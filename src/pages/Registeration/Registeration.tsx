@@ -16,6 +16,10 @@ const Registeration: React.FC = () => {
   const [email, setEmail] = useState('');
   const [firstNameError, setFirstNameError] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [token, setToken] = useState('');
+
+
+
 
   const handleFirstNameChange = (event) => {
     const value = event.target.value;
@@ -31,6 +35,18 @@ const Registeration: React.FC = () => {
   };
 
     const isFormValid = firstName && email && !firstNameError && !emailError;
+
+
+    // const testapicall = () => {
+    //   axios
+    //     .get("https://localhost:44367/api/Employee/employees")
+    //     .then((response) => {
+    //       console.log(response.data.value);
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // };
 
   
   return (
