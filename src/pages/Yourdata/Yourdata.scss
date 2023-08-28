@@ -1,0 +1,53 @@
+.Yourdata
+{
+    ion-content
+    {
+        --background: #FEFCFA;
+
+        .title-holder
+        {
+            margin-bottom: 20px;
+            h3
+            {
+                font-family: 'GBold';
+                font-size: 25px;
+            }
+
+            h6
+            {
+                color: #636363;
+                font-size: 20px;
+                margin-top: 10px;
+            }
+        }
+
+        .list
+        {
+            ion-item
+            {
+                --background: transparent;
+                ion-label
+                {
+                    color: #636363;
+                    font-size: 16px;
+                }
+
+                ion-toggle
+                {
+                    --track-background-checked: #3684B3;
+                }
+            }
+        }
+
+        .btn-holder
+        {
+            ion-button
+            {
+                --border-radius: 10px;
+                --color: white;
+                font-size: 18px;
+                height: 54px;
+            }
+        }
+    }
+}

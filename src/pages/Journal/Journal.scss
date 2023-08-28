@@ -1,0 +1,141 @@
+.Journal
+{
+    ion-toolbar
+    {
+        --background: #FEFCFA;
+
+        ion-segment
+        {
+            ion-segment-button
+            {
+                font-size: 18px;
+            }
+
+            .segment-button-checked
+            {
+                font-family: 'GBold' !important;
+            }
+        }
+    }
+    ion-content
+    {
+        --background: #FEFCFA;
+
+        .overview
+        {
+            margin-top: -20px;
+            .btn-slider
+            {
+                overflow-x: scroll !important;
+                overflow-y: hidden !important;
+                white-space: nowrap !important;
+                margin-top: -25px ;
+                &::-webkit-scrollbar
+                {
+                  display: none !important;
+                 }
+
+
+                 ion-button
+                 {
+                    display: inline-block;
+                    width: fit-content;
+
+                    ion-icon
+                    {
+                        font-size: 50px;
+                    }
+
+                    p
+                    {
+                        color: #636363;
+                        font-size: 14px;
+                        margin: 0;
+                    }
+                 }
+            }
+
+            .recommended
+            {
+
+                background: white;
+                padding: 10px;
+
+                .title-holder
+                {
+                    margin-bottom: 20px;
+                    h3
+                    {
+                        font-family: 'GBold';
+                        font-size: 22px;
+                        margin-top: 0;
+                    }
+                }
+                .rc-card
+                {
+                    position: relative;
+                    .img-holder
+                    {
+                        position: relative;
+                        img
+                        {
+                            border-radius: 10px;
+                            width: 100%;
+                        }
+
+                        .btn
+                        {
+                            background: white;
+                            border-radius: 50%;
+                            bottom: 10px;
+                            height: 40px;
+                            position: absolute;
+                            right: 10px;
+                            width: 40px;
+
+                            img
+                            {
+                                height: 20px !important;
+                            }
+                        }
+
+                     
+                    }
+
+                    h4
+                    {
+                        font-family: 'GBold';
+                        font-size: 16px;
+                        margin: 10px 0;
+                    }
+
+
+                }
+            }
+
+            .add-recommendation
+            {
+                ion-button
+                {
+                    --border-radius: 50%;
+                    height: 3rem;
+                    width: 3rem;
+
+                    ion-icon
+                    {
+                        color: white;
+                        transform: scale(2);
+                    }
+                    
+                }
+
+                h4
+                {
+                    font-family: 'GBold';
+                    font-size: 20px;
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+}

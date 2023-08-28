@@ -1,0 +1,71 @@
+.Community
+{
+    ion-toolbar
+    {
+        --background: #FEFCFA;
+
+        ion-title
+        {
+            font-family: 'GBold';
+            font-size: 23px;
+        }
+    }
+
+    ion-content
+    {
+        --background: #FEFCFA;
+
+        .the-list
+        {
+            margin-top: 4vw;
+            ion-item
+            {
+                margin-bottom: 20px;
+                ion-avatar
+                {
+                    background: var(--ion-color-primary);
+                    height: 3rem;
+                    width: 3rem;
+
+                    h3
+                    {
+                        color: white;
+                        font-size: 24px;
+                        margin: 0;
+                    }
+                }
+
+                ion-label
+                {
+                    margin: 0;
+                    h4
+                    {
+                        font-family: 'GBold';
+                        font-size: 15px;
+                    }
+
+                    h6
+                    {
+                        font-size: 14px;
+                    }
+                }
+
+                .end-slot
+                {
+                    margin-left: 0 !important;
+
+                    p
+                    {
+                        font-size: 12px;
+                        margin: 0;
+                    }
+
+                    .done
+                    {
+                        color: #3684B3;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,123 @@
+.Courseoverviewpaid
+{
+    ion-toolbar
+    {
+        --background: #FEFCFA;
+
+        ion-title
+        {
+            font-family: 'GBold';
+            font-size: 20px;
+            padding-left: 60px;
+        }
+    }
+
+    ion-content
+    {
+        --background: #FEFCFA;
+
+        .the-title
+        {
+            h3
+            {
+                font-family: 'GBold';
+                font-size: 28px;
+                margin-top: 0;
+            }
+        }
+
+        .progress-holder
+        {
+
+            p
+            {
+                margin: 0;
+            }
+            ion-progress-bar
+            {
+                --background:white;
+                --progress-background:#F0A6A9;
+                border-radius: 10px;
+                height: 10px;
+
+              
+            }
+
+            h6
+            {
+                margin-left: 20px;
+            }
+        }
+
+        .resume-holder
+        {
+            margin-bottom: 10px;
+            h3
+            {
+                font-family: 'GBold';
+                font-size: 22px;
+            }
+
+            ion-item
+            {
+                --background: #3684B3;
+                --border-radius: 10px;
+                --detail-icon-opacity:1;
+                --detail-icon-color:white;	
+                ion-label
+                {
+                    color: white;
+                    font-size: 22.5px;
+                }
+            }
+        }
+
+        .sub
+        {
+            margin-bottom: 20px;
+            p
+            {
+                font-size: 18px;
+                margin: 0;
+            }
+        }
+
+        .the-list
+        {
+            ion-accordion
+            {
+                margin: 10px 0;
+
+                ion-item
+                {
+                    --background: white;
+                    --border-radius: 10px;
+
+                   
+                }
+            }
+            .sublist
+            {
+                ion-item
+                {
+                    --border-radius: 0 !important;
+                    ion-label
+                    {
+                        color: #636363;
+                        font-size: 16px;
+                        span
+                        {
+                            color: #3684B3;
+                            font-size: 14px;
+                        }
+                    }
+                }
+
+                .third-list
+                {
+                    padding-left: 40px;
+                }
+            }
+        }
+    }
+}

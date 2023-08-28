@@ -1,0 +1,315 @@
+.Coursechapter
+{
+    ion-toolbar
+    {
+        --background: #FEFCFA;
+
+        ion-title
+        {
+            font-family: 'GBold';
+            font-size: 20px;
+            padding: 0;
+            margin: 0 auto;
+        }
+    }
+
+    ion-content
+    {
+        --background: #FEFCFA;
+        .seg-holder
+        {
+            position: absolute;
+            width: fit-content;
+            top: 50px;
+            right: 16px;
+            z-index: 100 !important;
+            ion-segment
+            {
+
+                background: transparent !important;
+                
+                width: fit-content;
+
+                .first
+                {
+                    --border-radius: 10px 0  0  10px!important;
+                    margin-right: -10px;
+                }
+
+                .second
+                {
+                    --border-radius: 0 10px 10px 0 !important;
+                }
+                ion-segment-button
+                {
+                    --background: white;
+                    --indicator-color: var(--ion-color-primary); 
+                    font-size: 14px;    
+                    ion-label
+                    {
+                        ion-icon
+                        {
+                            margin-right: 5px;
+                        }
+                    }
+                }
+
+               
+    
+                .segment-button-checked
+                {
+                    color: white !important;
+                }
+            }
+        }
+
+        .player-holder
+        {
+            position: relative;
+            video
+            {
+                width: 100% !important;
+            }
+           
+
+            .player-img
+            {
+                img
+                {
+                    border-radius: 10px;
+                    height: 440px;
+                    width: 100%;
+                }
+
+               
+            }
+            .player-toolbar
+            {
+                left: 0;
+                margin: auto;
+                position: absolute;
+                right: 0;
+                width: 100%;
+                height: fit-content;
+                top: 0;
+                bottom: 0;
+                .play-btn
+                {
+                    ion-icon
+                    {
+                        font-size: 60px;
+                    }
+                }
+            }
+
+            .status
+            {
+                background: rgba(255, 255, 255, 0.493);
+                padding-left: 10px;
+                bottom: 0;
+                position: absolute;
+                width: 100%;
+
+                h6
+                {
+                    margin-top: 0;
+                }
+
+                ion-button
+                {
+                    margin-top: -10px;
+                    margin-right: -10px;
+                }
+
+                ion-progress-bar
+                {
+                    --background:white;
+                }
+            }
+        }
+
+        .details
+        {
+
+            h2
+            {
+                font-family: 'Gbold';
+                font-size: 23px;
+            }
+            ion-item
+            {
+                --background: transparent;
+                --padding-start:0;
+
+                .start-slot
+                {
+                    height: 120px;
+                    position: relative;
+                    width: 40px;
+                }
+                ion-avatar
+                {
+                    height: 2rem;
+                    width: 2rem;
+                }
+
+                .verify
+                {
+                    position: absolute;
+                    top: 10px;
+                    right: 0;
+                }
+
+            ion-label
+            {
+                p
+                {
+                    color: #636363;
+                    font-size: 14px;
+                }
+
+                h6
+                {
+                    color: #2D2D2D;
+                    font-size: 16px;
+
+                    span
+                    {
+                        font-family: 'GBold';
+                    }
+                }
+            }
+            }
+
+            .desc
+            {
+                p
+                {
+                    color: #636363;
+                    font-size: 16px;
+                    margin-top: 0;
+                }
+            }
+        }
+
+        .aplayer-holder
+        {
+            .aplayer
+            {
+                background: linear-gradient(44deg, #F0EBE6 0%, #FBD9B8 100%);
+                border-radius: 10px;
+                padding: 10px;
+                ion-item
+                {
+                    --background: transparent;
+                    .thumb
+                    {
+                        img
+                        {
+                            border-radius: 10px;
+                            height: 150px;
+                        }
+                    }
+
+                    ion-label
+                    {
+                        font-family: 'GBold';
+                        font-size: 16px;
+                    }
+                }
+
+                .status
+                {
+                    h6
+                    {
+                        font-size: 14px !important;
+                        margin-left: 12px;
+                        width: 80px;
+                    }
+
+                    ion-progress-bar
+                    {
+                        --background:white;
+                    }
+                }
+                    .player-toolbar
+                    {
+                        height: 85px;
+                        margin-top: -20px;
+                        .play-btn
+                        {
+                            ion-icon
+                            {
+                                font-size: 60px;
+                            }
+                        }
+                    }
+
+                 
+            }
+
+            .details
+            {
+                ion-item
+                {
+
+                    .start-slot
+                    {
+                        height: 80px !important;
+                    }
+                    ion-label
+                    {
+                        margin: 0 !important;
+                    }
+                }
+            }
+
+            .play-list
+            {
+                ion-item
+                {
+                    --padding-start:10px;
+                    --inner-padding-end:5px;
+                    .thumb
+                    {
+                        img
+                        {
+                            border-radius: 10px;
+                        }
+                    }
+
+                    ion-label
+                    {
+                       h3
+                       {
+                        font-family: 'GBold';
+                        font-size: 20px;
+                       }
+
+                       p
+                       {
+                        color: #636363;
+                        font-size: 16px;
+                       }
+                    }
+                }
+
+                
+            }
+
+
+    .btn-holder
+    {
+        ion-button
+        {
+            --border-radius: 10px;
+            --color: white;
+            font-size: 18px;
+            height: 54px;
+        }
+    }
+        }
+
+      
+    }
+}

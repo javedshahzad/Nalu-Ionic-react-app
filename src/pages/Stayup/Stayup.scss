@@ -1,0 +1,45 @@
+.Stayup
+{
+    ion-content
+{
+    --background: #FEFCFA;
+
+    .title-holder
+    {
+        position: fixed;
+        text-align: center;
+        width: 100%;
+        top: 20px;
+        h3
+        {
+            font-family: 'GBold';
+            font-size: 25px;
+        }
+
+     
+    }
+
+    .img-holder
+    {
+        margin-top: 25vw;
+    }
+
+    .btn-holder
+    {
+        ion-button
+        {
+            --border-radius: 10px;
+            --color: white;
+            font-size: 18px;
+            height: 54px;
+        }
+    }
+
+    .bottom-btn
+    {
+        color: #636363;
+        font-size: 20px;
+        margin-top: -20px;
+    }
+}
+}

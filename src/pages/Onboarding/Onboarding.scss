@@ -1,0 +1,42 @@
+.onborading
+{
+    .img-holder
+    {
+        img
+        {
+            height: 90vw;
+        }
+    }
+    .content-holder
+    {
+        h3
+        {
+            font-family: 'GBold';
+            font-size: 28px;
+        }
+
+        p
+        {
+            color: #636363;
+            font-size: 20px;
+        }
+    }
+
+    .btn-holder
+    {
+        ion-button
+        {
+            --border-radius: 10px;
+            --color: white;
+            font-size: 18px;
+            height: 54px;
+        }
+    }
+
+    .bottom-btn
+    {
+        color: #636363;
+        font-size: 20px;
+        margin-top: -20px;
+    }
+}

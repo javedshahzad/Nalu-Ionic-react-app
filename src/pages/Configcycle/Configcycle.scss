@@ -1,0 +1,63 @@
+.Configcycle
+{
+    ion-content
+    {
+        --background: #FEFCFA;
+
+        .title-holder
+        {
+            margin-bottom: 20px;
+            h3
+            {
+                font-family: 'GBold';
+                font-size: 25px;
+            }
+
+            h6
+            {
+                color: #636363;
+                font-size: 20px;
+                margin-top: 10px;
+            }
+        }
+
+        .calender-holder
+        {
+            margin-top: 40px;
+
+            ion-datetime
+            {
+                --background: white;
+            }
+        }
+
+        .bottom-holder 
+        {
+            margin-top: 20px;
+            h3
+            {
+                font-family: 'GBold';
+                font-size: 18px;
+            }
+
+            h6
+            {
+                color: #636363;
+                font-size: 16px;
+                margin-top: 10px;
+            }
+        }
+
+        .btn-holder
+        {
+            ion-button
+            {
+                --border-radius: 10px;
+                --color: white;
+                font-size: 18px;
+                height: 54px;
+            }
+        }
+
+    }
+}

@@ -1,0 +1,77 @@
+.Addrecmodal
+{
+    ion-content
+    {
+        --background: transparent;
+
+        .back
+        {
+            background: transparent;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .holder
+        {
+            position: relative;
+            width: 100%;
+
+            .card
+            {
+                background: white;
+                border-radius: 10px;
+                padding: 10px 15px;
+                margin: 0 auto;
+                width: 80%;
+
+                .header
+                {
+                    background: white;
+                    border-radius: 50%;
+                    position: absolute;
+                    height: 5rem;
+                    top: 0;
+                    margin: -40px auto 0 auto;
+                    left: 0;
+                    right: 0;
+                    width: 5rem;
+
+                    ion-icon
+                    {
+                        color: var(--ion-color-primary);
+                        transform: scale(3);
+                    }
+                }
+
+                ion-select
+                {
+                    min-width: 100% !important;
+                    --min-width: 100% !important;
+                    width: 100% !important;
+                }
+
+                .error-message
+                {
+                    color: var(--ion-color-primary);
+                        margin: 0;
+                }
+
+                .btn-holder
+                {
+                    ion-button
+                    {
+                        --border-radius: 10px;
+                        --color: white;
+                        font-size: 18px;
+                        height: 50px;
+                    }
+                }
+            }
+        }
+    }
+}

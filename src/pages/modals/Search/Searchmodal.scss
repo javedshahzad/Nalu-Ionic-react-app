@@ -1,0 +1,52 @@
+.Searchmodal
+{
+
+    ion-header
+    {
+        background: #FEFCFA;
+    }
+
+    ion-toolbar
+    {
+        --background: #FEFCFA;
+        margin-top: 20px;
+        height: 40px;
+        ion-icon
+        {
+            margin-right: 16px !important;
+        }
+
+        ion-title
+        {
+            --color: #636363;
+            padding: 0 0 0 40px !important;
+
+            ion-searchbar
+            {
+                text-align: left !important;
+            }
+        }
+    }
+    ion-content
+    {
+        --background: #FEFCFA;
+
+        .the-list
+        {
+            ion-item
+            {
+                ion-icon
+                {
+                    color: #636363;
+                }
+
+                ion-label
+                {
+                    color: #636363;
+                    font-size: 20px;
+                }
+            }
+        }
+        
+    }
+}

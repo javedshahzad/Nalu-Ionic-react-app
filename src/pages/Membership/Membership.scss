@@ -1,0 +1,237 @@
+.Membership
+{
+    ion-toolbar
+    {
+        --background: #FEFCFA;
+
+        ion-title
+        {
+            font-family: 'GBold';
+            font-size: 20px;
+        }
+    }
+
+    ion-content
+    {
+        --background: #FEFCFA;
+
+        .title
+        {
+            h2
+            {
+                font-family: 'GBold';
+                font-size: 28px;
+                margin-top: 0;
+            }
+        }
+
+        .title2
+        {
+            h2
+            {
+                font-family: 'GBold';
+                font-size: 22px;
+            }
+        }
+
+        .section
+        {
+            ion-grid
+            {
+               .header-row
+               {
+                    h4
+                    {
+                        font-family: 'GBold';
+                        font-size: 18px;
+                        margin: 10px 0;
+                    }
+               }
+
+               .value-row
+               {
+                    h5
+                    {
+                        font-size: 18px;
+                        margin: 5px 0;
+                    }
+               }
+            }
+        }
+
+        .options
+        {
+          
+
+            .the-list
+            {
+
+                ion-radio-group
+                {
+                    ion-item
+                    {
+                        --background: rgb(226, 226, 226);
+                        opacity: 0.7;
+                        --border-radius: 10px;
+                        margin-bottom: 30px;
+                        .thumb
+                        {
+                            img
+                            {
+                                border-radius: 10px;
+                                height: 80px;
+                            }
+                        }
+    
+                        ion-label
+                        {
+                            padding: 10px 0;
+                            h4
+                            {
+                                font-family: 'GBold';
+                                font-size: 18px;
+                            }
+    
+                            p
+                            {
+                                font-size: 16px;
+                            }
+                        }
+
+                        ion-radio
+                        {
+                            bottom: 0;
+                            height: 100%;
+                            left: 0;
+                            position: absolute;
+                            right: 0;
+                            top: 0;
+                            width: 100%;
+                            opacity: 0 !important;
+                        }
+                    }
+
+                    .item-radio-checked
+                    {
+                      --background: white;
+                        opacity: 1 !important;
+                    }
+                }
+               
+            }
+        }
+
+        .title
+        {
+            margin-bottom: 20px;
+            h3
+            {
+                font-family: 'GBold';
+                font-size: 18px;
+            }
+        }
+
+        .nalu
+        {
+            padding-left: 5%;
+            .sec
+            {
+                margin-bottom: 10px;
+                h4
+                {
+                    font-size: 16px;
+                    margin: 0 0 0 20px;
+                }
+            }
+        }
+
+        .packages
+        {
+            margin-top: 20px;
+            ion-radio-group
+            {
+                ion-item
+                {
+                    --border-color: #A9A8AA;
+                    --border-radius: 10px;
+                    --border-style: solid;
+                    --border-width: 2px;
+                    --inner-padding-end:0;
+                    margin-bottom: 10px;
+                    ion-label
+                    {
+                        padding: 10px 0;
+                        .first
+                        {
+                            h3
+                            {
+                                color: #A9A8AA;
+                                font-family: 'GBold';
+                                font-size: 20px;
+                            }
+
+                            ion-badge
+                            {
+                                background: transparent;
+                                border: 1px solid var(--ion-color-primary);
+                                color: var(--ion-color-primary);
+                                padding: 10px;
+                            }
+                        }
+
+                        p
+                        {
+                            color: #A9A8AA;
+                            font-size: 17px;
+                            margin-top: 10px;
+                        }
+                    }
+
+                    ion-radio
+                    {
+                        bottom: 0;
+                        height: 100%;
+                        left: 0;
+                        opacity: 0;
+                        position: absolute;
+                        right: 0;
+                        top: 0;
+                        width: 100%;
+                    }
+                }
+
+                .item-radio-checked
+                {
+                    --border-color: #3684B3;
+                    ion-label
+                    {
+                        .first
+                        {
+                            h3
+                            {
+                                color: #2D2D2D !important;
+                            }
+                        }
+                        p
+                        {
+                            color: #2D2D2D !important;
+                        }
+                    }
+                }
+            }
+        }
+
+
+    .btn-holder
+    {
+        ion-button
+        {
+            --border-radius: 10px;
+            --color: white;
+            font-size: 18px;
+            height: 54px;
+        }
+    }
+
+    }
+}

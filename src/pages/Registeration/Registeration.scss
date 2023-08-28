@@ -1,0 +1,85 @@
+.Registeration
+{
+    ion-content
+    {
+        --background: #FEFCFA;
+
+        .error-message
+        {
+            color: var(--ion-color-primary);
+            margin: 0;
+        }
+        .title-holder
+        {
+            h3
+            {
+                font-family: 'GBold';
+                font-size: 25px;
+            }
+
+            h6
+            {
+                color: #636363;
+                font-size: 20px;
+                margin-top: 10px;
+            }
+        }
+
+        .btn-holder
+        {
+            ion-button
+            {
+                --border-radius: 10px;
+                --color: white;
+                font-size: 18px;
+                height: 54px;
+            }
+        }
+
+        .or
+        {
+            p
+            {
+                color: #636363;
+                font-size: 20px;
+                margin: 0;
+            }
+        }
+
+        .social-holder
+        {
+            ion-button
+            {
+                --background: white;
+                --border-color: #F0F0F0;
+                --border-radius: 10px;
+                --border-style: solid;
+                --border-width: 1px;
+                --color: #636363;
+                margin: 10px 0;
+
+                ion-icon
+                {
+                    margin-right: 10px;
+                }
+            }
+        }
+
+        .bottom-holder
+        {
+            h6
+            {
+                color: #2D2D2D;
+                font-size: 16px;
+            }
+            .btn
+            {
+                h5
+                {
+                    font-family: 'GBold';
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}

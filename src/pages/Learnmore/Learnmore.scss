@@ -1,0 +1,162 @@
+.learnmore
+{
+    ion-content
+    {
+        --background: #FEFCFA;
+
+        .title-holder
+        {
+            position: fixed;
+            text-align: center;
+            width: 100%;
+            top: 0;
+            h3
+            {
+                font-family: 'GBold';
+                font-size: 25px;
+            }
+
+         
+        }
+
+        .slider
+        {
+            margin-top: 80px;
+            h6
+            {
+                color: #636363;
+                font-size: 20px;
+                margin-top: 0;
+            }
+            .quote-holder
+            {
+                .inside
+                {
+                    margin-top: -10px;
+                }
+                h6
+                {
+                    font-size: 18px;
+                }
+                .quote2
+                {
+                    height: 80px;
+                    margin-right: 10px;
+
+                   
+                }
+            }
+        }
+
+        .webinar
+        {
+            margin-top: 20px;
+            .title
+            {
+                margin-bottom: 10px;
+                h3
+                {
+                    font-family: 'GBold';
+                    font-size: 22px;
+                    margin: 0 0 5px 0;
+                }
+
+                h6
+                {
+                    color: #636363;
+                    font-size: 18px;
+                    margin: 0;
+                }
+            }
+
+            .webinar-card
+            {
+                margin-bottom: 20px;
+                ion-item
+                {
+                    --background: transparent;
+                    --padding-start:0;
+                    ion-avatar
+                    {
+                        height: 60px;
+                        width: 60px;
+                    }
+
+                ion-label
+                {
+                    p
+                    {
+                        color: #636363;
+                        font-size: 16px;
+                    }
+
+                    h6
+                    {
+                        color: #2D2D2D;
+                        font-size: 16px;
+
+                        span
+                        {
+                            font-family: 'GBold';
+                        }
+                    }
+                }
+                }
+
+                h5
+                {
+                    color: #636363;
+                    font-size: 16px;
+                    margin-top: 0;
+                }
+            }
+        }
+
+        .btn-holder
+        {
+            ion-button
+            {
+                --border-radius: 10px;
+                --color: white;
+                font-size: 18px;
+                height: 54px;
+            }
+        }
+
+        .date-selector
+        {
+            ion-item
+            {
+                ion-select
+                {
+                    --min-width: 100% !important;
+                    width: 100% !important;
+                    text-align: left;
+                    max-width: 100% !important;
+                }
+            }
+        }
+
+        .bottom-holder
+        {
+            h6
+            {
+                color: #2D2D2D;
+                font-size: 16px;
+                margin: 0;
+            }
+            h5
+            {
+                color: #3684B3;
+                font-family: 'GBold';
+                font-size: 16px;
+                margin: 0;
+            }
+        }
+    }
+}
+
+.date-popup
+{
+    width: 100% !important;
+}

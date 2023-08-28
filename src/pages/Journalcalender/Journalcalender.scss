@@ -1,0 +1,71 @@
+.Journalcalender
+{
+
+    ion-toolbar
+    {
+        --background: #FEFCFA;
+    }
+    ion-content
+    {
+        --background: #FEFCFA;
+
+     
+
+        .calender-holder
+        {
+            margin-top: 40px;
+
+            ion-datetime
+            {
+                --background: white;
+            }
+        }
+
+      
+        .title
+        {
+            h3
+            {
+                color: #636363;
+                span
+                {
+                    font-family: 'GBold';
+                }
+            }
+        }
+
+        .section
+        {
+            h4
+            {
+                color: #2D2D2D;
+                font-family: 'GBold';
+                font-size: 28px;
+                margin: 0;
+            }
+
+            p
+            {
+                color: #636363;
+                font-size: 16px;
+                margin: 5px 0;
+            }
+
+            ion-button
+            {
+                --color: #636363;
+            }
+        }
+        .btn-holder
+        {
+            ion-button
+            {
+                --border-radius: 10px;
+                --color: white;
+                font-size: 18px;
+                height: 54px;
+            }
+        }
+
+    }
+}

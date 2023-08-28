@@ -1,0 +1,70 @@
+.questioning
+{
+    ion-toolbar
+    {
+        --background: white;
+
+        ion-title
+        {
+            font-family: 'GBold';
+            font-size: 25px;
+            padding: 0;
+        }
+    }
+
+    ion-content
+    {
+
+        --background:#FEFCFA;
+       .sub-title
+       {
+        p
+        {
+            color: #2D2D2D;
+            font-size: 22px;
+            margin: 0;
+        }
+       }
+
+       .the-list
+       {
+        margin-top: 20px;
+        ion-item
+        {
+            --background: white;
+            --border-color: #F0F0F0;
+            --border-radius: 6px;
+            --border-style: solid;
+            --border-width: 1px;
+            --padding-start:10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            .thumb
+            {
+                img
+                {
+                    border-radius: 6px;
+                    height: 140px;
+                    width: 130px;
+                }
+            }
+
+            ion-label
+            {
+                padding-top: 10px;
+                h4
+                {
+                    font-family: 'GBold';
+                    font-size: 18px;
+                }
+
+                h6
+                {
+                    color: #636363;
+                    font-size: 18px;
+                }
+            }
+        }
+       }
+    }
+}
