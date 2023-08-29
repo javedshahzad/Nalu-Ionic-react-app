@@ -10,6 +10,8 @@ import {
 
 import "./Registeration.scss";
 import { useState } from "react";
+import axios from 'axios';
+import { useHistory } from "react-router";
 
 const Registeration: React.FC = () => {
   const [firstName, setFirstName] = useState('');
@@ -17,9 +19,10 @@ const Registeration: React.FC = () => {
   const [firstNameError, setFirstNameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [token, setToken] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
 
-
+  const history = useHistory();
 
   const handleFirstNameChange = (event) => {
     const value = event.target.value;
@@ -36,7 +39,6 @@ const Registeration: React.FC = () => {
 
     const isFormValid = firstName && email && !firstNameError && !emailError;
 
-
     // const testapicall = () => {
     //   axios
     //     .get("https://localhost:44367/api/Employee/employees")
@@ -48,7 +50,37 @@ const Registeration: React.FC = () => {
     //     });
     // };
 
-  
+      const handleRegister = async () => {
+        try {
+          const response = await axios.post('https://app.mynalu.com/wp-json/nalu-app/v1/add-freemium-user', {
+            email: email,
+            first_name: firstName,
+          },{
+            // headers: {
+            //   'X-WP-Nonce': 'rbkanB3yTlxu9PFb3PYcbKRgAJ9vujt2',
+            // },
+            //withCredentials: true,
+          });
+          console.log("Response::",response);
+          if(response.status === 200){
+            setToken(response.data.token);
+            setErrorMessage("Email has been sent")
+            localStorage.setItem('jwtToken', response.data.token);
+
+          // naviagtion
+          history.push("/yourdata")
+          }
+        } catch (error) {
+          console.log('Error', error);
+          if(error.response.data.message = "A user with this email already exists."){
+            setEmailError(error.response.data.message);
+          }
+          else if(error.response.data.message = "Too many registration attempts. Please try again later."){
+            setEmailError(error.response.data.message);
+          }
+        }
+      };
+
   return (
     <IonPage className="Registeration">
       <IonContent className="ion-padding" fullscreen>
@@ -71,15 +103,13 @@ const Registeration: React.FC = () => {
               <IonIcon src="assets/imgs/icn-email.svg" slot="start"/>
               <IonInput placeholder="Email" autocomplete="given-name" type="email"  value={email} onIonInput={handleEmailChange} />
             </IonItem>
-
             {emailError && <p className="error-message">{emailError}</p>}
+            {errorMessage && <p className="success-message">{errorMessage}</p>}
 
           </div>
-
-         
         </div>
         <div className="btn-holder ion-text-center ion-padding-vertical">
-          <IonButton expand="block" routerLink="/yourdata" disabled={!isFormValid}>Continue</IonButton>
+          <IonButton expand="block"  disabled={!isFormValid} onClick={() => handleRegister()}>Continue</IonButton>
         </div>
         <div className="or ion-text-center">
           <p>or</p>
