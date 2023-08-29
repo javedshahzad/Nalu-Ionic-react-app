@@ -21,40 +21,35 @@ import "./Addrecmodal.scss";
 import { useState } from "react";
 
 const Addrecmodal: React.FC<{onClose?: any }> = ({onClose}) => {
-  const [selectedCategory, setselectedCategory] = useState('');
-  const [categoryError, setcategoryError] = useState('');
+  
+  const [selectedCategory, setselectedCategory] = useState("");
+  const [categoryError, setcategoryError] = useState("");
 
-  const [title, setTitle] = useState('');
-  const [titleError, setTitleError] = useState('');
+  const [title, setTitle] = useState("");
+  const [titleError, setTitleError] = useState("");
 
-  const [note, setNote] = useState('');
+  const [note, setNote] = useState("");
+  const [noteError, setNoteError] = useState("");
 
   const isFormValid = !!selectedCategory && !!title && !categoryError && !titleError;
+
 
   const handleCategoryChange = (event) => {
     const value = event.target.value;
     setselectedCategory(value);
-    setcategoryError(value.trim() === '' ? 'Please select a category.' : '');
+    setcategoryError(value.trim() === "" ? "Please select a category." : "");
   };
 
   const handleTitleChange = (event) => {
     const value = event.target.value;
     setTitle(value);
-    setTitleError(value.trim() === '' ? 'Please enter a title.' : '');
+    setTitleError(value.trim() === "" ? "Please enter a title." : "");
   };
 
-  const handleSubmit = () => {
-    if (!selectedCategory) {
-      setcategoryError('Please select a category.');
-    }
-    if (!title) {
-      setTitleError('Please enter a title.');
-    }
-
-    if (isFormValid) {
-      // Proceed with sharing recommendation or whatever action you want
-      console.log('Recommendation shared successfully!');
-    }
+  const handleNoteChange = (event) => {
+    const value = event.target.value;
+    setNote(value);
+    setNoteError(value.trim() === "" ? "Please enter the note." : "");
   };
 
   return (
@@ -91,16 +86,21 @@ const Addrecmodal: React.FC<{onClose?: any }> = ({onClose}) => {
                   </div>
                   <div className="input-item">
                     <IonItem>
-                      <IonInput placeholder="Title" type="text"  value={title} onIonChange={handleTitleChange} />
+                      <IonInput placeholder="Title" type="text"  value={title} onIonInput={handleTitleChange} />
                     </IonItem>
-                    {titleError && <p className="error-message">{titleError}</p>}
-
+                    {titleError && (
+                      <p className="error-message">{titleError}</p>
+                    )}
                   
                   </div>
                   <div className="input-item">
                     <IonItem>
-                      <IonTextarea placeholder="Note" rows={5} value={note} onIonChange={(e) => setNote(e.target.value)}  />
+                      <IonTextarea placeholder="Note" rows={5} value={note} onIonInput={handleNoteChange}  />
                     </IonItem>
+
+                    {noteError && (
+                      <p className="error-message">{noteError}</p>
+                    )}
                   </div>
 
                   <div className="btn-holder ion-text-center ion-padding-vertical">

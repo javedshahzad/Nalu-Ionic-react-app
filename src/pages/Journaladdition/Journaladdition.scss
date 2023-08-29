@@ -31,11 +31,6 @@
             {
               display: none !important;
              }
-
-             .date
-             {
-                
-             }
         }
 
         .tick-labels {
@@ -133,6 +128,7 @@
                     --border-width: 1px;
                     --padding-start:10px;
                     --inner-padding-end:5px;
+                    margin-left: 0 !important;
 
                     ion-icon
                     {
@@ -151,6 +147,7 @@
                         --border-color:white;
                         --checkbox-background-checked:white;
                         --border-color-checked:#3684B3;
+                        --checkmark-color: #3684B3;
                     }
                 }
 

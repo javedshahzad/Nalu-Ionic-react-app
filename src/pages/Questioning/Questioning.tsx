@@ -17,20 +17,17 @@ import "./Questioning.scss";
 const Questioning: React.FC = () => {
   return (
     <IonPage className="questioning">
-      <IonHeader className="ion-no-border">
-        <IonToolbar>
-          <IonTitle className="ion-text-center">
-            How can we Support you?
-          </IonTitle>
-        </IonToolbar>
-      </IonHeader>
+     
       <IonContent className=" ion-padding" fullscreen>
-        <div className="sub-title ion-text-center">
+      <div className="title-holder ion-text-center animate__animated animate__zoomIn">
+          <h3>How can we Support you?</h3>
+        </div>
+        <div className="sub-title ion-text-center animate__animated animate__zoomIn">
           <p className="ion-text-wrap">
             We'll configure your experience according to your goals.
           </p>
         </div>
-        <div className="the-list">
+        <div className="the-list animate__animated animate__slideInUp">
           <IonItem button detail={false} lines="none" routerLink="/registeration">
             <div className="thumb" slot="start">
               <img src="assets/imgs/q1.png" alt="" />

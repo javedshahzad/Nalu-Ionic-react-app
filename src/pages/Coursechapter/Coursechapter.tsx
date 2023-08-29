@@ -290,7 +290,7 @@ const Coursechapter: React.FC = () => {
               </div>
 
               <div className="play-list ion-padding-horizontal">
-                <IonItem lines="none">
+                <IonItem lines="none" button  detail={false} >
                   <div className="thumb" slot="start">
                     <img src="assets/imgs/relax.png" alt="" />
                   </div>

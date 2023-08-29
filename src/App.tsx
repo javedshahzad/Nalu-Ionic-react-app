@@ -1,6 +1,4 @@
-import { Redirect } from "react-router-dom";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-
+import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
   IonIcon,
@@ -56,9 +54,6 @@ import Membership from "./pages/Membership/Membership";
 import Journalcalender from "./pages/Journalcalender/Journalcalender";
 import Community from "./pages/Community/Community";
 import Login from "./pages/Login/Login";
-import Resources from "./pages/Resources/Resources";
-import PrivateRoute from "./auth/PrivateRoute";
-
 
 setupIonicReact({
   mode: "ios",
@@ -68,125 +63,85 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-    
         <Route path="/tabs" render={() => <MainTabs />} />
-        
         <Route exact path="/chat">
-        <PrivateRoute>
           <Chat />
-        </PrivateRoute>
         </Route>
         <Route exact path="/community">
-        <PrivateRoute>
           <Community />
-        </PrivateRoute>
         </Route>
         <Route exact path="/configcycle">
-        <PrivateRoute>
-            <Configcycle />
-        </PrivateRoute>
+          <Configcycle />
         </Route>
 
         <Route exact path="/coursechapter">
-        <PrivateRoute>
           <Coursechapter />
-        </PrivateRoute>
         </Route>
 
         <Route exact path="/courseoverviewfree">
-        <PrivateRoute>
           <Courseoverviewfree />
-        </PrivateRoute>
         </Route>
 
         <Route exact path="/courseoverviewpaid">
-        <PrivateRoute>
           <Courseoverviewpaid />
-        </PrivateRoute>
         </Route>
 
         <Route exact path="/eventdetail">
-        <PrivateRoute>
           <Eventdetail />
-        </PrivateRoute>
         </Route>
 
         
         <Route exact path="/filter">
-        <PrivateRoute>
           <Filtermodal />
-        </PrivateRoute>
         </Route>
 
         <Route exact path="/journaladdition">
-        <PrivateRoute>
           <Journaladdition />
-        </PrivateRoute>
         </Route>
 
         <Route exact path="/journalcalender">
-        <PrivateRoute>
           <Journalcalender />
-        </PrivateRoute>
         </Route>
         
         
         <Route exact path="/learnmore">
-        <PrivateRoute>
           <Learnmore />
-        </PrivateRoute>
         </Route>
         <Route exact path="/login">
           <Login />
         </Route>
         <Route exact path="/membership">
-        <PrivateRoute>
           <Membership />
-        </PrivateRoute>
         </Route>
         <Route exact path="/mygroups">
-        <PrivateRoute>
           <Mygroups />
-        </PrivateRoute>
         </Route>
         <Route exact path="/onboarding">
           <Onboarding />
         </Route>
         <Route exact path="/questioning">
           <Questioning />
-        </Route>        
+        </Route>
         <Route exact path="/registeration">
           <Registeration />
         </Route>
         <Route exact path="/resourcedetail">
-        <PrivateRoute>
           <Resourcedetail />
-        </PrivateRoute>
         </Route>
         <Route exact path="/stayup">
-        <PrivateRoute>
           <Stayup />
-        </PrivateRoute>
-        </Route>
-        <Route exact path="/resources">
-        <PrivateRoute>
-          <Resources />
-        </PrivateRoute>
         </Route>
 
         <Route exact path="/search">
-        <PrivateRoute>
           <Searchmodal />
-        </PrivateRoute>
         </Route>
         <Route exact path="/yourdata">
-        <PrivateRoute>
           <Yourdata />
-        </PrivateRoute>
         </Route>
         <Route exact path="/">
           <Redirect to="/onboarding" />
         </Route>
+        
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>

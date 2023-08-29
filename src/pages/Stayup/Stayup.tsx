@@ -18,7 +18,7 @@ const Stayup: React.FC = () => {
           <h3>Stay Up To Date</h3>
         </div>
 
-        <div className="img-holder ion-text-center">
+        <div className="img-holder ion-text-center animate__animated animate__zoomIn">
           <img src="assets/imgs/stayup.png" alt="" />
         </div>
 

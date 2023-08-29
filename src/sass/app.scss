@@ -73,6 +73,11 @@ ion-button
   text-transform: none;
 }
 
+ion-tab-bar
+{
+  --background: white !important;
+  border: none !important;
+}
 
 ion-tab-button
 {
