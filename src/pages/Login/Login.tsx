@@ -37,7 +37,6 @@ const Login: React.FC = () => {
 
   };
 
-
   const handleEmailChange = (event) => {
     const value = event.target.value;
     setEmail(value);
@@ -73,8 +72,6 @@ const Login: React.FC = () => {
 
           // naviagtion
           history.push("/tabs/tab1")
-
-
         }
       } catch (error) {
         console.log('Error', error.response.data.message);
@@ -109,10 +106,7 @@ const Login: React.FC = () => {
             </IonItem>
             {passwordError && <p className="error-message">{passwordError}</p>}
             {errorMessage && <p className="error-message">{errorMessage}</p>}
-
           </div>
-
-         
         </div>
         <div className="btn-holder ion-text-center ion-padding-vertical">
           <IonButton expand="block" disabled={!isFormValid} onClick={() => handleLogin()}>Continue</IonButton>
