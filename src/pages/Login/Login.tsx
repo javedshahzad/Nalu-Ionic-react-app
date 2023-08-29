@@ -112,6 +112,8 @@ const Login: React.FC = () => {
               />
             </IonItem>
             {passwordError && <p className="error-message">{passwordError}</p>}
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+
           </div>
 
          
@@ -119,7 +121,6 @@ const Login: React.FC = () => {
         <div className="btn-holder ion-text-center ion-padding-vertical">
           <IonButton expand="block" disabled={!isFormValid} onClick={() => handleLogin()}>Continue</IonButton>
         </div>
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
 
         <div className="or ion-text-center">
           <p>or</p>
