@@ -32,7 +32,7 @@ const Login: React.FC = () => {
   const handlePasswordChange = (event) => {
     const value = event.target.value;
     setPassword(value);
-    setPasswordError(value.trim() === '' ? 'Please enter your password.' : value.length < 6 ? 'Password must be at least 6 characters long.' : '');
+    setPasswordError(value.trim() === '' ? 'Please enter your password.' : value.length < 8 ? 'Password must be at least 8 characters long.' : '');
     setErrorMessage(value.trim() === '' ? '': '')
 
   };
@@ -78,7 +78,7 @@ const Login: React.FC = () => {
         }
       } catch (error) {
         console.log('Error', error.response.data.message);
-        setErrorMessage("Invalid credentials")
+        setErrorMessage("Invalid email or password. Please try again.")
       }
     };
   
@@ -94,7 +94,7 @@ const Login: React.FC = () => {
           <div className="input-item">
           <IonItem lines="none">
               <IonIcon src="assets/imgs/icn-email.svg" slot="start"/>
-              <IonInput placeholder="Email" autocomplete="given-name" type="email"  value={email} onIonInput={handleEmailChange} />
+              <IonInput placeholder="Email" autocomplete="email" type="email"  value={email} onIonInput={handleEmailChange} />
             </IonItem>
 
             {emailError && <p className="error-message">{emailError}</p>}
@@ -104,11 +104,7 @@ const Login: React.FC = () => {
           <div className="input-item">
             <IonItem lines="none">
               <IonIcon src="assets/imgs/icn-lock.svg" slot="start" />
-              <IonInput
-                placeholder="Password"
-                type="password"
-                value={password}
-                onIonInput={handlePasswordChange}
+              <IonInput placeholder="Password" type="password" autocomplete="password" value={password} onIonInput={handlePasswordChange}
               />
             </IonItem>
             {passwordError && <p className="error-message">{passwordError}</p>}
