@@ -19,6 +19,7 @@ import Community from "../Community/Community";
 import Courseoverviewpaid from "../Courseoverviewpaid/Courseoverviewpaid";
 import Mygroups from "../Mygroups/Mygroups";
 import PrivateRoute from './../../auth/PrivateRoute';
+import CourseInnerOverview from "../Courseoverviewpaid/CourseInnerOverview/CourseInnerOverview";
 interface MainTabsProps {}
 
 const MainTabs: React.FC<MainTabsProps> = () => {
@@ -35,6 +36,8 @@ const MainTabs: React.FC<MainTabsProps> = () => {
       
         <Route path="/tabs/tab1" render={() => <PrivateRoute><Journal /> </PrivateRoute>} exact={true} />
         <Route path="/tabs/tab2" render={() => <PrivateRoute><Courseoverviewpaid /></PrivateRoute>} exact={true} />
+        <Route path="/tabs/tab2/courseinneroverview" render={() => <PrivateRoute><CourseInnerOverview /></PrivateRoute>} exact={true} />
+
         <Route path="/tabs/tab3" render={() => <PrivateRoute><Mygroups /></PrivateRoute>} exact={true} />
         <Route path="/tabs/tab4" render={() => <PrivateRoute><Resources /></PrivateRoute>} exact={true} />
       </IonRouterOutlet>

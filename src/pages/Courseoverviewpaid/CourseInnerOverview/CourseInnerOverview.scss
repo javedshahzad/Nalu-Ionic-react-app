@@ -1,0 +1,150 @@
+.CourseInnerOverview
+{
+    ion-toolbar
+    {
+        --background: #FEFCFA;
+
+        ion-title
+        {
+            font-family: 'GBold';
+            font-size: 20px;
+            padding-left: 60px;
+        }
+    }
+
+    ion-content
+    {
+        --background: #FEFCFA;
+     .main_div{
+         //// background-color: rgb(145, 145, 145);
+         .title{
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             h3{
+                font-weight: 700;
+                font-family: 'GBold';
+             }
+         }
+         .img_relative{
+             position: relative;
+             .img_absolute{
+             position: absolute;
+             top: 60%;
+             left: 60%;
+             }
+         }
+         .align_col{
+             display: flex;
+             flex-direction: column;
+             .createdby{
+                 color: #636363 !important;
+                font-weight: 500;
+                margin-bottom: 9px;
+             }
+             .message{
+                 span{
+                     font-weight: 700;
+                     font-family: 'GBold';
+                 }
+                color: #2D2D2D !important;
+                font-weight: 500;
+             }
+         }
+         .paragraph{
+             color:#636363;
+             margin-left: 10px;
+             margin-right: 10px;
+             margin-bottom: 20px;
+         }
+         .paragraph_2{
+             color: #2D2D2D;
+             font-weight: 700;
+             margin-bottom: 10px;
+             font-family: 'GBold';
+
+         }
+         .align_justify{
+             display: flex;
+             justify-content: space-between;
+             span{
+                 color: #636363;
+             }
+         }
+         .btn-holder{
+            ion-button
+            {
+                --border-radius: 10px;
+                --color: white;
+                font-size: 18px;
+                height: 54px;
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+        }
+        .player_div{
+            position: relative;
+            margin-left: 5px;
+            margin-right: 5px;
+        .playbuttons {
+            display: flex;
+            width: 100%;
+            margin-top: 2px;
+          }
+          
+          .video_span,
+          .audio_span {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 7px;
+            padding-bottom: 7px;
+            border-radius: 10px;
+            cursor: pointer;
+            span {
+              margin-left: 5px;
+            }
+          }
+          
+          .video_span {
+            background-color: #F8F8F8;
+          }
+          
+          .audio_span {
+            background-color: #F8F8F8;
+          }
+          
+          .active {
+            background-color: #EE5F64 !important;
+          }
+          
+          span {
+            color: #A9A8AA;
+          }
+          
+          .video_span span {
+            color: #A9A8AA;
+          }
+          
+          .audio_span span {
+            color: #A9A8AA;
+          }
+          
+           .audio_player_div{
+               min-height: 900 px;
+               background: linear-gradient(to bottom, #F0EBE6 0%, #FBD9B8 100%);
+               margin-left: 0px;
+               margin-right: 0px;
+               border-radius: 10px;
+
+           }
+        //    .grey-icon {
+        //     filter: grayscale(100%) !important;
+        //   }
+        }
+        
+     }
+       
+    }
+}

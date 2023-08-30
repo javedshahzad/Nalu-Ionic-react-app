@@ -120,6 +120,9 @@ const Registeration: React.FC = () => {
           <IonIcon slot="start" src="assets/imgs/icn-google.svg" />
           Continue With Google
         </IonButton>
+        <video>
+          <source />
+        </video>
 
         <IonButton expand="block" routerLink="/questioning">
           <IonIcon slot="start" src="assets/imgs/icn-fb.svg" />
