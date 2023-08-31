@@ -54,6 +54,8 @@ import Membership from "./pages/Membership/Membership";
 import Journalcalender from "./pages/Journalcalender/Journalcalender";
 import Community from "./pages/Community/Community";
 import Login from "./pages/Login/Login";
+import ConfigCycleRemade from "./pages/Configcycle/ConfigCycleRemade";
+import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
 
 setupIonicReact({
   mode: "ios",
@@ -90,7 +92,6 @@ const App: React.FC = () => (
           <Eventdetail />
         </Route>
 
-        
         <Route exact path="/filter">
           <Filtermodal />
         </Route>
@@ -102,8 +103,13 @@ const App: React.FC = () => (
         <Route exact path="/journalcalender">
           <Journalcalender />
         </Route>
-        
-        
+        <Route exact path="/configcycleremade">
+          <ConfigCycleRemade />
+        </Route>
+        <Route exact path="/journalcalendarremade">
+          <JournalCalendarRemade />
+        </Route>
+
         <Route exact path="/learnmore">
           <Learnmore />
         </Route>
@@ -141,7 +147,6 @@ const App: React.FC = () => (
         <Route exact path="/">
           <Redirect to="/onboarding" />
         </Route>
-        
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>

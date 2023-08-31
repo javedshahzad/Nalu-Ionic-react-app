@@ -1,0 +1,283 @@
+$config-font-family: var(--ion-font-family);
+$config-white: #fefcfa;
+$config-pink: #ee5f64;
+$config-black: #2d2d2d;
+
+.journalcalendar-main {
+  background-color: $config-white !important;
+  padding: 0 15px 0 15px !important;
+  .journal-div {
+    background-color: $config-white;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.calendar {
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 65vh;
+  overflow: auto;
+  justify-content: center;
+}
+
+.dates {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  margin-top: 10px;
+  span {
+    gap: 5px;
+  }
+}
+.day {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  color: $config-black !important;
+  font-family: $config-font-family;
+  font-size: 16px;
+  font-weight: 400;
+  text-align: center;
+  &:hover {
+    background-color: $config-pink !important;
+    color: $config-white !important;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    gap: 10px;
+  }
+  &:active {
+    background-color: $config-pink !important;
+  }
+}
+
+.calendar::-webkit-scrollbar {
+  display: none;
+}
+
+.ion-page {
+  justify-content: center !important;
+}
+.dateMonth {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  h2 {
+    margin: 0;
+  }
+}
+
+.fadeIn {
+  opacity: 1;
+}
+.fadeOut {
+  opacity: 0.5;
+}
+
+.days {
+  display: flex;
+  justify-content: space-around;
+}
+
+.popover-content {
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  gap: 10px;
+  label {
+    flex-direction: column;
+    display: flex;
+    gap: 5px;
+  }
+}
+
+.month-label {
+  margin-right: 110px;
+  font-weight: bold;
+}
+
+.go-button {
+  background-color: $config-pink !important;
+  color: $config-white !important;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: $config-pink !important;
+  }
+}
+
+.month-select {
+  padding: 5px;
+  transition: height 0.3s ease, opacity 0.3s ease;
+  overflow: hidden;
+  overflow-y: auto;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  background-color: $config-white !important;
+  border: 1px solid $config-pink !important;
+  option:hover {
+    background-color: $config-pink !important;
+    color: $config-white !important;
+  }
+  option:checked {
+    background-color: $config-pink !important;
+    color: $config-white !important;
+  }
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.dateMonth p {
+  font-family: $config-font-family;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.days span {
+  font-family: $config-font-family;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.moon-phases {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap !important;
+}
+
+.new-moon {
+  display: flex;
+  gap: 8px;
+  .moon-text {
+    font-size: 14px;
+  }
+}
+
+.full-moon {
+  display: flex;
+  gap: 8px;
+}
+
+.currentDay {
+  background-color: $config-black !important;
+  border-radius: 10px;
+  color: $config-white !important;
+  content: "today";
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0 !important;
+  &:hover {
+    background-color: $config-white !important;
+    border-radius: 10px;
+    color: $config-black !important;
+  }
+  &::before {
+    content: "Today";
+    font-size: 8px;
+  }
+}
+
+.currentDay::before {
+  content: "Today";
+  font-size: 8px;
+}
+
+.active {
+  border-radius: 10px;
+  color: $config-white !important;
+  background-color: $config-pink !important;
+}
+
+.popoverHeading {
+  font-size: 15px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.customIcons {
+  position: relative;
+  max-width: 100%;
+  top: 4px;
+  left: 3px;
+}
+.day:hover .customIcons {
+  display: none !important;
+}
+.active .customIcons {
+  display: none !important;
+}
+
+.gratitude-edit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .journal-gratitude {
+    margin: 0;
+    h3 {
+      font-size: 24px !important;
+      color: $config-black;
+      span {
+        font-weight: 700;
+        color: $config-black;
+      }
+    }
+  }
+}
+
+ion-button {
+  --padding-top: 0 !important;
+  --padding-bottom: 0 !important;
+  --padding-start: 0 !important;
+  --padding-end: 0 !important;
+}
+
+.journal-cycle-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  .journal-cycle {
+    h3 {
+      margin: 0;
+      font-size: 28px !important;
+      font-weight: 700;
+    }
+    .date-time {
+      span {
+        font-size: 16px;
+        font-weight: 400;
+      }
+    }
+  }
+}
+
+.day-time {
+  display: flex;
+  gap: 5px;
+}
+
+.period-btn {
+  width: 100%;
+  color: $config-white;
+  font-size: 18px;
+  font-weight: 400;
+  margin-top: 32px;
+}
+
+.button-native {
+  .button-inner {
+    margin-left: 20px !important;
+  }
+}
