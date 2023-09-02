@@ -13,62 +13,8 @@ $config-black: #2d2d2d;
   }
 }
 
-.calendar {
-  display: flex;
-  flex-wrap: wrap;
-  max-height: 65vh;
-  overflow: auto;
-  justify-content: center;
-}
-
-.dates {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
-  margin-top: 10px;
-  span {
-    gap: 5px;
-  }
-}
-.day {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  color: $config-black !important;
-  font-family: $config-font-family;
-  font-size: 16px;
-  font-weight: 400;
-  text-align: center;
-  &:hover {
-    background-color: $config-pink !important;
-    color: $config-white !important;
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    gap: 10px;
-  }
-  &:active {
-    background-color: $config-pink !important;
-  }
-}
-
-.calendar::-webkit-scrollbar {
-  display: none;
-}
-
 .ion-page {
   justify-content: center !important;
-}
-.dateMonth {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  h2 {
-    margin: 0;
-  }
 }
 
 .fadeIn {
@@ -76,11 +22,6 @@ $config-black: #2d2d2d;
 }
 .fadeOut {
   opacity: 0.5;
-}
-
-.days {
-  display: flex;
-  justify-content: space-around;
 }
 
 .popover-content {
@@ -93,11 +34,6 @@ $config-black: #2d2d2d;
     display: flex;
     gap: 5px;
   }
-}
-
-.month-label {
-  margin-right: 110px;
-  font-weight: bold;
 }
 
 .go-button {
@@ -135,30 +71,17 @@ $config-black: #2d2d2d;
   }
 }
 
-.dateMonth p {
-  font-family: $config-font-family;
-  font-size: 18px;
-  font-weight: 700;
-  text-align: left;
-}
-
-.days span {
-  font-family: $config-font-family;
-  font-size: 16px;
-  font-weight: 700;
-  text-align: center;
-}
-
 .moon-phases {
   display: flex;
   gap: 16px;
   justify-content: center;
-  flex-wrap: wrap !important;
+  flex-wrap: wrap;
 }
 
 .new-moon {
   display: flex;
   gap: 8px;
+  align-items: center;
   .moon-text {
     font-size: 14px;
   }
@@ -170,34 +93,22 @@ $config-black: #2d2d2d;
 }
 
 .currentDay {
-  background-color: $config-black !important;
+  background-color: $config-black;
   border-radius: 10px;
-  color: $config-white !important;
+  color: $config-white;
   content: "today";
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0 !important;
+  gap: 0;
   &:hover {
     background-color: $config-white !important;
     border-radius: 10px;
-    color: $config-black !important;
   }
   &::before {
     content: "Today";
     font-size: 8px;
   }
-}
-
-.currentDay::before {
-  content: "Today";
-  font-size: 8px;
-}
-
-.active {
-  border-radius: 10px;
-  color: $config-white !important;
-  background-color: $config-pink !important;
 }
 
 .popoverHeading {
@@ -206,17 +117,18 @@ $config-black: #2d2d2d;
   margin: 0;
 }
 
-.customIcons {
+.daysIcon {
   position: relative;
   max-width: 100%;
   top: 4px;
-  left: 3px;
+  right: 2px;
 }
-.day:hover .customIcons {
-  display: none !important;
-}
-.active .customIcons {
-  display: none !important;
+
+ion-button {
+  --padding-top: 0 !important;
+  --padding-bottom: 0 !important;
+  --padding-start: 0 !important;
+  --padding-end: 0 !important;
 }
 
 .gratitude-edit {
@@ -236,13 +148,6 @@ $config-black: #2d2d2d;
   }
 }
 
-ion-button {
-  --padding-top: 0 !important;
-  --padding-bottom: 0 !important;
-  --padding-start: 0 !important;
-  --padding-end: 0 !important;
-}
-
 .journal-cycle-wrapper {
   display: flex;
   justify-content: space-between;
@@ -260,6 +165,9 @@ ion-button {
         font-weight: 400;
       }
     }
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
   }
 }
 
@@ -274,10 +182,4 @@ ion-button {
   font-size: 18px;
   font-weight: 400;
   margin-top: 32px;
-}
-
-.button-native {
-  .button-inner {
-    margin-left: 20px !important;
-  }
 }

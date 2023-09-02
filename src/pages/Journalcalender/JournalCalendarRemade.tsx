@@ -1,6 +1,5 @@
 import {
   IonPage,
-  IonToolbar,
   IonButtons,
   IonButton,
   IonIcon,
@@ -9,7 +8,6 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import { menuOutline, notificationsOutline } from "ionicons/icons";
-import { ChevronDownOutline } from "react-ionicons";
 import { useState, useRef, useEffect } from "react";
 import newMoon from "../../assets/images/new moon.svg";
 import fullMoon from "../../assets/images/full moon.svg";
@@ -17,10 +15,9 @@ import menstruation from "../../assets/images/Menstruation.svg";
 import cervicalMucus from "../../assets/images/Cervical Mucus.svg";
 import pen from "../../assets/images/Pen.svg";
 import setting from "../../assets/images/setting.svg";
+import { chevronDownOutline } from "ionicons/icons";
 
-import classNames from "classnames";
 import "./journalcalendarremade.scss";
-import MainTabs from "../Tabs/MainTabs";
 
 const months = [
   "January",
@@ -41,13 +38,10 @@ const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const JournalCalendarRemade = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-  const [isCurrentDate, setIsCurrentDate] = useState(new Date().getDate());
+  const [year, setYear] = useState(new Date().getFullYear());
   const [currentMonth, setCurrentMonth] = useState();
   const popoverRef = useRef(null);
   const [currentdivInView, setCurrentDivInView] = useState("January");
-  const calendarContainer = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeMonthIndex, setActiveMonthIndex] = useState(null);
 
@@ -55,6 +49,7 @@ const JournalCalendarRemade = () => {
   const toJournalAddition = () => {
     navigation.push("/journaladdition");
   };
+
   const date: Date = new Date();
   const curDate: string = date.toLocaleDateString();
   const curDay: string = [
@@ -67,7 +62,7 @@ const JournalCalendarRemade = () => {
     "Saturday",
   ][date.getDay()];
 
-  const customIconFunc = (dateIndex, mIndex): string => {
+  const daysIcon = (dateIndex, mIndex): string => {
     if (dateIndex === 12 && mIndex === 7) {
       return newMoon;
     } else if (dateIndex === 6 && mIndex === 7) {
@@ -81,18 +76,7 @@ const JournalCalendarRemade = () => {
     setActiveIndex(dateIndex);
     setActiveMonthIndex(monthIndex);
     toJournalAddition();
-    console.log("Clicked:", dateIndex);
   };
-
-  const curMonth = new Date(selectedYear, selectedMonth, 0);
-  const numberOfDaysInCurMonth = curMonth.getDate();
-
-  const daysInCurMonth = Array.from(
-    {
-      length: numberOfDaysInCurMonth,
-    },
-    (_, dateIndex) => dateIndex + 1
-  );
 
   const handleClick = () => {
     setIsOpen(!isOpen);
@@ -109,7 +93,9 @@ const JournalCalendarRemade = () => {
 
       if (element !== null) {
         if (currentMonth) {
-          element.scrollIntoView({ behavior: "smooth", block: "center" });
+          setTimeout(() => {
+            element.scrollIntoView({ behavior: "smooth", block: "center" });
+          }, 500);
         } else {
           window.scrollTo({ top: 0, behavior: "smooth" });
         }
@@ -118,9 +104,8 @@ const JournalCalendarRemade = () => {
   };
 
   function isSectionVisible(sectionRef) {
-    console.log(sectionRef);
     const section = document.getElementById(sectionRef);
-    console.log(section);
+
     if (section) {
       const rect = section.getBoundingClientRect();
 
@@ -141,6 +126,105 @@ const JournalCalendarRemade = () => {
     }
   };
 
+  function isLeapYear(year) {
+    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+  }
+
+  const calendarMonths = [];
+
+  for (let m = 0; m < 12; m++) {
+    const monthData = [];
+    const firstDayOfMonth = new Date(year, m, 1).getDay();
+    let lastDateOfMonth = new Date(year, m + 1, 0).getDate();
+    const lastDateOfPrevMonth = new Date(year, m, 0).getDate();
+
+    if (m === 1 && isLeapYear(year)) {
+      lastDateOfMonth = 29;
+    }
+    for (const day of days) {
+      monthData.push(
+        <li key={`day-${day}`} className="calendar-day day-of-week">
+          {day}
+        </li>
+      );
+    }
+
+    for (let i = 0; i < firstDayOfMonth; i++) {
+      const prevMonthDate = lastDateOfPrevMonth - firstDayOfMonth + i + 1;
+      monthData.push(
+        <li key={`inactive-${i}`} className="inactive calendar-day">
+          {prevMonthDate}
+        </li>
+      );
+    }
+
+    for (let i = 1; i <= lastDateOfMonth; i++) {
+      const isToday =
+        i === new Date().getDate() &&
+        m === new Date().getMonth() &&
+        year === new Date().getFullYear()
+          ? "currentDay"
+          : "";
+      monthData.push(
+        <li
+          key={`currentDay-${i}`}
+          className={`calendar-day ${isToday} ${
+            activeIndex === i && activeMonthIndex === m ? "dayActive" : ""
+          }`}
+          onClick={() => handleOnClick(i, m)}
+        >
+          {daysIcon(i, m) && (
+            <img
+              className="daysIcon" // Apply custom styles to control image display
+              src={daysIcon(i, m)}
+              alt=""
+            />
+          )}
+          {i}
+        </li>
+      );
+    }
+    calendarMonths.push(
+      <div className="calendar-month" key={`month-${m}`}>
+        <div className="cur-month-year">
+          <span className="cur-month-year-text">{months[m]}</span>
+          <span className="cur-month-year-text">{year}</span>
+          <span id="cur-month-year-icon">
+            <IonButton fill="clear" onClick={handleClick}>
+              <IonIcon icon={chevronDownOutline}></IonIcon>
+            </IonButton>
+          </span>
+          <IonPopover
+            isOpen={isOpen}
+            onDidDismiss={() => setIsOpen(false)}
+            ref={popoverRef}
+          >
+            <div className="popover-content">
+              <h5 className="popoverHeading"> Select Month:</h5>
+              <label>
+                <select
+                  value={currentMonth}
+                  onChange={handleMonthChange}
+                  className="month-select"
+                >
+                  {months.map((monthName, optionIndex) => (
+                    <option value={monthName} key={optionIndex}>
+                      {monthName}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button onClick={handleGo} className="go-button">
+                Go
+              </button>
+            </div>
+          </IonPopover>
+        </div>
+        <ul className="calendar-data">{monthData}</ul>
+      </div>
+    );
+  }
+
   return (
     <IonPage>
       <IonContent>
@@ -158,88 +242,22 @@ const JournalCalendarRemade = () => {
             </IonButtons>
           </div>
 
-          <div className="calendar" onScroll={() => handleScroll()}>
-            <div className="calender-div" ref={calendarContainer}>
-              {months.map((month, mIndex) => (
+          <div className="calendar-container" onScroll={() => handleScroll()}>
+            <div className="calendar-scrollable">
+              {calendarMonths.map((monthData, mIndex) => (
                 <div
-                  className={`month ${
-                    currentdivInView == month ? "fadeIn" : "fadeOut"
+                  id={`${months[mIndex]}`}
+                  key={monthData.key}
+                  className={`calendar-month ${
+                    currentdivInView === months[mIndex] ? "fadeIn" : "fadeOut"
                   }`}
-                  id={month}
-                  key={mIndex}
                 >
-                  <div className="dateMonth">
-                    <p>{month}</p>
-                    <p>{selectedYear}</p>
-                    <IonButton fill="clear">
-                      <ChevronDownOutline
-                        color={"#ee5f64;"}
-                        height="12px"
-                        width="12px"
-                        onClick={handleClick}
-                      />
-                    </IonButton>
-                    <IonPopover
-                      isOpen={isOpen}
-                      onDidDismiss={() => setIsOpen(false)}
-                      ref={popoverRef}
-                    >
-                      <div className="popover-content">
-                        <h5 className="popoverHeading"> Select Month:</h5>
-                        <label>
-                          <select
-                            value={currentMonth}
-                            onChange={handleMonthChange}
-                            className="month-select"
-                          >
-                            {months.map((monthName, optionIndex) => (
-                              <option value={monthName} key={optionIndex}>
-                                {monthName}
-                              </option>
-                            ))}
-                          </select>
-                        </label>
-                        <button onClick={handleGo} className="go-button">
-                          Go
-                        </button>
-                      </div>
-                    </IonPopover>
-                  </div>
-                  <div className="days">
-                    {days.map((day, dayIndex) => (
-                      <span key={dayIndex} className="days">
-                        {day}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="dates">
-                    {daysInCurMonth.map((date, dateIndex) => (
-                      <span
-                        key={dateIndex}
-                        className={classNames("day", {
-                          active:
-                            activeIndex === dateIndex &&
-                            activeMonthIndex === mIndex,
-                          currentDay:
-                            isCurrentDate === date && selectedMonth === mIndex,
-                        })}
-                        onClick={() => handleOnClick(dateIndex, mIndex)}
-                      >
-                        {customIconFunc(dateIndex, mIndex) && (
-                          <img
-                            className="customIcons" // Apply custom styles to control image display
-                            src={customIconFunc(dateIndex, mIndex)}
-                            alt=""
-                          />
-                        )}
-                        {date}
-                      </span>
-                    ))}
-                  </div>
+                  {monthData}
                 </div>
               ))}
             </div>
           </div>
+
           <div className="moon-phases">
             <div className="full-moon">
               <img src={menstruation} alt="" />
