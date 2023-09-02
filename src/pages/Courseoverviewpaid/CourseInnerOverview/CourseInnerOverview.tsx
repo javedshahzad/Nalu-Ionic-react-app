@@ -42,22 +42,36 @@ import playCircle from "../../../Icons/Play Circle.jpg"
 import Thumbnail from '../Thumbnail';
 import AudioPlayer from '../AudioPlayes';
 import audioFile from "../../../audio/testing.mp4"
+ import i18next from "i18next";
+import { useTranslation } from 'react-i18next';
+import { Suspense, startTransition } from 'react';
 
  const CourseInnerOverview: React.FC = () => {
   const history = useHistory();
+  const { t, i18n, ready} = useTranslation();  
   const [togglePlay, setTogglePlay] = useState('video');
 
   const handleVideoClick = (value)=>{
     setTogglePlay(value)
   }
+  console.log(ready);
+
+  const handleLanguageChange = ()=> {
+   // i18next.changeLanguage('de');
+   // localStorage.setItem("language",'de')
+  //  history.push('/configcycle')
+    }
   return (
-    <IonPage className="CourseInnerOverview">
-      <IonHeader className="ion-no-border">
+<>
+        <IonPage className="CourseInnerOverview">
+         <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton color="dark" text={""} defaultHref="/tabs/tab2" />
           </IonButtons>
-          <IonTitle>Stretching & Loosening Exercises</IonTitle>
+          <IonTitle> 
+          {t('course_inner_overview.header')} 
+         </IonTitle>
           <IonButtons slot="end">
             <IonButton color="dark">
               <IonIcon icon={notificationsOutline} />
@@ -73,15 +87,7 @@ import audioFile from "../../../audio/testing.mp4"
                <ReactPlayer
             url={"https://player.vimeo.com/external/768936607.m3u8?s=da16b0319d8ef09713f6b1843a66d487537b4861&logging=false"}
             controls={true}
-  
             /> 
-            
-      
-    //   <video  height="240" controls>
-    //   <source src="https://player.vimeo.com/external/768936607.m3u8?s=da16b0319d8ef09713f6b1843a66d487537b4861&logging=false" 
-    //   />
-    //   Your browser does not support the video tag.
-    // </video>
             :
             <>
             <div className="audio_player_div">
@@ -92,7 +98,7 @@ import audioFile from "../../../audio/testing.mp4"
                 </IonCol>
                 <IonCol size="6">
                 <div className="title">
-                     <h3>Stretching & Loosening Exercises</h3>
+                     <h3>{t('course_inner_overview.header')}</h3>
                      </div>
                 </IonCol>
               </IonRow>
@@ -130,7 +136,7 @@ import audioFile from "../../../audio/testing.mp4"
           </div>
           </div>
           <div className="title">
-            <h3>Stretching & Loosening Exercises</h3>
+            <h3>{t('course_inner_overview.header')}</h3>
           </div>
           <IonGrid>
               <IonRow>
@@ -144,35 +150,41 @@ import audioFile from "../../../audio/testing.mp4"
                   </IonCol>
                   <IonCol size="10">
                     <div className="align_col">
-                      <div className="createdby">Created by</div >
-                      <div className="message"><span>Dr. Ilca Wilhelm, MD,</span> Medical Specialist at the University Clinic for Anesthesiology and Pain Medicine of Inselspital, University Hospital Bern</div>
+                      <div className="createdby">{t('course_inner_overview.created_by')}</div >
+                      <div className="message">
+                        <span>{t('course_inner_overview.message_1')}</span> 
+                        {t('course_inner_overview.message_2')}
+                        </div>
                     </div>
                   </IonCol>
               </IonRow>
           </IonGrid>
           <div className="paragraph">
-            When we experience pain our body, our body usually reacts by increasing muscle tension
-          </div>
+          {t('course_inner_overview.description')}
+                    </div>
           <IonGrid>
             <IonRow>
               <IonCol size="5">
                 <img src={img2}/>
               </IonCol>
               <IonCol size="7">
-              <div className="paragraph_2">Abdomen: Abdominal Breathing</div>
+              <div className="paragraph_2">{t('course_inner_overview.block')}</div>
               <div className="align_justify">
-                <span>3 Minutes</span>
+                <span>{t('course_inner_overview.timeline')}</span>
                 <span><img src={playCircle} alt="" /></span>
               </div>
               </IonCol>
             </IonRow>
           </IonGrid>
           <div className="btn-holder ion-text-center ion-padding-vertical">
-          <IonButton expand="block" >Continue</IonButton>
+          <IonButton expand="block" onClick={() => handleLanguageChange()}>{t('course_inner_overview.continue_button')}</IonButton>
         </div>
         </div>
       </IonContent>
-    </IonPage>
+      </IonPage>
+        </>
+    
+     
   );
 };
 

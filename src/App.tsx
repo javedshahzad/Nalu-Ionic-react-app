@@ -58,7 +58,8 @@ import Community from "./pages/Community/Community";
 import Login from "./pages/Login/Login";
 import Resources from "./pages/Resources/Resources";
 import PrivateRoute from "./auth/PrivateRoute";
-
+import './i18n';
+import { Suspense } from "react";
 
 setupIonicReact({
   mode: "ios",
@@ -68,7 +69,8 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-    
+      {/* <Suspense fallback={<div>Loading...</div>}> */}
+
         <Route path="/tabs" render={() => <MainTabs />} />
         
         <Route exact path="/chat">
@@ -187,7 +189,10 @@ const App: React.FC = () => (
         <Route exact path="/">
           <Redirect to="/onboarding" />
         </Route>
+        {/* </Suspense> */}
+
       </IonRouterOutlet>
+
     </IonReactRouter>
   </IonApp>
 );

@@ -1,0 +1,52 @@
+{
+    "course_inner_overview":
+    {
+    "header": "Dehn- und Lockerungsübungen",
+    "created_by": "Erstellt von",
+    "message_1":"Dr. Ilca Wilhelm, MD,",
+    "message_2":"Facharzt an der Universitätsklinik für Anästhesiologie und Schmerzmedizin des Inselspitals, Universitätsspital Bern",
+    "description":"Wenn wir Schmerzen in unserem Körper verspüren, reagiert unser Körper normalerweise mit einer Erhöhung der Muskelspannung",
+    "block":"Bauch: Bauchatmung",
+    "timeline": "3 Minuten",
+    "continue_button":"Weitermachen"
+    },
+    
+        "login": {
+          "login": "Anmeldung",
+          "account": "Erstelle einen kostenlosen Account",
+          "continue_button": "Weitermachen",
+          "or": "oder",
+          "google": "Weiter mit Google",
+          "facebook": "Weiter mit Facebook",
+          "no_account": "Ich habe noch kein Konto?",
+          "sign_up": "Melden Sie sich an",
+          "email":"email",
+         "password":"passwort"
+        },
+        "community": {
+            "browse_groups": "Gruppen durchsuchen"
+          },
+        "config_cycle": {
+              "config_title": "Konfigurieren Sie Ihr Zyklusjournal",
+              "description_1": "Wann war Ihre letzte Periode?",
+              "description_2": "Ich weiß es nicht / Ich hatte nie eines",
+              "description_3": "Wenn Sie Ihre Periode nicht kennen oder nie hatten, wird Ihr Zyklus auf die Mondphasen eingestellt, um Sie an den zyklischen Lebensstil heranzuführen.",
+              "continue_button": "Weitermachen"
+            },
+            "onboarding": {
+                "description_1": "Harmonisieren Sie Ihren Menstruationszyklus",
+                "description_2": "Lernen Sie, Ihren Zyklus auf natürliche Weise zu regulieren und sich ausgeglichener und voller Energie zu fühlen.",
+                "get_started": "Loslegen",
+                "account": "Ich habe einen Account"
+              },
+              "questioning": {
+                "description_1": "Wie können wir Sie unterstützen?",
+                "description_2": "Wir konfigurieren Ihr Erlebnis entsprechend Ihren Zielen.",
+                "description_3": "Verbessern Sie Ihr Leben mit Endometriose",
+                "description_4": "Holen Sie sich regelmäßige Periode",
+                "description_5": "Harmonisieren Sie Ihren Zyklus",
+                "description_6": "Ich weiß nicht"
+
+              }
+           
+        }

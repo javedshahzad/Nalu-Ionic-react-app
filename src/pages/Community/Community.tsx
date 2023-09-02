@@ -15,8 +15,11 @@ import { addCircle, addCircleOutline, checkmarkCircle, notificationsOutline } fr
 
 import "./Community.scss";
 import { useState } from "react";
+import { useTranslation } from 'react-i18next';
 
 const Community: React.FC = () => {
+  const { t} = useTranslation();  
+
   const itemList = [
     {
       avatarText: 'A',
@@ -70,7 +73,7 @@ const Community: React.FC = () => {
             <IonBackButton color="dark" text={""} defaultHref="/" />
           </IonButtons>
           <IonTitle>
-            Browse Groups
+          {t('community.browse_groups')}
             </IonTitle>
             <IonButtons slot="end">
               <IonButton color="dark">
