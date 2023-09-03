@@ -1,0 +1,119 @@
+$config-font-family: var(--ion-font-family);
+$config-white: #fefcfa;
+$config-pink: #ee5f64;
+$config-black: #2d2d2d;
+
+.journal-addition-main {
+  background-color: $config-white !important;
+  padding: 0 15px 0 15px !important;
+}
+
+#week-view-wrapper {
+  width: 100%;
+  background-color: $config-white;
+  overflow-x: auto;
+
+  overflow-y: hidden;
+
+  display: flex;
+
+  flex-direction: column;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .day-heading {
+    display: flex;
+    overflow-y: hidden;
+    overflow-x: auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .isToday {
+      background-color: $config-black;
+      border-radius: 10px;
+      color: $config-white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0;
+      &:hover {
+        background-color: $config-pink !important;
+        border-radius: 10px;
+        .daysIcon {
+          display: none !important;
+        }
+      }
+      &::before {
+        content: "Today";
+        font-size: 8px;
+      }
+    }
+
+    .day {
+      min-width: calc(100% / 7 + 1px);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+      font-weight: 500;
+
+      .weekday,
+      .date {
+        display: flex;
+        width: 40px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+      }
+      .weekday {
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .date {
+        &:hover {
+          background-color: $config-pink;
+          color: $config-white;
+          border-radius: 10px;
+          cursor: pointer;
+          .daysIcon {
+            display: none !important;
+          }
+        }
+      }
+    }
+    .daysIcon {
+      position: relative;
+      max-width: 100%;
+      top: 4px;
+      right: 2px;
+    }
+
+    .active {
+      background-color: $config-pink !important;
+      color: $config-white !important;
+
+      .daysIcon {
+        display: none !important;
+        &:hover {
+          display: none !important;
+        }
+      }
+    }
+    .date {
+      font-size: 16px;
+      font-weight: 400;
+    }
+  }
+}
+
+.today-clicked-date {
+  display: flex;
+  justify-content: space-between;
+  h4 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+}

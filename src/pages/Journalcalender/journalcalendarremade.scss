@@ -13,6 +13,23 @@ $config-black: #2d2d2d;
   }
 }
 
+.calendar-day {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  &:hover {
+    background-color: $config-pink !important;
+    color: $config-white;
+    .daysIcon {
+      display: none !important;
+    }
+  }
+}
+
 .ion-page {
   justify-content: center !important;
 }
@@ -145,6 +162,14 @@ ion-button {
         color: $config-black;
       }
     }
+  }
+}
+.day-of-week {
+  font-weight: 700;
+  &:hover {
+    background-color: transparent !important;
+    cursor: default !important;
+    color: $config-black;
   }
 }
 

@@ -57,6 +57,7 @@ import Login from "./pages/Login/Login";
 import Resources from "./pages/Resources/Resources";
 import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
 import ConfigCycleRemade from "./pages/Configcycle/ConfigCycleRemade";
+import JournalAdditionRemade from "./pages/Journaladdition/JournalAdditionRemade";
 
 setupIonicReact({
   mode: "ios",
@@ -141,6 +142,19 @@ const App: React.FC = () => (
         <Route exact path="/configcycleremade">
           <ConfigCycleRemade />
         </Route>
+        {/* <Route exact path="/journaladditionremade">
+          <JournalAdditionRemade />
+        </Route> */}
+
+        <Route
+          path="/journaladditionremade/:dateParam"
+          render={(props) => (
+            <JournalAdditionRemade
+              key={props.match.params.dateParam}
+              {...props}
+            />
+          )}
+        />
 
         <Route exact path="/search">
           <Searchmodal />

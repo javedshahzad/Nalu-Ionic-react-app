@@ -16,6 +16,7 @@ import cervicalMucus from "../../assets/images/Cervical Mucus.svg";
 import pen from "../../assets/images/Pen.svg";
 import setting from "../../assets/images/setting.svg";
 import { chevronDownOutline } from "ionicons/icons";
+import { useHistory } from "react-router-dom";
 
 import "./journalcalendarremade.scss";
 
@@ -45,10 +46,10 @@ const JournalCalendarRemade = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeMonthIndex, setActiveMonthIndex] = useState(null);
 
-  const navigation = useIonRouter();
-  const toJournalAddition = () => {
-    navigation.push("/journaladdition");
-  };
+  const history = useHistory(); // Use useHistory for navigation
+
+  // const navigation = useIonRouter();
+  // const toJounralAddition = () => {};
 
   const date: Date = new Date();
   const curDate: string = date.toLocaleDateString();
@@ -75,7 +76,10 @@ const JournalCalendarRemade = () => {
   const handleOnClick = (dateIndex, monthIndex) => {
     setActiveIndex(dateIndex);
     setActiveMonthIndex(monthIndex);
-    toJournalAddition();
+    const dateParam = `${year}-${monthIndex + 1}-${dateIndex}`;
+
+    const url = `/journaladditionremade/${dateParam}`;
+    history.push(url);
   };
 
   const handleClick = () => {
