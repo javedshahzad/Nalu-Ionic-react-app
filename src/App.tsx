@@ -142,7 +142,7 @@ const App: React.FC = () => (
         <Route exact path="/configcycleremade">
           <ConfigCycleRemade />
         </Route>
-        {/* <Route exact path="/journaladditionremade">
+        {/* <Route exact path="/journaladditionremade:dateParam">
           <JournalAdditionRemade />
         </Route> */}
 

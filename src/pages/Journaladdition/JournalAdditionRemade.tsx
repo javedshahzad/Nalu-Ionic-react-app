@@ -21,13 +21,15 @@ function JournalAdditionRemade() {
     setActiveMonth(new Date(dateParam).getMonth());
     setActiveYear(new Date(dateParam).getFullYear());
 
+    const goTo = document.getElementById(dateParam);
+    console.log(goTo);
     setTimeout(() => {
-      const el = document.getElementById(dateParam);
-      console.log("newELParam", el);
-      if (el !== null) {
-        el.scrollIntoView({ behavior: "smooth", inline: "center" });
+      if (goTo !== null) {
+        goTo.scrollIntoView({ behavior: "smooth", inline: "center" });
       }
     }, 500);
+
+    return () => console.log("destroyed");
   }, []);
 
   const showClickDate = (date) => {
@@ -85,7 +87,6 @@ function JournalAdditionRemade() {
   };
 
   const parentRef = useRef(null);
-  const divRef = useRef<HTMLDivElement>(null);
 
   let date = new Date(dateParam),
     y = date.getFullYear(),
@@ -115,10 +116,10 @@ function JournalAdditionRemade() {
 
   function weekdays(loopDate, loopEndDate) {
     const today = formatDates(new Date());
-    console.log("today", today);
+    // console.log("today", today);
     let newWeekDays = [];
     while (loopDate <= loopEndDate) {
-      console.log("toffy", today);
+      // console.log("toffy", today);
       newWeekDays.push({
         fullDate: loopDate.toLocaleString("default", {
           weekday: "short",
@@ -140,73 +141,7 @@ function JournalAdditionRemade() {
 
   let days = weekdays(new Date(dateRange[0]), new Date(dateRange[1]));
 
-  // function getMonthName(monthNumber) {
-  //   const months = [
-  //     "January",
-  //     "February",
-  //     "March",
-  //     "April",
-  //     "May",
-  //     "June",
-  //     "July",
-  //     "August",
-  //     "September",
-  //     "October",
-  //     "November",
-  //     "December",
-  //   ];
-
-  //   if (monthNumber >= 1 && monthNumber <= 12) {
-  //     return months[monthNumber - 1];
-  //   } else {
-  //     return "Invalid Month";
-  //   }
-  // }
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-
-  // useEffect(() => {
-  //   const scrollContainer = scrollContainerRef.current;
-  //   console.log("scrollContainer", scrollContainer);
-  //   if (scrollContainer) {
-  //     const handleScroll = () => {
-  //       const dayDivs = scrollContainer.querySelectorAll(".day"); // Change the selector as needed
-  //       const scrollPosition = scrollContainer.scrollLeft;
-
-  //       let currentDivId = "";
-
-  //       for (const dayDiv of dayDivs) {
-  //         const dateDiv = dayDiv.querySelector(".date") as HTMLElement;
-  //         const divLeft =
-  //           dateDiv.getBoundingClientRect().left -
-  //           scrollContainer.getBoundingClientRect().left;
-  //         const divWidth = dateDiv.clientWidth;
-
-  //         if (
-  //           scrollPosition >= divLeft &&
-  //           scrollPosition < divLeft + divWidth
-  //         ) {
-  //           currentDivId = dateDiv.id;
-  //           break;
-  //         }
-  //       }
-
-  //       console.log("Currently at div with ID:", currentDivId);
-  //       if (currentDivId) {
-  //         let month = new Date(currentDivId).getMonth();
-
-  //         const monthName = getMonthName(month + 1);
-
-  //         setJournalDate(monthName);
-  //       }
-  //     };
-
-  //     scrollContainer.addEventListener("scroll", handleScroll);
-
-  //     return () => {
-  //       scrollContainer.removeEventListener("scroll", handleScroll);
-  //     };
-  //   }
-  // }, []);
 
   const handleHorizontalScroll = () => {
     let e = document.getElementById("day-heading");
@@ -218,11 +153,6 @@ function JournalAdditionRemade() {
       let y = date.getFullYear(),
         m = date.getMonth();
 
-      // const monthNumber = m + 1;
-      // const monthName = getMonthName(monthNumber);
-
-      // setJournalDate(monthName);
-
       let lastDay = formatDates(new Date(y, m + 2, 0));
       console.log("lastDay", dateRange[1], lastDay, m, [dateRange[0], lastDay]);
       setDateRange([dateRange[0], lastDay]);
@@ -232,11 +162,6 @@ function JournalAdditionRemade() {
       date.setMonth(date.getMonth() - 1);
       let y = date.getFullYear(),
         m = date.getMonth();
-
-      // const monthNumber = m - 1;
-      // const monthName = getMonthName(monthNumber);
-
-      // setJournalDate(monthName);
 
       let firstDay = formatDates(new Date(y, m, 1));
       console.log("firstDay", firstDay);
@@ -284,7 +209,7 @@ function JournalAdditionRemade() {
                   >
                     {daysIcon(day.dayNo, day.month) && (
                       <img
-                        className="daysIcon" // Apply custom styles to control image display
+                        className="daysIcon"
                         src={daysIcon(day.dayNo, day.month)}
                         alt=""
                       />

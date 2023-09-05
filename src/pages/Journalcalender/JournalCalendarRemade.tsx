@@ -76,7 +76,13 @@ const JournalCalendarRemade = () => {
   const handleOnClick = (dateIndex, monthIndex) => {
     setActiveIndex(dateIndex);
     setActiveMonthIndex(monthIndex);
-    const dateParam = `${year}-${monthIndex + 1}-${dateIndex}`;
+
+    const tempMonthIndex = monthIndex + 1 + "";
+    const tempDateIndex = dateIndex + "";
+
+    const dateParam = `${year}-${
+      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
     const url = `/journaladditionremade/${dateParam}`;
     history.push(url);
