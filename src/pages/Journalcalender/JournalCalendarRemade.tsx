@@ -6,6 +6,7 @@ import {
   IonContent,
   IonPopover,
   useIonRouter,
+  IonToolbar,
 } from "@ionic/react";
 import { menuOutline, notificationsOutline } from "ionicons/icons";
 import { useState, useRef, useEffect } from "react";
@@ -15,8 +16,9 @@ import menstruation from "../../assets/images/Menstruation.svg";
 import cervicalMucus from "../../assets/images/Cervical Mucus.svg";
 import pen from "../../assets/images/Pen.svg";
 import setting from "../../assets/images/setting.svg";
-import { chevronDownOutline } from "ionicons/icons";
+import { chevronDownOutline, searchOutline } from "ionicons/icons";
 import { useHistory } from "react-router-dom";
+import NotificationBell from "../../components/NotificationBell";
 
 import "./journalcalendarremade.scss";
 
@@ -238,20 +240,22 @@ const JournalCalendarRemade = () => {
   return (
     <IonPage>
       <IonContent>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonButton color="dark">
+              <IonIcon icon={menuOutline} />
+            </IonButton>
+          </IonButtons>
+          <IonButtons slot="end">
+            <IonButton color="dark">
+              <IonIcon icon={searchOutline} />
+            </IonButton>
+            <IonButton color="dark">
+              <NotificationBell />
+            </IonButton>
+          </IonButtons>
+        </IonToolbar>{" "}
         <div className="journalcalendar-main">
-          <div className="journal-div">
-            <IonButtons slot="start">
-              <IonButton color="dark">
-                <IonIcon icon={menuOutline} />
-              </IonButton>
-            </IonButtons>
-            <IonButtons slot="end">
-              <IonButton color="dark">
-                <IonIcon icon={notificationsOutline} />
-              </IonButton>
-            </IonButtons>
-          </div>
-
           <div className="calendar-container" onScroll={() => handleScroll()}>
             <div className="calendar-scrollable">
               {calendarMonths.map((monthData, mIndex) => (

@@ -18,6 +18,7 @@ import {
   optionsOutline,
 } from "ionicons/icons";
 import { useEffect, useRef } from "react";
+import NotificationBell from "../../components/NotificationBell";
 
 const Journalcalender: React.FC = () => {
   const datetime = useRef<null | HTMLIonDatetimeElement>(null);
@@ -42,8 +43,8 @@ const Journalcalender: React.FC = () => {
           </IonButton>
         </IonButtons>
         <IonButtons slot="end">
-          <IonButton color="dark">
-            <IonIcon icon={notificationsOutline} />
+          <IonButton slot="end" fill="clear">
+            <NotificationBell />
           </IonButton>
         </IonButtons>
       </IonToolbar>

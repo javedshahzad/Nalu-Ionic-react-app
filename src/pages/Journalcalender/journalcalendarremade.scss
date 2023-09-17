@@ -12,6 +12,9 @@ $config-black: #2d2d2d;
     justify-content: space-between;
   }
 }
+ion-toolbar {
+  --background: #fefcfa;
+}
 
 .calendar-day {
   display: flex;

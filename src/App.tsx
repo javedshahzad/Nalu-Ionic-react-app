@@ -1,16 +1,11 @@
 import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
-  IonIcon,
-  IonLabel,
   IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
+  useIonToast,
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { ellipse, square, triangle } from "ionicons/icons";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -58,8 +53,11 @@ import Resources from "./pages/Resources/Resources";
 import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
 import ConfigCycleRemade from "./pages/Configcycle/ConfigCycleRemade";
 import JournalAdditionRemade from "./pages/Journaladdition/JournalAdditionRemade";
-
+import Pusher from "pusher-js";
+import { addNotification } from "./store";
+import { useDispatch } from "react-redux";
 import OneSignal from "onesignal-cordova-plugin";
+import { useState } from "react";
 
 setupIonicReact({
   mode: "ios",
@@ -71,6 +69,28 @@ function OneSignalInit() {
 
 const App: React.FC = () => {
   OneSignalInit();
+
+  const [present] = useIonToast();
+  const presentToast = (notification: any) => {
+    present({
+      message: notification,
+      duration: 2000,
+      position: "top",
+    });
+  };
+  const dispatch = useDispatch();
+  const pusher = new Pusher("eac7e44a867cbabf54df", {
+    cluster: "us3",
+  });
+
+  const channel = pusher.subscribe("vote-channel");
+
+  // Listen for an event
+  channel.bind("vote", (data: any) => {
+    dispatch(addNotification(data));
+    presentToast(data.body.title);
+  });
+
   return (
     <IonApp>
       <IonReactRouter>

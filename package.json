@@ -28,12 +28,16 @@
     "ionicons": "^7.0.0",
     "moment": "^2.29.4",
     "onesignal-cordova-plugin": "^5.0.0",
+    "pusher-js": "^8.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-ionicons": "^4.2.1",
+    "react-redux": "^8.1.2",
     "react-router": "^5.3.4",
     "react-router-dom": "^5.3.4",
-    "swiper": "^10.2.0"
+    "redux": "^4.2.1",
+    "swiper": "^10.2.0",
+    "terser": "^5.19.4"
   },
   "devDependencies": {
     "@capacitor/cli": "5.2.3",
