@@ -263,8 +263,8 @@ const Filtermodal: React.FC = () => {
                   max={130}
                   value={rangeValues}
                 >
-                  <IonLabel slot="start">0</IonLabel>
-                  <IonLabel slot="end">130</IonLabel>
+                  <IonLabel slot="start"> {rangeValues.lower}</IonLabel>
+                  <IonLabel slot="end"> {rangeValues.upper}</IonLabel>
                 </IonRange>
                 <div
                   style={{
