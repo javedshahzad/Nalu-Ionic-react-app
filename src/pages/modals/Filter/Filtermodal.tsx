@@ -25,11 +25,14 @@ import axios from "axios";
 
 const Filtermodal: React.FC = () => {
   const [rangeValues, setRangeValues] = useState({ lower: null, upper: null });
+  const [apiRangeValues, setAPIRangeValues] = useState({ lower: null, upper: null });
+
   const [menuType, setMenuType] = useState([]);
   const [filterValues, setFilterValues] = useState("");
   const [mediaItems, setmediaItems] = useState([]);
   const [recommendedItems, setrecommendedItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [votes, setVotes] = useState([]);
 
   const handleRangeChange = (event: CustomEvent) => {
     setRangeValues(event.detail.value);
@@ -51,18 +54,25 @@ const Filtermodal: React.FC = () => {
           name: string;
           icon_url: string | null;
         };
-        
-        const categoryArray = Object.entries(response.data.category).map(([id, category]: [string, CategoryObject]) => ({
-          id: parseInt(id),
-          name: category.name,
-          icon_url: category.icon_url,
-          active: false,
-        }));
+
+        const categoryArray = Object.entries(response.data.category).map(
+          ([id, category]: [string, CategoryObject]) => ({
+            id: parseInt(id),
+            name: category.name,
+            icon_url: category.icon_url,
+            active: false,
+          })
+        );
         setmediaItems(categoryArray);
 
         const names = getFullNames(response.data.authorities);
         console.log(names);
         setrecommendedItems(names);
+
+        setAPIRangeValues({
+          lower: response.data.upvotes_min,
+          upper: response.data.upvotes_max,
+        });
 
         setRangeValues({
           lower: response.data.upvotes_min,
@@ -70,6 +80,11 @@ const Filtermodal: React.FC = () => {
         });
 
         setIsLoading(false);
+        //         const generatedValues = [];
+        // for (let i = response.data.upvotes_min; i <= response.data.upvotes_max; i += 1) {
+        //   generatedValues.push(i);
+        // }
+        // setVotes(generatedValues);
       })
       .catch((error) => {
         console.log(error);
@@ -128,7 +143,11 @@ const Filtermodal: React.FC = () => {
 
         const imageUrl = category?.[0]?.icon_url || icon_url;
 
-        fullNames.push({ name: fullName.trim(),icon_url: imageUrl, active: false });
+        fullNames.push({
+          name: fullName.trim(),
+          icon_url: imageUrl,
+          active: false,
+        });
       }
     }
     return fullNames;
@@ -203,7 +222,7 @@ const Filtermodal: React.FC = () => {
                 <div className="selector mtype">
                   {mediaItems.map((item, index) => (
                     <IonItem lines="none" key={index}>
-                      <div className="img_div">  
+                      <div className="img_div">
                         {item.icon_url ? (
                           <img
                             src={item.icon_url}
@@ -233,15 +252,15 @@ const Filtermodal: React.FC = () => {
                     {recommendedItems.map((item, index) => (
                       <IonCol size="6" key={index}>
                         <IonItem lines="none">
-                        <div className="img_div">  
-                        {item.icon_url ? (
-                          <img
-                            src={item.icon_url}
-                            alt={item.name}
-                            className="icon-img"
-                          />
-                        ) : null}
-                      </div>
+                          <div className="img_div">
+                            {item.icon_url ? (
+                              <img
+                                src={item.icon_url}
+                                alt={item.name}
+                                className="icon-img"
+                              />
+                            ) : null}
+                          </div>
                           <IonLabel>{item.name}</IonLabel>
                           <IonCheckbox
                             mode="md"
@@ -269,23 +288,12 @@ const Filtermodal: React.FC = () => {
                   onIonChange={handleRangeChange}
                   aria-label="Dual Knobs Range"
                   dualKnobs={true}
-                  max={130}
+                  max={apiRangeValues.upper}
                   value={rangeValues}
                 >
                   <IonLabel slot="start"> {rangeValues.lower}</IonLabel>
                   <IonLabel slot="end"> {rangeValues.upper}</IonLabel>
                 </IonRange>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginTop: "10px",
-                  }}
-                >
-                  {[0, 30, 60, 90, 120, 130].map((value) => (
-                    <span key={value}>{value}</span>
-                  ))}
-                </div>
               </div>
 
               <div className="btn-holder ion-text-center ion-padding-vertical">
