@@ -61,6 +61,7 @@ const Filtermodal: React.FC = () => {
         setmediaItems(categoryArray);
 
         const names = getFullNames(response.data.authorities);
+        console.log(names);
         setrecommendedItems(names);
 
         setRangeValues({
@@ -113,6 +114,8 @@ const Filtermodal: React.FC = () => {
           middle_name,
           last_name,
           title_suffix,
+          category,
+          icon_url,
         } = authoritiesObj[authority];
 
         // Construct the full name based on available parts
@@ -123,7 +126,9 @@ const Filtermodal: React.FC = () => {
         if (last_name) fullName += last_name + " ";
         if (title_suffix) fullName += title_suffix;
 
-        fullNames.push({ name: fullName.trim(), active: false });
+        const imageUrl = category?.[0]?.icon_url || icon_url;
+
+        fullNames.push({ name: fullName.trim(),icon_url: imageUrl, active: false });
       }
     }
     return fullNames;
@@ -228,17 +233,15 @@ const Filtermodal: React.FC = () => {
                     {recommendedItems.map((item, index) => (
                       <IonCol size="6" key={index}>
                         <IonItem lines="none">
-                          {/* <IonIcon
-                      slot="start"
-                      src={
-                        item.active
-                          ? `assets/imgs/${item.icon.replace(
-                              ".svg",
-                              "a.svg"
-                            )}`
-                          : `assets/imgs/${item.icon}`
-                      }
-                    /> */}
+                        <div className="img_div">  
+                        {item.icon_url ? (
+                          <img
+                            src={item.icon_url}
+                            alt={item.name}
+                            className="icon-img"
+                          />
+                        ) : null}
+                      </div>
                           <IonLabel>{item.name}</IonLabel>
                           <IonCheckbox
                             mode="md"
