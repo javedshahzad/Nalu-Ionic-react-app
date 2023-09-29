@@ -43,18 +43,21 @@ const Filtermodal: React.FC = () => {
     setIsLoading(true);
 
     axios
-      .get(`https://app.mynalu.com/wp-json/nalu/v1/filter-values?lang=de`)
+      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/filter-values?lang=en`)
       .then((response) => {
         console.log(response.data);
         setFilterValues(response.data);
-
-        const categoryArray = Object.entries(response.data.category).map(
-          ([id, name]) => ({
-            id: parseInt(id),
-            name,
-            active: false,
-          })
-        );
+        type CategoryObject = {
+          name: string;
+          icon_url: string | null;
+        };
+        
+        const categoryArray = Object.entries(response.data.category).map(([id, category]: [string, CategoryObject]) => ({
+          id: parseInt(id),
+          name: category.name,
+          icon_url: category.icon_url,
+          active: false,
+        }));
         setmediaItems(categoryArray);
 
         const names = getFullNames(response.data.authorities);
@@ -97,10 +100,6 @@ const Filtermodal: React.FC = () => {
     setRangeValues({ lower: 0, upper: 0 });
 
     getValues();
-
-    // Reset recommended items
-    // const resetRecommendedItems = recommendedItems.map(item => ({ ...item, active: false }));
-    // setrecommendedItems(resetRecommendedItems);
   };
 
   const getFullNames = (authoritiesObj) => {
@@ -164,9 +163,15 @@ const Filtermodal: React.FC = () => {
     <>
       {isLoading ? (
         <>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <IonSpinner name="crescent"></IonSpinner>
-        </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <IonSpinner name="crescent"></IonSpinner>
+          </div>
         </>
       ) : (
         <>
@@ -193,14 +198,15 @@ const Filtermodal: React.FC = () => {
                 <div className="selector mtype">
                   {mediaItems.map((item, index) => (
                     <IonItem lines="none" key={index}>
-                      {/* <IonIcon
-                  slot="start"
-                  src={
-                    item.active
-                      ? `assets/imgs/${item.icon.replace(".svg", "a.svg")}`
-                      : `assets/imgs/${item.icon}`
-                  }
-                /> */}
+                      <div className="img_div">  
+                        {item.icon_url ? (
+                          <img
+                            src={item.icon_url}
+                            alt={item.name}
+                            className="icon-img"
+                          />
+                        ) : null}
+                      </div>
                       <IonLabel>{item.name}</IonLabel>
                       <IonCheckbox
                         mode="md"
