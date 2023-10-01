@@ -108,9 +108,9 @@ const App: React.FC = () => (
         </Route>
 
         <Route exact path="/eventdetail">
-        <PrivateRoute>
+        {/* <PrivateRoute> */}
           <Eventdetail />
-        </PrivateRoute>
+       {/* </PrivateRoute> */}
         </Route>
 
         
