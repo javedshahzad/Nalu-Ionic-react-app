@@ -1,0 +1,51 @@
+{
+    "course_inner_overview":
+    {
+    "header": "Stretching & Loosening Exercises",
+    "created_by": "Created by",
+    "message_1":"Dr. Ilca Wilhelm, MD,",
+    "message_2":"Medical Specialist at the University Clinic for Anesthesiology and Pain Medicine of Inselspital, University Hospital Bern",
+    "description":"When we experience pain our body, our body usually reacts by increasing muscle tension",
+    "block":"Abdomen: Abdominal Breathing",
+    "timeline": "3 Minutes",
+    "continue_button": "Continue"
+   },
+   "login":
+    {
+    "login":"Login",
+    "account":"Create a free Account",
+    "continue_button": "Continue",
+    "or":"or",
+    "google": "Continue With Google",
+    "facebook":"Continue With Facebook",
+    "no_account":"Don't have account yet?",
+    "sign_up":"Sign Up",
+    "email":"email",
+    "password":"password"
+},
+"community":{
+    "browse_groups":"Browse Groups"
+},
+"config_cycle":{
+    "config_title":"Configure your Cycle Journal",
+    "description_1":"When was the last of your last period?",
+    "description_2":"I don't Know / I never had one",
+    "description_3":"If you don’t know or never had a period your cycle will be set to the moon phases to introduce you to the cyclical lifestyle.",
+    "continue_button": "Continue"
+},
+
+  "onboarding":{
+    "description_1":"Harmonize Your Menstual Cycle",
+    "description_2":"Learn to regulate your cycle naturally and feel more balanced and energetic.",
+    "get_started":"Get Started",
+    "account":"I have an account"
+},
+"questioning":{
+    "description_1":"How can we support you",
+    "description_2":"We'll configure your experience according to your goals.",
+    "description_3":"Improve life with Endometriosis",
+    "description_4":"Get regular periods",
+    "description_5":"Harmonize your Cycle",
+    "description_6":"I don't know"
+}
+}

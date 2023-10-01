@@ -36,7 +36,7 @@ const Mygroups: React.FC = () => {
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton color="dark" text={""} defaultHref="/tabs/tab3" />
+            <IonBackButton color="dark" text={""} defaultHref="/tabs/tab2" />
           </IonButtons>
           <IonTitle>My Groups</IonTitle>
           <IonButtons slot="end">

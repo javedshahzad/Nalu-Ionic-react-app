@@ -17,6 +17,7 @@ import Journal from "../Journal/Journal";
 import Courseoverviewpaid from "../Courseoverviewpaid/Courseoverviewpaid";
 import Mygroups from "../Mygroups/Mygroups";
 import Journalcalender from "../Journalcalender/Journalcalender";
+import CourseInnerOverview from "../Courseoverviewpaid/CourseInnerOverview/CourseInnerOverview";
 interface MainTabsProps {}
 
 const MainTabs: React.FC<MainTabsProps> = () => {
@@ -33,6 +34,8 @@ const MainTabs: React.FC<MainTabsProps> = () => {
       
         <Route path="/tabs/tab1" render={() => <Journalcalender />} exact={true} />
         <Route path="/tabs/tab2" render={() => <Courseoverviewpaid />} exact={true} />
+        <Route path="/tabs/tab2/courseinneroverview" render={() => <PrivateRoute><CourseInnerOverview /></PrivateRoute>} exact={true} />
+
         <Route path="/tabs/tab3" render={() => <Mygroups />} exact={true} />
         <Route path="/tabs/tab4" render={() => <Journal />} exact={true} />
       </IonRouterOutlet>
