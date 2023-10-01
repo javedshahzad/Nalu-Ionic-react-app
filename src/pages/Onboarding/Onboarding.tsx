@@ -53,7 +53,7 @@ const Onboarding: React.FC = () => {
         <div className="content-holder ion-text-center animate__animated animate__zoomIn">
           <h3 className="ion-text-wrap">{t('onboarding.description_1')}</h3>
           <p className="ion-text-wrap">
-          {t('onboarding.description_2')}          
+          {t('onboarding.description_2')}
           </p>
         </div>
 

@@ -52,10 +52,7 @@ const Configcycle: React.FC = () => {
           <h3 className="ion-text-wrap">
             {t('config_cycle.description_2')}
             </h3>
-          <h6 className="ion-text-wrap">
-          If you don't know or never had a period your cycle will be set to the moon phases to introduce you to the cyclical lifestyle.
-          </h6>
-          {t('config_cycle.description_3')}          </h6>
+          <h6 className="ion-text-wrap">{t('config_cycle.description_3')}</h6>
         </div>
 
         <div className="btn-holder ion-text-center ion-padding-vertical">
