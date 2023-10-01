@@ -16,12 +16,18 @@ import {
   IonSegmentButton,
   IonToolbar,
 } from "@ionic/react";
-import { add,menuOutline, notificationsOutline, searchOutline } from "ionicons/icons";
+import {
+  add,
+  menuOutline,
+  notificationsOutline,
+  searchOutline,
+} from "ionicons/icons";
 
 import "./Journal.scss";
 import { useEffect, useState } from "react";
 import Addrecmodal from "../modals/Addrec/Addrecmodal";
 import { useHistory } from "react-router";
+import NotificationBell from "../../components/NotificationBell";
 
 const Journal: React.FC = () => {
   const [activeSegment, setActiveSegment] = useState<string>("overview");
@@ -29,7 +35,7 @@ const Journal: React.FC = () => {
   const history = useHistory();
 
   const navigateToNextPage = () => {
-    history.push('/resourcedetail'); // Navigate to the "/next" route
+    history.push("/resourcedetail"); // Navigate to the "/next" route
   };
 
   useEffect(() => {
@@ -42,11 +48,10 @@ const Journal: React.FC = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
 
-
   const handleModalClose = () => {
     setModalOpen(false);
   };
-  
+
   return (
     <IonPage className="Journal">
       <IonHeader className="ion-no-border">
@@ -62,8 +67,8 @@ const Journal: React.FC = () => {
             </IonButton>
           </IonButtons>
           <IonButtons slot="end">
-            <IonButton color="dark">
-              <IonIcon icon={notificationsOutline} />
+            <IonButton slot="end" fill="clear">
+              <NotificationBell />
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -83,10 +88,12 @@ const Journal: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-      <IonModal
-         isOpen={modalOpen} className="modaaal"  onDidDismiss={handleModalClose}
+        <IonModal
+          isOpen={modalOpen}
+          className="modaaal"
+          onDidDismiss={handleModalClose}
         >
-          <Addrecmodal onClose={() => setModalOpen(false)}  />
+          <Addrecmodal onClose={() => setModalOpen(false)} />
         </IonModal>
         {activeSegment === "overview" ? (
           <div className="overview">
@@ -104,7 +111,7 @@ const Journal: React.FC = () => {
                 </div>
               </IonButton>
               <IonButton fill="clear">
-                <div className="flexd" style={{paddingTop:"14px"}}>
+                <div className="flexd" style={{ paddingTop: "14px" }}>
                   <IonIcon src="assets/imgs/ov3.svg" />
                   <p className="ion-text-wrap">
                     Contact Points <br /> & Providers
@@ -131,8 +138,11 @@ const Journal: React.FC = () => {
               </div>
               <IonRow>
                 <IonCol size="6">
-                  <div className="rc-card ion-activatable ripple-parent" onClick={() => navigateToNextPage()}>
-                  <IonRippleEffect />
+                  <div
+                    className="rc-card ion-activatable ripple-parent"
+                    onClick={() => navigateToNextPage()}
+                  >
+                    <IonRippleEffect />
                     <div className="img-holder">
                       <img src="assets/imgs/rc1.svg" alt="" />
 
@@ -143,10 +153,13 @@ const Journal: React.FC = () => {
 
                     <h4>Movie: Nicht die Regel</h4>
                   </div>
-                </IonCol> 
+                </IonCol>
                 <IonCol size="6">
-                  <div className="rc-card ion-activatable ripple-parent" onClick={() => navigateToNextPage()}>
-                  <IonRippleEffect />
+                  <div
+                    className="rc-card ion-activatable ripple-parent"
+                    onClick={() => navigateToNextPage()}
+                  >
+                    <IonRippleEffect />
                     <div className="img-holder">
                       <img src="assets/imgs/rc2.png" alt="" />
 
@@ -159,8 +172,11 @@ const Journal: React.FC = () => {
                   </div>
                 </IonCol>
                 <IonCol size="6">
-                  <div className="rc-card ion-activatable ripple-parent" onClick={() => navigateToNextPage()}>
-                  <IonRippleEffect />
+                  <div
+                    className="rc-card ion-activatable ripple-parent"
+                    onClick={() => navigateToNextPage()}
+                  >
+                    <IonRippleEffect />
                     <div className="img-holder">
                       <img src="assets/imgs/rc3.png" alt="" />
 
@@ -170,13 +186,16 @@ const Journal: React.FC = () => {
                     </div>
 
                     <h4 className="ion-text-wrap">
-                    Article: Statement about non-invasive diagnostic tests
+                      Article: Statement about non-invasive diagnostic tests
                     </h4>
                   </div>
                 </IonCol>
                 <IonCol size="6">
-                  <div className="rc-card ion-activatable ripple-parent" onClick={() => navigateToNextPage()}>
-                  <IonRippleEffect />
+                  <div
+                    className="rc-card ion-activatable ripple-parent"
+                    onClick={() => navigateToNextPage()}
+                  >
+                    <IonRippleEffect />
                     <div className="img-holder">
                       <img src="assets/imgs/rc4.png" alt="" />
 
@@ -195,7 +214,7 @@ const Journal: React.FC = () => {
 
             <div className="add-recommendation ion-text-center">
               <IonButton onClick={() => setModalOpen(true)}>
-                <IonIcon icon={add}/>
+                <IonIcon icon={add} />
               </IonButton>
               <h4>Add Recommendation</h4>
             </div>

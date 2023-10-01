@@ -17,10 +17,17 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { bookmarkOutline, checkmarkCircleOutline, closeCircleOutline, heartOutline, notificationsOutline } from "ionicons/icons";
+import {
+  bookmarkOutline,
+  checkmarkCircleOutline,
+  closeCircleOutline,
+  heartOutline,
+  notificationsOutline,
+} from "ionicons/icons";
 
 import "./Eventdetail.scss";
 import { useState } from "react";
+import NotificationBell from "../../components/NotificationBell";
 
 const Eventdetail: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState("");
@@ -48,8 +55,8 @@ const Eventdetail: React.FC = () => {
             </IonButton>
           </IonButtons>
           <IonButtons slot="end">
-            <IonButton color="dark">
-              <IonIcon icon={notificationsOutline} />
+            <IonButton slot="end" fill="clear">
+              <NotificationBell />
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -130,17 +137,26 @@ const Eventdetail: React.FC = () => {
                 <IonRow>
                   <IonCol size="4" id="register">
                     <IonButton fill="clear">
-                      <p><IonIcon icon={checkmarkCircleOutline} /> <br />Register</p>
+                      <p>
+                        <IonIcon icon={checkmarkCircleOutline} /> <br />
+                        Register
+                      </p>
                     </IonButton>
                   </IonCol>
                   <IonCol size="4">
                     <IonButton fill="clear" color="dark">
-                      <p><IonIcon icon={bookmarkOutline} /> <br />Bookmark</p>
+                      <p>
+                        <IonIcon icon={bookmarkOutline} /> <br />
+                        Bookmark
+                      </p>
                     </IonButton>
                   </IonCol>
                   <IonCol size="4">
-                    <IonButton fill="clear" color="dark" >
-                      <p><IonIcon icon={closeCircleOutline} /> <br />Cancel</p>
+                    <IonButton fill="clear" color="dark">
+                      <p>
+                        <IonIcon icon={closeCircleOutline} /> <br />
+                        Cancel
+                      </p>
                     </IonButton>
                   </IonCol>
                 </IonRow>

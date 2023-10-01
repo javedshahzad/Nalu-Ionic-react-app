@@ -1,16 +1,11 @@
 import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
-  IonIcon,
-  IonLabel,
   IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
+  useIonToast,
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { ellipse, square, triangle } from "ionicons/icons";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -59,106 +54,155 @@ import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade
 import Resources from "./pages/Resources/Resources";
 import PrivateRoute from "./auth/PrivateRoute";
 import './i18n';
-import { Suspense } from "react";
+import { Suspense } from "react";import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
+import ConfigCycleRemade from "./pages/Configcycle/ConfigCycleRemade";
+import JournalAdditionRemade from "./pages/Journaladdition/JournalAdditionRemade";
+import Pusher from "pusher-js";
+import { addNotification } from "./store";
+import { useDispatch } from "react-redux";
+import OneSignal from "onesignal-cordova-plugin";
+import { useState } from "react";
 
 setupIonicReact({
   mode: "ios",
 });
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-      {/* <Suspense fallback={<div>Loading...</div>}> */}
+function OneSignalInit() {
+  OneSignal.initialize("0f10d9d5-8078-4eda-b52f-c616a5398d0b");
+}
+
+const App: React.FC = () => {
+  OneSignalInit();
+
+  const [present] = useIonToast();
+  const presentToast = (notification: any) => {
+    present({
+      message: notification,
+      duration: 2000,
+      position: "top",
+    });
+  };
+  const dispatch = useDispatch();
+  const pusher = new Pusher("eac7e44a867cbabf54df", {
+    cluster: "us3",
+  });
+
+  const channel = pusher.subscribe("vote-channel");
+
+  // Listen for an event
+  channel.bind("vote", (data: any) => {
+    dispatch(addNotification(data));
+    presentToast(data.body.title);
+  });
+
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+        {/* <Suspense fallback={<div>Loading...</div>}> */}
 
         <Route path="/tabs" render={() => <MainTabs />} />
-        <Route exact path="/chat">
-          <Chat />
-        </Route>
-        <Route exact path="/community">
-          <Community />
-        </Route>
-        <Route exact path="/configcycle">
-          <Configcycle />
-        </Route>
+          <Route exact path="/chat">
+            <Chat />
+          </Route>
+          <Route exact path="/community">
+            <Community />
+          </Route>
+          <Route exact path="/configcycle">
+            <Configcycle />
+          </Route>
 
-        <Route exact path="/coursechapter">
-          <Coursechapter />
-        </Route>
+          <Route exact path="/coursechapter">
+            <Coursechapter />
+          </Route>
 
-        <Route exact path="/courseoverviewfree">
-          <Courseoverviewfree />
-        </Route>
+          <Route exact path="/courseoverviewfree">
+            <Courseoverviewfree />
+          </Route>
 
-        <Route exact path="/courseoverviewpaid">
-          <Courseoverviewpaid />
-        </Route>
+          <Route exact path="/courseoverviewpaid">
+            <Courseoverviewpaid />
+          </Route>
 
-        <Route exact path="/eventdetail">
-          <Eventdetail />
-        </Route>
+          <Route exact path="/eventdetail">
+            <Eventdetail />
+          </Route>
 
         <Route exact path="/filter">
           <Filtermodal />
         </Route>
 
-        <Route exact path="/journaladdition">
-          <Journaladdition />
-        </Route>
+          <Route exact path="/journaladdition">
+            <Journaladdition />
+          </Route>
 
-        <Route exact path="/journalcalender">
-          <Journalcalender />
-        </Route>
-        <Route exact path="/configcycleremade">
-          <ConfigCycleRemade />
-        </Route>
-        <Route exact path="/journalcalendarremade">
-          <JournalCalendarRemade />
-        </Route>
+          <Route exact path="/journalcalender">
+            <Journalcalender />
+          </Route>
 
-        <Route exact path="/learnmore">
-          <Learnmore />
-        </Route>
-        <Route exact path="/login">
-          <Login />
-        </Route>
-        <Route exact path="/membership">
-          <Membership />
-        </Route>
-        <Route exact path="/mygroups">
-          <Mygroups />
-        </Route>
-        <Route exact path="/onboarding">
-          <Onboarding />
-        </Route>
-        <Route exact path="/questioning">
-          <Questioning />
-        </Route>
-        <Route exact path="/registeration">
-          <Registeration />
-        </Route>
-        <Route exact path="/resourcedetail">
-          <Resourcedetail />
-        </Route>
-        <Route exact path="/stayup">
-          <Stayup />
-        </Route>
+          <Route exact path="/learnmore">
+            <Learnmore />
+          </Route>
+          <Route exact path="/login">
+            <Login />
+          </Route>
+          <Route exact path="/membership">
+            <Membership />
+          </Route>
+          <Route exact path="/mygroups">
+            <Mygroups />
+          </Route>
+          <Route exact path="/onboarding">
+            <Onboarding />
+          </Route>
+          <Route exact path="/questioning">
+            <Questioning />
+          </Route>
+          <Route exact path="/registeration">
+            <Registeration />
+          </Route>
+          <Route exact path="/resourcedetail">
+            <Resourcedetail />
+          </Route>
+          <Route exact path="/stayup">
+            <Stayup />
+          </Route>
+          <Route exact path="/resources">
+            <Resources />
+          </Route>
+          <Route exact path="/journalcalendarremade">
+            <JournalCalendarRemade />
+          </Route>
+          <Route exact path="/configcycleremade">
+            <ConfigCycleRemade />
+          </Route>
+          {/* <Route exact path="/journaladditionremade:dateParam">
+          <JournalAdditionRemade />
+        </Route> */}
 
-        <Route exact path="/search">
-          <Searchmodal />
-        </Route>
-        <Route exact path="/yourdata">
-          <Yourdata />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/onboarding" />
-        </Route>
-        {/* </Suspense> */}
+          <Route
+            path="/journaladditionremade/:dateParam"
+            render={(props) => (
+              <JournalAdditionRemade
+                key={props.match.params.dateParam}
+                {...props}
+              />
+            )}
+          />
 
-      </IonRouterOutlet>
-
-    </IonReactRouter>
-  </IonApp>
-);
+          <Route exact path="/search">
+            <Searchmodal />
+          </Route>
+          <Route exact path="/yourdata">
+            <Yourdata />
+          </Route>
+          <Route exact path="/">
+            <Redirect to="/onboarding" />
+          </Route>
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  );
+};
 
 export default App;

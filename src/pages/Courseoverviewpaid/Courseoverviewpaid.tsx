@@ -22,6 +22,7 @@ import {
 } from "ionicons/icons";
 
 import "./Courseoverviewpaid.scss";
+import NotificationBell from "../../components/NotificationBell";
 
 const Courseoverviewpaid: React.FC = () => {
   return (
@@ -33,8 +34,8 @@ const Courseoverviewpaid: React.FC = () => {
           </IonButton>
 
           <IonButtons slot="end">
-            <IonButton color="dark">
-              <IonIcon icon={notificationsOutline} />
+            <IonButton slot="end" fill="clear">
+              <NotificationBell />
             </IonButton>
           </IonButtons>
         </IonToolbar>

@@ -24,6 +24,7 @@ import {
 } from "ionicons/icons";
 
 import "./Resourcedetail.scss";
+import NotificationBell from "../../components/NotificationBell";
 
 const Resourcedetail: React.FC = () => {
   return (
@@ -40,8 +41,8 @@ const Resourcedetail: React.FC = () => {
             </IonButton>
           </IonButtons>
           <IonButtons slot="end">
-            <IonButton color="dark">
-              <IonIcon icon={notificationsOutline} />
+            <IonButton slot="end" fill="clear">
+              <NotificationBell />
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -59,9 +60,9 @@ const Resourcedetail: React.FC = () => {
               <IonRadio value="Movies"></IonRadio>
             </IonItem>
           </div>
-        
+
           <div className="rec">
-          <div className="details">
+            <div className="details">
               <h2>Nicht die Regel</h2>
 
               <IonItem lines="none">
@@ -78,16 +79,26 @@ const Resourcedetail: React.FC = () => {
                 <IonLabel>
                   <p>Recommended by</p>
                   <h6 className="ion-text-wrap">
-                    <span>Dr. Ilca Wilhelm, MD,</span>Specialist for gynecology and obstetrics
+                    <span>Dr. Ilca Wilhelm, MD,</span>Specialist for gynecology
+                    and obstetrics
                   </h6>
                 </IonLabel>
               </IonItem>
 
               <div className="desc">
                 <p className="ion-text-wrap">
-                nicht die regel is an independently produced documentary film. It is about three different women who talk about their lives with endometriosis. They report on symptoms, long diagnostic paths, therapies and operations.
+                  nicht die regel is an independently produced documentary film.
+                  It is about three different women who talk about their lives
+                  with endometriosis. They report on symptoms, long diagnostic
+                  paths, therapies and operations.
                 </p>
-                <p>It quickly becomes clear that despite the large number of people affected, there ia s lack of knowledge about this chronic disease - not only in society, but also among doctors. The film deals with widespread by giving numerous experts from various fields a chance sneak.</p>
+                <p>
+                  It quickly becomes clear that despite the large number of
+                  people affected, there ia s lack of knowledge about this
+                  chronic disease - not only in society, but also among doctors.
+                  The film deals with widespread by giving numerous experts from
+                  various fields a chance sneak.
+                </p>
               </div>
             </div>
           </div>

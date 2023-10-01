@@ -1,75 +1,57 @@
-
-.flex
-{
-    display: flex;
+.flex {
+  display: flex;
 }
 
-.flexd
-{
-    flex-direction: column;
+.flexd {
+  flex-direction: column;
 }
 
-
-.al-start
-{
-    align-items: flex-start;
+.al-start {
+  align-items: flex-start;
 }
 
-.al-center
-{
-    align-items: center;
+.al-center {
+  align-items: center;
 }
 
-.al-end
-{
-    align-items: flex-end;
+.al-end {
+  align-items: flex-end;
 }
 
-.jc-start
-{
-    justify-content: flex-start;
+.jc-start {
+  justify-content: flex-start;
 }
 
-
-.jc-center
-{
-    justify-content: center;
+.jc-center {
+  justify-content: center;
 }
 
-.jc-end
-{
-    justify-content: flex-end;
+.jc-end {
+  justify-content: flex-end;
 }
 
-.jc-between
-{
-    justify-content: space-between;
+.jc-between {
+  justify-content: space-between;
 }
 
-.jc-around
-{
-    justify-content: space-around;
+.jc-around {
+  justify-content: space-around;
 }
-
 
 .modal-wrapper {
   background: transparent !important;
 }
 
-.modaaal
-{
-    --background: rgba(255, 255, 255, 0.26) !important;
-    
+.modaaal {
+  --background: rgba(255, 255, 255, 0.26) !important;
 }
 
-.ripple-parent
-{
-    position: relative;
-    overflow: hidden;
+.ripple-parent {
+  position: relative;
+  overflow: hidden;
 }
 
-ion-button
-{
+ion-button {
   text-transform: none;
 }
 
@@ -78,120 +60,89 @@ ion-tab-bar
   --background: white !important;
   border: none !important;
 }
-
-ion-tab-button
-{
-
-
-    #inactive
-    {
-        display: inline;
-    }
- 
-    #active
-    {
-     display: none;
-    }
-}
-
-.tab-selected
-{
-   #inactive
-   {
-     display: none;
-   }
-
-   #active
-   {
+ion-tab-button {
+  #inactive {
     display: inline;
-   }
+  }
+
+  #active {
+    display: none;
+  }
 }
 
+.tab-selected {
+  #inactive {
+    display: none;
+  }
 
-.swiper-pagination
-{
+   #active {
+    display: inline;
+  }
+}
 
+.swiper-pagination {
   position: unset !important;
 
-  .swiper-pagination-bullet
-  {
-    background: #EE5F64;
+  .swiper-pagination-bullet {
+    background: #ee5f64;
   }
 
-  .swiper-pagination-bullet-active
-  {
-    background: #D19E12;
+  .swiper-pagination-bullet-active {
+    background: #d19e12;
   }
 }
 
-
-.the-form
-{
+.the-form {
   margin-top: 10vw;
-  .input-item
-  {
+  .input-item {
     margin-bottom: 10px;
 
-    ion-item
-    {
-      --border-color: #F0F0F0;
+    ion-item {
+      --border-color: #f0f0f0;
       --border-radius: 10px;
       --border-style: solid;
       --border-width: 1px;
       min-height: 56px;
-      ion-input
-      {
-          font-size: 18px;
+      ion-input {
+        font-size: 18px;
       }
     }
   }
 }
 
-.holder
-{
-  ion-select
-  {
+.holder {
+  ion-select {
     width: 100% !important;
     max-width: 100% !important;
     --max-width: 100% !important;
     min-width: 100% !important;
     --min-width: 100% !important;
-    .native-wrapper
-    {
+    .native-wrapper {
       background: red !important;
       width: 100% !important;
     }
-
-    
   }
 }
 
-.search-holder
-{
-  ion-searchbar
-    {
+.search-holder {
+  ion-searchbar {
+    height: 50px !important;
+    .searchbar-input-container {
       height: 50px !important;
-        .searchbar-input-container {
-          height: 50px !important;
-            input {
-              background: #F8F8F8 !important;
-              box-shadow: none !important;
-              border: 1px solid #F3F3F3 !important;
-             
-            }
-          }
+      input {
+        background: #f8f8f8 !important;
+        box-shadow: none !important;
+        border: 1px solid #f3f3f3 !important;
+      }
     }
+  }
 }
 
-ion-footer
-{
- #ion-input-0
- {
-  padding-left: 20px !important;
- }
+ion-footer {
+  #ion-input-0 {
+    padding-left: 20px !important;
+  }
 }
-
-
 
 // ion-range::part(tick)::after,
 // ::part(tick-active)::after {
@@ -208,20 +159,26 @@ ion-footer
 //   counter-reset: tick-counter -1;
 // }
 
-
-ion-accordion.accordion-animated > [slot=header] .ion-accordion-toggle-icon
-{
-   color: #2D2D2D !important;
-   opacity: .4;
+ion-accordion.accordion-animated > [slot="header"] .ion-accordion-toggle-icon {
+  color: #2d2d2d !important;
+  opacity: 0.4;
 }
 
 ion-range::part(knob) {
   --knob-size: 16px;
-
 }
 
-
 ion-range::part(knob) {
- border: 8px solid #EE5F64;
- margin-top: -10px;
+  border: 8px solid #ee5f64;
+  margin-top: -10px;
+}
+
+// Notifications
+
+.read {
+  opacity: 0.5;
+}
+
+.unread {
+  opacity: 1;
 }
