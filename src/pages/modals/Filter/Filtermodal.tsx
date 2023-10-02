@@ -188,11 +188,12 @@ const Filtermodal: React.FC = () => {
       {isLoading ? (
         <>
           <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+           style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height:"100vh"
+          }}
           >
             <IonSpinner name="crescent"></IonSpinner>
           </div>

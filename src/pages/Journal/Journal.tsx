@@ -17,6 +17,7 @@ import {
   IonRow,
   IonSegment,
   IonSegmentButton,
+  IonSpinner,
   IonToolbar,
 } from "@ionic/react";
 import {
@@ -34,7 +35,11 @@ import { useHistory } from "react-router";
 import axios from "axios";
 
 import heart from "../../Images/heart.svg";
-import h_outline from "../../Images/heart-outline.svg"
+import h_outline from "../../Images/heart-outline.svg";
+import thumbs_up from "../../Images/thumbs-up.svg";
+import thumbs_up_outline from "../../Images/thumbs-up-outline.svg";
+import thumbs_down from "../../Images/thumbs-down.svg";
+import thumbs_down_outline from "../../Images/thumbs-down-outline.svg";
 
 const Journal: React.FC = () => {
   const [activeSegment, setActiveSegment] = useState<string>("overview");
@@ -46,8 +51,6 @@ const Journal: React.FC = () => {
   const [recommendations, setRecommendations] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [id, setID] = useState();
-
-
 
   const history = useHistory();
   const resourceCards = [
@@ -81,10 +84,12 @@ const Journal: React.FC = () => {
     },
   ];
   useEffect(() => {
+    // setIsLoading(true)
     setActiveSegment("overview");
     getCategoriesOverview();
     getCategoriesFavourites();
     getRecommendations();
+    // setIsLoading(false)
   }, []);
 
   const navigateToNextPage = () => {
@@ -108,8 +113,7 @@ const Journal: React.FC = () => {
       .then((response) => {
         console.log(response.data);
         setCategoriesOverview(response.data);
-
-        //setIsLoading(false);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -117,6 +121,8 @@ const Journal: React.FC = () => {
       });
   };
   const getCategoriesFavourites = () => {
+    setIsLoading(true);
+
     axios
       .get(
         `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`
@@ -124,12 +130,16 @@ const Journal: React.FC = () => {
       .then((response) => {
         console.log(response.data);
         setCategoriesFavourites(response.data);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
+        setIsLoading(false);
       });
   };
   const getRecommendations = () => {
+    setIsLoading(true);
+
     axios
       .get(
         `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`
@@ -137,283 +147,395 @@ const Journal: React.FC = () => {
       .then((response) => {
         console.log(response.data);
         setRecommendations(response.data);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
+        setIsLoading(false);
       });
   };
   const getCategoryByID = (id) => {
     setID(id);
+    setIsLoading(true);
 
     axios
-    .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, {
-      params: {
-        category_id: id,
-      },
-    })
+      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, {
+        params: {
+          category_id: id,
+        },
+      })
       .then((response) => {
         console.log(response.data);
         setFiltered(response.data);
-        setIsFilterSelected(true)
+        setIsFilterSelected(true);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
+        setIsLoading(false);
       });
   };
+  const handleUpvote = async (is_upvoted, id,is_downvoted) => {
+    // const status = !val;
+    let URL
+    if(is_upvoted){
+       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false}`;
+    }
+    else if(!is_upvoted && !is_downvoted){ // <-
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
+    }
+    else if(!is_upvoted && is_downvoted){
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
+    }
+  
+    try {
+      const response = await axios.post(URL);
+      console.log(response.data);
+      // getCategoriesFavourites();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleDownvote = async (is_upvoted, id,is_downvoted) => {
+    let URL
+    if(!is_downvoted && !is_upvoted){ // <-
+       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=true}`;
+    }
+    else if(!is_downvoted && is_upvoted){ 
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false`;
+    }
+    else if(is_downvoted){
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
+    }
+  
+    try {
+      const response = await axios.post(URL);
+      console.log(response.data);
+      // getCategoriesFavourites();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleSave = async (fav,id) => {
+    let URL
+    if(fav){ 
+       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=false`;
+    }
+    else{
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=true`;
+    }
+    try {
+      const response = await axios.post(URL);
+      console.log(response.data);
+      // getCategoriesFavourites();
+       getFavouriteColor(!fav);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const getFavouriteColor = (fav)=>{
+    if (fav){
+      return 'filled'
+    }
+    else{
+      return 'not-filled'
+    }
+  }
 
   return (
-    <IonPage className="Journal">
-      <IonHeader className="ion-no-border">
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonButton color={"dark"}>
-              <IonIcon icon={menuOutline} />
-            </IonButton>
-          </IonButtons>
-          <IonButtons slot="end">
-            <IonButton color="dark">
-              <IonIcon icon={searchOutline} />
-            </IonButton>
-          </IonButtons>
-          <IonButtons slot="end">
-            <IonButton color="dark">
-              <IonIcon icon={notificationsOutline} />
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
-        <IonToolbar>
-          <IonSegment
-            mode="md"
-            onIonChange={(e) => segmentChanged(e)}
-            value={activeSegment as any}
+    <>
+      {isLoading ? (
+        <>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+            }}
           >
-            <IonSegmentButton value={"overview"}>
-              <IonLabel>Overview</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton value={"favourites"}>
-              <IonLabel>Favourites</IonLabel>
-            </IonSegmentButton>
-          </IonSegment>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonModal
-          isOpen={modalOpen}
-          className="modaaal"
-          onDidDismiss={handleModalClose}
-        >
-          <Addrecmodal onClose={() => setModalOpen(false)} />
-        </IonModal>
-        {activeSegment === "overview" ? (
-          <>
-             <div className="overview">
-            <div className="btn-slider">
-              {categoriesOverview.map((item, index) => (
-                <IonButton fill="clear" key={index}>
-                  <div 
-                    className={`img_div ${id === item.id ? 'selected' : 'non_selected'}`}
-                    onClick={()=>getCategoryByID(item.id)}>
-                    {item.icon_url ? (
-                      <img
-                        src={item.icon_url}
-                        alt={item.name}
-                        className="icon-img custom-icon"
-                      />
-                    ) : (
-                      ""
-                    )}
-                    <p>{item.name}</p>
-                  </div>
-                </IonButton>
-              ))}
-            </div>
-            {
-              isFilterSelected?
-              <>
-              <div className="the-list">
-                {filtered.map((card, index) => (
-                  <div
-                    className="resource-card"
-                    key={index}
-                    onClick={() => navigateToNextPage()}
-                  >
-                    <IonItem lines="none">
-                      <div className="thumb" slot="start">
-                        <img src={"assets/imgs/rc1.png"} alt="" />
-                      </div>
-
-                      <IonLabel>
-                        <div className="first flex al-center">
-                          <h3>{card.title}</h3>
-                          <IonIcon src="assets/imgs/moviesm.svg" />
-                        </div>
-                        <div className="second flex al-center">
-                          <IonIcon icon={informationCircleOutline} />
-                          <p className="ion-text-wrap">
-                            {card?.authority?.title}
-                          </p>
-                        </div>
-                        <h5 className="ion-text-wrap">{card.title}</h5>
-                        <div className="btns-holder flex al-center jc-between">
-                          <div className="btn ion-activatable ripple-parent flex al-center">
-                            <IonIcon src="assets/imgs/icn-like.svg" />
-                            <h6>{card.upvotes_number}</h6>
-                          </div>
-                          <div className="btn ion-activatable ripple-parent flex al-center">
-                            <IonIcon src="assets/imgs/icn-dislike.svg" />
-                            <h6>{card.downvotes_number}</h6>
-                          </div>
-                          <div className="btn ion-activatable ripple-parent flex al-center">
-                            {!card.favourite ? (
-                              <IonIcon src={h_outline}></IonIcon>
+            <IonSpinner name="crescent"></IonSpinner>
+          </div>
+        </>
+      ) : (
+        <>
+          <IonPage className="Journal">
+            <IonHeader className="ion-no-border">
+              <IonToolbar>
+                <IonButtons slot="start">
+                  <IonButton color={"dark"}>
+                    <IonIcon icon={menuOutline} />
+                  </IonButton>
+                </IonButtons>
+                <IonButtons slot="end">
+                  <IonButton color="dark">
+                    <IonIcon icon={searchOutline} />
+                  </IonButton>
+                </IonButtons>
+                <IonButtons slot="end">
+                  <IonButton color="dark">
+                    <IonIcon icon={notificationsOutline} />
+                  </IonButton>
+                </IonButtons>
+              </IonToolbar>
+              <IonToolbar>
+                <IonSegment
+                  mode="md"
+                  onIonChange={(e) => segmentChanged(e)}
+                  value={activeSegment as any}
+                >
+                  <IonSegmentButton value={"overview"}>
+                    <IonLabel>Overview</IonLabel>
+                  </IonSegmentButton>
+                  <IonSegmentButton value={"favourites"}>
+                    <IonLabel>Favourites</IonLabel>
+                  </IonSegmentButton>
+                </IonSegment>
+              </IonToolbar>
+            </IonHeader>
+            <IonContent fullscreen>
+              <IonModal
+                isOpen={modalOpen}
+                className="modaaal"
+                onDidDismiss={handleModalClose}
+              >
+                <Addrecmodal onClose={() => setModalOpen(false)} />
+              </IonModal>
+              {activeSegment === "overview" ? (
+                <>
+                  <div className="overview">
+                    <div className="btn-slider">
+                      {categoriesOverview.map((item, index) => (
+                        <IonButton fill="clear" key={index}>
+                          <div
+                            className={`img_div ${
+                              id === item.id ? "selected" : "non_selected"
+                            }`}
+                            onClick={() => getCategoryByID(item.id)}
+                          >
+                            {item.icon_url ? (
+                              <img
+                                src={item.icon_url}
+                                alt={item.name}
+                                className="icon-img custom-icon"
+                              />
                             ) : (
-                              <IonIcon src={heart}></IonIcon>
+                              ""
                             )}
-                            <h6>Save</h6>
+                            <p>{item.name}</p>
                           </div>
-                        </div>
-                      </IonLabel>
-                    </IonItem>
-                  </div>
-                ))}
-              </div>
-              </>
-              :
-              <>
-           <div className="recommended">
-              <div className="title-holder">
-                <h3>Recommended</h3>
-              </div>
-              <IonRow>
-                {recommendations.map((item, index) => (
-                  <IonCol size="6" key={index}>
-                    <div className="rc-card ion-activatable ripple-parent">
-                      <IonRippleEffect />
-                      <div className="img-holder">
-                        {item.icon_url ? (
-                          <svg width="16" height="16">
-                            <image
-                              href={item.icon_url}
-                              x="0"
-                              y="0"
-                              height="16"
-                              width="16"
-                            />
-                          </svg>
-                        ) : (
-                          <img src="assets/imgs/rc1.svg" alt="" />
-                        )}
-
-                        <div className="btn ion-activatable ripple-parent flex al-center jc-center">
-                          {item.parent_category.map((value, index) =>
-                            value.icon_url ? (
-                              <img key={index} src={value.icon_url} alt="" />
-                            ) : (
-                              <p key={index}>null</p>
-                            )
-                          )}
-                        </div>
-                      </div>
-
-                      <h4>{item.title}</h4>
+                        </IonButton>
+                      ))}
                     </div>
-                  </IonCol>
-                ))}
-              </IonRow>
-            </div>
-              </>
-            }
-            <div className="add-recommendation ion-text-center">
-              <IonButton onClick={() => setModalOpen(true)}>
-                <IonIcon icon={add} />
-              </IonButton>
-              <h4>Add Recommendation</h4>
-            </div>
-          </div>
-           
-          </>
-        ) : (
-          <div className="Resources">
-            <IonContent className="ion-padding" fullscreen>
-              <div className="selector mtype">
-                <IonRadioGroup>
-                  <IonItem lines="none">
-                    <IonIcon slot="start" src="assets/imgs/f1.svg" />
-                    <IonLabel>Books</IonLabel>
-                    <IonRadio value="books"></IonRadio>
-                  </IonItem>
+                    {isFilterSelected ? (
+                      <>
+                        <div className="the-list">
+                          {filtered.map((card, index) => (
+                            <div
+                              className="resource-card"
+                              key={index}
+                              onClick={() => navigateToNextPage()}
+                            >
+                              <IonItem lines="none">
+                                <div className="thumb" slot="start">
+                                  <img src={"assets/imgs/rc1.png"} alt="" />
+                                </div>
 
-                  <IonItem lines="none">
-                    <IonIcon slot="start" src="assets/imgs/f2.svg" />
-                    <IonLabel>Movies</IonLabel>
-                    <IonRadio value="Movies"></IonRadio>
-                  </IonItem>
-
-                  <IonItem lines="none">
-                    <IonIcon slot="start" src="assets/imgs/f3.svg" />
-                    <IonLabel>Articles</IonLabel>
-                    <IonRadio value="Articles"></IonRadio>
-                  </IonItem>
-
-                  <IonItem lines="none">
-                    <IonIcon slot="start" src="assets/imgs/f4.svg" />
-                    <IonLabel>Pap</IonLabel>
-                    <IonRadio value="Pap"></IonRadio>
-                  </IonItem>
-                </IonRadioGroup>
-              </div>
-              <div className="the-list">
-                {categoriesFavourites.map((card, index) => (
-                  <div
-                    className="resource-card"
-                    key={index}
-                    onClick={() => navigateToNextPage()}
-                  >
-                    <IonItem lines="none">
-                      <div className="thumb" slot="start">
-                        <img src={"assets/imgs/rc1.png"} alt="" />
-                      </div>
-
-                      <IonLabel>
-                        <div className="first flex al-center">
-                          <h3>{card.title}</h3>
-                          <IonIcon src="assets/imgs/moviesm.svg" />
+                                <IonLabel>
+                                  <div className="first flex al-center">
+                                    <h3>{card.title}</h3>
+                                    <IonIcon src="assets/imgs/moviesm.svg" />
+                                  </div>
+                                  <div className="second flex al-center">
+                                    <IonIcon icon={informationCircleOutline} />
+                                    <p className="ion-text-wrap">
+                                      {card?.authority?.title}
+                                    </p>
+                                  </div>
+                                  <h5 className="ion-text-wrap">
+                                    {card.title}
+                                  </h5>
+                                  <div className="btns-holder flex al-center jc-between">
+                                    <div className="btn ion-activatable ripple-parent flex al-center">
+                                      <IonIcon src="assets/imgs/icn-like.svg" />
+                                      <h6>{card.upvotes_number}</h6>
+                                    </div>
+                                    <div className="btn ion-activatable ripple-parent flex al-center">
+                                      <IonIcon src="assets/imgs/icn-dislike.svg" />
+                                      <h6>{card.downvotes_number}</h6>
+                                    </div>
+                                    <div className="btn ion-activatable ripple-parent flex al-center">
+                                      {!card.favourite ? (
+                                        <IonIcon src={h_outline}></IonIcon>
+                                      ) : (
+                                        <IonIcon src={heart}></IonIcon>
+                                      )}
+                                      <h6>Save</h6>
+                                    </div>
+                                  </div>
+                                </IonLabel>
+                              </IonItem>
+                            </div>
+                          ))}
                         </div>
-                        <div className="second flex al-center">
-                          <IonIcon icon={informationCircleOutline} />
-                          <p className="ion-text-wrap">
-                            {card?.authority?.title}
-                          </p>
+                      </>
+                    ) : (
+                      <>
+                        <div className="recommended">
+                          <div className="title-holder">
+                            <h3>Recommended</h3>
+                          </div>
+                          <IonRow>
+                            {recommendations.map((item, index) => (
+                              <IonCol size="6" key={index}>
+                                <div className="rc-card ion-activatable ripple-parent">
+                                  <IonRippleEffect />
+                                  <div className="img-holder">
+                                    {item.icon_url ? (
+                                      <svg width="16" height="16">
+                                        <image
+                                          href={item.icon_url}
+                                          x="0"
+                                          y="0"
+                                          height="16"
+                                          width="16"
+                                        />
+                                      </svg>
+                                    ) : (
+                                      <img src="assets/imgs/rc1.svg" alt="" />
+                                    )}
+
+                                    <div className="btn ion-activatable ripple-parent flex al-center jc-center">
+                                      {item.parent_category.map(
+                                        (value, index) =>
+                                          value.icon_url ? (
+                                            <img
+                                              key={index}
+                                              src={value.icon_url}
+                                              alt=""
+                                            />
+                                          ) : (
+                                            <p key={index}>null</p>
+                                          )
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  <h4>{item.title}</h4>
+                                </div>
+                              </IonCol>
+                            ))}
+                          </IonRow>
                         </div>
-                        <h5 className="ion-text-wrap">{card.title}</h5>
-                        <div className="btns-holder flex al-center jc-between">
-                          <div className="btn ion-activatable ripple-parent flex al-center">
-                            <IonIcon src="assets/imgs/icn-like.svg" />
-                            <h6>{card.upvotes_number}</h6>
-                          </div>
-                          <div className="btn ion-activatable ripple-parent flex al-center">
-                            <IonIcon src="assets/imgs/icn-dislike.svg" />
-                            <h6>{card.downvotes_number}</h6>
-                          </div>
-                          <div className="btn ion-activatable ripple-parent flex al-center">
-                            {!card.favourite ? (
-                              <IonIcon src={h_outline}></IonIcon>
-                            ) : (
-                              <IonIcon src={heart}></IonIcon>
-                            )}
-                            <h6>Save</h6>
-                          </div>
-                        </div>
-                      </IonLabel>
-                    </IonItem>
+                      </>
+                    )}
+                    <div className="add-recommendation ion-text-center">
+                      <IonButton onClick={() => setModalOpen(true)}>
+                        <IonIcon icon={add} />
+                      </IonButton>
+                      <h4>Add Recommendation</h4>
+                    </div>
                   </div>
-                ))}
-              </div>
+                </>
+              ) : (
+                <div className="Resources">
+                  <IonContent className="ion-padding" fullscreen>
+                    <div className="selector mtype">
+                      <IonRadioGroup>
+                        <IonItem lines="none">
+                          <IonIcon slot="start" src="assets/imgs/f1.svg" />
+                          <IonLabel>Books</IonLabel>
+                          <IonRadio value="books"></IonRadio>
+                        </IonItem>
+
+                        <IonItem lines="none">
+                          <IonIcon slot="start" src="assets/imgs/f2.svg" />
+                          <IonLabel>Movies</IonLabel>
+                          <IonRadio value="Movies"></IonRadio>
+                        </IonItem>
+
+                        <IonItem lines="none">
+                          <IonIcon slot="start" src="assets/imgs/f3.svg" />
+                          <IonLabel>Articles</IonLabel>
+                          <IonRadio value="Articles"></IonRadio>
+                        </IonItem>
+
+                        <IonItem lines="none">
+                          <IonIcon slot="start" src="assets/imgs/f4.svg" />
+                          <IonLabel>Pap</IonLabel>
+                          <IonRadio value="Pap"></IonRadio>
+                        </IonItem>
+                      </IonRadioGroup>
+                    </div>
+                    <div className="the-list">
+                      {categoriesFavourites.map((card, index) => (
+                        <div className="resource-card" key={index}>
+                          <IonItem lines="none">
+                            <div className="thumb" slot="start">
+                              <img src={"assets/imgs/rc1.png"} alt="" />
+                            </div>
+
+                            <IonLabel>
+                              <div className="first flex al-center">
+                                <h3>{card.title}</h3>
+                                <IonIcon src="assets/imgs/moviesm.svg" />
+                              </div>
+                              <div className="second flex al-center">
+                                <IonIcon icon={informationCircleOutline} />
+                                <p className="ion-text-wrap">
+                                  {card?.authority?.title}
+                                </p>
+                              </div>
+                              <h5 className="ion-text-wrap">{card.title}</h5>
+                              <div className="btns-holder flex al-center jc-between">
+                                <div
+                                  onClick={() =>
+                                    handleUpvote(card.is_upvoted, card.id, card.is_downvoted)
+                                  }
+                                  className="btn ion-activatable ripple-parent flex al-center"
+                                >
+                                  {card.is_upvoted ? (
+                                    <IonIcon src={thumbs_up}></IonIcon>
+                                  ) : (
+                                    <IonIcon src={thumbs_up_outline}></IonIcon>
+                                  )}
+                                  <h6>{card.upvotes_number}</h6>
+                                </div>
+                                <div 
+                                onClick={()=>handleDownvote(card.is_upvoted, card.id, card.is_downvoted)}
+                                className="btn ion-activatable ripple-parent flex al-center">
+                                  {card.is_downvoted ? (
+                                    <IonIcon src={thumbs_down}></IonIcon>
+                                  ) : (
+                                    <IonIcon src={thumbs_down_outline}></IonIcon>
+                                  )}
+                                  <h6>{card.downvotes_number}</h6>
+                                </div>
+                                <div 
+                                onClick={() => handleSave(card.favourite,card.id)}
+                                className="btn ion-activatable ripple-parent flex al-center">
+                                  {!card.favourite ? (
+                                    <IonIcon className={`heart-icon ${getFavouriteColor(card.favourite)}`} src={h_outline}></IonIcon>
+                                  ) : (
+                                    <IonIcon src={heart}></IonIcon>
+                                  )}
+                                  <h6>Save</h6>
+                                </div>
+                              </div>
+                            </IonLabel>
+                          </IonItem>
+                        </div>
+                      ))}
+                    </div>
+                  </IonContent>
+                </div>
+              )}
             </IonContent>
-          </div>
-        )}
-      </IonContent>
-    </IonPage>
+          </IonPage>
+        </>
+      )}
+    </>
   );
 };
 
