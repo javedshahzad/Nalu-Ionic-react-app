@@ -44,6 +44,8 @@ import thumbs_up_outline from "../../Images/thumbs-up-outline.svg";
 import thumbs_down from "../../Images/thumbs-down.svg";
 import thumbs_down_outline from "../../Images/thumbs-down-outline.svg";
 import filter from "../../Images/filter.png";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Journal: React.FC = () => {
   const [activeSegment, setActiveSegment] = useState<string>("overview");
@@ -278,8 +280,16 @@ const Journal: React.FC = () => {
   const navigateFilter = () => {
     history.push("/filter");
   };
+  const setToastAndClose = (val)=>{
+    toast.success(val)
+    setModalOpen(false)
+  }
   return (
     <>
+            <ToastContainer
+            
+            autoClose={19000}/>
+
       {isLoading ? (
         <>
           <div
@@ -335,7 +345,9 @@ const Journal: React.FC = () => {
                 className="modaaal"
                 onDidDismiss={handleModalClose}
               >
-                <Addrecmodal onClose={() => setModalOpen(false)} />
+                <Addrecmodal 
+
+                onClose={(val) => setToastAndClose(val)} />
               </IonModal>
               {activeSegment === "overview" ? (
                 <>
