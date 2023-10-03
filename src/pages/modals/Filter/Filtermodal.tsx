@@ -22,6 +22,7 @@ import "./Filtermodal.scss";
 import { close } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useHistory } from "react-router";
 
 const Filtermodal: React.FC = () => {
   const [rangeValues, setRangeValues] = useState({ lower: null, upper: null });
@@ -33,6 +34,8 @@ const Filtermodal: React.FC = () => {
   const [recommendedItems, setrecommendedItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [votes, setVotes] = useState([]);
+
+  const history = useHistory();
 
   const handleRangeChange = (event: CustomEvent) => {
     setRangeValues(event.detail.value);
@@ -156,31 +159,38 @@ const Filtermodal: React.FC = () => {
   const activeLabels = mediaItems
     .filter((item) => item.active)
     .map((item) => item.name);
+  const activeLabelsString = activeLabels.join(', ');
+
 
   const activeRecommendations = recommendedItems
     .filter((item) => item.active)
     .map((item) => item.name);
+  const activeRecommendationsString = activeRecommendations.join(', ');
+
 
   const handleFilters = async () => {
-    const data = {
-      activeLabels,
-      activeRecommendations,
-      rangeValues,
-    };
-    console.log(data);
-
-    // try {
-    //   const response = await axios.post(`https://app.mynalu.com/wp-admin/edit.php?post_type=nalu_ressources`, data);
-    //   console.log("Response:",response);
-    //   if(response.status === 200){
-
-    //     // naviagtion
-    //     // history.push("/tabs/tab1")
-    //   }
-    // } catch (error) {
-    //   console.log('Error', error.response.data.message);
-    //   // setErrorMessage("Invalid email or password. Please try again.")
-    // }
+    try {
+      axios
+        .get("https://app.mynalu.com/wp-json/nalu-app/v1/ressources", {
+          params: {
+            category_name: activeLabelsString,
+            "authority.title": activeRecommendationsString,
+            upvotes_number_min: rangeValues.lower,
+            upvotes_number_max: rangeValues.upper
+          },
+        })
+        .then((response) => {
+          const dataToSendAsString = JSON.stringify(response.data);
+          localStorage.setItem("DATA",dataToSendAsString)
+          history.push(`/tabs/tab1`);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log("Error", error);
+    }
+    
   };
 
   return (
@@ -204,7 +214,7 @@ const Filtermodal: React.FC = () => {
             <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
-                  <IonButton>
+                  <IonButton routerLink="/tabs/tab1">
                     <IonIcon icon={close} />
                   </IonButton>
                 </IonButtons>
