@@ -24,16 +24,97 @@ import {
 } from "ionicons/icons";
 
 import "./Resourcedetail.scss";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { useState } from 'react';
+import thumbs_up from "../.././Images/thumbs-up.svg";
+import thumbs_up_outline from "../.././Images/thumbs-up-outline.svg";
+import thumbs_down from "../.././Images/thumbs-down.svg";
+import thumbs_down_outline from "../.././Images/thumbs-down-outline.svg";
+
+
 
 const Resourcedetail: React.FC = () => {
+  const location = useLocation();
+  const data: any = location.state;
+  const [resourseData, setResourceData] = useState(data);
+console.log(resourseData);
+
+  const handleUpvote = async (is_upvoted, id, is_downvoted) => {
+    let URL;
+    if (is_upvoted) {
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false}`;
+    } else if (!is_upvoted && !is_downvoted) {
+      // <-
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
+    } else if (!is_upvoted && is_downvoted) {
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
+    }
+
+    try {
+      const response = await axios.post(URL);
+      console.log(response.data);
+      if ((response.data.message = "Upvote added successfully") || (response.data.message = "Downvote removed successfully")) {
+          getResourceDetailsByID(resourseData.data.id)
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleDownvote = async (is_upvoted, id, is_downvoted) => {
+    let URL;
+    if (!is_downvoted && !is_upvoted) {
+      // <-
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=true}`;
+    } else if (!is_downvoted && is_upvoted) {
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false`;
+    } else if (is_downvoted) {
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
+    }
+
+    try {
+      const response = await axios.post(URL);
+      if ((response.data.message = "Downvote removed successfully")) {
+          getResourceDetailsByID(resourseData.data.id)
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const getResourceDetailsByID =(id)=>{
+    try {
+      axios
+          .get(
+            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`
+          )
+          .then((response) => {
+            setResourceData(response.data)
+           
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const getFavouriteColor = (fav) => {
+    if (fav) {
+      return "filled";
+    } else {
+      return "not-filled";
+    }
+  };
+const vide0 ="https://www.youtube.com/watch?v=zk8M00rjMfQ"
   return (
     <IonPage className="Resourcedetail">
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton color="dark" text={""} defaultHref="/tabs/tab5" />
+            <IonBackButton color="dark" text={""} defaultHref="/tabs/tab1" />
           </IonButtons>
-          <IonTitle>Nicht die Regel</IonTitle>
+          <IonTitle>{resourseData?.data.title}</IonTitle>
           <IonButtons slot="end">
             <IonButton color="dark">
               <IonIcon icon={heartOutline} />
@@ -48,7 +129,14 @@ const Resourcedetail: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         <div className="top-img-holder ion-text-center">
-          <img src="assets/imgs/r2.png" alt="" />
+          {!resourseData?.data.image_url ? (
+            <video src={vide0} autoPlay loop muted />
+            ) : (
+            <img src={resourseData?.data.image_url} alt="No image" />
+//  <video src={`https://www.youtube.com/watch?v=zk8M00rjMfQ`} width="750" height="500" controls>
+//  </video>
+
+          )}
         </div>
 
         <div className="content ion-padding">
@@ -59,15 +147,15 @@ const Resourcedetail: React.FC = () => {
               <IonRadio value="Movies"></IonRadio>
             </IonItem>
           </div>
-        
+
           <div className="rec">
-          <div className="details">
-              <h2>Nicht die Regel</h2>
+            <div className="details">
+              <h2>{resourseData?.data.authority.title}</h2>
 
               <IonItem lines="none">
                 <div className="start-slot flex al-start " slot="start">
                   <IonAvatar>
-                    <img src="assets/imgs/user.png" alt="" />
+                    <img src={resourseData?.data?.authority?.image} alt="" />
                   </IonAvatar>
 
                   <IonIcon
@@ -78,16 +166,51 @@ const Resourcedetail: React.FC = () => {
                 <IonLabel>
                   <p>Recommended by</p>
                   <h6 className="ion-text-wrap">
-                    <span>Dr. Ilca Wilhelm, MD,</span>Specialist for gynecology and obstetrics
+                    <span>{resourseData?.data.authority.title}</span> Specialist for
+                    gynecology and obstetrics
                   </h6>
+                  <div className="btns-holder flex al-center">
+                    <div 
+                    onClick={()=>handleUpvote(resourseData?.data.is_upvoted,
+                      resourseData?.data.id,
+                      resourseData?.data.is_downvoted)}
+                    className="btn ion-activatable ripple-parent flex al-center">
+                      {resourseData?.data.is_upvoted ? (
+                                    <IonIcon src={thumbs_up}></IonIcon>
+                                  ) : (
+                                    <IonIcon src={thumbs_up_outline}></IonIcon>
+                                  )}
+
+                      <h6>{resourseData?.data.upvotes_number}</h6>
+                    </div>
+                    <div 
+                    onClick={() =>
+                      handleDownvote(
+                        resourseData?.data.is_upvoted,
+                        resourseData?.data.id,
+                        resourseData?.data.is_downvoted
+                      )
+                    }
+                    className="btn ion-activatable ripple-parent flex al-center" style={{"marginLeft": "29px"}}>
+                          {resourseData?.data.is_downvoted ? (
+                                    <IonIcon src={thumbs_down}></IonIcon>
+                                  ) : (
+                                    <IonIcon
+                                   
+                                    className={`vote-icon ${getFavouriteColor(
+                                      resourseData?.data.is_downvoted
+                                    )}`}
+                                    src={thumbs_down_outline}
+                                    ></IonIcon>
+                                  )}
+                      <h6>{resourseData?.data.downvotes_number}</h6>
+                    </div>
+                  </div>
                 </IonLabel>
               </IonItem>
 
               <div className="desc">
-                <p className="ion-text-wrap">
-                nicht die regel is an independently produced documentary film. It is about three different women who talk about their lives with endometriosis. They report on symptoms, long diagnostic paths, therapies and operations.
-                </p>
-                <p>It quickly becomes clear that despite the large number of people affected, there ia s lack of knowledge about this chronic disease - not only in society, but also among doctors. The film deals with widespread by giving numerous experts from various fields a chance sneak.</p>
+              <p className="ion-text-wrap" dangerouslySetInnerHTML={{ __html: resourseData?.data.content }}></p>
               </div>
             </div>
           </div>
