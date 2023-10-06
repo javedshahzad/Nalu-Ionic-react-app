@@ -61,7 +61,6 @@ const Journal: React.FC = () => {
   const history = useHistory();
   const location = useLocation();
   const dataReceivedAsString = new URLSearchParams(location.search).get("data");
-  const passedData = JSON.parse(dataReceivedAsString);
 
   useEffect(() => {
     Data();

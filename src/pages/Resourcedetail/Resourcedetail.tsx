@@ -88,7 +88,7 @@ console.log(resourseData);
             `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`
           )
           .then((response) => {
-            setResourceData(response.data)
+            setResourceData(response)
            
           })
           .catch((error) => {
@@ -112,7 +112,7 @@ const vide0 ="https://www.youtube.com/watch?v=zk8M00rjMfQ"
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton color="dark" text={""} defaultHref="/tabs/tab1" />
+            <IonBackButton color="dark" text={""} defaultHref="/tabs/tab4" />
           </IonButtons>
           <IonTitle>{resourseData?.data.title}</IonTitle>
           <IonButtons slot="end">

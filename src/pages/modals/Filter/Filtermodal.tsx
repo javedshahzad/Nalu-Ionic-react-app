@@ -182,7 +182,7 @@ const Filtermodal: React.FC = () => {
         .then((response) => {
           const dataToSendAsString = JSON.stringify(response.data);
           localStorage.setItem("DATA",dataToSendAsString)
-          history.push(`/tabs/tab1`);
+          history.push(`/tabs/tab4`);
         })
         .catch((error) => {
           console.log(error);
@@ -214,7 +214,7 @@ const Filtermodal: React.FC = () => {
             <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
-                  <IonButton routerLink="/tabs/tab1">
+                  <IonButton routerLink="/tabs/tab4">
                     <IonIcon icon={close} />
                   </IonButton>
                 </IonButtons>
