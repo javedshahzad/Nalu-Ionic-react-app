@@ -1,4 +1,4 @@
-.Journal
+.Overview
 {
     ion-toolbar
     {
@@ -21,6 +21,7 @@
     {
         --background: #FEFCFA;
 
+        
         .overview
         {
             margin-top: -20px;
@@ -149,6 +150,9 @@
                     --border-width: 1px;
                     --border-radius: 10px;
                     --padding-start:10px;
+                    // display: flex;
+                    // flex-direction: column;
+                    // align-items: center;
 
                     ion-icon
                     {
@@ -157,7 +161,9 @@
 
                     ion-label
                     {
-                        font-size: 12px;
+                        font-size: 16px;
+                        margin-left: 10px;
+                        color: #636363;
                     }
                     
                     ion-radio
@@ -168,6 +174,11 @@
                         width: 100%;
                     }
                 }
+                ion-item::part(native) {
+                    display: flex;
+                    flex-direction: column;
+                    align-content: center;
+                  }
 
                 // .item-radio-checked
                 // {
@@ -347,7 +358,8 @@
 .icon-img{
     width: 20px;
     height: 20px;
-    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 5px;
 }
 
 .Resources

@@ -311,7 +311,7 @@ const Resources: React.FC = () => {
   }
   return (
     <>
-            <ToastContainer autoClose={19000}/>
+      <ToastContainer autoClose={19000} />
       {isLoading ? (
         <>
           <div
@@ -327,7 +327,7 @@ const Resources: React.FC = () => {
         </>
       ) : (
         <>
-          <IonPage className="Journal">
+          <IonPage className="Overview">
             <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
@@ -367,57 +367,93 @@ const Resources: React.FC = () => {
                 className="modaaal"
                 onDidDismiss={handleModalClose}
               >
-                <Addrecmodal 
-
-                onClose={(val) => setToastAndClose(val)} />
+                <Addrecmodal onClose={(val) => setToastAndClose(val)} />
               </IonModal>
               {activeSegment === "overview" ? (
                 <>
                   <div className="overview">
-                    <div className="selector mtype">
-                      <IonRadioGroup>
-                        {categoriesOverview.map((item, index) => (
-                          <IonItem
-                            key={index}
-                            lines="none"
-                            className={`img_div ${
-                              categoryID === item.id ? "selected" : "non_selected"
-                            }`}
-                            onClick={() => getCategoryByID(item.id)}
-                          >
-                            <div>
-                              {item.icon_url ? (
-                                <img
-                                  src={item.icon_url}
-                                  alt={item.name}
-                                  className="icon-img custom-icon"
-                                />
-                              ) : (
-                                ""
-                              )}
-                            </div>
-                            <IonLabel>{item.name}</IonLabel>
-                          </IonItem>
-                        ))}
-                      </IonRadioGroup>
-                    </div>
+                    {!isFilterSelected ? (
+                      <>
+                        <div className="selector mtype">
+                          <IonRadioGroup>
+                            {categoriesOverview.map((item, index) => (
+                              <IonItem
+                                key={index}
+                                lines="none"
+                                onClick={() => getCategoryByID(item.id)}
+                              >
+                                <div className="icon-img">
+                                  {item.icon_url ? (
+                                    <img src={item.icon_url} alt={item.name} />
+                                  ) : (
+                                    "null"
+                                  )}
+                                </div>
+                                <IonLabel>{item.name}</IonLabel>
+                              </IonItem>
+                            ))}
+                          </IonRadioGroup>
+                        </div>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+
                     {isFilterSelected ? (
                       <>
+                        <div className="selector mtype">
+                          <IonRadioGroup>
+                          {filtered
+  .filter(item => item.category && item.category.length > 0)
+  .map((item, index) => (
+    <IonItem
+      key={index}
+      lines="none"
+      onClick={() => getCategoryByID(item.id)}
+    >
+      <div className="icon-img">
+        {item.category.map((categoryItem, categoryIndex) => (
+          <div key={categoryIndex}>
+            {categoryItem.icon_url ? (
+              <img
+                src={categoryItem.icon_url}
+                alt={categoryItem.name}
+              />
+            ) : (
+              "nulp"
+            )}
+            <IonLabel>{categoryItem.name}</IonLabel>
+          </div>
+        ))}
+      </div>
+    </IonItem>
+  ))}
+
+
+                          </IonRadioGroup>
+                        </div>
                         <div className="the-list">
                           {filtered.map((card, index) => (
                             <div
                               className="resource-card"
                               key={index}
-                              onClick={() => navigateToNextPage()}
+                              onClick={() => getResourceDetailsByID(card.id)}
                             >
                               <IonItem lines="none">
-                              <div className="thumb" slot="start">
-                              {card?.thumbnail_url ? (
-                                <img style={{"borderRadius":"15px"}} src={card.thumbnail_url} alt="" />
-                              ) : (
-                                <img src="Not found" alt="Image not found" />
-                              )}
-                            </div>
+                                <div className="thumb" slot="start">
+                                  {card?.thumbnail_url ? (
+                                    <img
+                                      style={{ borderRadius: "15px" }}
+                                      src={card.thumbnail_url}
+                                      alt=""
+                                    />
+                                  ) : (
+                                    <img
+                                      src="Not found"
+                                      alt="Image not found"
+                                    />
+                                  )}
+                                </div>
 
                                 <IonLabel>
                                   <div className="first flex al-center">
@@ -434,45 +470,50 @@ const Resources: React.FC = () => {
                                     {card.title}
                                   </h5>
                                   <div className="btns-holder flex al-center jc-between">
-                                    <div 
-                                    onClick={() =>
-                                      handleUpvote(
-                                        card.is_upvoted,
-                                        card.id,
-                                        card.is_downvoted
-                                      )
-                                    }
-                                    className="btn ion-activatable ripple-parent flex al-center">
+                                    <div
+                                      onClick={() =>
+                                        handleUpvote(
+                                          card.is_upvoted,
+                                          card.id,
+                                          card.is_downvoted
+                                        )
+                                      }
+                                      className="btn ion-activatable ripple-parent flex al-center"
+                                    >
                                       {card.is_upvoted ? (
-                                    <IonIcon src={thumbs_up}></IonIcon>
-                                  ) : (
-                                    <IonIcon src={thumbs_up_outline}></IonIcon>
-                                  )}
+                                        <IonIcon src={thumbs_up}></IonIcon>
+                                      ) : (
+                                        <IonIcon
+                                          src={thumbs_up_outline}
+                                        ></IonIcon>
+                                      )}
                                       <h6>{card.upvotes_number}</h6>
                                     </div>
-                                    <div 
-                                     onClick={() =>
-                                      handleDownvote(
-                                        card.is_upvoted,
-                                        card.id,
-                                        card.is_downvoted
-                                      )
-                                    }
-                                    className="btn ion-activatable ripple-parent flex al-center">
+                                    <div
+                                      onClick={() =>
+                                        handleDownvote(
+                                          card.is_upvoted,
+                                          card.id,
+                                          card.is_downvoted
+                                        )
+                                      }
+                                      className="btn ion-activatable ripple-parent flex al-center"
+                                    >
                                       {card.is_downvoted ? (
-                                    <IonIcon src={thumbs_down}></IonIcon>
-                                  ) : (
-                                    <IonIcon
-                                      src={thumbs_down_outline}
-                                    ></IonIcon>
-                                  )}
+                                        <IonIcon src={thumbs_down}></IonIcon>
+                                      ) : (
+                                        <IonIcon
+                                          src={thumbs_down_outline}
+                                        ></IonIcon>
+                                      )}
                                       <h6>{card.downvotes_number}</h6>
                                     </div>
                                     <div
-                                    onClick={() =>
-                                      handleSave(card.favourite, card.id)
-                                    }
-                                     className="btn ion-activatable ripple-parent flex al-center">
+                                      onClick={() =>
+                                        handleSave(card.favourite, card.id)
+                                      }
+                                      className="btn ion-activatable ripple-parent flex al-center"
+                                    >
                                       {!card.favourite ? (
                                         <IonIcon src={h_outline}></IonIcon>
                                       ) : (
@@ -496,9 +537,11 @@ const Resources: React.FC = () => {
                           <IonRow>
                             {recommendations.map((item, index) => (
                               <IonCol size="6" key={index}>
-                                <div 
-                                className="rc-card ion-activatable ripple-parent"
-                                onClick={()=> getResourceDetailsByID(item.id)}
+                                <div
+                                  className="rc-card ion-activatable ripple-parent"
+                                  onClick={() =>
+                                    getResourceDetailsByID(item.id)
+                                  }
                                 >
                                   <IonRippleEffect />
                                   <div className="img-holder">
@@ -570,7 +613,9 @@ const Resources: React.FC = () => {
                     <div className="the-list">
                       {categoriesFavourites.map((card, index) => (
                         <div className="resource-card" key={index}>
-                          <IonItem lines="none">
+                          <IonItem lines="none" 
+                                onClick={() => getResourceDetailsByID(card.id)}
+                                >
                             <div className="thumb" slot="start">
                               {card?.thumbnail_url ? (
                                 <img src={card.thumbnail_url} alt="" />

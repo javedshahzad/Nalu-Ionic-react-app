@@ -38,7 +38,6 @@ const Resourcedetail: React.FC = () => {
   const location = useLocation();
   const data: any = location.state;
   const [resourseData, setResourceData] = useState(data);
-console.log(resourseData);
 
   const handleUpvote = async (is_upvoted, id, is_downvoted) => {
     let URL;
@@ -130,12 +129,12 @@ const vide0 ="https://www.youtube.com/watch?v=zk8M00rjMfQ"
       <IonContent fullscreen>
         <div className="top-img-holder ion-text-center">
           {!resourseData?.data.image_url ? (
-            <video src={vide0} autoPlay loop muted />
-            ) : (
-            <img src={resourseData?.data.image_url} alt="No image" />
-//  <video src={`https://www.youtube.com/watch?v=zk8M00rjMfQ`} width="750" height="500" controls>
-//  </video>
+            <div>
+              <div dangerouslySetInnerHTML={{ __html: resourseData.data.featured_video }}></div>
+            </div>
 
+            ) : (
+        <img src={resourseData?.data.image_url} alt="No image" />
           )}
         </div>
 
