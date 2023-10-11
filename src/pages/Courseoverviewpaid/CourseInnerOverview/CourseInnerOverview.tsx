@@ -242,7 +242,7 @@ const CourseInnerOverview: React.FC = () => {
                       <IonCol size="7">
                         <div className="paragraph_2">{item.title}</div>
                         <div className="align_justify">
-                          <span>{"3 Minutes"}</span>
+                          <span>{""}</span>
                           <span>
                             <img src={playCircle} alt="" />
                           </span>
