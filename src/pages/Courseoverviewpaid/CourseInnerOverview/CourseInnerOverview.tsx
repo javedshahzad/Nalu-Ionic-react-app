@@ -18,6 +18,10 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
+  useIonViewDidEnter,
+  useIonViewDidLeave,
+  useIonViewWillEnter,
+  useIonViewWillLeave,
 } from "@ionic/react";
 import {
   add,
@@ -60,28 +64,29 @@ import {
 } from "@vidstack/react/player/layouts/default";
 import axios from "axios";
 
+
 const CourseInnerOverview: React.FC = () => {
   const history = useHistory();
   const { t, i18n, ready } = useTranslation();
   const [togglePlay, setTogglePlay] = useState("video");
   const [courseData, setCourseData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [ismarkLoading, setIsMarlLoading] = useState(false);
 
   useEffect(() => {
     getData(27);
-  }, []);
+  }, [0]);
+
 
   const handleVideoClick = (value) => {
     setTogglePlay(value);
   };
-  const handleLanguageChange = () => {
-    // i18next.changeLanguage('de');
-    // localStorage.setItem("language",'de')
-    //  history.push('/configcycle')
+  const handleComplete = (id) => {
+    history.push(`/tabs/tab2/courseinneroverview/${id}`);
   };
 
   const getData = (id) => {
-    console.log;
+    console.log(id);
     setIsLoading(true);
     try {
       axios
@@ -97,6 +102,28 @@ const CourseInnerOverview: React.FC = () => {
         });
     } catch (error) {
       setIsLoading(false);
+      console.log(error);
+    }
+  };
+  const markAsDone = (URL) => {
+    setIsMarlLoading(true);
+    try {
+      axios
+        .post(URL)
+        .then((response) => {
+          console.log(response.data);
+          // setCourseData(response.data);
+          // if(response.data.status = "success"){
+          //   getData()
+          // }
+          setIsMarlLoading(false);
+        })
+        .catch((error) => {
+          setIsMarlLoading(false);
+          console.log(error);
+        });
+    } catch (error) {
+      setIsMarlLoading(false);
       console.log(error);
     }
   };
@@ -139,7 +166,7 @@ const CourseInnerOverview: React.FC = () => {
               <div className="main_div">
                 <div className="player_div">
                   {togglePlay === "video" && courseData?.video_url ? (
-                    <MediaPlayer className="player" src={courseData?.video_url}>
+                    <MediaPlayer className="player" src={courseData?.video_url? courseData?.video_url : ""}>
                       <MediaProvider>
                         <DefaultVideoLayout
                           thumbnails={courseData?.video_thumbnail}
@@ -163,17 +190,18 @@ const CourseInnerOverview: React.FC = () => {
                           </IonRow>
                         </IonGrid>
 
-                        <ReactPlayer
-                          url={courseData?.audio_url}
-                          config={{
-                            file: {
-                              forceAudio: true,
-                            },
-                          }}
-                          height="100px"
-                          playing={false}
-                          controls={true}
-                        />
+                        <MediaPlayer
+                          src={
+                            "https://media-files.vidstack.io/sprite-fight/audio.mp3"
+                          }
+                        >
+                          <MediaProvider></MediaProvider>
+                          <DefaultAudioLayout icons={defaultLayoutIcons} />
+                          <DefaultVideoLayout
+                            icons={defaultLayoutIcons}
+                            thumbnails={courseData?.audio_thumbnail}
+                          />
+                        </MediaPlayer>
                       </div>
                     </>
                   )}
@@ -213,21 +241,29 @@ const CourseInnerOverview: React.FC = () => {
                     </IonCol>
                     <IonCol size="9">
                       <div className="align_col">
-                        <div className="createdby">Created By</div>
-                        <div className="message">
-                          <span> {courseData?.authority?.title}, </span>
-                          {courseData?.authority?.description}
-                        </div>
+                        {courseData?.authority?.title ? (
+                          <>
+                            <div className="createdby">Created By</div>
+                            <div className="message">
+                              <span>{courseData?.authority?.title},</span>{" "}
+                              {courseData?.authority?.description}
+                            </div>
+                          </>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </IonCol>
                   </IonRow>
                 </IonGrid>
-                <div className="paragraph">
-                  {courseData?.authority?.content}
-                </div>
+                <div
+                  className="paragraph"
+                  dangerouslySetInnerHTML={{ __html: courseData?.content }}
+                ></div>
+
                 <IonGrid>
                   {courseData?.chapter_exercises?.map((item, index) => (
-                    <IonRow key={index}>
+                    <IonRow key={index} onClick={() => handleComplete(item.id)}>
                       <IonCol size="5">
                         <img
                           style={{
@@ -251,15 +287,34 @@ const CourseInnerOverview: React.FC = () => {
                     </IonRow>
                   ))}
                 </IonGrid>
-
-                <div className="btn-holder ion-text-center ion-padding-vertical">
-                  <IonButton
-                    expand="block"
-                    onClick={() => handleLanguageChange()}
-                  >
-                    {"Mark as Done"}
-                  </IonButton>
-                </div>
+                {!courseData?.completed ? (
+                    <div
+                      style={{
+                        borderRadius: "10px",
+                        fontSize: "18px",
+                        height: "54px",
+                        marginLeft: "15px",
+                        marginRight: "15px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "#EE5F64",
+                      }}
+                      onClick={()=> markAsDone(courseData?.completion_link)}
+                    >
+                      {ismarkLoading ? (
+                        <IonSpinner
+                          class="mark_loading_spinner"
+                          name="crescent"
+                          style={{"color":"white","width":"30px","height":"30px"}}
+                        />
+                      ) : (
+                        <p style={{"color":"white"}}>Mark as Done</p>
+                      )}
+                    </div>
+                ) : (
+                  ""
+                )}
               </div>
             </IonContent>
           </IonPage>
