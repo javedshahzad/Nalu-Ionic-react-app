@@ -36,16 +36,9 @@ import Addrecmodal from "../modals/Addrec/Addrecmodal";
 import { useHistory } from "react-router";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-
-import heart from "../../Images/heart.svg";
-import h_outline from "../../Images/heart-outline.svg";
-import thumbs_up from "../../Images/thumbs-up.svg";
-import thumbs_up_outline from "../../Images/thumbs-up-outline.svg";
-import thumbs_down from "../../Images/thumbs-down.svg";
-import thumbs_down_outline from "../../Images/thumbs-down-outline.svg";
 import filter from "../../Images/filter.png";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Resources: React.FC = () => {
   const [activeSegment, setActiveSegment] = useState<string>("overview");
@@ -56,11 +49,10 @@ const Resources: React.FC = () => {
   const [categoriesFavourites, setCategoriesFavourites] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
   const [filtered, setFiltered] = useState([]);
-  const [categoryID, setCategoryID] = useState('');
+  const [categoryID, setCategoryID] = useState("");
 
   const history = useHistory();
   const location = useLocation();
-  const dataReceivedAsString = new URLSearchParams(location.search).get("data");
 
   useEffect(() => {
     Data();
@@ -87,7 +79,7 @@ const Resources: React.FC = () => {
   });
 
   const navigateToNextPage = () => {
-    if(!isFilterSelected){
+    if (!isFilterSelected) {
       history.push("/resourcedetail");
     }
   };
@@ -100,8 +92,8 @@ const Resources: React.FC = () => {
       localStorage.removeItem("DATA");
     } else {
       getCategoriesFavourites();
-      setIsFilterSelected(false)
-      setCategoryID('')
+      setIsFilterSelected(false);
+      setCategoryID("");
     }
   };
 
@@ -112,7 +104,11 @@ const Resources: React.FC = () => {
     setIsLoading(true);
 
     axios
-      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`)
+      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
+      })
       .then((response) => {
         console.log(response.data);
         setCategoriesOverview(response.data);
@@ -128,7 +124,11 @@ const Resources: React.FC = () => {
 
     axios
       .get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`
+        `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
+        }
       )
       .then((response) => {
         console.log(response.data);
@@ -145,7 +145,11 @@ const Resources: React.FC = () => {
 
     axios
       .get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`
+        `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
+        }
       )
       .then((response) => {
         console.log(response.data);
@@ -160,11 +164,16 @@ const Resources: React.FC = () => {
   const getCategoryByID = (id) => {
     console.log(id);
     setCategoryID(id);
-    if (!isFilterSelected){setIsLoading(true);} // for first loading
+    if (!isFilterSelected) {
+      setIsLoading(true);
+    } // for first loading
     setIsFilterSelected(true);
 
     axios
       .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
         params: {
           category_id: id,
         },
@@ -191,12 +200,28 @@ const Resources: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(URL);
+      const response = await axios.post(
+        URL,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
+        }
+      );
       console.log(response.data);
-      if ((response.data.message = "Upvote added successfully") && !isFilterSelected) {
+      if (
+        (response.data.message = "Upvote added successfully") &&
+        !isFilterSelected
+      ) {
         axios
           .get(
-            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`
+            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+              },
+            }
           )
           .then((response) => {
             console.log(response.data);
@@ -205,8 +230,11 @@ const Resources: React.FC = () => {
           .catch((error) => {
             console.log(error);
           });
-      } else if((response.data.message = "Upvote added successfully") &&  isFilterSelected){
-        getCategoryByID(id)
+      } else if (
+        (response.data.message = "Upvote added successfully") &&
+        isFilterSelected
+      ) {
+        getCategoryByID(id);
       }
     } catch (error) {
       console.error(error);
@@ -224,11 +252,27 @@ const Resources: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(URL);
-      if ((response.data.message = "Downvote removed successfully") &&  !isFilterSelected) {
+      const response = await axios.post(
+        URL,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
+        }
+      );
+      if (
+        (response.data.message = "Downvote removed successfully") &&
+        !isFilterSelected
+      ) {
         axios
           .get(
-            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`
+            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+              },
+            }
           )
           .then((response) => {
             setCategoriesFavourites(response.data);
@@ -236,9 +280,11 @@ const Resources: React.FC = () => {
           .catch((error) => {
             console.log(error);
           });
-      }
-      else if((response.data.message = "Downvote removed successfully") &&  isFilterSelected){
-        getCategoryByID(categoryID)
+      } else if (
+        (response.data.message = "Downvote removed successfully") &&
+        isFilterSelected
+      ) {
+        getCategoryByID(categoryID);
       }
     } catch (error) {
       console.error(error);
@@ -252,24 +298,12 @@ const Resources: React.FC = () => {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=true`;
     }
     try {
-      const response = await axios.post(URL);
+      const response = await axios.post(URL,{},{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
+      });
       console.log(response.data);
-      // getCategoriesFavourites();
-      // getFavouriteColor(!fav);
-
-      // if ((response.data.message = "Upvote added successfully")) {
-      //   axios
-      //     .get(
-      //       `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`
-      //     )
-      //     .then((response) => {
-      //       console.log(response.data);
-      //       setCategoriesFavourites(response.data);
-      //     })
-      //     .catch((error) => {
-      //       console.log(error);
-      //     });
-      // }
     } catch (error) {
       console.error(error);
     }
@@ -285,30 +319,27 @@ const Resources: React.FC = () => {
   const navigateFilter = () => {
     history.push("/filter");
   };
-  const setToastAndClose = (val)=>{
-    toast.success(val)
-    setModalOpen(false)
-  }
-  const getResourceDetailsByID =(id)=>{
+  const setToastAndClose = (val) => {
+    toast.success(val);
+    setModalOpen(false);
+  };
+  const getResourceDetailsByID = (id) => {
     try {
       axios
-          .get(
-            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`
-          )
-          .then((response) => {
-            console.log(response.data);
-           history.push('/resourcedetail',{
-             data: response.data
-           })
-          })
-          .catch((error) => {
-            console.log(error);
+        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`)
+        .then((response) => {
+          console.log(response.data);
+          history.push("/resourcedetail", {
+            data: response.data,
           });
-      
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   return (
     <>
       <ToastContainer autoClose={19000} />
@@ -385,6 +416,7 @@ const Resources: React.FC = () => {
                                 <div className="icon-img">
                                   {item.icon_url ? (
                                     <img src={item.icon_url} alt={item.name} />
+
                                   ) : (
                                     "null"
                                   )}
@@ -403,33 +435,38 @@ const Resources: React.FC = () => {
                       <>
                         <div className="selector mtype">
                           <IonRadioGroup>
-                          {filtered
-  .filter(item => item.category && item.category.length > 0)
-  .map((item, index) => (
-    <IonItem
-      key={index}
-      lines="none"
-      onClick={() => getCategoryByID(item.id)}
-    >
-      <div className="icon-img">
-        {item.category.map((categoryItem, categoryIndex) => (
-          <div key={categoryIndex}>
-            {categoryItem.icon_url ? (
-              <img
-                src={categoryItem.icon_url}
-                alt={categoryItem.name}
-              />
-            ) : (
-              "nulp"
-            )}
-            <IonLabel>{categoryItem.name}</IonLabel>
-          </div>
-        ))}
-      </div>
-    </IonItem>
-  ))}
-
-
+                            {filtered
+                              .filter(
+                                (item) =>
+                                  item.category && item.category.length > 0
+                              )
+                              .map((item, index) => (
+                                <IonItem
+                                  key={index}
+                                  lines="none"
+                                  onClick={() => getCategoryByID(item.id)}
+                                >
+                                  <div className="icon-img">
+                                    {item.category.map(
+                                      (categoryItem, categoryIndex) => (
+                                        <div key={categoryIndex}>
+                                          {categoryItem.icon_url ? (
+                                            <img
+                                              src={categoryItem.icon_url}
+                                              alt={categoryItem.name}
+                                            />
+                                          ) : (
+                                            "nulp"
+                                          )}
+                                          <IonLabel>
+                                            {categoryItem.name}
+                                          </IonLabel>
+                                        </div>
+                                      )
+                                    )}
+                                  </div>
+                                </IonItem>
+                              ))}
                           </IonRadioGroup>
                         </div>
                         <div className="the-list">
@@ -470,54 +507,49 @@ const Resources: React.FC = () => {
                                     {card.title}
                                   </h5>
                                   <div className="btns-holder flex al-center jc-between">
-                                    <div
+                                    {/* <div
                                       onClick={() =>
                                         handleUpvote(
                                           card.is_upvoted,
                                           card.id,
                                           card.is_downvoted
                                         )
-                                      }
-                                      className="btn ion-activatable ripple-parent flex al-center"
-                                    >
+                                      } */}
+                                    <div className="btn ion-activatable ripple-parent flex al-center">
                                       {card.is_upvoted ? (
-                                        <IonIcon src={thumbs_up}></IonIcon>
+                                        <IonIcon src="assets/imgs/like-unfilled.svg" />
                                       ) : (
-                                        <IonIcon
-                                          src={thumbs_up_outline}
-                                        ></IonIcon>
+                                        <IonIcon src="assets/imgs/like-filled.svg" />
                                       )}
                                       <h6>{card.upvotes_number}</h6>
                                     </div>
-                                    <div
+                                    {/* <div
                                       onClick={() =>
                                         handleDownvote(
                                           card.is_upvoted,
                                           card.id,
                                           card.is_downvoted
                                         )
-                                      }
-                                      className="btn ion-activatable ripple-parent flex al-center"
-                                    >
+                                      } */}
+                                    <div className="btn ion-activatable ripple-parent flex al-center">
                                       {card.is_downvoted ? (
-                                        <IonIcon src={thumbs_down}></IonIcon>
+                                        <IonIcon src="assets/imgs/dislike-unfilled.svg" />
                                       ) : (
-                                        <IonIcon
-                                          src={thumbs_down_outline}
-                                        ></IonIcon>
+                                        <IonIcon src="assets/imgs/dislike-filled.svg"></IonIcon>
                                       )}
                                       <h6>{card.downvotes_number}</h6>
                                     </div>
-                                    <div
+                                    {/* <div
                                       onClick={() =>
                                         handleSave(card.favourite, card.id)
-                                      }
+                                      } */}
+                                      <div
                                       className="btn ion-activatable ripple-parent flex al-center"
                                     >
                                       {!card.favourite ? (
-                                        <IonIcon src={h_outline}></IonIcon>
+                                        <IonIcon src="assets/imgs/heart-unfilled.svg"></IonIcon>
                                       ) : (
-                                        <IonIcon src={heart}></IonIcon>
+                                        <IonIcon src="assets/imgs/heart-filled.svg" />
                                       )}
                                       <h6>Save</h6>
                                     </div>
@@ -613,9 +645,10 @@ const Resources: React.FC = () => {
                     <div className="the-list">
                       {categoriesFavourites.map((card, index) => (
                         <div className="resource-card" key={index}>
-                          <IonItem lines="none" 
-                                onClick={() => getResourceDetailsByID(card.id)}
-                                >
+                          <IonItem
+                            lines="none"
+                            onClick={() => getResourceDetailsByID(card.id)}
+                          >
                             <div className="thumb" slot="start">
                               {card?.thumbnail_url ? (
                                 <img src={card.thumbnail_url} alt="" />
@@ -637,57 +670,49 @@ const Resources: React.FC = () => {
                               </div>
                               <h5 className="ion-text-wrap">{card.title}</h5>
                               <div className="btns-holder flex al-center jc-between">
-                                <div
+                                {/* <div
                                   onClick={() =>
                                     handleUpvote(
                                       card.is_upvoted,
                                       card.id,
                                       card.is_downvoted
                                     )
-                                  }
-                                  className="btn ion-activatable ripple-parent flex al-center"
-                                >
+                                  } */}
+                                <div className="btn ion-activatable ripple-parent flex al-center">
                                   {card.is_upvoted ? (
-                                    <IonIcon src={thumbs_up}></IonIcon>
+                                    <IonIcon src="assets/imgs/like-unfilled.svg" />
                                   ) : (
-                                    <IonIcon src={thumbs_up_outline}></IonIcon>
+                                    <IonIcon src="assets/imgs/like-filled.svg" />
                                   )}
                                   <h6>{card.upvotes_number}</h6>
                                 </div>
-                                <div
+                                {/* <div
                                   onClick={() =>
                                     handleDownvote(
                                       card.is_upvoted,
                                       card.id,
                                       card.is_downvoted
                                     )
-                                  }
-                                  className="btn ion-activatable ripple-parent flex al-center"
-                                >
+                                  } */}
+                                <div className="btn ion-activatable ripple-parent flex al-center">
                                   {card.is_downvoted ? (
-                                    <IonIcon src={thumbs_down}></IonIcon>
+                                    <IonIcon src="assets/imgs/dislike-unfilled.svg" />
                                   ) : (
-                                    <IonIcon
-                                      src={thumbs_down_outline}
-                                    ></IonIcon>
+                                    <IonIcon src="assets/imgs/dislike-filled.svg"></IonIcon>
                                   )}
                                   <h6>{card.downvotes_number}</h6>
                                 </div>
-                                <div
+                                {/* <div
                                   onClick={() =>
                                     handleSave(card.favourite, card.id)
-                                  }
+                                  } */}
+                                  <div
                                   className="btn ion-activatable ripple-parent flex al-center"
                                 >
                                   {!card.favourite ? (
-                                    <IonIcon
-                                      className={`heart-icon ${getFavouriteColor(
-                                        card.favourite
-                                      )}`}
-                                      src={h_outline}
-                                    ></IonIcon>
+                                    <IonIcon src="assets/imgs/heart-unfilled.svg"></IonIcon>
                                   ) : (
-                                    <IonIcon src={heart}></IonIcon>
+                                    <IonIcon src="assets/imgs/heart-filled.svg" />
                                   )}
                                   <h6>Save</h6>
                                 </div>
@@ -709,4 +734,3 @@ const Resources: React.FC = () => {
 };
 
 export default Resources;
-

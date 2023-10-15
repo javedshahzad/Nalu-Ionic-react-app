@@ -90,7 +90,11 @@ const CourseInnerOverview: React.FC = () => {
     setIsLoading(true);
     try {
       axios
-        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`)
+        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`,{
+          headers:{
+            Authorization:`Bearer ${localStorage.getItem('jwtToken')}`
+          }
+        })
         .then((response) => {
           console.log(response.data);
           setCourseData(response.data);

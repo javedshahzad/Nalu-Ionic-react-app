@@ -84,9 +84,9 @@
 
         .the-list
         {
-            ion-accordion
+            ion-accordion.first_accord
             {
-                margin: 10px 0;
+                margin: 10px 0 !important;
 
                 ion-item
                 {

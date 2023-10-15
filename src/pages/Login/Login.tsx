@@ -67,8 +67,8 @@ const Login: React.FC = () => {
             const storedToken = localStorage.getItem('jwtToken');
             if (storedToken) {
               config.headers.Authorization = `Bearer ${storedToken}`;
+              return config;
             }
-            return config;
           });
 
           // naviagtion

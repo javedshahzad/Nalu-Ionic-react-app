@@ -17,6 +17,8 @@ import {
 import {
   checkmarkCircle,
   heartOutline,
+  heartHalfOutline,
+
   informationCircleOutline,
   menuOutline,
   notificationsOutline,
@@ -27,12 +29,6 @@ import "./Resourcedetail.scss";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useState } from 'react';
-import thumbs_up from "../.././Images/thumbs-up.svg";
-import thumbs_up_outline from "../.././Images/thumbs-up-outline.svg";
-import thumbs_down from "../.././Images/thumbs-down.svg";
-import thumbs_down_outline from "../.././Images/thumbs-down-outline.svg";
-
-
 
 const Resourcedetail: React.FC = () => {
   const location = useLocation();
@@ -44,22 +40,33 @@ const Resourcedetail: React.FC = () => {
     if (is_upvoted) {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false}`;
     } else if (!is_upvoted && !is_downvoted) {
-      // <-
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
     } else if (!is_upvoted && is_downvoted) {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
     }
-
+  
     try {
-      const response = await axios.post(URL);
+      const response = await axios.post(
+        URL,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
+        }
+      );
       console.log(response.data);
-      if ((response.data.message = "Upvote added successfully") || (response.data.message = "Downvote removed successfully")) {
-          getResourceDetailsByID(resourseData.data.id)
+      if (
+        response.data.message === "Upvote added successfully" ||
+        response.data.message === "Downvote removed successfully"
+      ) {
+        getResourceDetailsByID(resourseData.data.id);
       }
     } catch (error) {
       console.error(error);
     }
   };
+  
   const handleDownvote = async (is_upvoted, id, is_downvoted) => {
     let URL;
     if (!is_downvoted && !is_upvoted) {
@@ -72,8 +79,39 @@ const Resourcedetail: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(URL);
+      const response = await axios.post(URL, {}, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
+      });
       if ((response.data.message = "Downvote removed successfully")) {
+          getResourceDetailsByID(resourseData.data.id)
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSave = async (favourite,id) => {
+    console.log(favourite);
+    console.log(id);
+
+
+    let URL;
+    if (favourite) {
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=false}`;
+    } else {
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=true`;
+    } 
+
+    try {
+      const response = await axios.post(URL, {}, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
+      });
+      console.log(response);
+      if ((response.data.message = "Post added to favourites successfully")) {
           getResourceDetailsByID(resourseData.data.id)
       }
     } catch (error) {
@@ -84,9 +122,14 @@ const Resourcedetail: React.FC = () => {
     try {
       axios
           .get(
-            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`
+            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+              },
+            }
           )
           .then((response) => {
+            console.log(response);
             setResourceData(response)
            
           })
@@ -105,7 +148,6 @@ const Resourcedetail: React.FC = () => {
       return "not-filled";
     }
   };
-const vide0 ="https://www.youtube.com/watch?v=zk8M00rjMfQ"
   return (
     <IonPage className="Resourcedetail">
       <IonHeader className="ion-no-border">
@@ -175,9 +217,11 @@ const vide0 ="https://www.youtube.com/watch?v=zk8M00rjMfQ"
                       resourseData?.data.is_downvoted)}
                     className="btn ion-activatable ripple-parent flex al-center">
                       {resourseData?.data.is_upvoted ? (
-                                    <IonIcon src={thumbs_up}></IonIcon>
+                                    <IonIcon src="assets/imgs/like-unfilled.svg"/>
+
                                   ) : (
-                                    <IonIcon src={thumbs_up_outline}></IonIcon>
+                                    <IonIcon src="assets/imgs/like-filled.svg"/>
+
                                   )}
 
                       <h6>{resourseData?.data.upvotes_number}</h6>
@@ -192,17 +236,29 @@ const vide0 ="https://www.youtube.com/watch?v=zk8M00rjMfQ"
                     }
                     className="btn ion-activatable ripple-parent flex al-center" style={{"marginLeft": "29px"}}>
                           {resourseData?.data.is_downvoted ? (
-                                    <IonIcon src={thumbs_down}></IonIcon>
+                                    <IonIcon src="assets/imgs/dislike-unfilled.svg"/>
+
                                   ) : (
                                     <IonIcon
-                                   
-                                    className={`vote-icon ${getFavouriteColor(
-                                      resourseData?.data.is_downvoted
-                                    )}`}
-                                    src={thumbs_down_outline}
+                                    src="assets/imgs/dislike-filled.svg"
                                     ></IonIcon>
                                   )}
                       <h6>{resourseData?.data.downvotes_number}</h6>
+                    </div>
+                    <div 
+                    onClick={() =>
+                      handleSave(
+                        resourseData?.data.favourite,
+                        resourseData?.data.id
+                      )
+                    }
+                    className="btn ion-activatable ripple-parent flex al-center" style={{"marginLeft": "29px"}}>
+                          {resourseData?.data.favourite ? (
+                                    <IonIcon src="assets/imgs/heart-filled.svg"/>
+                                  ) : (
+                                    <IonIcon src="assets/imgs/heart-unfilled.svg" ></IonIcon>
+                                  )}
+                      <h6 style={{"marginLeft":"5px","color":"#636363"}}> Save</h6> 
                     </div>
                   </div>
                 </IonLabel>
