@@ -3,6 +3,14 @@ $config-white: #fefcfa;
 $config-black: #2d2d2d;
 $config-font-family: var(--ion-font-family);
 
+:root {
+  --body-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --msger-bg: #fff;
+  --border: 2px solid #ddd;
+  --left-msg-bg: #f5f5f5;
+  --right-msg-bg: #fff7ef;
+}
+
 .top-row {
   display: flex;
   justify-content: center;
@@ -33,6 +41,9 @@ $config-font-family: var(--ion-font-family);
 }
 .overflow-x-auto {
   overflow-x: auto;
+}
+.overflow-y-auto {
+  overflow-y: auto;
 }
 .flex {
   display: flex;
@@ -80,26 +91,26 @@ $config-font-family: var(--ion-font-family);
   font-family: $config-font-family;
 }
 .profile-image {
-  height: 40px !important;
-  width: 40px !important;
+  height: 30px !important;
+  width: 30px !important;
   border-radius: 100%;
 }
-.user-name {
-  padding: 4px;
-  position: absolute;
-  left: 6px;
-  font-weight: bold;
-  bottom: 14px;
-  font-size: 14px;
-  color: $config-black;
-  font-family: $config-font-family;
-}
-.text-right {
-  text-align: right;
-}
-.msg {
-  padding: 4px;
-}
+// .user-name {
+//   padding: 4px;
+//   position: absolute;
+//   left: 6px;
+//   font-weight: bold;
+//   bottom: 14px;
+//   font-size: 20px;
+//   color: $config-black;
+//   font-family: $config-font-family;
+// }
+// .text-right {
+//   text-align: right;
+// }
+// .msg {
+//   padding: 4px;
+// }
 .message-time {
   text-align: right !important;
   color: $config-gray;
@@ -116,48 +127,18 @@ $config-font-family: var(--ion-font-family);
   color: $config-black;
 }
 
-.currentUser {
-  height: auto !important;
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  padding: 5px !important;
-  background-color: rgb(249, 249, 232) !important;
-}
-.otherUsers {
-  height: auto !important;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-  border-bottom-left-radius: 20px;
-  padding: 5px !important;
-  background-color: rgb(255, 229, 238) !important;
-}
 .bg-white {
   background-color: #ffff;
   color: black;
 }
 
-.absolute {
-  position: absolute;
-}
 .right-0 {
   right: 0px;
 }
 .top-0 {
   top: 0px;
 }
-.-translate-y-1\/2 {
-  --tw-translate-y: -50%;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-.translate-x-1\/2 {
-  --tw-translate-x: 50%;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
+
 .h-20 {
   height: 5rem /* 80px */;
 }
@@ -183,114 +164,6 @@ $config-font-family: var(--ion-font-family);
 /* new styling */
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400);
-
-.message-container {
-  padding-right: 20px;
-  padding-left: 20px;
-}
-
-.message-blue {
-  position: relative;
-  margin-left: 20px;
-  padding: 10px;
-  background-color: #fefcfa;
-  width: 200px;
-  height: 50px;
-  text-align: left;
-  font: 400 0.9em "Open Sans", sans-serif;
-  border: 1px solid #fefcfa;
-  border-radius: 10px;
-}
-
-.message-orange {
-  position: relative;
-  margin-bottom: 10px;
-  margin-left: calc(100% - 240px);
-  padding: 10px;
-  background-color: #fff7ef;
-  width: auto;
-  height: auto;
-  text-align: left;
-  font: 400 0.9em "Open Sans", sans-serif;
-  border: 1px solid #fff7ef;
-  border-radius: 10px;
-}
-
-.message-content {
-  padding: 0;
-  margin: 0;
-  color: $config-black;
-  font-family: $config-font-family;
-}
-
-.message-timestamp-right {
-  position: absolute;
-  font-size: 0.85em;
-  font-weight: 300;
-  bottom: 5px;
-  right: 5px;
-}
-
-.message-timestamp-left {
-  position: absolute;
-  font-size: 0.85em;
-  font-weight: 300;
-  bottom: 5px;
-  left: 5px;
-}
-
-.message-blue:after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-bottom: 15px solid #fefcfa; /* Change border-top to border-bottom */
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  bottom: 0; /* Change top to bottom */
-  left: -15px;
-}
-
-.message-blue:before {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-bottom: 17px solid #fefcfa; /* Change border-top to border-bottom */
-  border-left: 16px solid transparent;
-  border-right: 16px solid transparent;
-  bottom: -1px; /* Change top to bottom */
-  left: -17px;
-}
-
-.message-orange:after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-bottom: 15px solid #fff7ef;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  bottom: 0;
-  right: -15px;
-}
-
-.message-orange:before {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-bottom: 17px solid #fff7ef;
-  border-left: 16px solid transparent;
-  border-right: 16px solid transparent;
-  bottom: -1px;
-  right: -17px;
-}
-
-.other-user-wrapper {
-  display: flex;
-  align-items: flex-end;
-}
 
 .message-emoji {
   display: flex;
@@ -342,8 +215,66 @@ $config-font-family: var(--ion-font-family);
 
 ion-content {
   --ion-background-color: #fefcfa;
+  --padding-start: 10px;
+  --padding-end: 10px;
 }
 
 ion-page {
   --ion-background-color: #fefcfa;
+}
+
+.msg {
+  display: flex !important;
+  align-items: flex-end !important;
+  margin-bottom: 10px !important;
+}
+
+.msg-bubble {
+  max-width: 450px !important;
+  padding: 15px !important;
+  border-radius: 15px !important;
+  background: var(--left-msg-bg) !important;
+}
+
+.msg-info-name {
+  margin-right: 10px !important;
+  font-weight: bold !important;
+  font-size: 18px;
+}
+
+.left-msg .msg-bubble {
+  border-bottom-left-radius: 0 !important;
+}
+
+.right-msg {
+  // display: flex !important;
+  flex-direction: column !important;
+}
+
+.right-msg .msg-bubble {
+  background: var(--right-msg-bg) !important;
+  color: #fff !important;
+  border-bottom-right-radius: 0 !important;
+}
+.right-msg .msg-img {
+  margin: 0 0 0 10px !important;
+}
+
+.msg-text {
+  p {
+    margin: 0;
+    font-size: 18px;
+    font-family: $config-font-family;
+    color: $config-black;
+  }
+}
+
+.other-msg-text {
+  p {
+    margin: 0;
+    margin-top: 10px;
+    font-size: 18px;
+    font-family: $config-font-family;
+    color: $config-black;
+  }
 }

@@ -45,6 +45,7 @@ ion-list.webkit-scrollbar::-webkit-scrollbar {
   margin-left: 10px;
   margin-right: 10px;
   border-radius: 10px;
+  border: 1px solid #f0f0f0;
 }
 
 .browse-grps-icon {
@@ -53,6 +54,7 @@ ion-list.webkit-scrollbar::-webkit-scrollbar {
 
 .browse-grps-label {
   color: $config-gray;
+  font-family: $config-font-family;
 }
 
 .group-name-input {
@@ -72,4 +74,21 @@ ion-list.webkit-scrollbar::-webkit-scrollbar {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.addGrpLabel {
+  color: $config-gray !important;
+  font-family: $config-font-family;
+}
+
+.addIcon {
+  color: $config-gray;
+}
+
+.createGrpBtn {
+  color: white;
+}
+
+.cancelBtn {
+  --background-color: black;
 }

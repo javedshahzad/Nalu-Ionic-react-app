@@ -133,6 +133,10 @@ const GroupChat: React.FC = () => {
     },
   });
 
+  const [limit, setLimit] = useState(10);
+
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     socket.emit("join", {
       user: "65194710d160530510955d7d",
@@ -144,8 +148,8 @@ const GroupChat: React.FC = () => {
     });
 
     socket.emit("message-list", {
-      page,
-      limit: 10,
+      page: 1,
+      limit: limit,
       user: "65194710d160530510955d7d",
       conversation: groupId,
     });
@@ -240,29 +244,95 @@ const GroupChat: React.FC = () => {
   };
 
   useIonViewWillEnter(() => {
+    setLimit(10);
     // Check if the chatContentRef has been initialized
-    if (chatContentRef && chatContentRef.current) {
+    if (chatContentRef.current) {
+      console.log("chatContentRef", chatContentRef.current);
       // Scroll to the bottom of the chat content
       setTimeout(() => {
-        chatContentRef.current.scrollToBottom();
-      }, 2000);
+        chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
+      }, 3000);
     }
   });
 
-  const loadMessages = () => {
-    setChatLoading(true);
-
+  const loadMore = () => {
+    setLimit((prevLimit) => prevLimit + 10);
+    console.log("limit", limit);
     socket.emit("message-list", {
-      page,
-      limit: 10,
+      page: 1,
+      limit: limit,
       user: "65194710d160530510955d7d",
       conversation: groupId,
     });
+
+    socket.on("message-list", (data) => {
+      console.log("data", data);
+      if (data.results.length > 0) {
+        // setgrpMessage(data.results);
+        const invertedArray = data.results.reverse();
+        console.log("invertedArray", invertedArray);
+        setgrpMessage(
+          invertedArray.map((msg: any) => {
+            const timestamp = moment(msg.createdAt);
+            const now = moment();
+            const diffInSeconds = now.diff(timestamp, "seconds");
+
+            if (diffInSeconds < 60) {
+              return {
+                ...msg,
+                relativeTimestamp: "Just Now",
+              };
+            } else if (diffInSeconds < 60 * 60) {
+              const diffInMinutes = Math.floor(diffInSeconds / 60);
+              return {
+                ...msg,
+                relativeTimestamp: `${diffInMinutes} min ago`,
+              };
+            } else if (diffInSeconds < 2 * 60 * 60) {
+              return {
+                ...msg,
+                relativeTimestamp: "1 hour ago",
+              };
+            } else if (diffInSeconds < 24 * 60 * 60) {
+              const diffInHours = Math.floor(diffInSeconds / (60 * 60));
+              return {
+                ...msg,
+                relativeTimestamp: `${diffInHours} hours ago`,
+              };
+            } else if (diffInSeconds < 2 * 24 * 60 * 60) {
+              return {
+                ...msg,
+                relativeTimestamp: "yesterday",
+              };
+            } else if (diffInSeconds < 7 * 24 * 60 * 60) {
+              const diffInDays = Math.floor(diffInSeconds / (24 * 60 * 60));
+              return {
+                ...msg,
+                relativeTimestamp: `${diffInDays} days ago`,
+              };
+            } else {
+              return {
+                ...msg,
+                relativeTimestamp: timestamp.format("YYYY-MM-DD"),
+              };
+            }
+          })
+        );
+      }
+      setLoading(false);
+    });
   };
 
-  useEffect(() => {
-    loadMessages();
-  }, [page]);
+  const handleScroll = (event) => {
+    console.log("event scroll", event.currentTarget.scrollTop);
+    const scrollTop = event.currentTarget.scrollTop;
+    if (scrollTop === 0) {
+      setLoading(true);
+      setTimeout(() => {
+        loadMore();
+      }, 500);
+    }
+  };
 
   return (
     <IonPage>
@@ -280,42 +350,62 @@ const GroupChat: React.FC = () => {
           </IonButton>
         </IonToolbar>
       </IonHeader>
-
+      {loading ? (
+        <div className="flex align-middle items-center justify-center">
+          <IonSpinner
+            color={"primary"}
+            name="crescent"
+            className="h-20px w-20px"
+          ></IonSpinner>
+        </div>
+      ) : null}
+      {/* <div
+        ref={chatContentRef}
+        onScroll={handleScroll}
+        className="overflow-y-auto"
+      > */}
       <IonContent fullscreen ref={chatContentRef}>
         {grpMessage.map((message: any, index: any) => (
-          <div className="message-container" key={index}>
+          <div>
             {message.sender._id === user ? (
               <>
-                <div className="message-orange">
-                  {message.files.length > 0 && (
-                    <img
-                      src={message.files[0]}
-                      className="h-20 w-20 max-w-md rounded-sm"
-                      alt="Message Image"
-                    />
-                  )}
-                  {message.message && (
-                    <div
-                      className="message-content"
-                      dangerouslySetInnerHTML={sanitizeHTML(message.message)}
-                    />
-                  )}
+                <div className="msg right-msg" key={index}>
+                  <div className="msg-bubble">
+                    {message.files.length > 0 && (
+                      <img
+                        src={message.files[0]}
+                        className="h-20 w-20 max-w-md rounded-sm"
+                        alt="Message Image"
+                      />
+                    )}
+                    <div className="msg-text">
+                      {message.message && (
+                        <div
+                          dangerouslySetInnerHTML={sanitizeHTML(
+                            message.message
+                          )}
+                        />
+                      )}
+                    </div>
+                  </div>
+                  <p className="message-time">{message.relativeTimestamp}</p>
                 </div>
-                <p className="message-time">{message.relativeTimestamp}</p>
               </>
             ) : (
               <>
-                <div className="other-user-wrapper">
+                <div className="msg left-msg">
                   <img
                     src={message.sender.userImage}
                     alt="User"
                     className="profile-image"
                   />
 
-                  <div className="message-blue">
-                    <h1 className="user-name">{message.sender.name}</h1>
+                  <div className="msg-bubble">
+                    <div className="msg-info">
+                      <div className="msg-info-name">{message.sender.name}</div>
+                    </div>
                     <div
-                      className="message-content"
+                      className="other-msg-text"
                       dangerouslySetInnerHTML={sanitizeHTML(message.message)}
                     />
                   </div>
@@ -325,7 +415,7 @@ const GroupChat: React.FC = () => {
             )}
           </div>
         ))}
-        <IonInfiniteScroll threshold="100px" onIonInfinite={loadMessages} />
+        {/* </div> */}
       </IonContent>
       <IonFooter className="footer relative">
         {(filesArray || []).length > 0 && (

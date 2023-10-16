@@ -19,10 +19,12 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonModal,
   IonPage,
   IonPopover,
   IonText,
   IonToolbar,
+  useIonActionSheet,
 } from "@ionic/react";
 import "./mygroups.scss";
 import { useHistory } from "react-router-dom";
@@ -39,6 +41,13 @@ const MyGroups: React.FC = () => {
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
 
   const [groupsList, setGroupsList] = useState([]);
+
+  const modal = useRef<HTMLIonModalElement>(null);
+  const page = useRef(null);
+
+  const [presentingElement, setPresentingElement] =
+    useState<HTMLElement | null>(null);
+  const [present] = useIonActionSheet();
 
   const groups = useSelector((state: RootState) => state.groups);
 
@@ -59,16 +68,9 @@ const MyGroups: React.FC = () => {
     history.goBack();
   };
 
-  const popoverRef = useRef(null);
-
   const [users, setUsers] = useState<any[]>([]);
 
   const dispatch = useDispatch();
-  function dismiss() {
-    setShowPopover(false);
-    setGroupName("");
-    setSelectedUsers([]);
-  }
 
   const openPopover = () => {
     setShowPopover(true);
@@ -148,8 +150,19 @@ const MyGroups: React.FC = () => {
     history.push("/browsegroups");
   };
 
+  useEffect(() => {
+    setPresentingElement(page.current);
+    GetAllUsers();
+  }, []);
+
+  function dismiss() {
+    modal.current?.dismiss();
+    setGroupName("");
+    setSelectedUsers([]);
+  }
+
   return (
-    <IonPage>
+    <IonPage ref={page}>
       <IonHeader className="ion-no-border">
         <IonToolbar className="ion-no-border">
           <IonButton slot="start" fill="clear" onClick={back}>
@@ -165,66 +178,69 @@ const MyGroups: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         <IonButtons style={{ display: "flex", justifyContent: "end" }}>
-          <IonButton fill="clear" onClick={openPopover}>
-            <IonText style={{ marginRight: "5px" }}>Add Group</IonText>
-            <IonIcon icon={addOutline}></IonIcon>
+          <IonButton fill="clear" id="open-modal" expand="block">
+            <p className="addGrpLabel" style={{ marginRight: "5px" }}>
+              Add Group
+            </p>
+            <IonIcon icon={addOutline} className="addIcon" />
           </IonButton>
         </IonButtons>
 
-        <IonPopover
-          isOpen={showPopover}
-          onDidDismiss={dismiss}
-          ref={popoverRef}
+        <IonModal
+          ref={modal}
+          trigger="open-modal"
+          presentingElement={presentingElement!}
         >
-          <div className="popover-header">
-            <h5>Create a Group</h5>
-            <IonButton fill="clear">
-              <IonIcon icon={cameraOutline} size="small" />
-            </IonButton>
-          </div>
+          <IonHeader>
+            <IonToolbar>
+              <h1>Create Group</h1>
+              <IonButtons slot="end">
+                <IonButton onClick={() => dismiss()}>Close</IonButton>
+              </IonButtons>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent className="ion-padding">
+            <div style={{ paddingLeft: "10px", paddingRight: "10px" }}>
+              <input
+                style={{ padding: "20px" }}
+                value={groupName}
+                onChange={(e) => handleGroupNameChange(e)}
+                placeholder="Group Name"
+                className="group-name-input"
+              />
 
-          <div style={{ paddingLeft: "10px", paddingRight: "10px" }}>
-            <input
-              style={{ padding: "20px" }}
-              value={groupName}
-              onChange={(e) => handleGroupNameChange(e)}
-              placeholder="Group Name"
-              className="group-name-input"
-            />
-          </div>
+              <h5 style={{ textAlign: "center" }}>Add Users</h5>
+            </div>
 
-          <h5 style={{ textAlign: "center" }}>Add Users</h5>
-
-          <IonList>
-            <IonItem>
-              <div style={{ width: "100%", height: "100px", overflow: "auto" }}>
-                {users.map((user: any, index) => (
-                  <IonItem key={index}>
-                    <img
-                      src={user.avatar_urls["96"]}
-                      alt=""
-                      className="profile-image my-auto"
-                      style={{ marginRight: "10px" }}
-                    />
-                    <IonCheckbox
-                      mode="ios"
-                      checked={selectedUsers.includes(user)}
-                      onIonChange={(e) => handleUserSelection(e, user)}
-                    >
-                      <IonText>{user.name}</IonText>
-                    </IonCheckbox>
-                  </IonItem>
-                ))}
-              </div>
-            </IonItem>
-          </IonList>
-          <IonButton expand="full" onClick={createGroup}>
+            <div style={{ height: "100vh", overflow: "auto" }}>
+              {users.map((user: any, index) => (
+                <IonItem key={index}>
+                  <img
+                    src={user.avatar_urls["96"]}
+                    alt=""
+                    className="profile-image my-auto"
+                    style={{ marginRight: "10px" }}
+                  />
+                  <IonCheckbox
+                    mode="ios"
+                    checked={selectedUsers.includes(user)}
+                    onIonChange={(e) => handleUserSelection(e, user)}
+                  >
+                    <IonText>{user.name}</IonText>
+                  </IonCheckbox>
+                </IonItem>
+              ))}
+            </div>
+          </IonContent>
+          <IonButton
+            expand="full"
+            onClick={createGroup}
+            disabled={groupName === ""}
+            className="createGrpBtn"
+          >
             Create Group
           </IonButton>
-          <IonButton expand="full" color="danger" onClick={dismiss}>
-            Cancel
-          </IonButton>
-        </IonPopover>
+        </IonModal>
 
         {recentGroups.map((group: any, index: any) => (
           <ul key={index} className="browsed-grps">

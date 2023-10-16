@@ -132,7 +132,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (token) {
-      socket.on("my-group-list", (data) => {
+      socket.on("my-group-list", (data: any) => {
         if (data.results.length > 0) {
           dispatchFunction(data.results);
         }
@@ -251,7 +251,7 @@ const App: React.FC = () => {
           <Route exact path="/groupchat/:groupId">
             <GroupChat />
           </Route>
-          <Route exact path="/my-groups">
+          <Route exact path="/mygroups">
             <MyGroups />
           </Route>
           <Route exact path="/group-info/:groupId">

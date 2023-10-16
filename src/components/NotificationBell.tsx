@@ -87,7 +87,9 @@ function NotificationBell() {
     <>
       <IonButton fill="clear" color="dark" id="open-modal">
         <IonIcon icon={notificationsOutline} />
-        {notificationsArr.some((notification) => notification.isActive) && (
+        {notificationsArr.some(
+          (notification: any) => notification.isActive
+        ) && (
           <span className="notification-number">
             {
               notificationsArr.filter((notification) => notification.isActive)

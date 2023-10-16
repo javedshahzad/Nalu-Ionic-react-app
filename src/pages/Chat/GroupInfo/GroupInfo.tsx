@@ -19,16 +19,17 @@ import {
   notificationsOutline,
   arrowBackOutline,
   add,
-  create,
   closeOutline,
+  createOutline,
 } from "ionicons/icons";
 import React, { useEffect, useRef, useState } from "react";
-import "./GroupInfo.css";
+import "./GroupInfo.scss";
 import { useHistory, useParams } from "react-router";
 
 import apiService from "../../../Services";
 
 import tokenService from "../../../token";
+import { CreateOutline } from "react-ionicons";
 
 const GroupInfo: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
@@ -207,7 +208,7 @@ const GroupInfo: React.FC = () => {
       <IonHeader className="ion-no-border">
         <IonToolbar className="ion-no-border">
           <IonButton slot="start" fill="clear" onClick={back}>
-            <IonIcon icon={arrowBackOutline} />
+            <IonIcon icon={arrowBackOutline} className="backBtnIcon" />
           </IonButton>
           <IonButton slot="end" fill="clear">
             <IonIcon icon={notificationsOutline} className="bell-icon" />
@@ -223,11 +224,11 @@ const GroupInfo: React.FC = () => {
             <div className="w-full flex align-middle items-center justify-center">
               <span className="group-title2">{GroupName}</span>
               <IonIcon
-                icon={create}
+                icon={createOutline}
                 className="group-title2"
                 onClick={EditGroupInfo}
                 id="open-custom-dialog2"
-              ></IonIcon>
+              />
             </div>
             <hr className="under-line" />
           </IonCol>
@@ -248,10 +249,9 @@ const GroupInfo: React.FC = () => {
           </div>
           <div>
             <IonButton
-              shape="round"
               onClick={AddUser}
               id="open-custom-dialog"
-              slot="end"
+              className="addBtn"
             >
               Add
               <IonIcon icon={add}></IonIcon>
@@ -309,9 +309,14 @@ const GroupInfo: React.FC = () => {
             <IonRow>
               <IonCol size="10"></IonCol>
               <IonCol size="2">
-                <button className="close-icon" onClick={dismiss}>
-                  X
-                </button>
+                <IonButton
+                  className="close-icon"
+                  onClick={dismiss}
+                  fill="clear"
+                  size="small"
+                >
+                  <IonIcon icon={closeOutline} size="small" />
+                </IonButton>
               </IonCol>
             </IonRow>
 
@@ -340,7 +345,11 @@ const GroupInfo: React.FC = () => {
               </IonCol>
             </IonRow>
 
-            <IonButton expand="full" onClick={updateGroup}>
+            <IonButton
+              expand="full"
+              className="updateGrp"
+              onClick={updateGroup}
+            >
               Update Group
             </IonButton>
           </div>

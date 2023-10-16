@@ -1,16 +1,22 @@
+$config-gray: #636363;
+$config-white: #fefcfa;
+$config-black: #2d2d2d;
+$config-font-family: var(--ion-font-family);
+
 .group-icon2 {
   /* margin-left: auto;
   margin-right: auto; */
   height: 100px;
   width: 100px;
   border-radius: 50%;
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .group-title2 {
   border: none !important;
   padding: 4px !important;
   font-size: 20px;
   font-weight: 700 !important;
+  font-family: $config-font-family;
 }
 .under-line {
   border-bottom: 1px solid gray;
@@ -124,4 +130,21 @@ ion-modal#example-modal ion-icon {
   margin-left: 22px;
   font-size: 20px;
   font-weight: bold;
+}
+
+.addBtn {
+  width: 80px;
+  color: $config-white;
+}
+
+ion-content {
+  --ion-background-color: #fefcfa;
+}
+
+.backBtnIcon {
+  color: $config-black;
+}
+
+.updateGrp {
+  color: $config-white;
 }
