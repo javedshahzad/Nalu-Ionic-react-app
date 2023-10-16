@@ -37,7 +37,7 @@ import Learnmore from "./pages/Learnmore/Learnmore";
 import Stayup from "./pages/Stayup/Stayup";
 import Searchmodal from "./pages/modals/Search/Searchmodal";
 import Filtermodal from "./pages/modals/Filter/Filtermodal";
-import Chat from "./pages/Chat/Chat";
+// import Chat from "./pages/Chat/Chat";
 import Mygroups from "./pages/Mygroups/Mygroups";
 import Coursechapter from "./pages/Coursechapter/Coursechapter";
 import Courseoverviewfree from "./pages/Courseoverviewfree/Courseoverviewfree";
@@ -54,21 +54,39 @@ import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade
 import ConfigCycleRemade from "./pages/Configcycle/ConfigCycleRemade";
 import JournalAdditionRemade from "./pages/Journaladdition/JournalAdditionRemade";
 import Pusher from "pusher-js";
-import { addNotification } from "./store";
+import { addNotification } from "./actions/notificationAction";
 import { useDispatch } from "react-redux";
 import OneSignal from "onesignal-cordova-plugin";
-import { useState } from "react";
+import { useEffect } from "react";
+import { groupsListAction } from "./actions/groupsListAction";
+import tokenService from "./token";
+import { io } from "socket.io-client";
+import BrowseGroups from "./pages/Chat/BrowseGroups/BrowseGroups";
+import GroupChat from "./pages/Chat/GroupChat/GroupChat";
+import GroupDetails from "./pages/Chat/GroupDetails/GroupDetails";
+import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
+import MyGroups from "./pages/Chat/mygroups/MyGroups";
 
 setupIonicReact({
   mode: "ios",
 });
 
+// ***onesignal*** //
+
 function OneSignalInit() {
   OneSignal.initialize("0f10d9d5-8078-4eda-b52f-c616a5398d0b");
 }
 
+// ***onesignal*** //
+
 const App: React.FC = () => {
-  OneSignalInit();
+  // ***onesignal*** //
+
+  // OneSignalInit();
+
+  // ***onesignal*** //
+
+  // ***pusher*** //
 
   const [present] = useIonToast();
   const presentToast = (notification: any) => {
@@ -91,14 +109,51 @@ const App: React.FC = () => {
     presentToast(data.body.title);
   });
 
+  // ***pusher*** //
+
+  // ***socket io*** //
+
+  const token = tokenService.getToken();
+
+  const socket = io("https://apidev.mynalu.com/", {
+    query: {
+      token,
+    },
+  });
+
+  useEffect(() => {
+    socket.emit("my-group-list", {
+      search: "",
+      page: 1,
+      limit: 10,
+      user: "65194710d160530510955d7d",
+    });
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      socket.on("my-group-list", (data) => {
+        if (data.results.length > 0) {
+          dispatchFunction(data.results);
+        }
+      });
+    }
+  }, [token]);
+
+  const dispatchFunction = (param: any) => {
+    dispatch(groupsListAction(param));
+  };
+
+  // ***socket io*** //
+
   return (
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet>
           <Route path="/tabs" render={() => <MainTabs />} />
-          <Route exact path="/chat">
+          {/* <Route exact path="/chat">
             <Chat />
-          </Route>
+          </Route> */}
           <Route exact path="/community">
             <Community />
           </Route>
@@ -192,6 +247,22 @@ const App: React.FC = () => {
           </Route>
           <Route exact path="/">
             <Redirect to="/onboarding" />
+          </Route>
+          <Route exact path="/groupchat/:groupId">
+            <GroupChat />
+          </Route>
+          <Route exact path="/my-groups">
+            <MyGroups />
+          </Route>
+          <Route exact path="/group-info/:groupId">
+            <GroupInfo />
+          </Route>
+
+          <Route exact path="/browsegroups">
+            <BrowseGroups />
+          </Route>
+          <Route exact path="/groupdetails/:groupId">
+            <GroupDetails />
           </Route>
         </IonRouterOutlet>
       </IonReactRouter>

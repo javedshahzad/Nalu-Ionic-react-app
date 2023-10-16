@@ -1,0 +1,349 @@
+$config-gray: #636363;
+$config-white: #fefcfa;
+$config-black: #2d2d2d;
+$config-font-family: var(--ion-font-family);
+
+.top-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.group-icon {
+  height: 28px;
+  width: 28px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+.group-title {
+  font-size: 17px;
+  font-weight: 700 !important;
+  margin: 0;
+  color: $config-black;
+  font-family: $config-font-family;
+}
+.bg-black {
+  background-color: black;
+}
+.text-white {
+  color: white;
+}
+.w-screen {
+  width: 100vw;
+}
+.overflow-x-auto {
+  overflow-x: auto;
+}
+.flex {
+  display: flex;
+}
+.gap-4 {
+  gap: 1rem /* 16px */;
+}
+.py-4 {
+  padding-top: 1rem /* 16px */;
+  padding-bottom: 1rem /* 16px */;
+}
+.px-4 {
+  padding-left: 1rem /* 16px */;
+  padding-right: 1rem /* 16px */;
+}
+.ml-5px {
+  margin-left: 5px;
+}
+.bell-icon {
+  font-size: 24px;
+  color: $config-black !important;
+}
+.bell-icon2 {
+  font-size: 40px;
+  color: $config-black !important;
+}
+
+.attach-icon {
+  font-size: 28px;
+}
+.footer {
+  background-color: #ffff;
+}
+.enter-msg {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 7px;
+  background-color: rgb(242, 239, 239);
+  color: black !important;
+  padding: 10px 40px 10px 30px !important;
+  font-size: 15px !important;
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  font-family: $config-font-family;
+}
+.profile-image {
+  height: 40px !important;
+  width: 40px !important;
+  border-radius: 100%;
+}
+.user-name {
+  padding: 4px;
+  position: absolute;
+  left: 6px;
+  font-weight: bold;
+  bottom: 14px;
+  font-size: 14px;
+  color: $config-black;
+  font-family: $config-font-family;
+}
+.text-right {
+  text-align: right;
+}
+.msg {
+  padding: 4px;
+}
+.message-time {
+  text-align: right !important;
+  color: $config-gray;
+  font-family: $config-font-family;
+}
+
+.message-time2 {
+  color: $config-gray;
+  text-align: left !important;
+  font-family: $config-font-family;
+}
+
+.backBtn {
+  color: $config-black;
+}
+
+.currentUser {
+  height: auto !important;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  padding: 5px !important;
+  background-color: rgb(249, 249, 232) !important;
+}
+.otherUsers {
+  height: auto !important;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  padding: 5px !important;
+  background-color: rgb(255, 229, 238) !important;
+}
+.bg-white {
+  background-color: #ffff;
+  color: black;
+}
+
+.absolute {
+  position: absolute;
+}
+.right-0 {
+  right: 0px;
+}
+.top-0 {
+  top: 0px;
+}
+.-translate-y-1\/2 {
+  --tw-translate-y: -50%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.translate-x-1\/2 {
+  --tw-translate-x: 50%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.h-20 {
+  height: 5rem /* 80px */;
+}
+.w-20 {
+  width: 5rem /* 80px */;
+}
+.rounded-sm {
+  border-radius: 0.125rem /* 2px */;
+}
+.max-w-md {
+  max-width: 28rem /* 448px */;
+}
+.bottom-12 {
+  bottom: 48px;
+}
+.left-0 {
+  left: 0;
+}
+.z-20 {
+  z-index: 20;
+}
+
+/* new styling */
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400);
+
+.message-container {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+.message-blue {
+  position: relative;
+  margin-left: 20px;
+  padding: 10px;
+  background-color: #fefcfa;
+  width: 200px;
+  height: 50px;
+  text-align: left;
+  font: 400 0.9em "Open Sans", sans-serif;
+  border: 1px solid #fefcfa;
+  border-radius: 10px;
+}
+
+.message-orange {
+  position: relative;
+  margin-bottom: 10px;
+  margin-left: calc(100% - 240px);
+  padding: 10px;
+  background-color: #fff7ef;
+  width: auto;
+  height: auto;
+  text-align: left;
+  font: 400 0.9em "Open Sans", sans-serif;
+  border: 1px solid #fff7ef;
+  border-radius: 10px;
+}
+
+.message-content {
+  padding: 0;
+  margin: 0;
+  color: $config-black;
+  font-family: $config-font-family;
+}
+
+.message-timestamp-right {
+  position: absolute;
+  font-size: 0.85em;
+  font-weight: 300;
+  bottom: 5px;
+  right: 5px;
+}
+
+.message-timestamp-left {
+  position: absolute;
+  font-size: 0.85em;
+  font-weight: 300;
+  bottom: 5px;
+  left: 5px;
+}
+
+.message-blue:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-bottom: 15px solid #fefcfa; /* Change border-top to border-bottom */
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  bottom: 0; /* Change top to bottom */
+  left: -15px;
+}
+
+.message-blue:before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-bottom: 17px solid #fefcfa; /* Change border-top to border-bottom */
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  bottom: -1px; /* Change top to bottom */
+  left: -17px;
+}
+
+.message-orange:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-bottom: 15px solid #fff7ef;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  bottom: 0;
+  right: -15px;
+}
+
+.message-orange:before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-bottom: 17px solid #fff7ef;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  bottom: -1px;
+  right: -17px;
+}
+
+.other-user-wrapper {
+  display: flex;
+  align-items: flex-end;
+}
+
+.message-emoji {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 54px;
+  background-color: transparent;
+  font-size: 25px;
+  color: #3684b3;
+}
+
+.footer-wrapper {
+  display: flex;
+  align-items: center;
+  padding-right: 11px;
+  padding-left: 11px;
+}
+
+.send-spinner {
+  color: white;
+  height: 15px;
+  width: 15px;
+}
+
+.send-icon {
+  color: white;
+  height: 15px;
+  width: 15px;
+}
+
+.send-wrapper {
+  background-color: rgb(255, 113, 137);
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.attach-btn {
+  position: absolute;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $config-gray;
+}
+
+.grpchat-wrapper {
+  background-color: $config-black;
+}
+
+ion-content {
+  --ion-background-color: #fefcfa;
+}
+
+ion-page {
+  --ion-background-color: #fefcfa;
+}

@@ -56,7 +56,6 @@ function NotificationBell() {
   };
 
   const notificationsArr = useSelector((state: any) => state.notifications);
-  console.log("notificationsArr", notificationsArr);
 
   const [notificationArray, setNotificationArray] = useState([]);
 
@@ -65,9 +64,7 @@ function NotificationBell() {
       .slice()
       .sort((a: any, b: any) => b.timestamp - a.timestamp);
     setNotificationArray(sortedNotifications);
-  });
-
-  console.log("New Notification Array", notificationArray);
+  }, []);
 
   const markRead = (isActive: any) => {
     const updatedNotifications = notificationsArr.map(

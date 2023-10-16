@@ -1,86 +1,86 @@
-.Chat {
-  ion-header {
-    ion-toolbar {
-      --background: #fefcfa;
+// .Chat {
+//   ion-header {
+//     ion-toolbar {
+//       --background: #fefcfa;
 
-      ion-avatar {
-        background: var(--ion-color-primary);
-        height: 2rem;
-        margin-left: 10px;
-        width: 2rem;
+//       ion-avatar {
+//         background: var(--ion-color-primary);
+//         height: 2rem;
+//         margin-left: 10px;
+//         width: 2rem;
 
-        h3 {
-          color: white;
-          font-size: 24px;
-          margin: 0;
-        }
-      }
+//         h3 {
+//           color: white;
+//           font-size: 24px;
+//           margin: 0;
+//         }
+//       }
 
-      ion-title {
-        font-family: "GBold";
-        font-size: 18px;
-        padding: 0 !important;
-      }
-    }
-  }
+//       ion-title {
+//         font-family: "GBold";
+//         font-size: 18px;
+//         padding: 0 !important;
+//       }
+//     }
+//   }
 
-  ion-content {
-    --background: #fefcfa;
+//   ion-content {
+//     --background: #fefcfa;
 
-    .chat-area {
-      .chat-bubble {
-        padding: 16px;
+//     .chat-area {
+//       .chat-bubble {
+//         padding: 16px;
 
-        h3 {
-          font-family: "GBold";
-          font-size: 20px;
-          margin-top: 0;
-        }
+//         h3 {
+//           font-family: "GBold";
+//           font-size: 20px;
+//           margin-top: 0;
+//         }
 
-        p {
-          color: #2d2d2d;
-          font-size: 20px;
-          margin: 0;
-        }
-      }
+//         p {
+//           color: #2d2d2d;
+//           font-size: 20px;
+//           margin: 0;
+//         }
+//       }
 
-      h6 {
-        color: #636363;
-        font-size: 14px;
-      }
+//       h6 {
+//         color: #636363;
+//         font-size: 14px;
+//       }
 
-      .reciver {
-        .chat-bubble {
-          background: white;
-          border-radius: 16px 16px 16px 0;
-        }
-      }
-    }
+//       .reciver {
+//         .chat-bubble {
+//           background: white;
+//           border-radius: 16px 16px 16px 0;
+//         }
+//       }
+//     }
 
-    .sender {
-      .chat-bubble {
-        background: #fff7ef;
-        border-radius: 16px 16px 0 16px;
-      }
-    }
-  }
+//     .sender {
+//       .chat-bubble {
+//         background: #fff7ef;
+//         border-radius: 16px 16px 0 16px;
+//       }
+//     }
+//   }
 
-  ion-footer {
-    background: #fefcfa;
-    ion-toolbar {
-      --background: #fefcfa;
-      background: #fefcfa;
+//   ion-footer {
+//     background: #fefcfa;
+//     ion-toolbar {
+//       --background: #fefcfa;
+//       background: #fefcfa;
 
-      height: 4.5rem;
-      padding: 10px 10px 10px 10px;
+//       height: 4.5rem;
+//       padding: 10px 10px 10px 10px;
 
-      ion-item {
-        --border-radius: 10px;
-        --padding-start: 0;
-        ion-input {
-          --background: #f3f3f3;
-        }
-      }
-    }
-  }
-}
+//       ion-item {
+//         --border-radius: 10px;
+//         --padding-start: 0;
+//         ion-input {
+//           --background: #f3f3f3;
+//         }
+//       }
+//     }
+//   }
+// }
