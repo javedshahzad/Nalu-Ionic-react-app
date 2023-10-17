@@ -11,6 +11,7 @@ import {
   IonLabel,
   IonList,
   IonButton,
+  IonButtons,
 } from "@ionic/react";
 import React, { useState } from "react";
 import {
@@ -20,6 +21,7 @@ import {
 } from "ionicons/icons";
 import { useHistory } from "react-router";
 import "./BrowseGroups.scss";
+import NotificationBell from "../../../components/NotificationBell";
 
 const BrowseGroups: React.FC = () => {
   const groups = useSelector((state: RootState) => state.groups);

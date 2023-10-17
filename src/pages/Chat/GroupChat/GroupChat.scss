@@ -42,8 +42,14 @@ $config-font-family: var(--ion-font-family);
 .overflow-x-auto {
   overflow-x: auto;
 }
-.overflow-y-auto {
+.groupChatContent {
   overflow-y: auto;
+  background-color: $config-white;
+}
+
+.chatLoad {
+  background-color: $config-white;
+  text-align: center;
 }
 .flex {
   display: flex;
@@ -240,6 +246,7 @@ ion-page {
   margin-right: 10px !important;
   font-weight: bold !important;
   font-size: 18px;
+  color: $config-black;
 }
 
 .left-msg .msg-bubble {
@@ -247,7 +254,7 @@ ion-page {
 }
 
 .right-msg {
-  // display: flex !important;
+  margin-right: 10px;
   flex-direction: column !important;
 }
 
@@ -277,4 +284,10 @@ ion-page {
     font-family: $config-font-family;
     color: $config-black;
   }
+}
+
+.emojiPicker {
+  position: absolute;
+  bottom: 100%;
+  right: 5%;
 }

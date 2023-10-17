@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   IonButton,
+  IonButtons,
   IonContent,
   IonFooter,
   IonHeader,
@@ -33,6 +34,7 @@ import { io } from "socket.io-client";
 import tokenService from "../../../token";
 import DOMPurify from "dompurify";
 import moment from "moment";
+import NotificationBell from "../../../components/NotificationBell";
 
 const GroupChat: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
@@ -48,6 +50,10 @@ const GroupChat: React.FC = () => {
 
   const dispatch = useDispatch();
   const [newMessage, setNewMessage] = useState("");
+  const [emojiPickerPosition, setEmojiPickerPosition] = useState({
+    left: 0,
+    top: 0,
+  });
 
   const history = useHistory();
 
@@ -93,6 +99,7 @@ const GroupChat: React.FC = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const toggleEmojiPicker = (event: any) => {
     event.stopPropagation();
+
     setShowEmojiPicker(!showEmojiPicker);
   };
 
@@ -345,13 +352,14 @@ const GroupChat: React.FC = () => {
             <img src={GroupImage} className="group-icon" />
             <h1 className="group-title">{groupName}</h1>
           </div>
+
           <IonButton slot="end" fill="clear">
             <IonIcon icon={notificationsOutline} className="bell-icon" />
           </IonButton>
         </IonToolbar>
       </IonHeader>
       {loading ? (
-        <div className="flex align-middle items-center justify-center">
+        <div className="chatLoad">
           <IonSpinner
             color={"primary"}
             name="crescent"
@@ -359,17 +367,17 @@ const GroupChat: React.FC = () => {
           ></IonSpinner>
         </div>
       ) : null}
-      {/* <div
+      <div
         ref={chatContentRef}
         onScroll={handleScroll}
-        className="overflow-y-auto"
-      > */}
-      <IonContent fullscreen ref={chatContentRef}>
+        className="groupChatContent"
+      >
+        {/* <IonContent fullscreen ref={chatContentRef}> */}
         {grpMessage.map((message: any, index: any) => (
-          <div>
+          <div key={index}>
             {message.sender._id === user ? (
               <>
-                <div className="msg right-msg" key={index}>
+                <div className="msg right-msg">
                   <div className="msg-bubble">
                     {message.files.length > 0 && (
                       <img
@@ -392,31 +400,36 @@ const GroupChat: React.FC = () => {
                 </div>
               </>
             ) : (
-              <>
-                <div className="msg left-msg">
+              <div style={{ display: "flex", marginLeft: "10px" }}>
+                <div style={{ display: "flex", alignItems: "center" }}>
                   <img
                     src={message.sender.userImage}
                     alt="User"
                     className="profile-image"
                   />
-
-                  <div className="msg-bubble">
-                    <div className="msg-info">
-                      <div className="msg-info-name">{message.sender.name}</div>
+                </div>
+                <div className="msg left-msg">
+                  <div>
+                    <div className="msg-bubble">
+                      <div className="msg-info">
+                        <div className="msg-info-name">
+                          {message.sender.name}
+                        </div>
+                      </div>
+                      <div
+                        className="other-msg-text"
+                        dangerouslySetInnerHTML={sanitizeHTML(message.message)}
+                      />
                     </div>
-                    <div
-                      className="other-msg-text"
-                      dangerouslySetInnerHTML={sanitizeHTML(message.message)}
-                    />
+                    <p className="message-time2">{message.relativeTimestamp}</p>
                   </div>
                 </div>
-                <p className="message-time2">{message.relativeTimestamp}</p>
-              </>
+              </div>
             )}
           </div>
         ))}
-        {/* </div> */}
-      </IonContent>
+      </div>
+      {/* </IonContent> */}
       <IonFooter className="footer relative">
         {(filesArray || []).length > 0 && (
           <div className="w-screen overflow-x-auto flex gap-4 py-4 px-4 bg-[#fefcfa]">
@@ -461,7 +474,7 @@ const GroupChat: React.FC = () => {
           />
 
           {showEmojiPicker && (
-            <div className="absolute bottom-12 left-0 z-20">
+            <div className="emojiPicker">
               <Picker
                 previewPosition={"none"}
                 onClickOutside={() => setShowEmojiPicker(false)}

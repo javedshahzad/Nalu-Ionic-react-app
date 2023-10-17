@@ -14,6 +14,7 @@ import {
   IonLabel,
   IonList,
   IonModal,
+  IonButtons,
 } from "@ionic/react";
 import {
   notificationsOutline,
@@ -30,6 +31,7 @@ import apiService from "../../../Services";
 
 import tokenService from "../../../token";
 import { CreateOutline } from "react-ionicons";
+import NotificationBell from "../../../components/NotificationBell";
 
 const GroupInfo: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
@@ -210,9 +212,11 @@ const GroupInfo: React.FC = () => {
           <IonButton slot="start" fill="clear" onClick={back}>
             <IonIcon icon={arrowBackOutline} className="backBtnIcon" />
           </IonButton>
-          <IonButton slot="end" fill="clear">
-            <IonIcon icon={notificationsOutline} className="bell-icon" />
-          </IonButton>
+          <IonButtons slot="end">
+            <IonButton slot="end" fill="clear">
+              <NotificationBell />
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -294,7 +298,11 @@ const GroupInfo: React.FC = () => {
               ))}
             </IonList>
 
-            <IonButton expand="full" onClick={submit}>
+            <IonButton
+              expand="full"
+              onClick={submit}
+              style={{ color: "white" }}
+            >
               Add Users
             </IonButton>
           </div>

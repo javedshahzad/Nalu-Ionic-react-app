@@ -1,9 +1,11 @@
-import { createStore, Reducer } from "redux";
+import { Reducer } from "redux";
 
+// Initial state
 const initialState = {
   notifications: [],
 };
 
+// Reducer
 const reducer: Reducer = (state = initialState, action: any) => {
   switch (action.type) {
     case "ADD_NOTIFICATION": {

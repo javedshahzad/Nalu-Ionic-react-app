@@ -22,6 +22,7 @@ import {
 } from "ionicons/icons";
 import { useSelector } from "react-redux";
 import "./NotificationBell.scss";
+import { RootState } from "../store/store";
 
 function NotificationBell() {
   const modal = useRef<HTMLIonModalElement>(null);
@@ -55,7 +56,9 @@ function NotificationBell() {
     return enterAnimation(baseEl).direction("reverse");
   };
 
-  const notificationsArr = useSelector((state: any) => state.notifications);
+  const notificationsArr = useSelector(
+    (state: RootState) => state.notifications.notifications
+  );
 
   const [notificationArray, setNotificationArray] = useState([]);
 
@@ -92,8 +95,9 @@ function NotificationBell() {
         ) && (
           <span className="notification-number">
             {
-              notificationsArr.filter((notification) => notification.isActive)
-                .length
+              notificationsArr.filter(
+                (notification: any) => notification.isActive
+              ).length
             }
           </span>
         )}
