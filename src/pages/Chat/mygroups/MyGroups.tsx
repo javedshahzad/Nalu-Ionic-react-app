@@ -166,7 +166,7 @@ const MyGroups: React.FC = () => {
       <IonHeader className="ion-no-border">
         <IonToolbar className="ion-no-border">
           <IonButton slot="start" fill="clear" onClick={back}>
-            <IonIcon icon={arrowBackOutline} />
+            <IonIcon icon={arrowBackOutline} className="backBtn" />
           </IonButton>
           <div className="top-row">
             <h1 className="group-title">My Groups</h1>

@@ -44,13 +44,16 @@ $config-font-family: var(--ion-font-family);
 }
 .groupChatContent {
   overflow-y: auto;
-  background-color: $config-white;
+  background-color: $config-white !important;
 }
 
 .chatLoad {
-  background-color: $config-white;
+  background-color: $config-white !important;
   text-align: center;
+  margin: 0;
+  border: none;
 }
+
 .flex {
   display: flex;
 }
@@ -130,7 +133,7 @@ $config-font-family: var(--ion-font-family);
 }
 
 .backBtn {
-  color: $config-black;
+  color: $config-black !important;
 }
 
 .bg-white {
@@ -148,21 +151,27 @@ $config-font-family: var(--ion-font-family);
 .h-20 {
   height: 5rem /* 80px */;
 }
+
 .w-20 {
   width: 5rem /* 80px */;
 }
+
 .rounded-sm {
   border-radius: 0.125rem /* 2px */;
 }
+
 .max-w-md {
   max-width: 28rem /* 448px */;
 }
+
 .bottom-12 {
   bottom: 48px;
 }
+
 .left-0 {
   left: 0;
 }
+
 .z-20 {
   z-index: 20;
 }
@@ -290,4 +299,12 @@ ion-page {
   position: absolute;
   bottom: 100%;
   right: 5%;
+}
+
+.h-auto {
+  height: auto;
+}
+
+.closeBtn {
+  color: $config-white;
 }
