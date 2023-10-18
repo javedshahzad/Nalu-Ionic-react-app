@@ -46,7 +46,7 @@ const GroupChat: React.FC = () => {
   const [sendloading, setSendLoading] = useState(false);
   const [chatLoading, setChatLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const user = "65194710d160530510955d7d";
+  const user = tokenService.getUserId();
 
   const dispatch = useDispatch();
   const [newMessage, setNewMessage] = useState("");
