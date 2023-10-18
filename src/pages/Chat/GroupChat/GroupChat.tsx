@@ -7,6 +7,7 @@ import {
   IonHeader,
   IonIcon,
   IonInfiniteScroll,
+  IonModal,
   IonPage,
   IonSpinner,
   IonToolbar,
@@ -50,6 +51,8 @@ const GroupChat: React.FC = () => {
 
   const dispatch = useDispatch();
   const [newMessage, setNewMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
   const [emojiPickerPosition, setEmojiPickerPosition] = useState({
     left: 0,
     top: 0,
@@ -78,21 +81,46 @@ const GroupChat: React.FC = () => {
   };
 
   const handleSendMessage = () => {
-    if (newMessage !== "") {
+    if (filesArray.length > 0) {
+      const nameArray = [];
+      for (var i = 0; i < filesArray.length; i++) {
+        const fileName = filesArray[i]?.name;
+        var idxDotElse = fileName.lastIndexOf(".") + 1;
+        var extFileElse = fileName
+          .substr(idxDotElse, fileName.length)
+          .toLowerCase();
+        nameArray.push({
+          file: filesArray[i],
+          extension: extFileElse,
+        });
+      }
+      socket.emit("unread-message-count", {
+        user: user,
+        conversation: groupId,
+      });
       socket.emit("send-message", {
         user: user,
         conversation: groupId,
-        message: `<p>${newMessage}</p>`,
-        type: "message",
+        message: nameArray,
+        type: "file",
       });
+    } else {
+      if (newMessage !== "") {
+        socket.emit("send-message", {
+          user: user,
+          conversation: groupId,
+          message: `<p>${newMessage}</p>`,
+          type: "message-",
+        });
 
-      setSendLoading(true);
+        setSendLoading(true);
 
-      setTimeout(() => {
-        setSendLoading(false);
-      }, 500);
+        setTimeout(() => {
+          setSendLoading(false);
+        }, 500);
 
-      setNewMessage("");
+        setNewMessage("");
+      }
     }
   };
 
@@ -341,6 +369,11 @@ const GroupChat: React.FC = () => {
     }
   };
 
+  const handleImageClick = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+    setShowModal(true);
+  };
+
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
@@ -364,7 +397,7 @@ const GroupChat: React.FC = () => {
             color={"primary"}
             name="crescent"
             className="h-20px w-20px"
-          ></IonSpinner>
+          />
         </div>
       ) : null}
       <div
@@ -372,7 +405,6 @@ const GroupChat: React.FC = () => {
         onScroll={handleScroll}
         className="groupChatContent"
       >
-        {/* <IonContent fullscreen ref={chatContentRef}> */}
         {grpMessage.map((message: any, index: any) => (
           <div key={index}>
             {message.sender._id === user ? (
@@ -382,10 +414,20 @@ const GroupChat: React.FC = () => {
                     {message.files.length > 0 && (
                       <img
                         src={message.files[0]}
-                        className="h-20 w-20 max-w-md rounded-sm"
+                        className="h-auto w-20 max-w-md rounded-sm"
                         alt="Message Image"
+                        onClick={() => handleImageClick(message.files[0])}
                       />
                     )}
+                    <IonModal isOpen={showModal}>
+                      <img src={selectedImage} />
+                      <IonButton
+                        onClick={() => setShowModal(false)}
+                        className="closeBtn"
+                      >
+                        Close
+                      </IonButton>
+                    </IonModal>
                     <div className="msg-text">
                       {message.message && (
                         <div
@@ -429,7 +471,7 @@ const GroupChat: React.FC = () => {
           </div>
         ))}
       </div>
-      {/* </IonContent> */}
+
       <IonFooter className="footer relative">
         {(filesArray || []).length > 0 && (
           <div className="w-screen overflow-x-auto flex gap-4 py-4 px-4 bg-[#fefcfa]">
@@ -453,7 +495,7 @@ const GroupChat: React.FC = () => {
                     ></IonIcon>
                   </button>
                   <img
-                    className="h-20 w-20 max-w-md  rounded-sm"
+                    className="h-auto w-20 max-w-md  rounded-sm"
                     src={URL.createObjectURL(element)}
                     alt="messageImage"
                   />
