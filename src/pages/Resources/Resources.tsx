@@ -49,7 +49,6 @@ const Resources: React.FC = () => {
   const [recommendations, setRecommendations] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [categoryID, setCategoryID] = useState("");
-  const [shouldCallApi, setShouldCallApi] = useState(true);
 
 
   const history = useHistory();
