@@ -21,6 +21,7 @@ import Mygroups from "../Mygroups/Mygroups";
 import PrivateRoute from './../../auth/PrivateRoute';
 import CourseInnerOverview from "../Courseoverviewpaid/CourseInnerOverview/CourseInnerOverview";
 import CourseSubOverview from "../Courseoverviewpaid/CourseInnerOverview/CourseSubOverview/CourseSubOverview";
+import ResourceSubCategory from '../ResourceSubCategory/ResourceSubCategory';
 interface MainTabsProps {}
 
 const MainTabs: React.FC<MainTabsProps> = () => {
@@ -37,12 +38,15 @@ const MainTabs: React.FC<MainTabsProps> = () => {
       
         <Route path="/tabs/tab1" render={() => <PrivateRoute><Journal /> </PrivateRoute>} exact={true} />
         <Route path="/tabs/tab2" render={() => <PrivateRoute><Courseoverviewpaid /></PrivateRoute>} exact={true} />
-        <Route path="/tabs/tab2/courseinneroverview" render={() => <PrivateRoute><CourseInnerOverview /></PrivateRoute>} exact={true} />
+        <Route path="/tabs/tab2/courseinneroverview" render={() => <PrivateRoute><CourseInnerOverview /></PrivateRoute>}  exact={true}/>
         <Route path="/tabs/tab2/courseinneroverview/:id" render={() => <PrivateRoute><CourseSubOverview /></PrivateRoute>} exact={true} />
+
 
 
         <Route path="/tabs/tab3" render={() => <PrivateRoute><Mygroups /></PrivateRoute>} exact={true} />
         <Route path="/tabs/tab4" render={() => <PrivateRoute><Resources /></PrivateRoute>} exact={true} />
+        <Route path="/tabs/tab4/resourcesubcateggory" render={() => <PrivateRoute><ResourceSubCategory /></PrivateRoute>} exact={true} />
+
       </IonRouterOutlet>
 
       <IonTabBar slot="bottom">

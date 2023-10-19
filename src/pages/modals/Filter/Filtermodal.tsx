@@ -42,6 +42,7 @@ const Filtermodal: React.FC = () => {
   };
 
   useEffect(() => {
+
     getValues();
   }, []);
 
@@ -83,11 +84,7 @@ const Filtermodal: React.FC = () => {
         });
 
         setIsLoading(false);
-        //         const generatedValues = [];
-        // for (let i = response.data.upvotes_min; i <= response.data.upvotes_max; i += 1) {
-        //   generatedValues.push(i);
-        // }
-        // setVotes(generatedValues);
+      
       })
       .catch((error) => {
         console.log(error);
@@ -180,9 +177,14 @@ const Filtermodal: React.FC = () => {
           },
         })
         .then((response) => {
-          const dataToSendAsString = JSON.stringify(response.data);
-          localStorage.setItem("DATA",dataToSendAsString)
-          history.push(`/tabs/tab4`);
+          console.log(response);
+          
+          
+          history.push('/tabs/tab4/resourcesubcateggory',{
+            filteredData: response.data.ressources,
+            subCategory: response.data.sub_categories
+          })
+          
         })
         .catch((error) => {
           console.log(error);

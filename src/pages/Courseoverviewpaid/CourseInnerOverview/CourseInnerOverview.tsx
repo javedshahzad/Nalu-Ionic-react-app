@@ -54,8 +54,6 @@ import "@vidstack/react/player/styles/default/theme.css";
 import {
   MediaPlayer,
   MediaProvider,
-  Poster,
-  type MediaPlayerInstance,
 } from "@vidstack/react";
 import {
   DefaultAudioLayout,
@@ -63,18 +61,23 @@ import {
   DefaultVideoLayout,
 } from "@vidstack/react/player/layouts/default";
 import axios from "axios";
+import { useLocation } from 'react-router-dom';
 
 
 const CourseInnerOverview: React.FC = () => {
   const history = useHistory();
-  const { t, i18n, ready } = useTranslation();
+  const location = useLocation();
+   const data : any = location?.state;
+ 
   const [togglePlay, setTogglePlay] = useState("video");
   const [courseData, setCourseData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [ismarkLoading, setIsMarlLoading] = useState(false);
 
+
   useEffect(() => {
-    getData(27);
+    console.log(data?.course_id);
+    getData(data?.course_id);
   }, [0]);
 
 
@@ -86,7 +89,6 @@ const CourseInnerOverview: React.FC = () => {
   };
 
   const getData = (id) => {
-    console.log(id);
     setIsLoading(true);
     try {
       axios

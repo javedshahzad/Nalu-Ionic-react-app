@@ -132,7 +132,7 @@ const Journal: React.FC = () => {
       )
       .then((response) => {
         console.log(response.data);
-        setCategoriesFavourites(response.data);
+        setCategoriesFavourites(response.data.ressources);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -149,7 +149,7 @@ const Journal: React.FC = () => {
       )
       .then((response) => {
         console.log(response.data);
-        setRecommendations(response.data);
+        setRecommendations(response.data.ressources);
         setIsLoading(false);
       })
       .catch((error) => {

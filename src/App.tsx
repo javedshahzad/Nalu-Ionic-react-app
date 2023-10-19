@@ -60,6 +60,7 @@ import Resources from "./pages/Resources/Resources";
 import PrivateRoute from "./auth/PrivateRoute";
 import './i18n';
 import { Suspense } from "react";
+import ResourceSubCategory from './pages/ResourceSubCategory/ResourceSubCategory';
 
 setupIonicReact({
   mode: "ios",
@@ -108,9 +109,9 @@ const App: React.FC = () => (
         </Route>
 
         <Route exact path="/eventdetail">
-        {/* <PrivateRoute> */}
+        <PrivateRoute>
           <Eventdetail />
-       {/* </PrivateRoute> */}
+       </PrivateRoute>
         </Route>
 
         
@@ -165,6 +166,7 @@ const App: React.FC = () => (
           <Resourcedetail />
         </PrivateRoute>
         </Route>
+      
         <Route exact path="/stayup">
         <PrivateRoute>
           <Stayup />

@@ -15,14 +15,14 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import {
-  checkmarkCircle,
+  
   heartOutline,
-  heartHalfOutline,
+  
 
-  informationCircleOutline,
-  menuOutline,
+  
+  
   notificationsOutline,
-  searchOutline,
+  
 } from "ionicons/icons";
 
 import "./Resourcedetail.scss";
@@ -243,7 +243,6 @@ const Resourcedetail: React.FC = () => {
                                     src="assets/imgs/dislike-filled.svg"
                                     ></IonIcon>
                                   )}
-                      <h6>{resourseData?.data.downvotes_number}</h6>
                     </div>
                     <div 
                     onClick={() =>

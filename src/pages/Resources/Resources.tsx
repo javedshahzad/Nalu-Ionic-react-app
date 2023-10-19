@@ -31,12 +31,11 @@ import {
 } from "ionicons/icons";
 
 import "./Resources.scss";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect,  useState } from "react";
 import Addrecmodal from "../modals/Addrec/Addrecmodal";
 import { useHistory } from "react-router";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import filter from "../../Images/filter.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -50,39 +49,27 @@ const Resources: React.FC = () => {
   const [recommendations, setRecommendations] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [categoryID, setCategoryID] = useState("");
+  const [shouldCallApi, setShouldCallApi] = useState(true);
+
 
   const history = useHistory();
-  const location = useLocation();
+// console.log('RESOURCE Called');
 
   useEffect(() => {
-    Data();
-  }, []);
+      Data();   
+  },[]);
+  
+
 
   const Data = () => {
-    if (localStorage.getItem("DATA")) {
-      setActiveSegment("favourites");
-      setCategoriesFavourites(JSON.parse(localStorage.getItem("DATA")));
-    } else {
+    
       getCategoriesOverview();
-      getCategoriesFavourites();
       getRecommendations();
       setActiveSegment("overview");
-    }
   };
 
-  useIonViewDidEnter(() => {
-    if (localStorage.getItem("DATA")) {
-      setActiveSegment("favourites");
-      setCategoriesFavourites(JSON.parse(localStorage.getItem("DATA")));
-    } else {
-    }
-  });
 
-  const navigateToNextPage = () => {
-    if (!isFilterSelected) {
-      history.push("/resourcedetail");
-    }
-  };
+ 
 
   const segmentChanged = (e: any) => {
     setActiveSegment(e.detail.value);
@@ -112,7 +99,7 @@ const Resources: React.FC = () => {
       .then((response) => {
         console.log(response.data);
         setCategoriesOverview(response.data);
-        setIsLoading(false);
+        // setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -132,7 +119,7 @@ const Resources: React.FC = () => {
       )
       .then((response) => {
         console.log(response.data);
-        setCategoriesFavourites(response.data);
+        setCategoriesFavourites(response.data.ressources);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -153,7 +140,7 @@ const Resources: React.FC = () => {
       )
       .then((response) => {
         console.log(response.data);
-        setRecommendations(response.data);
+        setRecommendations(response.data.ressources);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -164,10 +151,7 @@ const Resources: React.FC = () => {
   const getCategoryByID = (id) => {
     console.log(id);
     setCategoryID(id);
-    if (!isFilterSelected) {
-      setIsLoading(true);
-    } // for first loading
-    setIsFilterSelected(true);
+  
 
     axios
       .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, {
@@ -180,7 +164,10 @@ const Resources: React.FC = () => {
       })
       .then((response) => {
         console.log(response.data);
-        setFiltered(response.data);
+        history.push('/tabs/tab4/resourcesubcateggory',{
+          filteredData: response.data.ressources,
+          subCategory: response.data.sub_categories
+        })
         setIsLoading(false);
       })
       .catch((error) => {
@@ -537,7 +524,7 @@ const Resources: React.FC = () => {
                                       ) : (
                                         <IonIcon src="assets/imgs/dislike-filled.svg"></IonIcon>
                                       )}
-                                      <h6>{card.downvotes_number}</h6>
+                                      {/* <h6>{card.downvotes_number}</h6> */}
                                     </div>
                                     {/* <div
                                       onClick={() =>
@@ -626,21 +613,7 @@ const Resources: React.FC = () => {
               ) : (
                 <div className="Resources">
                   <IonContent className="ion-padding" fullscreen>
-                    <div className="selector mtype"></div>
-                    <IonRadioGroup>
-                      <IonItem
-                        lines="none"
-                        className="filter"
-                        onClick={() => navigateFilter()}
-                      >
-                        <img
-                          src={filter}
-                          alt=""
-                          style={{ marginRight: "5px" }}
-                        />
-                        <IonLabel>Filter</IonLabel>
-                      </IonItem>
-                    </IonRadioGroup>
+                  
 
                     <div className="the-list">
                       {categoriesFavourites.map((card, index) => (
@@ -700,7 +673,7 @@ const Resources: React.FC = () => {
                                   ) : (
                                     <IonIcon src="assets/imgs/dislike-filled.svg"></IonIcon>
                                   )}
-                                  <h6>{card.downvotes_number}</h6>
+                                  {/* <h6>{card.downvotes_number}</h6> */}
                                 </div>
                                 {/* <div
                                   onClick={() =>
@@ -728,9 +701,13 @@ const Resources: React.FC = () => {
             </IonContent>
           </IonPage>
         </>
-      )}
+       )} 
     </>
   );
 };
 
 export default Resources;
+function elseif() {
+  throw new Error("Function not implemented.");
+}
+
