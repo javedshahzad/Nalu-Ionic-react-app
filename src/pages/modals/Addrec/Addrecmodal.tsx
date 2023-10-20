@@ -18,10 +18,11 @@ import {
 import { addCircle, checkmarkCircle } from "ionicons/icons";
 
 import "./Addrecmodal.scss";
+import axios from "axios";
+
 import { useState } from "react";
 
-const Addrecmodal: React.FC<{onClose?: any }> = ({onClose}) => {
-  
+const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
   const [selectedCategory, setselectedCategory] = useState("");
   const [categoryError, setcategoryError] = useState("");
 
@@ -29,9 +30,9 @@ const Addrecmodal: React.FC<{onClose?: any }> = ({onClose}) => {
   const [titleError, setTitleError] = useState("");
 
   const [note, setNote] = useState("");
-  const [noteError, setNoteError] = useState("");
 
-  const isFormValid = !!selectedCategory && !!title && !categoryError && !titleError;
+  const isFormValid =
+    !!selectedCategory && !!title && !categoryError && !titleError;
 
 
   const handleCategoryChange = (event) => {
@@ -46,18 +47,50 @@ const Addrecmodal: React.FC<{onClose?: any }> = ({onClose}) => {
     setTitleError(value.trim() === "" ? "Please enter a title." : "");
   };
 
-  const handleNoteChange = (event) => {
-    const value = event.target.value;
-    setNote(value);
-    setNoteError(value.trim() === "" ? "Please enter the note." : "");
+  const handleSubmit = () => {
+    if (!selectedCategory) {
+      setcategoryError("Please select a category.");
+    }
+    if (!title) {
+      setTitleError("Please enter a title.");
+    }
+
+    if (isFormValid) {
+      console.log("Recommendation shared successfully!");
+    }
+
+    try {
+      axios
+        .post("https://app.mynalu.com/wp-json/nalu-app/v1/recommendation", {
+          params: {
+            category: selectedCategory,
+            name: title,
+            description: note,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          if(response.data.message === 'Email sent successfully') {
+            onClose('Your recommendation was successfully shared. A representative from the NALU team will carefully check your recommendation before publishing it within the app');
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <IonPage className="Addrecmodal">
       <IonContent className="ion-padding-horizontal" fullscreen>
-        <div className="back" onClick={() => {onClose()}}>
-          
-        </div>
+        <div
+          className="back"
+          onClick={() => {
+            onClose();
+          }}
+        ></div>
         <IonGrid style={{ height: "100%" }}>
           <IonRow
             className="ion-justify-content-center ion-align-items-center"
@@ -71,41 +104,56 @@ const Addrecmodal: React.FC<{onClose?: any }> = ({onClose}) => {
                 <div className="the-form">
                   <div className="input-item">
                     <IonItem>
-                      <IonSelect mode="md"
+                      <IonSelect
+                        mode="md"
                         className="ion-text-left"
                         placeholder="Category"
                         value={selectedCategory}
-            onIonChange={handleCategoryChange}
+                        onIonChange={handleCategoryChange}
                       >
                         <IonSelectOption value="apple">Apple</IonSelectOption>
                         <IonSelectOption value="banana">Banana</IonSelectOption>
                         <IonSelectOption value="orange">Orange</IonSelectOption>
                       </IonSelect>
                     </IonItem>
-                    {categoryError && <p className="error-message">{categoryError}</p>}
+                    {categoryError && (
+                      <p className="error-message">{categoryError}</p>
+                    )}
                   </div>
                   <div className="input-item">
                     <IonItem>
-                      <IonInput placeholder="Title" type="text"  value={title} onIonInput={handleTitleChange} />
+                      <IonInput
+                        placeholder="Title"
+                        type="text"
+                        value={title}
+                        onIonChange={handleTitleChange}
+                      />
                     </IonItem>
                     {titleError && (
                       <p className="error-message">{titleError}</p>
                     )}
-                  
                   </div>
                   <div className="input-item">
                     <IonItem>
-                      <IonTextarea placeholder="Note" rows={5} value={note} onIonInput={handleNoteChange}  />
+                      <IonTextarea
+                        placeholder="Note"
+                        rows={5}
+                        value={note}
+                        onIonChange={(e) => setNote(e.target.value)}
+                      />
                     </IonItem>
 
-                    {noteError && (
+                    {/* {noteError && (
                       <p className="error-message">{noteError}</p>
-                    )}
+                    )} */}
                   </div>
 
                   <div className="btn-holder ion-text-center ion-padding-vertical">
-          <IonButton expand="block" disabled={!isFormValid} >Share Recommendation</IonButton>
-        </div>
+                    <IonButton expand="block" disabled={!isFormValid} 
+                    onClick={()=> handleSubmit()}>
+                      Share Recommendation
+                    </IonButton>
+                  </div>
                 </div>
               </div>
             </div>

@@ -85,9 +85,12 @@ const Community: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton color="dark" text={""} defaultHref="/" />
           </IonButtons>
-          <IonTitle>{t('community.browse_groups')}</IonTitle>
-          <IonButtons slot="end">
-            <IonButton slot="end" fill="clear">
+          <IonTitle>
+          {t('community.browse_groups')}
+            </IonTitle>
+            <IonButtons slot="end">
+             
+              <IonButton slot="end" fill="clear">
               <NotificationBell />
             </IonButton>
           </IonButtons>

@@ -1,0 +1,310 @@
+$config-gray: #636363;
+$config-white: #fefcfa;
+$config-black: #2d2d2d;
+$config-font-family: var(--ion-font-family);
+
+:root {
+  --body-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --msger-bg: #fff;
+  --border: 2px solid #ddd;
+  --left-msg-bg: #f5f5f5;
+  --right-msg-bg: #fff7ef;
+}
+
+.top-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.group-icon {
+  height: 28px;
+  width: 28px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+.group-title {
+  font-size: 17px;
+  font-weight: 700 !important;
+  margin: 0;
+  color: $config-black;
+  font-family: $config-font-family;
+}
+.bg-black {
+  background-color: black;
+}
+.text-white {
+  color: white;
+}
+.w-screen {
+  width: 100vw;
+}
+.overflow-x-auto {
+  overflow-x: auto;
+}
+.groupChatContent {
+  overflow-y: auto;
+  background-color: $config-white !important;
+}
+
+.chatLoad {
+  background-color: $config-white !important;
+  text-align: center;
+  margin: 0;
+  border: none;
+}
+
+.flex {
+  display: flex;
+}
+.gap-4 {
+  gap: 1rem /* 16px */;
+}
+.py-4 {
+  padding-top: 1rem /* 16px */;
+  padding-bottom: 1rem /* 16px */;
+}
+.px-4 {
+  padding-left: 1rem /* 16px */;
+  padding-right: 1rem /* 16px */;
+}
+.ml-5px {
+  margin-left: 5px;
+}
+.bell-icon {
+  font-size: 24px;
+  color: $config-black !important;
+}
+.bell-icon2 {
+  font-size: 40px;
+  color: $config-black !important;
+}
+
+.attach-icon {
+  font-size: 28px;
+}
+.footer {
+  background-color: #ffff;
+}
+.enter-msg {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 7px;
+  background-color: rgb(242, 239, 239);
+  color: black !important;
+  padding: 10px 40px 10px 30px !important;
+  font-size: 15px !important;
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  font-family: $config-font-family;
+}
+.profile-image {
+  height: 30px !important;
+  width: 30px !important;
+  border-radius: 100%;
+}
+// .user-name {
+//   padding: 4px;
+//   position: absolute;
+//   left: 6px;
+//   font-weight: bold;
+//   bottom: 14px;
+//   font-size: 20px;
+//   color: $config-black;
+//   font-family: $config-font-family;
+// }
+// .text-right {
+//   text-align: right;
+// }
+// .msg {
+//   padding: 4px;
+// }
+.message-time {
+  text-align: right !important;
+  color: $config-gray;
+  font-family: $config-font-family;
+}
+
+.message-time2 {
+  color: $config-gray;
+  text-align: left !important;
+  font-family: $config-font-family;
+}
+
+.backBtn {
+  color: $config-black !important;
+}
+
+.bg-white {
+  background-color: #ffff;
+  color: black;
+}
+
+.right-0 {
+  right: 0px;
+}
+.top-0 {
+  top: 0px;
+}
+
+.h-20 {
+  height: 5rem /* 80px */;
+}
+
+.w-20 {
+  width: 5rem /* 80px */;
+}
+
+.rounded-sm {
+  border-radius: 0.125rem /* 2px */;
+}
+
+.max-w-md {
+  max-width: 28rem /* 448px */;
+}
+
+.bottom-12 {
+  bottom: 48px;
+}
+
+.left-0 {
+  left: 0;
+}
+
+.z-20 {
+  z-index: 20;
+}
+
+/* new styling */
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400);
+
+.message-emoji {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 54px;
+  background-color: transparent;
+  font-size: 25px;
+  color: #3684b3;
+}
+
+.footer-wrapper {
+  display: flex;
+  align-items: center;
+  padding-right: 11px;
+  padding-left: 11px;
+}
+
+.send-spinner {
+  color: white;
+  height: 15px;
+  width: 15px;
+}
+
+.send-icon {
+  color: white;
+  height: 15px;
+  width: 15px;
+}
+
+.send-wrapper {
+  background-color: rgb(255, 113, 137);
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.attach-btn {
+  position: absolute;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $config-gray;
+}
+
+.grpchat-wrapper {
+  background-color: $config-black;
+}
+
+ion-content {
+  --ion-background-color: #fefcfa;
+  --padding-start: 10px;
+  --padding-end: 10px;
+}
+
+ion-page {
+  --ion-background-color: #fefcfa;
+}
+
+.msg {
+  display: flex !important;
+  align-items: flex-end !important;
+  margin-bottom: 10px !important;
+}
+
+.msg-bubble {
+  max-width: 450px !important;
+  padding: 15px !important;
+  border-radius: 15px !important;
+  background: var(--left-msg-bg) !important;
+}
+
+.msg-info-name {
+  margin-right: 10px !important;
+  font-weight: bold !important;
+  font-size: 18px;
+  color: $config-black;
+}
+
+.left-msg .msg-bubble {
+  border-bottom-left-radius: 0 !important;
+}
+
+.right-msg {
+  margin-right: 10px;
+  flex-direction: column !important;
+}
+
+.right-msg .msg-bubble {
+  background: var(--right-msg-bg) !important;
+  color: #fff !important;
+  border-bottom-right-radius: 0 !important;
+}
+.right-msg .msg-img {
+  margin: 0 0 0 10px !important;
+}
+
+.msg-text {
+  p {
+    margin: 0;
+    font-size: 18px;
+    font-family: $config-font-family;
+    color: $config-black;
+  }
+}
+
+.other-msg-text {
+  p {
+    margin: 0;
+    margin-top: 10px;
+    font-size: 18px;
+    font-family: $config-font-family;
+    color: $config-black;
+  }
+}
+
+.emojiPicker {
+  position: absolute;
+  bottom: 100%;
+  right: 5%;
+}
+
+.h-auto {
+  height: auto;
+}
+
+.closeBtn {
+  color: $config-white;
+}

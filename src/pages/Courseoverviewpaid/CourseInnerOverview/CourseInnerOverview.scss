@@ -31,7 +31,11 @@
              .img_absolute{
              position: absolute;
              top: 60%;
-             left: 60%;
+             left: 5%;
+             width: 75px;
+             img{
+               border-radius: 50px;
+             }
              }
          }
          .align_col{
@@ -75,7 +79,7 @@
             ion-button
             {
                 --border-radius: 10px;
-                --color: white;
+                // --color: white;
                 font-size: 18px;
                 height: 54px;
                 margin-left: 15px;
@@ -147,4 +151,24 @@
      }
        
     }
+}
+
+
+
+@import '@vidstack/react/player/styles/default/theme.css';
+@import '@vidstack/react/player/styles/default/layouts/audio.css';
+@import '@vidstack/react/player/styles/default/layouts/video.css';
+
+.player {
+  --brand-color: #f5f5f5;
+  --focus-color: #4e9cf6;
+
+  --audio-brand: var(--brand-color);
+  --audio-focus-ring-color: var(--focus-color);
+  --audio-border-radius: 2px;
+
+  --video-brand: var(--brand-color);
+  --video-focus-ring-color: var(--focus-color);
+  --video-border-radius: 2px;
+
 }

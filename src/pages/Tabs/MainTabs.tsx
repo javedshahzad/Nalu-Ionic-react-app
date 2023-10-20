@@ -18,6 +18,9 @@ import Courseoverviewpaid from "../Courseoverviewpaid/Courseoverviewpaid";
 import Mygroups from "../Mygroups/Mygroups";
 import Journalcalender from "../Journalcalender/Journalcalender";
 import CourseInnerOverview from "../Courseoverviewpaid/CourseInnerOverview/CourseInnerOverview";
+import CourseSubOverview from "../Courseoverviewpaid/CourseInnerOverview/CourseSubOverview/CourseSubOverview";
+import ResourceSubCategory from '../ResourceSubCategory/ResourceSubCategory';
+import PrivateRoute from './../../auth/PrivateRoute';
 interface MainTabsProps {}
 
 const MainTabs: React.FC<MainTabsProps> = () => {
@@ -32,12 +35,17 @@ const MainTabs: React.FC<MainTabsProps> = () => {
       <IonRouterOutlet>
         <Redirect exact path="/tabs" to="/tabs/tab1" />
       
-        <Route path="/tabs/tab1" render={() => <Journalcalender />} exact={true} />
-        <Route path="/tabs/tab2" render={() => <Courseoverviewpaid />} exact={true} />
-        <Route path="/tabs/tab2/courseinneroverview" render={() => <PrivateRoute><CourseInnerOverview /></PrivateRoute>} exact={true} />
+        <Route path="/tabs/tab1" render={() => <PrivateRoute><Journal /> </PrivateRoute>} exact={true} />
+        <Route path="/tabs/tab2" render={() => <PrivateRoute><Courseoverviewpaid /></PrivateRoute>} exact={true} />
+        <Route path="/tabs/tab2/courseinneroverview" render={() => <PrivateRoute><CourseInnerOverview /></PrivateRoute>}  exact={true}/>
+        <Route path="/tabs/tab2/courseinneroverview/:id" render={() => <PrivateRoute><CourseSubOverview /></PrivateRoute>} exact={true} />
 
-        <Route path="/tabs/tab3" render={() => <Mygroups />} exact={true} />
-        <Route path="/tabs/tab4" render={() => <Journal />} exact={true} />
+
+
+        <Route path="/tabs/tab3" render={() => <PrivateRoute><Mygroups /></PrivateRoute>} exact={true} />
+        <Route path="/tabs/tab4" render={() => <PrivateRoute><Resources /></PrivateRoute>} exact={true} />
+        <Route path="/tabs/tab4/resourcesubcateggory" render={() => <PrivateRoute><ResourceSubCategory /></PrivateRoute>} exact={true} />
+
       </IonRouterOutlet>
 
       <IonTabBar slot="bottom" className="ion-no-border">

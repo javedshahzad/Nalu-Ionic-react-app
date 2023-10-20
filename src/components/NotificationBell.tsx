@@ -22,6 +22,7 @@ import {
 } from "ionicons/icons";
 import { useSelector } from "react-redux";
 import "./NotificationBell.scss";
+import { RootState } from "../store/store";
 
 function NotificationBell() {
   const modal = useRef<HTMLIonModalElement>(null);
@@ -55,8 +56,9 @@ function NotificationBell() {
     return enterAnimation(baseEl).direction("reverse");
   };
 
-  const notificationsArr = useSelector((state: any) => state.notifications);
-  console.log("notificationsArr", notificationsArr);
+  const notificationsArr = useSelector(
+    (state: RootState) => state.notifications.notifications
+  );
 
   const [notificationArray, setNotificationArray] = useState([]);
 
@@ -65,9 +67,7 @@ function NotificationBell() {
       .slice()
       .sort((a: any, b: any) => b.timestamp - a.timestamp);
     setNotificationArray(sortedNotifications);
-  });
-
-  console.log("New Notification Array", notificationArray);
+  }, []);
 
   const markRead = (isActive: any) => {
     const updatedNotifications = notificationsArr.map(
@@ -90,11 +90,14 @@ function NotificationBell() {
     <>
       <IonButton fill="clear" color="dark" id="open-modal">
         <IonIcon icon={notificationsOutline} />
-        {notificationsArr.some((notification) => notification.isActive) && (
+        {notificationsArr.some(
+          (notification: any) => notification.isActive
+        ) && (
           <span className="notification-number">
             {
-              notificationsArr.filter((notification) => notification.isActive)
-                .length
+              notificationsArr.filter(
+                (notification: any) => notification.isActive
+              ).length
             }
           </span>
         )}

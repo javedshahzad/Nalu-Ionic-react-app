@@ -22,6 +22,7 @@ import "./Filtermodal.scss";
 import { close } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useHistory } from "react-router";
 
 const Filtermodal: React.FC = () => {
   const [rangeValues, setRangeValues] = useState({ lower: null, upper: null });
@@ -34,11 +35,14 @@ const Filtermodal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [votes, setVotes] = useState([]);
 
+  const history = useHistory();
+
   const handleRangeChange = (event: CustomEvent) => {
     setRangeValues(event.detail.value);
   };
 
   useEffect(() => {
+
     getValues();
   }, []);
 
@@ -80,11 +84,7 @@ const Filtermodal: React.FC = () => {
         });
 
         setIsLoading(false);
-        //         const generatedValues = [];
-        // for (let i = response.data.upvotes_min; i <= response.data.upvotes_max; i += 1) {
-        //   generatedValues.push(i);
-        // }
-        // setVotes(generatedValues);
+      
       })
       .catch((error) => {
         console.log(error);
@@ -156,31 +156,43 @@ const Filtermodal: React.FC = () => {
   const activeLabels = mediaItems
     .filter((item) => item.active)
     .map((item) => item.name);
+  const activeLabelsString = activeLabels.join(', ');
+
 
   const activeRecommendations = recommendedItems
     .filter((item) => item.active)
     .map((item) => item.name);
+  const activeRecommendationsString = activeRecommendations.join(', ');
+
 
   const handleFilters = async () => {
-    const data = {
-      activeLabels,
-      activeRecommendations,
-      rangeValues,
-    };
-    console.log(data);
-
-    // try {
-    //   const response = await axios.post(`https://app.mynalu.com/wp-admin/edit.php?post_type=nalu_ressources`, data);
-    //   console.log("Response:",response);
-    //   if(response.status === 200){
-
-    //     // naviagtion
-    //     // history.push("/tabs/tab1")
-    //   }
-    // } catch (error) {
-    //   console.log('Error', error.response.data.message);
-    //   // setErrorMessage("Invalid email or password. Please try again.")
-    // }
+    try {
+      axios
+        .get("https://app.mynalu.com/wp-json/nalu-app/v1/ressources", {
+          params: {
+            category_name: activeLabelsString,
+            "authority.title": activeRecommendationsString,
+            upvotes_number_min: rangeValues.lower,
+            upvotes_number_max: rangeValues.upper
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          
+          
+          history.push('/tabs/tab4/resourcesubcateggory',{
+            filteredData: response.data.ressources,
+            subCategory: response.data.sub_categories
+          })
+          
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log("Error", error);
+    }
+    
   };
 
   return (
@@ -188,11 +200,12 @@ const Filtermodal: React.FC = () => {
       {isLoading ? (
         <>
           <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+           style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height:"100vh"
+          }}
           >
             <IonSpinner name="crescent"></IonSpinner>
           </div>
@@ -203,7 +216,7 @@ const Filtermodal: React.FC = () => {
             <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
-                  <IonButton>
+                  <IonButton routerLink="/tabs/tab4">
                     <IonIcon icon={close} />
                   </IonButton>
                 </IonButtons>
