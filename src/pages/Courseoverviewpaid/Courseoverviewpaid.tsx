@@ -140,7 +140,9 @@ history.push('/tabs/tab2/courseinneroverview',{
                                 key={chapterIndex}
                                 multiple={false}
                               >
-                                <IonAccordion value={chapterIndex} disabled={!chapter.preview}>
+                                {/* <IonAccordion value={chapterIndex} disabled={!chapter.preview}> */}
+                                <IonAccordion value={chapterIndex}>
+
                                   <IonItem slot="header" lines="inset">
                                     <IonLabel
                                       style={{
