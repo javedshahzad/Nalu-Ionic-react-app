@@ -1,4 +1,6 @@
-import {IonAvatar,IonBackButton,
+import {
+  IonAvatar,
+  IonBackButton,
   IonButton,
   IonButtons,
   IonContent,
@@ -11,58 +13,69 @@ import {IonAvatar,IonBackButton,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { addCircle, addCircleOutline, checkmarkCircle, notificationsOutline } from "ionicons/icons";
+import {
+  addCircle,
+  addCircleOutline,
+  checkmarkCircle,
+  notificationsOutline,
+} from "ionicons/icons";
 
 import "./Community.scss";
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';
+import NotificationBell from "../../components/NotificationBell";
 
 const Community: React.FC = () => {
   const { t} = useTranslation();  
 
   const itemList = [
     {
-      avatarText: 'A',
-      title: 'NALU Endo Flow - English',
-      subTitle: 'Nisi Quis voluptate esse pariatela',
-      time: '6:27 PM',
+      avatarText: "A",
+      title: "NALU Endo Flow - English",
+      subTitle: "Nisi Quis voluptate esse pariatela",
+      time: "6:27 PM",
       icon: checkmarkCircle,
     },
     {
-      avatarText: 'A',
-      title: 'NALU Endo Flow - English',
-      subTitle: 'Nisi Quis voluptate esse pariatela',
-      time: '6:27 PM',
+      avatarText: "A",
+      title: "NALU Endo Flow - English",
+      subTitle: "Nisi Quis voluptate esse pariatela",
+      time: "6:27 PM",
       icon: checkmarkCircle,
     },
     {
-      avatarText: 'A',
-      title: 'NALU Community - German',
-      subTitle: 'Nisi Quis voluptate esse pariatela',
-      time: '6:27 PM',
+      avatarText: "A",
+      title: "NALU Community - German",
+      subTitle: "Nisi Quis voluptate esse pariatela",
+      time: "6:27 PM",
       icon: addCircleOutline,
     },
     {
-      avatarText: 'A',
-      title: 'NALU Community - German',
-      subTitle: 'Nisi Quis voluptate esse pariatela',
-      time: '6:27 PM',
+      avatarText: "A",
+      title: "NALU Community - German",
+      subTitle: "Nisi Quis voluptate esse pariatela",
+      time: "6:27 PM",
       icon: addCircleOutline,
     },
     {
-      avatarText: 'A',
-      title: 'NALU Community - German',
-      subTitle: 'Nisi Quis voluptate esse pariatela',
-      time: '6:27 PM',
+      avatarText: "A",
+      title: "NALU Community - German",
+      subTitle: "Nisi Quis voluptate esse pariatela",
+      time: "6:27 PM",
       icon: addCircleOutline,
     },
   ];
 
-  const [itemStates, setItemStates] = useState(itemList.map(item => item.icon)); // Initialize with the icons from the itemList
+  const [itemStates, setItemStates] = useState(
+    itemList.map((item) => item.icon)
+  ); // Initialize with the icons from the itemList
 
   const toggleIcon = (index) => {
     const updatedStates = [...itemStates];
-    updatedStates[index] = updatedStates[index] === addCircleOutline ? checkmarkCircle : addCircleOutline;
+    updatedStates[index] =
+      updatedStates[index] === addCircleOutline
+        ? checkmarkCircle
+        : addCircleOutline;
     setItemStates(updatedStates);
   };
   return (
@@ -76,18 +89,19 @@ const Community: React.FC = () => {
           {t('community.browse_groups')}
             </IonTitle>
             <IonButtons slot="end">
-              <IonButton color="dark">
-                <IonIcon icon={notificationsOutline} />
-              </IonButton>
+             
+              <IonButton slot="end" fill="clear">
+              <NotificationBell />
+            </IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding" fullscreen>
-       <div className="search-holder">
-        <IonSearchbar></IonSearchbar>
-       </div>
+        <div className="search-holder">
+          <IonSearchbar></IonSearchbar>
+        </div>
 
-       {/* <div className="the-list">
+        {/* <div className="the-list">
           <IonItem lines="none" detail={false} routerLink="/chat">
             <IonAvatar className="flex al-center jc-center" slot="start">
               <h3>A</h3>
@@ -155,23 +169,32 @@ const Community: React.FC = () => {
           </IonItem>
        </div>  */}
 
-       <div className="the-list">
-      {itemList.map((item, index) => (
-        <IonItem key={index} lines="none" detail={false} >
-          <IonAvatar className="flex al-center jc-center" slot="start">
-            <h3>{item.avatarText}</h3>
-          </IonAvatar>
-          <IonLabel>
-            <h4>{item.title}</h4>
-            <h6 className="ion-text-wrap">{item.subTitle}</h6>
-          </IonLabel>
-          <div className="end-slot ion-text-right" slot="end" onClick={() => toggleIcon(index)}>
-            <p>{item.time}</p>
-            <IonIcon className={itemStates[index] === addCircleOutline ? 'add' : 'done'} icon={itemStates[index]} />
-          </div>
-        </IonItem>
-      ))}
-    </div>
+        <div className="the-list">
+          {itemList.map((item, index) => (
+            <IonItem key={index} lines="none" detail={false}>
+              <IonAvatar className="flex al-center jc-center" slot="start">
+                <h3>{item.avatarText}</h3>
+              </IonAvatar>
+              <IonLabel>
+                <h4>{item.title}</h4>
+                <h6 className="ion-text-wrap">{item.subTitle}</h6>
+              </IonLabel>
+              <div
+                className="end-slot ion-text-right"
+                slot="end"
+                onClick={() => toggleIcon(index)}
+              >
+                <p>{item.time}</p>
+                <IonIcon
+                  className={
+                    itemStates[index] === addCircleOutline ? "add" : "done"
+                  }
+                  icon={itemStates[index]}
+                />
+              </div>
+            </IonItem>
+          ))}
+        </div>
       </IonContent>
     </IonPage>
   );

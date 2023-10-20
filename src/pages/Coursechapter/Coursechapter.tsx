@@ -27,6 +27,7 @@ import {
 
 import "./Coursechapter.scss";
 import { useState, useEffect, useRef } from "react";
+import NotificationBell from "../../components/NotificationBell";
 
 const Coursechapter: React.FC = () => {
   const [activeSegment, setActiveSegment] = useState<string>("Video");
@@ -88,8 +89,8 @@ const Coursechapter: React.FC = () => {
           </IonButtons>
           <IonTitle>Stretching & Loosening</IonTitle>
           <IonButtons slot="end">
-            <IonButton color="dark">
-              <IonIcon icon={notificationsOutline} />
+            <IonButton slot="end" fill="clear">
+              <NotificationBell />
             </IonButton>
           </IonButtons>
         </IonToolbar>

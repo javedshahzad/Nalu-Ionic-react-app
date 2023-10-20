@@ -46,6 +46,7 @@ import thumbs_down_outline from "../../Images/thumbs-down-outline.svg";
 import filter from "../../Images/filter.png";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import NotificationBell from './../../components/NotificationBell';
 
 const Journal: React.FC = () => {
   const [activeSegment, setActiveSegment] = useState<string>("overview");
@@ -341,9 +342,9 @@ const Journal: React.FC = () => {
                   </IonButton>
                 </IonButtons>
                 <IonButtons slot="end">
-                  <IonButton color="dark">
-                    <IonIcon icon={notificationsOutline} />
-                  </IonButton>
+                <IonButton slot="end" fill="clear">
+              <NotificationBell />
+            </IonButton>
                 </IonButtons>
               </IonToolbar>
               <IonToolbar>

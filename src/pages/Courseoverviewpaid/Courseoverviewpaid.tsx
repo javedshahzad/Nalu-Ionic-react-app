@@ -25,6 +25,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useHistory } from 'react-router';
+import NotificationBell from "../../components/NotificationBell";
 
 const Courseoverviewpaid: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -87,10 +88,10 @@ history.push('/tabs/tab2/courseinneroverview',{
                 </IonButton>
 
                 <IonButtons slot="end">
-                  <IonButton color="dark">
-                    <IonIcon icon={notificationsOutline} />
-                  </IonButton>
-                </IonButtons>
+            <IonButton slot="end" fill="clear">
+              <NotificationBell />
+            </IonButton>
+          </IonButtons>
               </IonToolbar>
             </IonHeader>
             <IonContent className="ion-padding-horizontal" fullscreen>

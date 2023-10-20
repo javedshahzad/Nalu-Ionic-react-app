@@ -29,6 +29,7 @@ import "./Resourcedetail.scss";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useState } from 'react';
+import NotificationBell from "../../components/NotificationBell";
 
 const Resourcedetail: React.FC = () => {
   const location = useLocation();
@@ -162,8 +163,8 @@ const Resourcedetail: React.FC = () => {
             </IonButton>
           </IonButtons>
           <IonButtons slot="end">
-            <IonButton color="dark">
-              <IonIcon icon={notificationsOutline} />
+            <IonButton slot="end" fill="clear">
+              <NotificationBell />
             </IonButton>
           </IonButtons>
         </IonToolbar>

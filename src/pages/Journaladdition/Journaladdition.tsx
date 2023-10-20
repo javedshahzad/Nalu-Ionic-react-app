@@ -23,7 +23,6 @@ import "./Journaladdition.scss";
 import { useState } from "react";
 import Additionfilter from "../modals/Additionfilter/Additionfilter";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -100,11 +99,10 @@ const Journaladdition: React.FC = () => {
     setexerciseItems(updatedItems);
   };
 
-  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const today = new Date();
   const startingDate = 20; // Starting date of the month
   const [weekOffset, setWeekOffset] = useState(0); // Week offset state
-
 
   return (
     <IonPage className="Journaladdition">
@@ -123,7 +121,7 @@ const Journaladdition: React.FC = () => {
       </IonHeader>
       <IonContent className="ion-padding-horizontal" fullscreen>
         <div>
-        <Swiper
+          <Swiper
             freeMode={true}
             pagination={true}
             centeredSlides={false}
@@ -153,7 +151,7 @@ const Journaladdition: React.FC = () => {
             })}
           </Swiper>
         </div>
-  
+
         <IonModal
           isOpen={modalOpen}
           className="modaaal"

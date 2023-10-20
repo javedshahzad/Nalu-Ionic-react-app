@@ -1,0 +1,50 @@
+$config-gray: #636363;
+$config-white: #fefcfa;
+$config-black: #2d2d2d;
+$config-font-family: var(--ion-font-family);
+
+.group-search {
+  width: 100%;
+  border-radius: 10px;
+  height: 48px;
+  background-color: #f8f8f8;
+  border: 1px #f3f3f3;
+  padding-left: 48px;
+  color: #636363;
+  font-family: $config-font-family;
+}
+.group-title {
+  font-size: 20px;
+  font-weight: bold;
+  font-family: $config-font-family;
+}
+.input-search {
+  position: absolute;
+  left: 29px;
+  color: #636363;
+}
+
+.browsed-grps {
+  border-bottom: none !important;
+  padding: 0;
+  margin-bottom: 10px !important;
+}
+
+.browse-grp-items {
+  display: flex;
+  align-items: center;
+  background-color: #ffff;
+  padding: 16px 20px 16px 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 10px;
+  border: 1px solid #f0f0f0;
+}
+
+ion-page {
+  --ion-background-color: #fefcfa;
+}
+
+ion-content {
+  --ion-background-color: #fefcfa;
+}

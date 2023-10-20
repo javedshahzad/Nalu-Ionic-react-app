@@ -26,6 +26,7 @@ import { useHistory } from "react-router";
 import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
+import NotificationBell from "../../components/NotificationBell";
 
 const Mygroups: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -89,9 +90,9 @@ const Mygroups: React.FC = () => {
               </IonButtons>
               <IonTitle>My Groups</IonTitle>
               <IonButtons slot="end">
-                <IonButton color="dark">
-                  <IonIcon icon={notificationsOutline} />
-                </IonButton>
+              <IonButton slot="end" fill="clear">
+              <NotificationBell />
+            </IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
@@ -181,9 +182,9 @@ const Mygroups: React.FC = () => {
                 {/* <div className="next-card closed">
             
               <div className="img-holder">
-              <div className="overlay flex al-center jc-center">
-                <img src="assets/imgs/lockw.svg" alt="" />
-              </div>
+                <div className="overlay flex al-center jc-center">
+                  <img src="assets/imgs/lockw.svg" alt="" />
+                </div>
                 <img src="assets/imgs/next.png" alt="" />
               </div>
               <div className="dates flex al-center jc-between">
@@ -195,14 +196,15 @@ const Mygroups: React.FC = () => {
               </div>
               <IonItem lines="none">
                 <div className="start-slot flex al-start " slot="start">
-                <IonAvatar >
-                  <img src="assets/imgs/user.png" alt="" />
-                </IonAvatar>
+                  <IonAvatar>
+                    <img src="assets/imgs/user.png" alt="" />
+                  </IonAvatar>
                 </div>
                 <IonLabel>
                   <p>Hosted by</p>
                   <h6 className="ion-text-wrap">
-                    <span>Sonia Sarina</span>, Certified Health Coach in Private Practice
+                    <span>Sonia Sarina</span>, Certified Health Coach in Private
+                    Practice
                   </h6>
                 </IonLabel>
               </IonItem>

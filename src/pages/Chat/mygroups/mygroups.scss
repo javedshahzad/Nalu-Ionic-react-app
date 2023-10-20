@@ -1,0 +1,94 @@
+$config-gray: #636363;
+$config-white: #fefcfa;
+$config-black: #2d2d2d;
+$config-font-family: var(--ion-font-family);
+
+ion-list.webkit-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+ion-list.webkit-scrollbar::-webkit-scrollbar {
+  width: 0;
+}
+
+.edit-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.backBtn {
+  color: $config-black !important;
+}
+
+.group-title {
+  font-size: 20px;
+  font-weight: bold;
+  font-family: $config-font-family;
+}
+
+.browsed-grps {
+  border-bottom: none !important;
+  padding: 0;
+  margin-bottom: 10px !important;
+}
+
+.browse-grps-btn {
+  margin-left: 10px;
+}
+
+.browse-grp-items {
+  display: flex;
+  align-items: center;
+  background-color: #ffff;
+  padding: 16px 20px 16px 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 10px;
+  border: 1px solid #f0f0f0;
+}
+
+.browse-grps-icon {
+  color: $config-gray;
+}
+
+.browse-grps-label {
+  color: $config-gray;
+  font-family: $config-font-family;
+}
+
+.group-name-input {
+  width: 100%;
+  border-radius: 10px;
+  height: 10px;
+  border: 1px;
+  background-color: #f3f3f3;
+  padding: 20px !important;
+}
+
+.group-name-input:focus {
+  outline: none;
+}
+
+.popover-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.addGrpLabel {
+  color: $config-gray !important;
+  font-family: $config-font-family;
+}
+
+.addIcon {
+  color: $config-gray;
+}
+
+.createGrpBtn {
+  color: white;
+}
