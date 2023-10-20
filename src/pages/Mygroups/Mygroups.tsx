@@ -30,7 +30,7 @@ import NotificationBell from "../../components/NotificationBell";
 
 const Mygroups: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [event, setEvents] = useState(null);
+  const [events, setEvents] = useState(null);
 
   const history = useHistory();
 
@@ -38,15 +38,18 @@ const Mygroups: React.FC = () => {
     getEvents();
   }, []);
 
-  const navigateToNextPage = () => {
-    history.push("/Eventdetail"); // Navigate to the "/next" route
+  const navigateToNextPage = (id) => {
+    console.log(id);
+    history.push("/Eventdetail", {
+      event_id: id,
+    });
   };
 
   const getEvents = () => {
     setIsLoading(true);
 
     axios
-      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/event/2146?lang=en`, {
+      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=en`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
         },
@@ -90,9 +93,9 @@ const Mygroups: React.FC = () => {
               </IonButtons>
               <IonTitle>My Groups</IonTitle>
               <IonButtons slot="end">
-              <IonButton slot="end" fill="clear">
-              <NotificationBell />
-            </IonButton>
+                <IonButton slot="end" fill="clear">
+                  <NotificationBell />
+                </IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
@@ -146,38 +149,44 @@ const Mygroups: React.FC = () => {
               </div>
 
               <div className="next-list">
-                <div className="next-card" onClick={() => navigateToNextPage()}>
-                  <div className="img-holder">
-                    <img src={event?.image_url} alt="" />
-                  </div>
-                  <div className="dates flex al-center jc-between">
-                    <div>
-                      <p>{event?.schedule}</p>
-                      <h4>{event?.title}</h4>
+                {events?.map((event, event_index) => (
+                  <div
+                    className="next-card"
+                    key={event_index}
+                    onClick={() => navigateToNextPage(event?.id)}
+                  >
+                    <div className="img-holder">
+                      <img src={event?.thumbnail_url} alt="" />
                     </div>
-                    {/* <IonIcon icon={checkmarkCircle} /> */}
-                    <IonIcon slot="start" src="assets/imgs/bookmark-blue.svg" />
-                    {/* <IonIcon slot="start" src="assets/imgs/cross-icon.svg" /> */}
-
-
-                  </div>
-                  <IonItem lines="none">
-                    <div className="start-slot flex al-start " slot="start">
-                      <IonAvatar>
-                        <img src={event?.event_host.image} alt="" />
-
-                      </IonAvatar>
+                    <div className="dates flex al-center jc-between">
+                      <div>
+                        <p>{event?.schedule}</p>
+                        <h4>{event?.title}</h4>
+                      </div>
+                      {/* <IonIcon icon={checkmarkCircle} /> */}
+                      <IonIcon
+                        slot="start"
+                        src="assets/imgs/bookmark-blue.svg"
+                      />
+                      {/* <IonIcon slot="start" src="assets/imgs/cross-icon.svg" /> */}
                     </div>
-                    <IonLabel>
-                      <p>Hosted by</p>
-                      <h6 className="ion-text-wrap">
-                        <span>{event?.event_host.title}</span>,
-                        {event?.event_host.description}
-                      </h6>
-                      <p>Coach for Cycle Health</p>
-                    </IonLabel>
-                  </IonItem>
-                </div>
+                    <IonItem lines="none">
+                      <div className="start-slot flex al-start " slot="start">
+                        <IonAvatar>
+                          <img src={event?.event_host.image} alt="" />
+                        </IonAvatar>
+                      </div>
+                      <IonLabel>
+                        <p>Hosted by</p>
+                        <h6 className="ion-text-wrap">
+                          <span>{event?.event_host.title}</span>,
+                          {event?.event_host.description}
+                        </h6>
+                        <p>Coach for Cycle Health</p>
+                      </IonLabel>
+                    </IonItem>
+                  </div>
+                ))}
 
                 {/* <div className="next-card closed">
             
