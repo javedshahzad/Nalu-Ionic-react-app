@@ -192,11 +192,7 @@ const App: React.FC = () => {
             </PrivateRoute>
           </Route>
 
-          <Route exact path="/eventdetail">
-            <PrivateRoute>
-              <Eventdetail />
-            </PrivateRoute>
-          </Route>
+        
 
           <Route exact path="/filter">
             <PrivateRoute>
@@ -243,11 +239,7 @@ const App: React.FC = () => {
           <Route exact path="/registeration">
             <Registeration />
           </Route>
-          <Route exact path="/resourcedetail">
-            <PrivateRoute>
-              <Resourcedetail />
-            </PrivateRoute>
-          </Route>
+         
 
           <Route exact path="/stayup">
             <PrivateRoute>

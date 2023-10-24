@@ -41,12 +41,21 @@ const Eventdetail: React.FC = () => {
 
   const location = useLocation();
   const data: any = location?.state;
+  let axiosCancelToken;
+
   useEffect(() => {
     getEventByID(data?.event_id);
+    return () => {
+      if (axiosCancelToken) {
+        axiosCancelToken.cancel("Component unmounted");
+      }
+    };
   }, []);
 
   const getEventByID = (event_id) => {
     setIsLoading(true);
+    const source = axios.CancelToken.source();
+    axiosCancelToken = source;
 
     axios
       .get(
@@ -55,6 +64,8 @@ const Eventdetail: React.FC = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           },
+          cancelToken: source.token,
+
         }
       )
       .then((response) => {
@@ -63,13 +74,33 @@ const Eventdetail: React.FC = () => {
         setIsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
         setIsLoading(false);
+        if (axios.isCancel(error)) {
+          console.log("Request was canceled:", error.message);
+        } else {
+          console.log(error);
+        }
       });
   };
 
-  const handleDateChange = (event) => {
+  const handleDateChange = (event, event_id,type) => {
     const value = event.target.value;
+    if(type === 'series'){
+      axios
+      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=en`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        
+      });
+    }
+
     setSelectedDate(value);
     setDateError(
       value.trim() === "" ? "Please select a date to continue." : ""
@@ -91,14 +122,14 @@ const Eventdetail: React.FC = () => {
         </div>
       ) : (
         <>
-          <IonPage className="Eventdetail">
+          <div className="Eventdetail">
             <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
                   <IonBackButton
                     color="dark"
                     text={""}
-                    defaultHref="/tabs/tab5"
+                    defaultHref="/tabs/tab3"
                   />
                 </IonButtons>
                 <IonTitle>{event?.title}</IonTitle>
@@ -162,20 +193,19 @@ const Eventdetail: React.FC = () => {
                       <IonItem lines="none" className="ion-text-left">
                         <IonSelect
                           className="ion-text-left "
-                          placeholder="Select Date"
+                          placeholder={event?.type === "single" ? "" : "Select Date"}
                           mode="md"
+                          disabled={event?.type === "single"}
                           value={selectedDate}
-                          onIonChange={handleDateChange}
-                        >
-                          <IonSelectOption value="Tuesday, 22.08.2023, 3 PM">
-                            Tuesday, 22.08.2023, 3 PM
-                          </IonSelectOption>
-                          <IonSelectOption value="Wednesday, 24.08.2023, 6 PM">
-                            Wednesday, 24.08.2023, 6 PM
-                          </IonSelectOption>
-                          <IonSelectOption value="orange">
-                            Friday, 25.08.2023, 8 PM
-                          </IonSelectOption>
+                          label={event?.type === "single" ? event?.schedule : ''}
+                          onIonChange={(e) => handleDateChange(e, event?.dates?.find(date => date.date === e.target.value)?.event_id, event?.type)}
+                          >
+                          {event?.dates?.map((date, date_index) => (
+                            <IonSelectOption
+                             key={date_index} value={date.date}>
+                              {date.date}
+                            </IonSelectOption>
+                          ))}
                         </IonSelect>
                       </IonItem>
 
@@ -216,7 +246,7 @@ const Eventdetail: React.FC = () => {
                 </div>
               </div>
             </IonContent>
-          </IonPage>
+          </div>
         </>
       )}
     </>

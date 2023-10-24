@@ -298,7 +298,7 @@ const Journal: React.FC = () => {
           )
           .then((response) => {
             console.log(response.data);
-           history.push('/resourcedetail',{
+           history.push('/tabs/tab4/resourcedetail',{
              data: response.data
            })
           })

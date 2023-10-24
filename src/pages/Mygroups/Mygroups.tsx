@@ -13,6 +13,8 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
+  useIonViewDidLeave,
+  useIonViewWillLeave,
 } from "@ionic/react";
 import {
   checkmarkCircle,
@@ -33,26 +35,41 @@ const Mygroups: React.FC = () => {
   const [events, setEvents] = useState(null);
 
   const history = useHistory();
+  let axiosCancelToken;
 
   useEffect(() => {
     getEvents();
-  }, []);
+    return () => {
+      if (axiosCancelToken) {
+        axiosCancelToken.cancel("Component unmounted");
+      }
+    };
+  },[]);
 
+  useIonViewDidLeave(() => {
+    axiosCancelToken.cancel("Component unmounted");
+  });
+ 
+  
   const navigateToNextPage = (id) => {
     console.log(id);
-    history.push("/Eventdetail", {
+    history.push("/tabs/tab3/eventdetail", {
       event_id: id,
     });
   };
 
   const getEvents = () => {
     setIsLoading(true);
+    const source = axios.CancelToken.source();
+    axiosCancelToken = source;
 
     axios
       .get(`https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=en`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
         },
+        cancelToken: source.token,
+
       })
       .then((response) => {
         console.log(response.data);
@@ -62,12 +79,17 @@ const Mygroups: React.FC = () => {
       .catch((error) => {
         console.log(error);
         setIsLoading(false);
+        if (axios.isCancel(error)) {
+          console.log("Request was canceled:", error.message);
+        } else {
+          console.log(error);
+        }
       });
   };
 
   return (
     <>
-      {isLoading ? (
+      {isLoading? (
         <>
           <div
             style={{
@@ -81,7 +103,7 @@ const Mygroups: React.FC = () => {
           </div>
         </>
       ) : (
-        <IonPage className="Mygroups">
+        <div className="Mygroups">
           <IonHeader className="ion-no-border">
             <IonToolbar>
               <IonButtons slot="start">
@@ -163,12 +185,18 @@ const Mygroups: React.FC = () => {
                         <p>{event?.schedule}</p>
                         <h4>{event?.title}</h4>
                       </div>
-                      {/* <IonIcon icon={checkmarkCircle} /> */}
                       <IonIcon
                         slot="start"
-                        src="assets/imgs/bookmark-blue.svg"
+                        src={
+                          event?.is_bookmarked
+                            ? "assets/imgs/bookmark-blue.svg"
+                            : event?.is_cancelled
+                            ? "assets/imgs/cross-icon.svg"
+                            : event?.is_registered
+                            ? checkmarkCircle
+                            : "assets/imgs/closed-letter.svg"
+                        }
                       />
-                      {/* <IonIcon slot="start" src="assets/imgs/cross-icon.svg" /> */}
                     </div>
                     <IonItem lines="none">
                       <div className="start-slot flex al-start " slot="start">
@@ -221,7 +249,7 @@ const Mygroups: React.FC = () => {
               </div>
             </div>
           </IonContent>
-        </IonPage>
+        </div>
       )}
     </>
   );

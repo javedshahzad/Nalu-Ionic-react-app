@@ -150,7 +150,7 @@ const CourseInnerOverview: React.FC = () => {
         </>
       ) : (
         <>
-          <IonPage className="CourseInnerOverview">
+          <div className="CourseInnerOverview">
             <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
@@ -323,7 +323,7 @@ const CourseInnerOverview: React.FC = () => {
                 )}
               </div>
             </IonContent>
-          </IonPage>
+          </div>
         </>
       )}
     </>

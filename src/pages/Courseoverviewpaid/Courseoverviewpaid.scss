@@ -87,13 +87,10 @@
             ion-accordion.first_accord
             {
                 margin: 10px 0 !important;
-
                 ion-item
                 {
                     --background: white;
                     --border-radius: 10px;
-
-                   
                 }
             }
             .sublist
@@ -121,3 +118,8 @@
         }
     }
 }
+
+.no-rotation {
+    animation: none !important;
+    transform: none !important;
+  }
