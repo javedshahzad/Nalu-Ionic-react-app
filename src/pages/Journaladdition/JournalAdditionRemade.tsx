@@ -24,9 +24,26 @@ import newMoon from "../../assets/images/new moon.svg";
 import fullMoon from "../../assets/images/full moon.svg";
 import { add, filterOutline, optionsOutline } from "ionicons/icons";
 import Additionfilter from "../modals/Additionfilter/Additionfilter";
+import JournalAdditionApiService from "../../JournalService";
 
 function JournalAdditionRemade() {
   const { dateParam } = useParams<{ dateParam: string }>();
+
+  console.log("dateParam", dateParam);
+
+  const getJournalEntries = async () => {
+    try {
+      const data = await JournalAdditionApiService.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`
+      );
+
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  getJournalEntries();
 
   const tickValues = [1, 2, 3, 4, 5]; // Custom tick values
   const [modalOpen, setModalOpen] = useState(false);
