@@ -120,7 +120,7 @@ const Addcustomcategory: React.FC = () => {
                     <IonRadio value="type1"></IonRadio>
                   </IonItem>
                 </IonCol>
-                <IonCol size="6" id="checks">
+                {/*<IonCol size="6" id="checks">
                   <IonItem lines="none">
                     <IonIcon
                       slot="start"
@@ -139,15 +139,15 @@ const Addcustomcategory: React.FC = () => {
                     )}
                     
                   </IonItem>
-                </IonCol>
+                </IonCol>*/}
                 <IonCol size="6" id="imgg">
                   <IonItem lines="none">
                     <IonLabel>
                       <img
                         src={
                           selectedValue === "type3"
-                            ? "assets/imgs/type3active.svg"
-                            : "assets/imgs/type3.svg"
+                            ? "assets/imgs/type3active.png"
+                            : "assets/imgs/type3.png"
                         }
                         alt=""
                       />
@@ -161,8 +161,8 @@ const Addcustomcategory: React.FC = () => {
                       <img
                         src={
                           selectedValue === "type4"
-                            ? "assets/imgs/type4active.svg"
-                            : "assets/imgs/type4.svg"
+                            ? "assets/imgs/type4active.png"
+                            : "assets/imgs/type4.png"
                         }
                         alt=""
                       />
