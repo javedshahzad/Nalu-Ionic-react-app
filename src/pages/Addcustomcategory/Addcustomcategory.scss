@@ -1,0 +1,199 @@
+.Addcustomcategory
+{
+    ion-toolbar
+    {
+        --background: #FEFCFA;
+
+        ion-title
+        {
+            font-family: 'GBold';
+            font-size: 20px;
+        }
+    }
+
+    ion-content
+    {
+        --background: #FEFCFA;
+
+        .up
+        {
+            margin-top: 20px !important;
+        }
+
+    
+        .error-message
+        {
+            color: var(--ion-color-warning);
+            margin: 0;
+        }
+       
+        .section
+        {
+            .title
+            {
+                h3
+                {
+                    font-family: 'GBold';
+                    font-size: 24px;
+                    margin: 0;
+                }
+            }
+
+            #imgg
+            {
+                ion-item
+                {
+                    --background: white;
+                    --border-color: #F0F0F0;
+                    --border-style: solid;
+                    --border-width: 1px;
+                    --border-radius: 10px;
+
+                    ion-label
+                    {
+                        text-align: center;
+                        margin-right: 0;
+                    }
+                    ion-radio
+                    {
+                        opacity: 0;
+                        height: 100%;
+                        left: 0;
+                        position: absolute;
+                        right: 0;
+                        width: 100%;
+                    }
+                }
+
+                .item-radio-checked
+                {
+                    --background: #3684B3;
+                }
+            }
+
+            #tagss
+            {
+                ion-item
+                {
+                    --background: white;
+                    --border-color: #F0F0F0;
+                    --border-style: solid;
+                    --border-radius: 10px;
+                    --border-width: 1px;
+                    --padding-start:10px;
+                    --inner-padding-end:5px;
+
+                    ion-icon
+                    {
+                        font-size: 13px;
+                        margin-right: 10px;
+                    }
+
+                    ion-label
+                    {
+                        font-size: 14px;
+                    }
+
+                    ion-radio
+                    {
+                        height: 100%;
+                        left: 0;
+                        opacity: 0;
+                        position: absolute;
+                        right: 0;
+                        width: 100%;
+                    }
+                }
+
+                .item-radio-checked
+                {
+                    --background: #3684B3;
+
+                    ion-label
+                    {
+                        color: white;
+                    }
+                }
+            }
+
+            #checks
+            {
+                ion-item
+                {
+                    --background: white;
+                    --border-color: #F0F0F0;
+                    --border-style: solid;
+                    --border-radius: 10px;
+                    --border-width: 1px;
+                    --padding-start:5px;
+                    --inner-padding-end:5px;
+                    margin-left: 0 !important;
+
+                    ion-icon
+                    {
+                        font-size: 12px;
+                        margin-right: 10px;
+                    }
+
+                    ion-label
+                    {
+                        font-size: 14px;
+                    }
+
+                    ion-radio
+                    {
+                        
+                        height: 100%;
+                        left: 0;
+                        opacity: 0;
+                        position: absolute;
+                        right: 0;
+                        width: 100%;
+                       
+                    }
+
+                    ion-checkbox
+                    {
+                        
+                        --border-color:white;
+                        --checkbox-background-checked:white;
+                        --border-color:#3684B3;
+                        --border-color-checked:#3684B3;
+                        --checkmark-color: #3684B3;
+                        --size:15px;
+                    }
+
+                 
+                }
+
+                .item-radio-checked
+                {
+                    --background: #3684B3;
+
+                    ion-label
+                    {
+                        color: white;
+                    }
+                }
+            }
+         
+         
+
+        
+        }
+
+          .btn-holder
+        {
+            margin-top: 20px;
+            ion-button
+            {
+                --border-radius: 10px;
+                --color: white;
+                font-size: 18px;
+                height: 54px;
+            }
+        }
+      
+     
+    }
+}
