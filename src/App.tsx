@@ -53,9 +53,9 @@ import Community from "./pages/Community/Community";
 import Login from "./pages/Login/Login";
 import Resources from "./pages/Resources/Resources";
 import PrivateRoute from "./auth/PrivateRoute";
-import './i18n';
-import { Suspense } from "react";
-import ResourceSubCategory from './pages/ResourceSubCategory/ResourceSubCategory';
+import "./i18n";
+// import { Suspense } from "react";
+import ResourceSubCategory from "./pages/ResourceSubCategory/ResourceSubCategory";
 import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
 import ConfigCycleRemade from "./pages/Configcycle/ConfigCycleRemade";
 import JournalAdditionRemade from "./pages/Journaladdition/JournalAdditionRemade";
@@ -72,6 +72,7 @@ import GroupChat from "./pages/Chat/GroupChat/GroupChat";
 import GroupDetails from "./pages/Chat/GroupDetails/GroupDetails";
 import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
 import MyGroups from "./pages/Chat/mygroups/MyGroups";
+import JournalEntries from "./pages/Journaladdition/JournalEntries";
 
 setupIonicReact({
   mode: "ios",
@@ -264,6 +265,9 @@ const App: React.FC = () => {
           </Route>
           <Route exact path="/configcycleremade">
             <ConfigCycleRemade />
+          </Route>
+          <Route exact path="/journalentries">
+            <JournalEntries />
           </Route>
 
           <Route
