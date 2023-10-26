@@ -202,6 +202,12 @@ const Courseoverviewpaid: React.FC = () => {
                                               <IonItem
                                                 slot="header"
                                                 lines="inset"
+                                                onClick={()=> {
+                                                  if (sub_chapter.protected &&
+                                                    sub_chapter.preview) {
+                                                    navigateToCourseInner(sub_chapter.id);
+                                                  }                              
+                                                    }}
                                               >
                                                 <IonLabel
                                                   style={{ color: "#636363" }}
