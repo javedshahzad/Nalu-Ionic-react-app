@@ -21,6 +21,7 @@ import { useHistory } from "react-router-dom";
 import NotificationBell from "../../components/NotificationBell";
 
 import "./journalcalendarremade.scss";
+import MoonPhasesServce from "../../MoonPhasesService";
 
 const months = [
   "January",
@@ -85,6 +86,28 @@ const JournalCalendarRemade = () => {
     const dateParam = `${year}-${
       +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
     }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+
+    // const [moonPhase, setMoonPhase] = useState([]);
+
+    // const getMoonPhaseData = async () => {
+    //   try {
+    //     const data = await MoonPhasesServce.get(
+    //       `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${dateParam}`
+    //     );
+    //     setMoonPhase(data);
+    //     console.log("phase", moonPhase);
+    //     return data;
+    //   } catch (error) {
+    //     console.error(error);
+    //     return null;
+    //   }
+    // };
+
+    // useEffect(() => {
+    //   setTimeout(() => {
+    //     getMoonPhaseData();
+    //   }, 2000);
+    // }, []);
 
     const url = `/journaladditionremade/${dateParam}`;
     history.push(url);
@@ -254,7 +277,7 @@ const JournalCalendarRemade = () => {
               <NotificationBell />
             </IonButton>
           </IonButtons>
-        </IonToolbar>{" "}
+        </IonToolbar>
         <div className="journalcalendar-main">
           <div className="calendar-container" onScroll={() => handleScroll()}>
             <div className="calendar-scrollable">
