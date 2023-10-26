@@ -38,13 +38,17 @@ const Eventdetail: React.FC = () => {
   const [dateError, setDateError] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
-
+  const [isDateSelected, setIsDateSelected] = useState(false);
+  
+  
+  
   const location = useLocation();
   const data: any = location?.state;
+  const [event_Id, setEventId] = useState(data?.event_id);
   let axiosCancelToken;
 
   useEffect(() => {
-    getEventByID(data?.event_id);
+    getEventByID(event_Id);
     return () => {
       if (axiosCancelToken) {
         axiosCancelToken.cancel("Component unmounted");
@@ -83,29 +87,77 @@ const Eventdetail: React.FC = () => {
       });
   };
 
-  const handleDateChange = (event, event_id,type) => {
+  const handleDateChange = (event, date_event, registration_link) => {
+    console.log(date_event);
     const value = event.target.value;
-    if(type === 'series'){
       axios
-      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=en`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        
-      });
-    }
+        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/event/${date_event.event_id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
+        })
+          .then((response) => {
+            console.log(response.data);
+            setEvent(response.data);
+            setIsDateSelected(true)
+  
+          })
+          .catch((error) => {
+            console.log(error);
+  
+          });     
 
     setSelectedDate(value);
     setDateError(
       value.trim() === "" ? "Please select a date to continue." : ""
     );
   };
+  const handleDateChangeWebinar = (event, date_event, registration_link)=> {
+    const value = event.target.value;
+
+    const updatedRegistrationLink = registration_link.replace('{webinar_id}', date_event.webinar_id);
+    axios.get(updatedRegistrationLink, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+
+        if (response.data === 'Accepted') {
+          setIsDateSelected(true)
+        }
+    
+      })
+      .catch((error) => {
+        console.log(error);
+    
+      }); 
+      setSelectedDate(value);
+    setDateError(
+      value.trim() === "" ? "Please select a date to continue." : ""
+    );
+  }
+
+  const handleIcons = (URL) => {
+    setIsLoading(true)
+    axios
+      .post(URL, null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
+        }
+      })
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.message === 'Updated successfully') {getEventByID(event_Id)}
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false)
+
+      });
+  }
+  
 
   return (
     <>
@@ -153,7 +205,7 @@ const Eventdetail: React.FC = () => {
               <div className="content ion-padding">
                 <div className="category-tag">
                   <IonItem lines="none">
-                    <IonLabel>Monthly</IonLabel>
+                    <IonLabel>{event?.schedule}</IonLabel>
                   </IonItem>
                 </div>
 
@@ -181,32 +233,51 @@ const Eventdetail: React.FC = () => {
                       </IonLabel>
                     </IonItem>
 
-                    <div className="desc">
-                      <p
-                        className="ion-text-wrap"
-                        dangerouslySetInnerHTML={{ __html: event?.content }}
-                      ></p>
-                    </div>
+{/* <div className="desc">
+  {event?.content?.trim() === "" ? (
+    <p>No content available</p>
+  ) : (
+    <p
+      className="ion-text-wrap"
+      dangerouslySetInnerHTML={{ __html: event.content }}
+    ></p>
+  )}
+</div> */}
+
+
                   </div>
                   <div className="signup-form">
                     <div className="date-selector">
                       <IonItem lines="none" className="ion-text-left">
-                        <IonSelect
-                          className="ion-text-left "
-                          placeholder={event?.type === "single" ? "" : "Select Date"}
-                          mode="md"
-                          disabled={event?.type === "single"}
-                          value={selectedDate}
-                          label={event?.type === "single" ? event?.schedule : ''}
-                          onIonChange={(e) => handleDateChange(e, event?.dates?.find(date => date.date === e.target.value)?.event_id, event?.type)}
-                          >
-                          {event?.dates?.map((date, date_index) => (
-                            <IonSelectOption
-                             key={date_index} value={date.date}>
-                              {date.date}
-                            </IonSelectOption>
-                          ))}
-                        </IonSelect>
+                        {
+                          event?.type === "single" ? (
+                            <p>{event?.schedule}</p>
+                          )
+                            : (
+                              <IonSelect
+                                className="ion-text-left "
+                                placeholder={"Select Date"}
+                                mode="md"
+                                value={selectedDate}
+                                onIonChange={(e) =>{
+                                  if(event?.type === 'series'){
+
+                                    handleDateChange(e, event?.dates?.find(date => date.date === e.target.value), event?.registration_link)
+                                  }else{
+                                    handleDateChangeWebinar(e, event?.dates?.find(date => date.date === e.target.value), event?.registration_link)
+                                  }
+                                  }
+                                }
+                              >
+                                {event?.dates?.map((date, date_index) => (
+                                  <IonSelectOption
+                                    key={date_index} value={date.date}>
+                                    {date.date}
+                                  </IonSelectOption>
+                                ))}
+                              </IonSelect>
+                            )
+                        }
                       </IonItem>
 
                       {dateError && (
@@ -214,34 +285,90 @@ const Eventdetail: React.FC = () => {
                       )}
                     </div>
 
-                    <div className="btns-holder">
-                      <IonRow>
-                        <IonCol size="4" id="register">
-                          <IonButton fill="clear">
-                            <p>
-                              <IonIcon icon={checkmarkCircleOutline} /> <br />
-                              Register
-                            </p>
-                          </IonButton>
-                        </IonCol>
-                        <IonCol size="4">
-                          <IonButton fill="clear" color="dark">
-                            <p>
-                              <IonIcon icon={bookmarkOutline} /> <br />
-                              Bookmark
-                            </p>
-                          </IonButton>
-                        </IonCol>
-                        <IonCol size="4">
-                          <IonButton fill="clear" color="dark">
-                            <p>
-                              <IonIcon icon={closeCircleOutline} /> <br />
-                              Cancel
-                            </p>
-                          </IonButton>
-                        </IonCol>
-                      </IonRow>
-                    </div>
+                    {isDateSelected === true || event?.type === "single" ? (
+  <div className="btns-holder">
+    <IonRow>
+      
+      {event?.type === "everwebinar" && isDateSelected && (
+        <IonCol size="4" id={"register"}>
+          <IonButton
+            fill="clear"
+          >
+            <p>
+              <IonIcon icon={checkmarkCircleOutline} /> <br />
+              Register
+            </p>
+          </IonButton>
+        </IonCol>
+      )}
+      {event?.type === "series" || event?.type === "single" && (
+        <>
+        <IonCol
+        size="4"
+        id={event?.is_registered === true ? "register" : ""}
+      >
+        <IonButton
+          onClick={() => handleIcons(event?.registration_link)}
+          fill="clear"
+          color={
+            event?.is_registered === false || event?.is_registered === null
+              ? "dark"
+              : ""
+          }
+        >
+          <p>
+            <IonIcon icon={checkmarkCircleOutline} /> <br />
+            Register
+          </p>
+        </IonButton>
+      </IonCol>
+          <IonCol
+            size="4"
+            id={event?.is_bookmarked === true ? "register" : ""}
+          >
+            <IonButton
+              onClick={() => handleIcons(event?.bookmark_link)}
+              fill="clear"
+              color={
+                event?.is_bookmarked === false ||
+                event?.is_bookmarked === null
+                  ? "dark"
+                  : ""
+              }
+            >
+              <p>
+                <IonIcon icon={bookmarkOutline} /> <br />
+                Bookmark
+              </p>
+            </IonButton>
+          </IonCol>
+          <IonCol
+            size="4"
+            id={event?.is_cancelled === true ? "register" : ""}
+          >
+            <IonButton
+              onClick={() => handleIcons(event?.cancel_link)}
+              fill="clear"
+              color={
+                event?.is_cancelled === false ||
+                event?.is_cancelled === null
+                  ? "dark"
+                  : ""
+              }
+            >
+              <p>
+                <IonIcon icon={closeCircleOutline} /> <br />
+                Cancel
+              </p>
+            </IonButton>
+          </IonCol>
+        </>
+      )}
+    </IonRow>
+  </div>
+) : null}
+
+
                   </div>
                 </div>
               </div>

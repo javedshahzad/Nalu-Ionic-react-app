@@ -183,7 +183,8 @@ const Mygroups: React.FC = () => {
                     <div className="dates flex al-center jc-between">
                       <div>
                         <p>{event?.schedule}</p>
-                        <h4>{event?.title}</h4>
+                        <h4 dangerouslySetInnerHTML={{ __html: event?.title }}></h4>
+
                       </div>
                       <IonIcon
                         slot="start"
@@ -194,7 +195,7 @@ const Mygroups: React.FC = () => {
                             ? "assets/imgs/cross-icon.svg"
                             : event?.is_registered
                             ? checkmarkCircle
-                            : "assets/imgs/closed-letter.svg"
+                            : "assets/imgs/closed-letterr.svg"
                         }
                       />
                     </div>
