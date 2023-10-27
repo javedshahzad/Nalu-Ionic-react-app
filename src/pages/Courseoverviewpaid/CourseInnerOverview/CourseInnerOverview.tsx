@@ -62,6 +62,7 @@ import {
 } from "@vidstack/react/player/layouts/default";
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
+import { Player } from './../../../components/videoPlayer/Player';
 
 
 const CourseInnerOverview: React.FC = () => {
@@ -172,14 +173,18 @@ const CourseInnerOverview: React.FC = () => {
               <div className="main_div">
                 <div className="player_div">
                   {togglePlay === "video" && courseData?.video_url ? (
-                    <MediaPlayer className="player" src={courseData?.video_url? courseData?.video_url : ""}>
-                      <MediaProvider>
-                        <DefaultVideoLayout
-                          thumbnails={courseData?.video_thumbnail}
-                          icons={defaultLayoutIcons}
-                        />
-                      </MediaProvider>
-                    </MediaPlayer>
+                    // <MediaPlayer className="player" src={courseData?.video_url? courseData?.video_url : ""}>
+                    //   <MediaProvider>
+                    //     <DefaultVideoLayout
+                    //       thumbnails={courseData?.video_thumbnail}
+                    //       icons={defaultLayoutIcons}
+                    //     />
+                    //   </MediaProvider>
+                    // </MediaPlayer>
+                    <Player url ={courseData?.video_url} 
+                    video_thumbnail={courseData?.video_thumbnail}
+                     source={'video'}/>
+
                   ) : (
                     <>
                       <div className="audio_player_div">
@@ -196,7 +201,7 @@ const CourseInnerOverview: React.FC = () => {
                           </IonRow>
                         </IonGrid>
 
-                        <MediaPlayer
+                        {/* <MediaPlayer
                           src={
                             "https://media-files.vidstack.io/sprite-fight/audio.mp3"
                           }
@@ -207,7 +212,9 @@ const CourseInnerOverview: React.FC = () => {
                             icons={defaultLayoutIcons}
                             thumbnails={courseData?.audio_thumbnail}
                           />
-                        </MediaPlayer>
+                        </MediaPlayer> */}
+                    <Player url ={'https://media-files.vidstack.io/sprite-fight/audio.mp3'} source={'audio'}/>
+
                       </div>
                     </>
                   )}
