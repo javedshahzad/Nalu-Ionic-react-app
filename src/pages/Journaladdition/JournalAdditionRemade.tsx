@@ -9,6 +9,7 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonInput,
   IonItem,
   IonLabel,
   IonModal,
@@ -28,6 +29,7 @@ import { add, filterOutline, optionsOutline } from "ionicons/icons";
 import Additionfilter from "../modals/Additionfilter/Additionfilter";
 import JournalAdditionApiService from "../../JournalService";
 import { object } from "prop-types";
+import { useHistory } from "react-router-dom";
 
 function JournalAdditionRemade() {
   const { dateParam } = useParams<{ dateParam: string }>();
@@ -66,13 +68,24 @@ function JournalAdditionRemade() {
   useEffect(() => {
     getJournalEntries();
   }, []);
+  const [inputValues, setInputValues] = useState({});
 
-  const [textareaValues, setTextareaValues] = useState([]);
+  const onInputChange = (event: any) => {
+    const { id, value } = event.target;
+    setInputValues((prevInputValues) => ({
+      ...prevInputValues,
+      [id]: value,
+    }));
+  };
 
-  const handleTextareaChange = (index, event) => {
-    const newValues = [...textareaValues];
-    newValues[index] = event.target.value;
-    setTextareaValues(newValues);
+  useEffect(() => {
+    console.log("Input Values:", inputValues);
+  }, [inputValues]);
+
+  const history = useHistory();
+
+  const addCustomCategory = () => {
+    history.push(`/addcustomcategory/${dateParam}`);
   };
 
   const rangeValues = [1, 2, 3, 4, 5];
@@ -309,7 +322,14 @@ function JournalAdditionRemade() {
             <Additionfilter onClose={() => setModalOpen(false)} />
           </IonModal>
         </div>
-
+        <div className="search-holder">
+          <IonItem lines="none">
+            <IonSearchbar></IonSearchbar>
+            <IonButton slot="end" fill="clear" color="dark">
+              <IonIcon icon={filterOutline} />
+            </IonButton>
+          </IonItem>
+        </div>
         {/* Journal Entries */}
         {isLoading ? (
           <div
@@ -615,23 +635,24 @@ function JournalAdditionRemade() {
                               </IonButton>
                             </div>
                             <div className="tags-holder">
-                              <IonRow>
+                              <div>
                                 {
                                   <div className="section last">
                                     <div className="the-form">
                                       <div className="input-item">
                                         <IonItem lines="none">
-                                          <IonTextarea
+                                          <IonInput
+                                            id={entry.key}
                                             placeholder="Input Text"
-                                            value={entry.label}
-                                            //  onChange={(event) => handleTextareaChange(index, event)}
+                                            value={inputValues[entry.key]}
+                                            onIonChange={onInputChange}
                                           />
                                         </IonItem>
                                       </div>
                                     </div>
                                   </div>
                                 }
-                              </IonRow>
+                              </div>
                             </div>
                           </div>
                         )}
@@ -640,6 +661,12 @@ function JournalAdditionRemade() {
                   ))}
                 </div>
               ))}
+            <div className="add-custom-category ion-text-center ion-padding-top">
+              <IonButton onClick={addCustomCategory}>
+                <IonIcon icon={add} />
+              </IonButton>
+              <h4>Add Custom Category</h4>
+            </div>
           </>
         )}
       </IonContent>

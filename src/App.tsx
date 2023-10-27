@@ -73,6 +73,7 @@ import GroupDetails from "./pages/Chat/GroupDetails/GroupDetails";
 import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
 import MyGroups from "./pages/Chat/mygroups/MyGroups";
 import JournalEntries from "./pages/Journaladdition/JournalEntries";
+import Addcustomcategory from "./pages/Addcustomcategory/Addcustomcategory";
 
 setupIonicReact({
   mode: "ios",
@@ -268,6 +269,9 @@ const App: React.FC = () => {
           </Route>
           <Route exact path="/journalentries">
             <JournalEntries />
+          </Route>
+          <Route exact path="/addcustomcategory/:dateParam">
+            <Addcustomcategory />
           </Route>
 
           <Route
