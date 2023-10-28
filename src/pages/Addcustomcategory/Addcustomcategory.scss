@@ -165,17 +165,25 @@
         height: 54px;
       }
     }
+    .addField_btn {
+      padding: 10px;
+      border-radius: 20px;
+    }
+
+    .addField_btn:active {
+      opacity: 0.25px;
+    }
+  }
+  .the-form {
+    margin-top: 0 !important;
   }
 
-  .addField_btn {
-    padding: 10px;
-    border-radius: 20px;
+  .custom-category {
+    display: flex;
+    align-items: center;
+    background-color: #fefcfa;
+    padding: 16px 20px 16px 20px;
+    border-radius: 10px;
+    border: 1px solid #f0f0f0;
   }
-
-  .addField_btn:active {
-    opacity: 0.25px;
-  }
-}
-.the-form {
-  margin-top: 0 !important;
 }

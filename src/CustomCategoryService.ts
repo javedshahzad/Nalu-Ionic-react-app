@@ -8,12 +8,10 @@ const CustomCategoryApiService = {
   },
 
   post: async (url: string, data: any, token: any) => {
-    // try {
-
     const customHeaders = {
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     };
     const response = await axios.post(url, data, customHeaders);
     return response.data;

@@ -21,12 +21,22 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { add, addOutline, filterOutline, optionsOutline } from "ionicons/icons";
-
+import {
+  add,
+  addOutline,
+  closeOutline,
+  filterOutline,
+  optionsOutline,
+  pencilOutline,
+  trashBin,
+  trashBinOutline,
+} from "ionicons/icons";
+import pen from "../../assets/images/Pen.svg";
 import "./Addcustomcategory.scss";
 import { useEffect, useRef, useState } from "react";
 import CustomCategoryApiService from "../../CustomCategoryService";
 import { OverlayEventDetail } from "@ionic/core";
+import tokenService from "../../token";
 
 const Addcustomcategory: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -50,10 +60,14 @@ const Addcustomcategory: React.FC = () => {
   //   const [selectedValueError, setValueError] = useState("");
 
   const [selectedLogoValue, setSelectedLogoValue] = useState("");
+  const [categoryIcon, setCategoryIcon] = useState("");
   const [selectedType, setSelectedType] = useState("");
   const [selectedLogoError, setSelectedLogoError] = useState("");
   const [allFields, setAllFields] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [editCategory, setEditCategory] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [fieldId, setFieldId] = useState(null);
 
   const getIcons = async () => {
     try {
@@ -72,43 +86,50 @@ const Addcustomcategory: React.FC = () => {
 
   useEffect(() => {
     getIcons();
-    console.log("icons", icons);
   }, []);
 
   const modal = useRef<HTMLIonModalElement>(null);
   const fieldModal = useRef<HTMLIonModalElement>(null);
 
   function confirm() {
-    const newCategory = {
-      generalLabel,
-      customName,
-      selectedType,
-      selectedLogoValue,
+    const newCategory: any = {
+      label: customName,
+      type: selectedType,
+      icon: selectedLogoValue,
+      value: null,
     };
 
+    newCategory.key = Date.now().toString(32) + Math.random().toString(16);
+
     setCustomCategoryData([...customCategoryData, newCategory]);
-    setAllFields([...allFields, ...customCategoryData]);
 
     setCustomName("");
-    // setSelectedValue("");
     setSelectedLogoValue("");
     setSelectedType("");
-    setGeneralLabel("");
+    setModalOpen(false);
 
     modal.current?.dismiss();
   }
 
-  const CategoryLabel = ({ label, data, onLabelClick }) => {
-    return (
-      <div className="Addcustomcategory">
-        <IonItem lines="none" onClick={() => onLabelClick(data)}>
-          {label}
-        </IonItem>
-      </div>
-    );
-  };
+  useEffect(() => {}, [customCategoryData]);
+
   const handleLabelClick = (data) => {
     setSelectedCategory(data);
+    setCustomName(data.customName);
+    setSelectedLogoValue(data.selectedLogoValue);
+    setSelectedType(data.selectedType);
+    setModalOpen(true);
+    setFieldId(data.key);
+
+    fieldModal.current?.present(); // Open the field modal
+  };
+  const addNewField = () => {
+    setCustomName("");
+    setSelectedLogoValue("");
+    setSelectedType("");
+    setFieldId(null);
+    setModalOpen(true);
+
     fieldModal.current?.present(); // Open the field modal
   };
 
@@ -144,28 +165,82 @@ const Addcustomcategory: React.FC = () => {
     );
   };
 
-  //   const handleRadioChange = (event) => {
-  //     // setSelectedValue(event.detail.value);
-  //     const value = event.target.value;
-  //     // setValueError(value.trim() === "" ? "Please select a category." : "");
-  //   };
+  const handleDeleteField = (id: any) => {
+    const updatedCustomCategoryData = customCategoryData.filter(
+      (obj) => obj.key !== id
+    );
+    setCustomCategoryData(updatedCustomCategoryData);
+    setFieldId(null);
+  };
+
+  const handleUpdateField = (id: any) => {
+    const editCategory: any = {
+      label: customName,
+      type: selectedType,
+      icon: selectedLogoValue,
+      value: null,
+      key: id,
+    };
+
+    setFieldId(id);
+
+    // const newArray = [];
+
+    const updatedItems = [...customCategoryData];
+
+    // Find the index of the item you want to replace
+    const index = updatedItems.findIndex((item) => item.key === id);
+
+    if (index !== -1) {
+      updatedItems[index] = editCategory;
+      0;
+
+      setCustomCategoryData(updatedItems);
+    }
+
+    setCustomName("");
+    setSelectedLogoValue("");
+    setSelectedType("");
+    setModalOpen(false);
+
+    modal.current?.dismiss();
+  };
 
   const handleLogoChange = (event: any) => {
     const value = event.target.value;
     setSelectedLogoValue(event.detail.value);
-    setSelectedLogoError(value.trim() === "" ? "Please select a Logo." : "");
+  };
+  const handleCategoryIcon = (event: any) => {
+    const value = event.target.value;
+    setCategoryIcon(event.detail.value);
   };
 
   const handleTypeChange = (event: any, clickedType: any) => {
     const value = event.target.value;
-    // setSelectedType(event.detail.value);
     setSelectedType(clickedType);
-    setSelectedLogoError(value.trim() === "" ? "Please select a Logo." : "");
   };
 
-  //   useEffect(() => {
-  //     console.log("Selected Type changed:", selectedType);
-  //   }, [selectedType]);
+  const saveCustomCategoryData = () => {
+    const body = {
+      key: "custom_user_fields",
+      label: generalLabel,
+      type: "group",
+      fields: customCategoryData,
+    };
+
+    CustomCategoryApiService.post(
+      `https://app.mynalu.com/wp-json/nalu-app/v1/add-custom-field?category\_name=${generalLabel}&category_icon=${categoryIcon}&type="group"`,
+      body,
+      tokenService.getWPToken()
+    ).then(
+      (data) => {
+        console.log("data from custom category api", data);
+      },
+      (err) => {
+        console.log("err sending data", err);
+      }
+    );
+  };
 
   return (
     <IonPage className="Addcustomcategory">
@@ -199,62 +274,109 @@ const Addcustomcategory: React.FC = () => {
             </div>
           </div>
         </div>
-
+        <div className="section ion-padding-bottom">
+          <div className="title flex al-center jc-between ion-padding-bottom">
+            <h3 style={{ fontSize: "15px" }}>Category Icon</h3>
+          </div>
+          <IonRadioGroup value={categoryIcon} onIonChange={handleCategoryIcon}>
+            <IonRow>
+              {icons.map((icon, index) => (
+                <IonCol id="imgg" key={index}>
+                  <IonItem lines="none">
+                    <IonLabel className="ion-text-center">
+                      <img src={icon} alt={`Icon ${index}`} height={20} />
+                    </IonLabel>
+                    <IonRadio value={icon} mode="md"></IonRadio>
+                  </IonItem>
+                </IonCol>
+              ))}
+            </IonRow>
+          </IonRadioGroup>
+        </div>
         <IonButtons>
-          <IonButton id="open-modal" expand="block">
+          <IonButton id="open-modal" expand="block" onClick={addNewField}>
             <IonLabel>Add field</IonLabel>
             <IonIcon icon={addOutline} />
           </IonButton>
         </IonButtons>
 
         <div>
-          {allFields.map((data, index) => (
-            <CategoryLabel
-              key={index}
-              label={data.generalLabel}
-              data={data}
-              onLabelClick={handleLabelClick}
-            />
+          {customCategoryData.map((data, index) => (
+            <>
+              <ul style={{ padding: "0px" }}>
+                <li className="custom-category">
+                  <span style={{ width: "70%" }}>{data.label}</span>
+                  <div
+                    style={{
+                      width: "30%",
+                      display: "flex",
+                      justifyContent: "end",
+                    }}
+                  >
+                    <button
+                      style={{
+                        backgroundColor: "transparent",
+                        marginRight: "5px",
+                      }}
+                      id="open-modal"
+                      onClick={() => handleLabelClick(data)}
+                      type="button"
+                    >
+                      <img src={pen} />
+                    </button>
+                    <button
+                      style={{
+                        backgroundColor: "transparent",
+                      }}
+                      onClick={() => handleDeleteField(data.key)}
+                      type="button"
+                    >
+                      <IonIcon icon={trashBin} style={{ color: "#f06f74" }} />
+                    </button>
+                  </div>
+                </li>
+              </ul>
+            </>
           ))}
-
-          <IonModal
-            id="example-modal"
-            ref={fieldModal}
-            trigger="open-custom-dialog"
-          >
-            <div className="wrapper">
-              {customCategoryData.map((data, index) => (
-                <>
-                  <h1>{data.customName}</h1>
-                  <IonList lines="none">
-                    <IonItem>
-                      <IonLabel>{data.selectedType}</IonLabel>
-                    </IonItem>
-                  </IonList>
-                </>
-              ))}
-            </div>
-          </IonModal>
         </div>
 
         <IonModal
           ref={modal}
-          trigger="open-modal"
-          onWillDismiss={(ev) => onWillDismiss(ev)}
           className="Addcustomcategory"
+          isOpen={modalOpen}
+          backdropDismiss={false}
         >
           <IonHeader>
             <IonToolbar>
               <IonButtons slot="start">
-                <IonButton onClick={() => modal.current?.dismiss()}>
+                <IonButton
+                  onClick={() => {
+                    setModalOpen(false);
+                    setFieldId(null);
+                  }}
+                >
                   Cancel
                 </IonButton>
               </IonButtons>
               <IonTitle>Add Field</IonTitle>
+
               <IonButtons slot="end">
-                <IonButton strong={true} onClick={() => confirm()}>
-                  Confirm
-                </IonButton>
+                {fieldId == null ? (
+                  <>
+                    <IonButton strong={true} onClick={() => confirm()}>
+                      Confirm
+                    </IonButton>
+                  </>
+                ) : (
+                  <>
+                    <IonButton
+                      strong={true}
+                      onClick={() => handleUpdateField(fieldId)}
+                    >
+                      Save
+                    </IonButton>
+                  </>
+                )}
               </IonButtons>
             </IonToolbar>
           </IonHeader>
@@ -280,6 +402,7 @@ const Addcustomcategory: React.FC = () => {
                 </div>
               </div>
             </div>
+
             <div className="section ion-padding-bottom">
               <div className="title flex al-center jc-between ion-padding-bottom">
                 <h3 style={{ fontSize: "15px" }}>Choose Category Type</h3>
@@ -326,7 +449,7 @@ const Addcustomcategory: React.FC = () => {
                           <IonLabel className="ion-text-center">
                             <img src={icon} alt={`Icon ${index}`} height={20} />
                           </IonLabel>
-                          <IonRadio value={`logo${index}`} mode="md"></IonRadio>
+                          <IonRadio value={icon} mode="md"></IonRadio>
                         </IonItem>
                       </IonCol>
                     ))}
@@ -341,7 +464,11 @@ const Addcustomcategory: React.FC = () => {
         </IonModal>
 
         <div className="btn-holder ion-text-center ion-padding-vertical">
-          <IonButton expand="block" disabled={!isFormValid}>
+          <IonButton
+            expand="block"
+            disabled={!isFormValid && customCategoryData.length === 0}
+            onClick={saveCustomCategoryData}
+          >
             Save
           </IonButton>
         </div>

@@ -19,7 +19,7 @@ import setting from "../../assets/images/setting.svg";
 import { chevronDownOutline, searchOutline } from "ionicons/icons";
 import { useHistory } from "react-router-dom";
 import NotificationBell from "../../components/NotificationBell";
-
+import { useParams } from "react-router-dom";
 import "./journalcalendarremade.scss";
 import MoonPhasesServce from "../../MoonPhasesService";
 
@@ -40,6 +40,8 @@ const months = [
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
+let url = "";
+
 const JournalCalendarRemade = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [year, setYear] = useState(new Date().getFullYear());
@@ -48,6 +50,9 @@ const JournalCalendarRemade = () => {
   const [currentdivInView, setCurrentDivInView] = useState("January");
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeMonthIndex, setActiveMonthIndex] = useState(null);
+  const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
+
+  const { dateParam } = useParams<{ dateParam: string }>();
 
   const history = useHistory(); // Use useHistory for navigation
 
@@ -87,29 +92,27 @@ const JournalCalendarRemade = () => {
       +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
     }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
-    // const [moonPhase, setMoonPhase] = useState([]);
+    url = `/journaladditionremade/${dateParam}`;
+  };
 
-    // const getMoonPhaseData = async () => {
-    //   try {
-    //     const data = await MoonPhasesServce.get(
-    //       `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${dateParam}`
-    //     );
-    //     setMoonPhase(data);
-    //     console.log("phase", moonPhase);
-    //     return data;
-    //   } catch (error) {
-    //     console.error(error);
-    //     return null;
-    //   }
-    // };
+  const getIcons = async () => {
+    try {
+      const data = await MoonPhasesServce.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${dateParam}`
+      );
 
-    // useEffect(() => {
-    //   setTimeout(() => {
-    //     getMoonPhaseData();
-    //   }, 2000);
-    // }, []);
+      setMoonPhaseIcon(data);
+      console.log("moon phases", data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-    const url = `/journaladditionremade/${dateParam}`;
+  useEffect(() => {
+    getIcons();
+  }, []);
+
+  const goToJournalAddition = () => {
     history.push(url);
   };
 
@@ -117,7 +120,7 @@ const JournalCalendarRemade = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleMonthChange = (event) => {
+  const handleMonthChange = (event: any) => {
     setCurrentMonth(event.target.value);
   };
 
@@ -219,6 +222,7 @@ const JournalCalendarRemade = () => {
         </li>
       );
     }
+
     calendarMonths.push(
       <div className="calendar-month" key={`month-${m}`}>
         <div className="cur-month-year">
@@ -337,7 +341,9 @@ const JournalCalendarRemade = () => {
               <img src={setting} alt="" />
             </IonButton>
           </div>
-          <IonButton className="period-btn">End of Period</IonButton>
+          <IonButton className="period-btn" onClick={goToJournalAddition}>
+            End of Period
+          </IonButton>
         </div>
       </IonContent>
     </IonPage>

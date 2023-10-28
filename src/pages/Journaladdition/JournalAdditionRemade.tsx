@@ -30,6 +30,8 @@ import Additionfilter from "../modals/Additionfilter/Additionfilter";
 import JournalAdditionApiService from "../../JournalService";
 import { object } from "prop-types";
 import { useHistory } from "react-router-dom";
+import CustomCategoryApiService from "../../CustomCategoryService";
+import tokenService from "../../token";
 
 function JournalAdditionRemade() {
   const { dateParam } = useParams<{ dateParam: string }>();
@@ -251,6 +253,30 @@ function JournalAdditionRemade() {
     }
   };
 
+  const updateField = (val: any, fields: any) => {
+    console.log("feilds data");
+
+    CustomCategoryApiService.post(
+      `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`,
+      {
+        entries: [
+          {
+            key: fields.key,
+            value: val,
+          },
+        ],
+      },
+      tokenService.getWPToken()
+    ).then(
+      (data) => {
+        console.log("data from custom category api", data);
+      },
+      (err) => {
+        console.log("err sending data", err);
+      }
+    );
+  };
+
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
@@ -374,6 +400,12 @@ function JournalAdditionRemade() {
                                           <IonLabel>{fields.label}</IonLabel>
                                           <IonCheckbox
                                             checked={fields.true_false}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                fields
+                                              )
+                                            }
                                           />
                                         </IonItem>
                                       </IonCol>
@@ -429,6 +461,12 @@ function JournalAdditionRemade() {
                                             pinFormatter={(value: number) =>
                                               `${value}`
                                             }
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                field
+                                              )
+                                            }
                                           ></IonRange>
                                           <div className="tick-labels">
                                             {rangeValues.map((values) => (
@@ -474,6 +512,12 @@ function JournalAdditionRemade() {
                                           <IonLabel>{fields.label}</IonLabel>
                                           <IonCheckbox
                                             checked={fields.true_false}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                fields
+                                              )
+                                            }
                                           />
                                         </IonItem>
                                       </IonCol>
@@ -509,6 +553,12 @@ function JournalAdditionRemade() {
                                           <IonLabel>{fields.label}</IonLabel>
                                           <IonCheckbox
                                             checked={fields.true_false}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                fields
+                                              )
+                                            }
                                           />
                                         </IonItem>
                                       </IonCol>
@@ -544,6 +594,12 @@ function JournalAdditionRemade() {
                                           <IonLabel>{fields.label}</IonLabel>
                                           <IonCheckbox
                                             checked={fields.true_false}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                fields
+                                              )
+                                            }
                                           />
                                         </IonItem>
                                       </IonCol>
@@ -579,6 +635,12 @@ function JournalAdditionRemade() {
                                           <IonLabel>{fields.label}</IonLabel>
                                           <IonCheckbox
                                             checked={fields.true_false}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                fields
+                                              )
+                                            }
                                           />
                                         </IonItem>
                                       </IonCol>
@@ -614,6 +676,12 @@ function JournalAdditionRemade() {
                                           <IonLabel>{fields.label}</IonLabel>
                                           <IonCheckbox
                                             checked={fields.true_false}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                fields
+                                              )
+                                            }
                                           />
                                         </IonItem>
                                       </IonCol>
@@ -645,7 +713,12 @@ function JournalAdditionRemade() {
                                             id={entry.key}
                                             placeholder="Input Text"
                                             value={inputValues[entry.key]}
-                                            onIonChange={onInputChange}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                entry
+                                              )
+                                            }
                                           />
                                         </IonItem>
                                       </div>

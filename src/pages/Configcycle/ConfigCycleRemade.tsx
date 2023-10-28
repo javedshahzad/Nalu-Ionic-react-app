@@ -29,6 +29,8 @@ const months = [
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
+let url = "";
+
 function ConfigCycleRemade() {
   const [isOpen, setIsOpen] = useState(false);
   const [year, setYear] = useState(new Date().getFullYear());
@@ -56,6 +58,15 @@ function ConfigCycleRemade() {
   const handleOnClick = (dateIndex, monthIndex) => {
     setActiveIndex(dateIndex);
     setActiveMonthIndex(monthIndex);
+
+    const tempMonthIndex = monthIndex + 1 + "";
+    const tempDateIndex = dateIndex + "";
+
+    const dateParam = `${year}-${
+      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+
+    // url = `/journaladditionremade/${dateParam}`;
   };
 
   const handleClick = () => {
