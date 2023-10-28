@@ -61,14 +61,14 @@ const Onboarding: React.FC = () => {
           <IonButton expand="block" routerLink="/questioning">{t('onboarding.get_started')}</IonButton>
         </div>
         <div className="bottom-btn animate__animated animate__slideInUp">
-        <IonButton expand="block" fill="clear" color="dark">{t('onboarding.account')}</IonButton>
+        <IonButton expand="block" fill="clear" color="dark" routerLink="/login">{t('onboarding.account')}</IonButton>
         </div>
-        <div className="btn-holder ion-text-center ion-padding-vertical">
+        {/*<div className="btn-holder ion-text-center ion-padding-vertical">
           <IonButton expand="block" onClick={()=>handleEnglishLanguageChange()}>Set English</IonButton>
         </div>
         <div className="btn-holder ion-text-center ion-padding-vertical">
           <IonButton expand="block" onClick={()=>handleGermanLanguageChange()}>Set German</IonButton>
-        </div>
+        </div>*/}
       </IonContent>
     </IonPage>
   );

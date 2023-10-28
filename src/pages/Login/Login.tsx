@@ -6,6 +6,7 @@ import {
   IonItem,
   IonPage,
   IonRippleEffect,
+  IonRouterLink,
 } from "@ionic/react";
 
 import "./Login.scss";
@@ -88,7 +89,6 @@ const Login: React.FC = () => {
       <IonContent className="ion-padding" fullscreen>
         <div className="title-holder ion-text-center">
           <h3> {t('login.login')}</h3>
-          <h6>{t('login.account')}</h6>
         </div>
         <div className="the-form">
     
@@ -127,7 +127,7 @@ const Login: React.FC = () => {
         </div>
       
 
-        <div className="social-holder ion-text-center">
+        {/*<div className="social-holder ion-text-center">
         <IonButton expand="block" routerLink="/questioning">
           <IonIcon slot="start" src="assets/imgs/icn-google.svg" />
           {t('login.google')}
@@ -137,16 +137,18 @@ const Login: React.FC = () => {
           <IonIcon slot="start" src="assets/imgs/icn-fb.svg" />
           {t('login.facebook')}
         </IonButton>
-        </div>
+        </div>*/}
 
+      <IonRouterLink routerLink="/registeration">
         <div className="bottom-holder flex al-center jc-center">
         <h6>{t('login.no_account')} &nbsp;&nbsp;</h6>
         <div className="btn ion-activatable ripple-parent rectangle">
         <IonRippleEffect></IonRippleEffect>
         <h5>{t('login.sign_up')}</h5>
       </div>
+      </div>
+      </IonRouterLink>
 
-        </div>
       </IonContent>
     </IonPage>
   );

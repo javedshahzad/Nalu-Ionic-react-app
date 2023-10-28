@@ -72,7 +72,7 @@ import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
 import MyGroups from "./pages/Chat/mygroups/MyGroups";
 import JournalAdditionRemade from './pages/Journaladdition/JournalAdditionRemade';
 import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
-import Addcustomcategory from "./pages/Addcustomcategory/Addcustomcategory";
+import Addcustomcategory from "./pages/Addcustomcategory/addcustomcategory";
 
 setupIonicReact({
   mode: "ios",
@@ -264,7 +264,9 @@ const App: React.FC = () => {
             </PrivateRoute>
           </Route>
           <Route exact path="/journalcalendarremade">
-            <JournalCalendarRemade />
+            <PrivateRoute>
+              <JournalCalendarRemade />
+            </PrivateRoute>
           </Route>
           <Route exact path="/configcycleremade">
             <ConfigCycleRemade />

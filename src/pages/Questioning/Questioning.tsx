@@ -14,21 +14,26 @@ import {
 
 import "./Questioning.scss";
 import { useTranslation } from 'react-i18next';
+import axios from "axios";
 
 const Questioning: React.FC = () => {
 
   const { t} = useTranslation();  
 
+  const setUserGoal = (goal: string) => {
+    localStorage.setItem('selectedGoal', goal);
+  };
+
   return (
     <IonPage className="questioning">
      
-      <IonHeader className="ion-no-border">
+      {/*<IonHeader className="ion-no-border">
         <IonToolbar>
           <IonTitle className="ion-text-center">
             {t('questioning.description_1')}
           </IonTitle>
         </IonToolbar>
-      </IonHeader>
+      </IonHeader>*/}
       <IonContent className=" ion-padding" fullscreen>
       <div className="title-holder ion-text-center animate__animated animate__zoomIn">
           <h3>How can we Support you?</h3>
@@ -39,7 +44,7 @@ const Questioning: React.FC = () => {
           </p>
         </div>
         <div className="the-list animate__animated animate__slideInUp">
-          <IonItem button detail={false} lines="none" routerLink="/registeration">
+          <IonItem button detail={false} lines="none" routerLink="/registeration" onClick={() => setUserGoal('endometriosis')}>
             <div className="thumb" slot="start">
               <img src="assets/imgs/q1.png" alt="" />
             </div>
@@ -51,7 +56,7 @@ const Questioning: React.FC = () => {
               <img src="assets/imgs/ce.png"/>
             </IonLabel>
           </IonItem>
-          <IonItem button lines="none" detail={false} routerLink="/registeration">
+          <IonItem button lines="none" detail={false} routerLink="/registeration" onClick={() => setUserGoal('amenorrhea')}>
             <div className="thumb" slot="start">
               <img src="assets/imgs/q2.png" alt="" />
             </div>
@@ -63,7 +68,7 @@ const Questioning: React.FC = () => {
               <img src="assets/imgs/ce.png"/>
             </IonLabel>
           </IonItem>
-          <IonItem button lines="none" detail={false} routerLink="/registeration">
+          <IonItem button lines="none" detail={false} routerLink="/registeration" onClick={() => setUserGoal('harmony')}>
             <div className="thumb" slot="start">
               <img src="assets/imgs/q3.png" alt="" />
             </div>
@@ -77,7 +82,7 @@ const Questioning: React.FC = () => {
           </IonItem>
         </div>
         <div className="bottom-btn">
-        <IonButton routerLink="/registeration" expand="block" fill="clear" color="dark">{t('questioning.description_6')}</IonButton>
+        <IonButton expand="block" fill="clear" color="dark" routerLink="/registeration" onClick={() => setUserGoal('harmony')}>{t('questioning.description_6')}</IonButton>
         </div>
       </IonContent>
     </IonPage>
