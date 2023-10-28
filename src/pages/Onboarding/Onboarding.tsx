@@ -50,25 +50,25 @@ const Onboarding: React.FC = () => {
         <div className="img-holder ion-text-center">
           <img src="assets/imgs/Menstrual calendar.gif" alt="" />
         </div>
-        <div className="content-holder ion-text-center">
+        <div className="content-holder ion-text-center animate__animated animate__zoomIn">
           <h3 className="ion-text-wrap">{t('onboarding.description_1')}</h3>
           <p className="ion-text-wrap">
-          {t('onboarding.description_2')}          
+          {t('onboarding.description_2')}
           </p>
         </div>
 
-        <div className="btn-holder ion-text-center ion-padding-vertical">
+        <div className="btn-holder ion-text-center ion-padding-vertical animate__animated animate__slideInUp">
           <IonButton expand="block" routerLink="/questioning">{t('onboarding.get_started')}</IonButton>
         </div>
-        <div className="bottom-btn">
-        <IonButton expand="block" fill="clear" color="dark">{t('onboarding.account')}</IonButton>
+        <div className="bottom-btn animate__animated animate__slideInUp">
+        <IonButton expand="block" fill="clear" color="dark" routerLink="/login">{t('onboarding.account')}</IonButton>
         </div>
-        <div className="btn-holder ion-text-center ion-padding-vertical">
+        {/*<div className="btn-holder ion-text-center ion-padding-vertical">
           <IonButton expand="block" onClick={()=>handleEnglishLanguageChange()}>Set English</IonButton>
         </div>
         <div className="btn-holder ion-text-center ion-padding-vertical">
           <IonButton expand="block" onClick={()=>handleGermanLanguageChange()}>Set German</IonButton>
-        </div>
+        </div>*/}
       </IonContent>
     </IonPage>
   );

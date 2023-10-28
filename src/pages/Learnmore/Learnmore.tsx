@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import {
   IonAvatar,
   IonBackButton,
@@ -12,6 +14,7 @@ import {
   IonPage,
   IonPopover,
   IonRippleEffect,
+  IonRouterLink,
   IonSelect,
   IonSelectOption,
   IonToolbar,
@@ -25,24 +28,50 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { useState } from "react";
 
 const Learnmore: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [dateError, setDateError] = useState('');
+  const [event, setEvent] = useState<any>(null);
 
-  // const handleDateChange = (event: CustomEvent<any>) => {
-  //   setDate(event.detail.value);
-  // };
+  useEffect(() => {
+    axios.get("https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/2133", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+      },
+    })
+    .then((response) => {
+      setEvent(response.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching event data:", error);
+    });
+  }, []);
+
   const isFormValid = !!selectedDate && !dateError;
-
-  const [date, setDate] = useState<string | null>(null);
-
-  const handleDateChange = (event) => {
+  
+  const handleDateChangeWebinar = (event, date_event) => {
     const value = event.target.value;
     setSelectedDate(value);
-    setDateError(value.trim() === '' ? 'Please select a date to continue.' : '');
-  };
+    setDateError(value.trim() === "" ? "Please select a date to continue." : "");
+}
+
+const handleRegistration = () => {
+  if (isFormValid) {
+      const updatedRegistrationLink = event?.registration_link.replace('{webinar_id}', selectedDate);
+      axios.post(updatedRegistrationLink, {}, {
+          headers: {
+              Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
+      })
+      .then((response) => {
+          console.log(response.data);
+      })
+      .catch((error) => {
+          console.log(error);
+      });
+  }
+}
   return (
     <IonPage className="learnmore">
       <IonContent className="ion-padding" fullscreen>
@@ -51,6 +80,7 @@ const Learnmore: React.FC = () => {
             Learn more about <br /> the NALU method
           </h3>
         </div>
+        
         <div className="slider">
           <Swiper
             modules={[Pagination]}
@@ -93,89 +123,60 @@ const Learnmore: React.FC = () => {
         <div className="webinar">
           <div className="title">
             <h3>Free Webinar:</h3>
-            <h6>3 Steps to a harmonious cycle</h6>
+            <h6>{event?.title}</h6>
           </div>
 
           <div className="webinar-card">
             <IonItem lines="none">
               <IonAvatar slot="start">
-                <img src="assets/imgs/user.png" alt="" />
+                <img src={event?.event_host?.image} alt="" />
               </IonAvatar>
               <IonLabel>
                 <p>Hosted by</p>
                 <h6>
-                  <span>Lisa Filipe</span>, NALU Co- Founder and Certified.
+                  <span>{event?.event_host?.title}</span>{event?.event_host?.description}
                 </h6>
-                <p>Hosted by</p>
               </IonLabel>
             </IonItem>
 
             <h5 className="ion-text-wrap">
-              Der naturliche Weg der NALU Method ohne Kunstliche Hormone oder
-              Medikamente - auch wenn deine Menstruation uber lange Zeit
-              ausbleibt, Unregelmassig ist oder zu Beschwerden fuhrt.
+              {event?.excerpt}
             </h5>
           </div>
 
-   
-        </div>
-
-        {/* <div>
-            <IonItem lines="none">
-              <IonLabel id="date">
-                {date ? (
-                  new Date(date).toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                  })
-                ) : (
-                  <span style={{ color: "gray" }}>Select Date</span>
-                )}
-              </IonLabel >
-            
-              <IonPopover
-                event="date"
-                mode="ios"
-                translucent={true}
-                showBackdrop={true}
-                trigger="date"
+          <div>
+            <IonItem lines="none" className="ion-text-left">
+              <IonSelect
+                className="ion-text-left "
+                placeholder={"Select Date"}
+                mode="md"
+                value={selectedDate}
+                onIonChange={(e) => {
+                  handleDateChangeWebinar(e, event?.dates?.find(date => date.date === e.target.value))
+                }}
               >
-                <IonContent className="date-popup">
-                  <IonDatetime
-                    value={date}
-                    onIonChange={handleDateChange}
-                    presentation="date"
-                  ></IonDatetime>
-                </IonContent>
-              </IonPopover>
+                {event?.dates?.map((date, date_index) => (
+                  <IonSelectOption
+                    key={date_index} value={date.date}>
+                    {date.date}
+                  </IonSelectOption>
+                ))}
+              </IonSelect>
             </IonItem>
-          </div> */}
-
-
-
-        <div className="date-selector">
-        <IonItem lines="none" className="ion-text-left">
-        <IonSelect className="ion-text-left "  placeholder="Select Date" mode="md"  value={selectedDate}
-            onIonChange={handleDateChange}>
-          <IonSelectOption value="Tuesday, 22.08.2023, 3 PM">Tuesday, 22.08.2023, 3 PM</IonSelectOption>
-          <IonSelectOption value="Wednesday, 24.08.2023, 6 PM">Wednesday, 24.08.2023, 6 PM</IonSelectOption>
-          <IonSelectOption value="orange">Friday, 25.08.2023, 8 PM</IonSelectOption>
-        </IonSelect>
-      </IonItem>
-
-      {dateError && <p className="error-message">{dateError}</p>}
+          </div>
         </div>
 
         <div className="btn-holder ion-text-center ion-padding-vertical">
-          <IonButton expand="block" routerLink="/stayup"  disabled={!isFormValid}>Register</IonButton>
+          <IonButton expand="block" routerLink="/stayup" onClick={handleRegistration} disabled={!isFormValid}>Register</IonButton>
         </div>
 
         <div className="bottom-holder flex al-center jc-center ion-activatable ripple-parent">
         
+        <IonRouterLink routerLink="/stayup">
         <h6>I'm not interesetd,&nbsp;&nbsp;</h6>
         <IonRippleEffect></IonRippleEffect>
         <h5>Continue the app</h5>
+        </IonRouterLink>
 
         </div>
       </IonContent>

@@ -1,6 +1,4 @@
-import { Redirect } from "react-router-dom";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-
+import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
   IonRouterOutlet,
@@ -51,14 +49,14 @@ import Membership from "./pages/Membership/Membership";
 import Journalcalender from "./pages/Journalcalender/Journalcalender";
 import Community from "./pages/Community/Community";
 import Login from "./pages/Login/Login";
-import Resources from "./pages/Resources/Resources";
-import PrivateRoute from "./auth/PrivateRoute";
 import './i18n';
 import { Suspense } from "react";
 import ResourceSubCategory from './pages/ResourceSubCategory/ResourceSubCategory';
-import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
+// import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
+import Resources from "./pages/Resources/Resources";
+import PrivateRoute from "./auth/PrivateRoute";
+import './i18n';
 import ConfigCycleRemade from "./pages/Configcycle/ConfigCycleRemade";
-import JournalAdditionRemade from "./pages/Journaladdition/JournalAdditionRemade";
 import Pusher from "pusher-js";
 import { addNotification } from "./actions/notificationAction";
 import { useDispatch } from "react-redux";
@@ -72,6 +70,9 @@ import GroupChat from "./pages/Chat/GroupChat/GroupChat";
 import GroupDetails from "./pages/Chat/GroupDetails/GroupDetails";
 import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
 import MyGroups from "./pages/Chat/mygroups/MyGroups";
+import JournalAdditionRemade from './pages/Journaladdition/JournalAdditionRemade';
+import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
+import Addcustomcategory from "./pages/Addcustomcategory/addcustomcategory";
 
 setupIonicReact({
   mode: "ios",
@@ -173,6 +174,9 @@ const App: React.FC = () => {
               <Chat />
             </PrivateRoute> */}
           </Route>
+          <Route exact path="/addcustomcategory">
+            <Addcustomcategory />
+          </Route>
           <Route exact path="/community">
             <PrivateRoute>
               <Community />
@@ -263,7 +267,9 @@ const App: React.FC = () => {
             </PrivateRoute>
           </Route>
           <Route exact path="/journalcalendarremade">
-            <JournalCalendarRemade />
+            <PrivateRoute>
+              <JournalCalendarRemade />
+            </PrivateRoute>
           </Route>
           <Route exact path="/configcycleremade">
             <ConfigCycleRemade />

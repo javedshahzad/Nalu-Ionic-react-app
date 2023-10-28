@@ -14,16 +14,16 @@ import {
 import { Route, Redirect } from "react-router";
 import Resources from "../Resources/Resources";
 import Journal from "../Journal/Journal";
-import Course from "../Course/Course";
-import Community from "../Community/Community";
 import Courseoverviewpaid from "../Courseoverviewpaid/Courseoverviewpaid";
 import Mygroups from "../Mygroups/Mygroups";
-import PrivateRoute from './../../auth/PrivateRoute';
+import Journalcalender from "../Journalcalender/Journalcalender";
 import CourseInnerOverview from "../Courseoverviewpaid/CourseInnerOverview/CourseInnerOverview";
 import CourseSubOverview from "../Courseoverviewpaid/CourseInnerOverview/CourseSubOverview/CourseSubOverview";
 import ResourceSubCategory from '../ResourceSubCategory/ResourceSubCategory';
 import Eventdetail from './../Eventdetail/Eventdetail';
 import Resourcedetail from './../Resourcedetail/Resourcedetail';
+import PrivateRoute from "../../auth/PrivateRoute";
+import JournalCalendarRemade from "../Journalcalender/JournalCalendarRemade";
 interface MainTabsProps {}
 
 const MainTabs: React.FC<MainTabsProps> = () => {
@@ -38,7 +38,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
       <IonRouterOutlet>
         <Redirect exact path="/tabs" to="/tabs/tab1" />
       
-        <Route path="/tabs/tab1" render={() => <PrivateRoute><Journal /> </PrivateRoute>} exact={true} />
+        <Route path="/tabs/tab1" render={() => <PrivateRoute><JournalCalendarRemade /></PrivateRoute>} exact={true} />
         <Route path="/tabs/tab2" render={() => <PrivateRoute><Courseoverviewpaid /></PrivateRoute>} exact={true} />
         <Route path="/tabs/tab2/courseinneroverview" render={() => <PrivateRoute><CourseInnerOverview /></PrivateRoute>}  exact={true}/>
         <Route path="/tabs/tab2/courseinneroverview/:id" render={() => <PrivateRoute><CourseSubOverview /></PrivateRoute>} exact={true} />
@@ -55,7 +55,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
 
       </IonRouterOutlet>
 
-      <IonTabBar slot="bottom">
+      <IonTabBar slot="bottom" className="ion-no-border">
           <IonTabButton tab="tab1" href="/tabs/tab1">
           <IonIcon src="assets/imgs/tabicns/tab1.svg" className="tab-icon-inactive" id="inactive" />
           <IonIcon src="assets/imgs/tabicns/tab1a.svg" className="tab-icon-active" id="active" />

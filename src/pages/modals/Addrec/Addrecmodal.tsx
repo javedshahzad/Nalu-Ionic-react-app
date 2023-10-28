@@ -34,6 +34,7 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
   const isFormValid =
     !!selectedCategory && !!title && !categoryError && !titleError;
 
+
   const handleCategoryChange = (event) => {
     const value = event.target.value;
     setselectedCategory(value);
@@ -141,6 +142,10 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
                         onIonChange={(e) => setNote(e.target.value)}
                       />
                     </IonItem>
+
+                    {/* {noteError && (
+                      <p className="error-message">{noteError}</p>
+                    )} */}
                   </div>
 
                   <div className="btn-holder ion-text-center ion-padding-vertical">

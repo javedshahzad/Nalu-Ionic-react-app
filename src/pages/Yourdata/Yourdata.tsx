@@ -13,6 +13,7 @@ import {
 
 import "./Yourdata.scss";
 import { useState } from "react";
+import axios from 'axios';
 
 const Yourdata: React.FC = () => {
   const [acceptPrivacyPolicy, setAcceptPrivacyPolicy] = useState(false);
@@ -32,19 +33,32 @@ const Yourdata: React.FC = () => {
 
   const isFormValid = acceptPrivacyPolicy && acceptTermsConditions;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!acceptPrivacyPolicy) {
       setPrivacyPolicyError('Please accept our Privacy Policy to continue.');
+      return;  // Exit the function early if validation fails
     }
+    
     if (!acceptTermsConditions) {
       setTermsConditionsError('Please accept our Terms & Conditions to continue.');
+      return;  // Exit the function early if validation fails
     }
-
-    if (isFormValid) {
-      // Proceed with registration or whatever action you want
-      console.log('Form submitted successfully!');
+  
+    try {
+      const token = localStorage.getItem('jwtToken');
+      
+      const response = await axios.put('https://app.mynalu.com/wp-json/nalu-app/v1/consent?type=privacy_policy,terms_conditions&set=true', {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+    
+      console.log('Consent updated successfully!', response.data);
+    } catch (error) {
+      console.error('Error updating consent:', error);
     }
   };
+  
 
   
   return (
@@ -55,7 +69,7 @@ const Yourdata: React.FC = () => {
           Your Data is Yours
           </h3>
           <h6 className="ion-text-wrap">
-          We keep your data confidential and dod not sell it to third parties. Accept our terms to create your account and get an email to set your password.
+          We keep your data confidential and do not sell it to third parties. Accept our terms to create your account and get an email to set your password.
           </h6>
         </div>
         <div className="list">

@@ -59,6 +59,11 @@ ion-button {
   text-transform: none;
 }
 
+ion-tab-bar
+{
+  --background: white !important;
+  border: none !important;
+}
 ion-tab-button {
   #inactive {
     display: inline;
@@ -74,7 +79,7 @@ ion-tab-button {
     display: none;
   }
 
-  #active {
+   #active {
     display: inline;
   }
 }
