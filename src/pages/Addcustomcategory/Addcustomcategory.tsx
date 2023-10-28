@@ -10,6 +10,7 @@ import {
   IonInput,
   IonItem,
   IonLabel,
+  IonList,
   IonModal,
   IonPage,
   IonRadio,
@@ -38,6 +39,22 @@ const Addcustomcategory: React.FC = () => {
     "textarea",
   ]);
   const [icons, setIcons] = useState([]);
+  const [customCategoryData, setCustomCategoryData] = useState([]);
+  const [message, setMessage] = useState("");
+  const [customName, setCustomName] = useState("");
+  const [generalLabel, setGeneralLabel] = useState("");
+  const [customNameError, setcustomNameError] = useState("");
+  const [generalLabelError, setGeneralLabelError] = useState("");
+
+  // //   const [selectedValue, setSelectedValue] = useState("");
+  //   const [selectedValueError, setValueError] = useState("");
+
+  const [selectedLogoValue, setSelectedLogoValue] = useState("");
+  const [selectedType, setSelectedType] = useState("");
+  const [selectedLogoError, setSelectedLogoError] = useState("");
+  const [allFields, setAllFields] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
   const getIcons = async () => {
     try {
       setIsLoading(true);
@@ -59,13 +76,45 @@ const Addcustomcategory: React.FC = () => {
   }, []);
 
   const modal = useRef<HTMLIonModalElement>(null);
-  const input = useRef<HTMLIonInputElement>(null);
+  const fieldModal = useRef<HTMLIonModalElement>(null);
 
-  const [message, setMessage] = useState("");
-
-  const openActionSheet = () => {};
   function confirm() {
-    modal.current?.dismiss(input.current?.value, "confirm");
+    const newCategory = {
+      generalLabel,
+      customName,
+      selectedType,
+      selectedLogoValue,
+    };
+
+    setCustomCategoryData([...customCategoryData, newCategory]);
+    setAllFields([...allFields, ...customCategoryData]);
+
+    setCustomName("");
+    // setSelectedValue("");
+    setSelectedLogoValue("");
+    setSelectedType("");
+    setGeneralLabel("");
+
+    modal.current?.dismiss();
+  }
+
+  const CategoryLabel = ({ label, data, onLabelClick }) => {
+    return (
+      <div className="Addcustomcategory">
+        <IonItem lines="none" onClick={() => onLabelClick(data)}>
+          {label}
+        </IonItem>
+      </div>
+    );
+  };
+  const handleLabelClick = (data) => {
+    setSelectedCategory(data);
+    fieldModal.current?.present(); // Open the field modal
+  };
+
+  function dismissFieldModal() {
+    setSelectedCategory(null);
+    fieldModal.current?.dismiss();
   }
 
   function onWillDismiss(ev: CustomEvent<OverlayEventDetail>) {
@@ -74,22 +123,12 @@ const Addcustomcategory: React.FC = () => {
     }
   }
 
-  const [customName, setCustomName] = useState("");
-  const [customNameError, setcustomNameError] = useState("");
-
-  const [selectedValue, setSelectedValue] = useState("");
-  const [selectedValueError, setValueError] = useState("");
-
-  const [selectedLogoValue, setSelectedLogoValue] = useState("");
-  const [selectedType, setSelectedType] = useState("");
-  const [selectedLogoError, setSelectedLogoError] = useState("");
-
   const isFormValid =
     !!customName &&
-    !!selectedValue &&
+    // !!selectedValue &&
     !!selectedLogoValue &&
     !customNameError &&
-    !selectedValueError &&
+    // !selectedValueError &&
     !selectedLogoError;
 
   const handleCustomNameChange = (event) => {
@@ -97,24 +136,36 @@ const Addcustomcategory: React.FC = () => {
     setCustomName(value);
     setcustomNameError(value.trim() === "" ? "Please enter Custom name." : "");
   };
-
-  const handleRadioChange = (event) => {
-    setSelectedValue(event.detail.value);
+  const handleGeneralLabelChange = (event) => {
     const value = event.target.value;
-    setValueError(value.trim() === "" ? "Please select a category." : "");
+    setGeneralLabel(value);
+    setGeneralLabelError(
+      value.trim() === "" ? "Please enter Custom name." : ""
+    );
   };
 
-  const handleLogoChange = (event) => {
+  //   const handleRadioChange = (event) => {
+  //     // setSelectedValue(event.detail.value);
+  //     const value = event.target.value;
+  //     // setValueError(value.trim() === "" ? "Please select a category." : "");
+  //   };
+
+  const handleLogoChange = (event: any) => {
     const value = event.target.value;
     setSelectedLogoValue(event.detail.value);
     setSelectedLogoError(value.trim() === "" ? "Please select a Logo." : "");
   };
 
-  const handleTypeChange = (event: any) => {
+  const handleTypeChange = (event: any, clickedType: any) => {
     const value = event.target.value;
-    setSelectedType(event.detail.value);
+    // setSelectedType(event.detail.value);
+    setSelectedType(clickedType);
     setSelectedLogoError(value.trim() === "" ? "Please select a Logo." : "");
   };
+
+  //   useEffect(() => {
+  //     console.log("Selected Type changed:", selectedType);
+  //   }, [selectedType]);
 
   return (
     <IonPage className="Addcustomcategory">
@@ -135,10 +186,10 @@ const Addcustomcategory: React.FC = () => {
             <div className="input-item">
               <IonItem lines="none">
                 <IonInput
-                  placeholder="Add Preferred Custom Name"
-                  value={customName}
-                  onIonFocus={handleCustomNameChange}
-                  onIonInput={handleCustomNameChange}
+                  placeholder="Input Text"
+                  value={generalLabel}
+                  onIonFocus={handleGeneralLabelChange}
+                  onIonInput={handleGeneralLabelChange}
                 />
               </IonItem>
 
@@ -148,145 +199,6 @@ const Addcustomcategory: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* <div className="section">
-          <div className="title flex al-center jc-between">
-            <h3>Add Custom Category Name</h3>
-          </div>
-          <div className="the-form up">
-            <div className="input-item">
-              <IonItem lines="none">
-                <IonInput
-                  placeholder="Add Preferred Custom Name"
-                  value={customName}
-                  onIonFocus={handleCustomNameChange}
-                  onIonInput={handleCustomNameChange}
-                />
-              </IonItem>
-
-              {customNameError && (
-                <p className="error-message">{customNameError}</p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="section">
-          <div className="title flex al-center jc-between ion-padding-bottom">
-            <h3>Choose Category Type</h3>
-          </div>
-          <div>
-            <IonRadioGroup
-              value={selectedValue}
-              onIonChange={handleRadioChange}
-            >
-              <IonRow>
-                <IonCol size="6" id="tagss">
-                  <IonItem lines="none">
-                    <IonIcon
-                      slot="start"
-                      src={
-                        selectedValue === "type1"
-                          ? "assets/imgs/sm1active.svg"
-                          : "assets/imgs/sm1.svg"
-                      }
-                    />
-                    <IonLabel>group</IonLabel>
-                    <IonRadio value="type1"></IonRadio>
-                  </IonItem>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol size="6" id="tagss">
-                  <IonItem lines="none">
-                    <IonIcon
-                      slot="start"
-                      src={
-                        selectedValue === "type1"
-                          ? "assets/imgs/sm1active.svg"
-                          : "assets/imgs/sm1.svg"
-                      }
-                    />
-                    <IonLabel>range_16</IonLabel>
-                    <IonRadio value="type1"></IonRadio>
-                  </IonItem>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol size="6" id="tagss">
-                  <IonItem lines="none">
-                    <IonIcon
-                      slot="start"
-                      src={
-                        selectedValue === "type1"
-                          ? "assets/imgs/sm1active.svg"
-                          : "assets/imgs/sm1.svg"
-                      }
-                    />
-                    <IonLabel>number</IonLabel>
-                    <IonRadio value="type1"></IonRadio>
-                  </IonItem>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol size="6" id="tagss">
-                  <IonItem lines="none">
-                    <IonIcon
-                      slot="start"
-                      src={
-                        selectedValue === "type1"
-                          ? "assets/imgs/sm1active.svg"
-                          : "assets/imgs/sm1.svg"
-                      }
-                    />
-                    <IonLabel>range_16</IonLabel>
-                    <IonRadio value="type1"></IonRadio>
-                  </IonItem>
-                </IonCol>
-              </IonRow>
-            </IonRadioGroup>
-          </div>
-
-          {selectedValueError && (
-            <p className="error-message">{selectedValueError}</p>
-          )}
-        </div>
-
-        <div className="section">
-          <div className="title flex al-center jc-between ion-padding-bottom">
-            <h3>Choose a Logo</h3>
-          </div>
-          {isLoading ? (
-            <IonRow>
-              <IonCol size="1">
-                <IonItem lines="none">
-                  <IonSpinner name="crescent"></IonSpinner>
-                </IonItem>
-              </IonCol>
-            </IonRow>
-          ) : (
-            <IonRadioGroup
-              value={selectedLogoValue}
-              onIonChange={handleLogoChange}
-            >
-              <IonRow>
-                {icons.map((icon, index) => (
-                  <IonCol id="imgg" key={index}>
-                    <IonItem lines="none">
-                      <IonLabel className="ion-text-center">
-                        <img src={icon} alt={`Icon ${index}`} height={20} />
-                      </IonLabel>
-                      <IonRadio value={`logo${index}`} mode="md"></IonRadio>
-                    </IonItem>
-                  </IonCol>
-                ))}
-              </IonRow>
-            </IonRadioGroup>
-          )}
-          {selectedLogoError && (
-            <p className="error-message">{selectedLogoError}</p>
-          )}
-        </div> */}
 
         <IonButtons>
           <IonButton id="open-modal" expand="block">
@@ -294,6 +206,36 @@ const Addcustomcategory: React.FC = () => {
             <IonIcon icon={addOutline} />
           </IonButton>
         </IonButtons>
+
+        <div>
+          {allFields.map((data, index) => (
+            <CategoryLabel
+              key={index}
+              label={data.generalLabel}
+              data={data}
+              onLabelClick={handleLabelClick}
+            />
+          ))}
+
+          <IonModal
+            id="example-modal"
+            ref={fieldModal}
+            trigger="open-custom-dialog"
+          >
+            <div className="wrapper">
+              {customCategoryData.map((data, index) => (
+                <>
+                  <h1>{data.customName}</h1>
+                  <IonList lines="none">
+                    <IonItem>
+                      <IonLabel>{data.selectedType}</IonLabel>
+                    </IonItem>
+                  </IonList>
+                </>
+              ))}
+            </div>
+          </IonModal>
+        </div>
 
         <IonModal
           ref={modal}
@@ -344,14 +286,16 @@ const Addcustomcategory: React.FC = () => {
               </div>
               <IonRadioGroup
                 value={selectedType}
-                onIonChange={handleTypeChange}
+                onIonChange={(event) =>
+                  handleTypeChange(event, event.target.value)
+                }
               >
                 <IonRow>
-                  {types.map((type, index) => (
-                    <IonCol id="imgg" key={index}>
+                  {types.map((type) => (
+                    <IonCol id="imgg" key={type}>
                       <IonItem lines="none">
                         <IonLabel className="ion-text-center">{type}</IonLabel>
-                        <IonRadio value={`logo${index}`} mode="md"></IonRadio>
+                        <IonRadio value={type} mode="md"></IonRadio>
                       </IonItem>
                     </IonCol>
                   ))}
