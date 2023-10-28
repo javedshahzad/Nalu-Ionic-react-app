@@ -1,4 +1,4 @@
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, useHistory } from "react-router-dom";
 import {
   IonApp,
   IonRouterOutlet,
@@ -73,6 +73,7 @@ import MyGroups from "./pages/Chat/mygroups/MyGroups";
 import JournalAdditionRemade from './pages/Journaladdition/JournalAdditionRemade';
 import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
 import Addcustomcategory from "./pages/Addcustomcategory/addcustomcategory";
+import UserAuthentication from "./auth/UserAuthentication";
 
 setupIonicReact({
   mode: "ios",
@@ -127,7 +128,16 @@ const App: React.FC = () => {
       token,
     },
   });
+console.log('----------')
 
+  // const auth = UserAuthentication(); // Replace this with your logic to check for a JWT token
+  // const history = useHistory();
+  // console.log('----')
+  // useEffect(() => {
+  //   if (auth && window.location.pathname === "/onboarding") {
+  //     history.push("/tabs/tab1");
+  //   }
+  // }, [auth, history]);
   useEffect(() => {
     socket.emit("my-group-list", {
       search: "",
@@ -158,16 +168,6 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonRouterOutlet>
           <Route path="/tabs" render={() => <MainTabs />} />
-
-          {/* <Route path="/" render={<Login />} /> */}
-          {/* <Route exact path="/">
-              <PrivateRoute>
-              <Onboarding />
-            </PrivateRoute>
-          </Route> */}
-          {/* <Route exact path="/onboarding">
-            <Onboarding />
-          </Route> */}
 
           <Route exact path="/chat">
             {/* <PrivateRoute>
@@ -243,10 +243,7 @@ const App: React.FC = () => {
             </PrivateRoute>
           </Route>
           <Route exact path="/onboarding">
-          <PrivateRoute>
           <Onboarding />
-            </PrivateRoute>
-           
           </Route>
           <Route exact path="/questioning">
             <Questioning />

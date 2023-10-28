@@ -15,17 +15,20 @@ import { useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import i18next from "i18next";
+import UserAuthentication from './../../auth/UserAuthentication';
 
 
 const Onboarding: React.FC = () => {
   const { t} = useTranslation();  
   const history = useHistory();
+   const auth = UserAuthentication(); 
+  useEffect(() => {
+    if (auth) {
+      history.push("/tabs/tab1");
+    }
+  }, [auth, history]);
 
   const [date, setDate] = useState<string>(new Date().toISOString());
-  
-  // useEffect(()=>{
-  //   i18next.changeLanguage(localStorage.getItem("language"));
-  // },[0])
 
   const handleDateChange = (event: CustomEvent<any>) => {
     setDate(event.detail.value);
