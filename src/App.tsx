@@ -128,16 +128,7 @@ const App: React.FC = () => {
       token,
     },
   });
-console.log('----------')
 
-  // const auth = UserAuthentication(); // Replace this with your logic to check for a JWT token
-  // const history = useHistory();
-  // console.log('----')
-  // useEffect(() => {
-  //   if (auth && window.location.pathname === "/onboarding") {
-  //     history.push("/tabs/tab1");
-  //   }
-  // }, [auth, history]);
   useEffect(() => {
     socket.emit("my-group-list", {
       search: "",

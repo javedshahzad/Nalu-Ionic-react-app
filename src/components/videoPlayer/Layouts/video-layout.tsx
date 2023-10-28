@@ -24,16 +24,11 @@ export function VideoLayout({ thumbnails }: VideoLayoutProps) {
         <Controls.Group className={`${styles.controlsGroup} vds-controls-group`}>
           <Buttons.Play tooltipPlacement="top start" />
           <Buttons.Mute tooltipPlacement="top" />
+          <Sliders.Volume />
           <Buttons.Seek seconds={-10} tooltipPlacement="top start" />
           <Buttons.Seek seconds={10} tooltipPlacement="top" />
-          <Sliders.Volume />
           <TimeGroup />
-          {/* <ChapterTitle className="vds-chapter-title" /> */}
           <div className="vds-controls-spacer" />
-          {/* <Buttons.Caption tooltipPlacement="top" /> */}
-          {/* <Menus.Settings placement="top end" tooltipPlacement="top" /> */}
-          {/* <Buttons.PIP tooltipPlacement="top" /> */}
-          {/* <Buttons.Fullscreen tooltipPlacement="top end" /> */}
         </Controls.Group>
       </Controls.Root>
     </>

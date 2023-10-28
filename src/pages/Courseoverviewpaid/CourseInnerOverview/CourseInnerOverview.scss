@@ -1,5 +1,6 @@
 .CourseInnerOverview
 {
+  
     ion-toolbar
     {
         --background: #FEFCFA;
@@ -14,9 +15,10 @@
 
     ion-content
     {
-        --background: #FEFCFA;
+     --offset-top: 0px !important;
+    --offset-bottom: 550px !important;
+
      .main_div{
-         //// background-color: rgb(145, 145, 145);
          .title{
              display: flex;
              justify-content: center;
@@ -79,7 +81,6 @@
             ion-button
             {
                 --border-radius: 10px;
-                // --color: white;
                 font-size: 18px;
                 height: 54px;
                 margin-left: 15px;
@@ -87,9 +88,7 @@
             }
         }
         .player_div{
-            position: relative;
-            // margin-left: 5px;
-            margin-right: 5px;
+           
         .playbuttons {
             display: flex;
             width: 100%;
@@ -143,9 +142,7 @@
                border-radius: 10px;
 
            }
-        //    .grey-icon {
-        //     filter: grayscale(100%) !important;
-        //   }
+        
         }
         
      }
@@ -155,23 +152,23 @@
 
 
 
-@import '@vidstack/react/player/styles/default/theme.css';
-@import '@vidstack/react/player/styles/default/layouts/audio.css';
-@import '@vidstack/react/player/styles/default/layouts/video.css';
+// @import '@vidstack/react/player/styles/default/theme.css';
+// @import '@vidstack/react/player/styles/default/layouts/audio.css';
+// @import '@vidstack/react/player/styles/default/layouts/video.css';
 
-.player {
-  --brand-color: #f5f5f5;
-  --focus-color: #4e9cf6;
+// .player {
+//   --brand-color: #f5f5f5;
+//   --focus-color: #4e9cf6;
 
-  --audio-brand: var(--brand-color);
-  --audio-focus-ring-color: var(--focus-color);
-  --audio-border-radius: 2px;
+//   --audio-brand: var(--brand-color);
+//   --audio-focus-ring-color: var(--focus-color);
+//   --audio-border-radius: 2px;
 
-  --video-brand: var(--brand-color);
-  --video-focus-ring-color: var(--focus-color);
-  --video-border-radius: 2px;
+//   --video-brand: var(--brand-color);
+//   --video-focus-ring-color: var(--focus-color);
+//   // --video-border-radius: 2px;
 
-}
+// }
 .mark-done-button {
   border-radius: 10px;
   font-size: 18px;

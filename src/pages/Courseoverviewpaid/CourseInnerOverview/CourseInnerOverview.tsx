@@ -174,7 +174,7 @@ const CourseInnerOverview: React.FC = () => {
                 </IonButtons>
               </IonToolbar>
             </IonHeader>
-            <IonContent fullscreen>
+            <IonContent fullscreen className="ion-no-padding">
               <div className="main_div">
                 <div className="player_div">
                   {togglePlay === "video" && courseData?.video_url ? (
@@ -184,58 +184,13 @@ const CourseInnerOverview: React.FC = () => {
 
                   ) : (
                     <>
-                      {/* <div className="audio_player_div">
-                        <IonGrid>
-                          <IonRow>
-                            <IonCol size="6">
-                              <img src={img3} alt="" />
-                            </IonCol>
-                            <IonCol size="6">
-                              <div className="title">
-                                <h3>{courseData?.title}</h3>
-                              </div>
-                            </IonCol>
-                          </IonRow>
-                        </IonGrid> */}
+                      
 
-                        {/* <MediaPlayer
-                          src={
-                            "https://media-files.vidstack.io/sprite-fight/audio.mp3"
-                          }
-                        >
-                          <MediaProvider></MediaProvider>
-                          <DefaultAudioLayout icons={defaultLayoutIcons} />
-                          <DefaultVideoLayout
-                            icons={defaultLayoutIcons}
-                            thumbnails={courseData?.audio_thumbnail}
-                          />
-                        </MediaPlayer> */}
-                    {/* <Player url ={'https://media-files.vidstack.io/sprite-fight/audio.mp3'} source={'audio'} video_thumbnail={null} /> */}
-
-                      {/* </div> */}
+                        
                     </>
                   )}
 
-                  {/* <div className="playbuttons ">
-                    <div
-                      className={`video_span togglePlay ${
-                        togglePlay === "video" ? "active" : ""
-                      }`}
-                      onClick={() => handleVideoClick("video")}
-                    >
-                      <img src={audioIcon} alt="" />
-                      <span>Video</span>
-                    </div>
-                    <div
-                      className={`audio_span togglePlay ${
-                        togglePlay === "audio" ? "active" : ""
-                      }`}
-                      onClick={() => handleVideoClick("audio")}
-                    >
-                      <img src={audioIcon} alt="" />
-                      <span>Audio</span>
-                    </div>
-                  </div> */}
+                 
                 </div>
                 <div className="title">
                   <h3>{courseData?.ttile}</h3>
@@ -245,7 +200,7 @@ const CourseInnerOverview: React.FC = () => {
                     <IonCol size="3">
                       <div className="img_relative">
                         <div className="img_absolute">
-                          <img src={courseData?.authority?.image} />
+                          <img src={courseData?.authority?.image? courseData?.authority?.image : null} />
                         </div>
                       </div>
                     </IonCol>
@@ -297,9 +252,11 @@ const CourseInnerOverview: React.FC = () => {
                     </IonRow>
                   ))}
                 </IonGrid>
+                {
+                  !courseData?.completed && (
                     <div
                       
-                      className={`mark-done-button ${courseData?.completed ? 'disabled' : ''}`}
+                      className={`mark-done-button`}
                       onClick={()=> markAsDone(courseData?.completion_link)}
                       
                     >
@@ -313,6 +270,8 @@ const CourseInnerOverview: React.FC = () => {
                         <p style={{"color":"white"}}>Mark as Done</p>
                       )}
                     </div>
+                  )
+                }
                
               </div>
             </IonContent>

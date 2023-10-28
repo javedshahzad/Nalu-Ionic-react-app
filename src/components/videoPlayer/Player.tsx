@@ -20,10 +20,8 @@ import {
 
 import { AudioLayout } from './Layouts/audio-layout';
 import { VideoLayout } from './Layouts/video-layout';
-import { textTracks } from './Tracks';
 
 export function Player({url, video_thumbnail,source}) {
-    console.log(url);
 
   let player = useRef<MediaPlayerInstance>(null),
     [src, setSrc] = useState(''),
@@ -74,7 +72,6 @@ export function Player({url, video_thumbnail,source}) {
     <>
       <MediaPlayer
         className={`${styles.player} media-player`}
-        title="Sprite Fight"
         src={url}
         crossorigin
         onProviderChange={onProviderChange}
@@ -86,27 +83,19 @@ export function Player({url, video_thumbnail,source}) {
             <Poster
               className={`${styles.poster} vds-poster`}
               src={video_thumbnail}
-              alt="Girl walks into campfire with gnomes surrounding her friend ready for their next meal!"
+              alt=" "
             />
           )}
-          {/* {textTracks.map((track) => (
-            <Track {...track} key={track.src} />
-          ))} */}
+          
         </MediaProvider>
 
         {/* Layouts */}
         {viewType === 'audio' ? (
           <AudioLayout />
         ) : viewType === 'video' ? (
-          <VideoLayout thumbnails="https://image.mux.com/VZtzUzGRv02OhRnZCxcNg49OilvolTqdnFLEqBsTwaxU/storyboard.vtt" />
+          <VideoLayout thumbnails={video_thumbnail}/>
         ) : null}
       </MediaPlayer>
-
-      {/* <div className={styles.srcButtons}>
-        <button onClick={() => changeSource('audio')}>Audio</button>
-        <button onClick={() => changeSource('video')}>Video</button>
-        <button onClick={() => changeSource('hls')}>HLS</button>
-      </div> */}
     </>
   );
 }
