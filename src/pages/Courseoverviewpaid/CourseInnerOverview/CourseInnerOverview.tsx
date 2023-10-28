@@ -69,6 +69,7 @@ const CourseInnerOverview: React.FC = () => {
   const history = useHistory();
   const location = useLocation();
    const data : any = location?.state;
+   const [courseId, setCourseId] = useState(data?.course_id);
  
   const [togglePlay, setTogglePlay] = useState("video");
   const [courseData, setCourseData] = useState(null);
@@ -77,16 +78,16 @@ const CourseInnerOverview: React.FC = () => {
 
 
   useEffect(() => {
-    console.log(data?.course_id);
-    getData(data?.course_id);
-  }, [0]);
+    getData(courseId);
+  }, []);
 
 
-  const handleVideoClick = (value) => {
-    setTogglePlay(value);
-  };
+  // const handleVideoClick = (value) => {
+  //   setTogglePlay(value);
+  // };
   const handleComplete = (id) => {
-    history.push(`/tabs/tab2/courseinneroverview/${id}`);
+    // history.push(`/tabs/tab2/courseinneroverview/${id}`);
+    getData(id)
   };
 
   const getData = (id) => {
@@ -116,13 +117,17 @@ const CourseInnerOverview: React.FC = () => {
     setIsMarlLoading(true);
     try {
       axios
-        .post(URL)
+        .post(URL,null,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
+          }
+        })
         .then((response) => {
           console.log(response.data);
-          // setCourseData(response.data);
-          // if(response.data.status = "success"){
-          //   getData()
-          // }
+          if(response.data.status = "success"){
+            getData(courseId)
+            // history.push('/tabs/tab2')
+          }
           setIsMarlLoading(false);
         })
         .catch((error) => {
@@ -173,21 +178,13 @@ const CourseInnerOverview: React.FC = () => {
               <div className="main_div">
                 <div className="player_div">
                   {togglePlay === "video" && courseData?.video_url ? (
-                    // <MediaPlayer className="player" src={courseData?.video_url? courseData?.video_url : ""}>
-                    //   <MediaProvider>
-                    //     <DefaultVideoLayout
-                    //       thumbnails={courseData?.video_thumbnail}
-                    //       icons={defaultLayoutIcons}
-                    //     />
-                    //   </MediaProvider>
-                    // </MediaPlayer>
                     <Player url ={courseData?.video_url} 
                     video_thumbnail={courseData?.video_thumbnail}
                      source={'video'}/>
 
                   ) : (
                     <>
-                      <div className="audio_player_div">
+                      {/* <div className="audio_player_div">
                         <IonGrid>
                           <IonRow>
                             <IonCol size="6">
@@ -199,7 +196,7 @@ const CourseInnerOverview: React.FC = () => {
                               </div>
                             </IonCol>
                           </IonRow>
-                        </IonGrid>
+                        </IonGrid> */}
 
                         {/* <MediaPlayer
                           src={
@@ -213,13 +210,13 @@ const CourseInnerOverview: React.FC = () => {
                             thumbnails={courseData?.audio_thumbnail}
                           />
                         </MediaPlayer> */}
-                    <Player url ={'https://media-files.vidstack.io/sprite-fight/audio.mp3'} source={'audio'}/>
+                    {/* <Player url ={'https://media-files.vidstack.io/sprite-fight/audio.mp3'} source={'audio'} video_thumbnail={null} /> */}
 
-                      </div>
+                      {/* </div> */}
                     </>
                   )}
 
-                  <div className="playbuttons ">
+                  {/* <div className="playbuttons ">
                     <div
                       className={`video_span togglePlay ${
                         togglePlay === "video" ? "active" : ""
@@ -238,7 +235,7 @@ const CourseInnerOverview: React.FC = () => {
                       <img src={audioIcon} alt="" />
                       <span>Audio</span>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="title">
                   <h3>{courseData?.ttile}</h3>
@@ -300,20 +297,11 @@ const CourseInnerOverview: React.FC = () => {
                     </IonRow>
                   ))}
                 </IonGrid>
-                {!courseData?.completed ? (
                     <div
-                      style={{
-                        borderRadius: "10px",
-                        fontSize: "18px",
-                        height: "54px",
-                        marginLeft: "15px",
-                        marginRight: "15px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        backgroundColor: "#EE5F64",
-                      }}
+                      
+                      className={`mark-done-button ${courseData?.completed ? 'disabled' : ''}`}
                       onClick={()=> markAsDone(courseData?.completion_link)}
+                      
                     >
                       {ismarkLoading ? (
                         <IonSpinner
@@ -325,9 +313,7 @@ const CourseInnerOverview: React.FC = () => {
                         <p style={{"color":"white"}}>Mark as Done</p>
                       )}
                     </div>
-                ) : (
-                  ""
-                )}
+               
               </div>
             </IonContent>
           </div>

@@ -158,6 +158,16 @@ const App: React.FC = () => {
         <IonRouterOutlet>
           <Route path="/tabs" render={() => <MainTabs />} />
 
+          {/* <Route path="/" render={<Login />} /> */}
+          {/* <Route exact path="/">
+              <PrivateRoute>
+              <Onboarding />
+            </PrivateRoute>
+          </Route> */}
+          {/* <Route exact path="/onboarding">
+            <Onboarding />
+          </Route> */}
+
           <Route exact path="/chat">
             {/* <PrivateRoute>
               <Chat />
@@ -191,8 +201,6 @@ const App: React.FC = () => {
               <Courseoverviewpaid />
             </PrivateRoute>
           </Route>
-
-        
 
           <Route exact path="/filter">
             <PrivateRoute>
@@ -231,7 +239,10 @@ const App: React.FC = () => {
             </PrivateRoute>
           </Route>
           <Route exact path="/onboarding">
-            <Onboarding />
+          <PrivateRoute>
+          <Onboarding />
+            </PrivateRoute>
+           
           </Route>
           <Route exact path="/questioning">
             <Questioning />

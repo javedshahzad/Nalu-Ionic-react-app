@@ -172,3 +172,19 @@
   --video-border-radius: 2px;
 
 }
+.mark-done-button {
+  border-radius: 10px;
+  font-size: 18px;
+  height: 54px;
+  margin-left: 15px;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #EE5F64;
+}
+
+.mark-done-button.disabled {
+  background-color: #ccc; 
+  cursor: not-allowed; 
+}

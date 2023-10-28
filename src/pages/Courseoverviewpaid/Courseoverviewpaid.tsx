@@ -221,7 +221,7 @@ const Courseoverviewpaid: React.FC = () => {
                                                       ? "assets/imgs/icn-lock.svg"
                                                       : "assets/imgs/right-arrow.svg"
                                                   }
-                                                  className="ion-accordion-toggle-icon custom-icon"
+                                                  className="ion-accordion-toggle-icon custom-icon custom_icon"
                                                   slot="end"
                                                 ></IonIcon>
                                               </IonItem>
