@@ -14,12 +14,10 @@ import {
   IonLabel,
   IonModal,
   IonPage,
-  IonPopover,
   IonRange,
   IonRow,
   IonSearchbar,
   IonSpinner,
-  IonTextarea,
   IonToolbar,
 } from "@ionic/react";
 import { useParams } from "react-router-dom";
@@ -28,39 +26,80 @@ import fullMoon from "../../assets/images/full moon.svg";
 import { add, filterOutline, optionsOutline } from "ionicons/icons";
 import Additionfilter from "../modals/Additionfilter/Additionfilter";
 import JournalAdditionApiService from "../../JournalService";
-import { object } from "prop-types";
 import { useHistory } from "react-router-dom";
+import menstruation from "../../assets/images/Menstruation.svg";
+import cervicalMucus from "../../assets/images/Cervical Mucus.svg";
 import CustomCategoryApiService from "../../CustomCategoryService";
 import tokenService from "../../token";
+import MoonPhasesServce from "../../MoonPhasesService";
 
 function JournalAdditionRemade() {
   const { dateParam } = useParams<{ dateParam: string }>();
 
   const [typeState, setTypeState] = useState({});
+  const [year, setYear] = useState(new Date().getFullYear());
   const [isLoading, setIsLoading] = useState(false);
 
   const getJournalEntries = async () => {
     try {
       setIsLoading(true);
+
       const data = await JournalAdditionApiService.get(
         `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`
       );
 
-      if (data.entries.length > 0) {
-        const types = [...new Set(data.entries.map((item: any) => item.type))];
-        const dynamicStates = {};
+      setTimeout(async () => {
+        let journalEntryObj = JSON.parse(localStorage.getItem(dateParam));
 
-        types.forEach((type: any) => {
-          dynamicStates[type] = data.entries.filter(
-            (item: any) => item.type === type
-          );
-        });
+        if (data === journalEntryObj) {
+          if (journalEntryObj === null || journalEntryObj === undefined) {
+            const data = await JournalAdditionApiService.get(
+              `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`
+            );
 
-        console.log("dynamic state", dynamicStates);
+            if (data.entries.length > 0) {
+              const types = [
+                ...new Set(data.entries.map((item: any) => item.type)),
+              ];
 
-        setTypeState(dynamicStates);
-        setIsLoading(false);
-      }
+              const dynamicStates = {};
+
+              types.forEach((type: any) => {
+                dynamicStates[type] = data.entries.filter(
+                  (item: any) => item.type === type
+                );
+              });
+
+              console.log("dynamic state", dynamicStates);
+              localStorage.setItem(dateParam, JSON.stringify(dynamicStates));
+              setTypeState(dynamicStates);
+              setIsLoading(false);
+            }
+          } else {
+            setTypeState(JSON.parse(journalEntryObj));
+            setIsLoading(false);
+          }
+        } else {
+          if (data.entries.length > 0) {
+            const types = [
+              ...new Set(data.entries.map((item: any) => item.type)),
+            ];
+
+            const dynamicStates = {};
+
+            types.forEach((type: any) => {
+              dynamicStates[type] = data.entries.filter(
+                (item: any) => item.type === type
+              );
+            });
+
+            console.log("dynamic state", dynamicStates);
+            localStorage.setItem(dateParam, JSON.stringify(dynamicStates));
+            setTypeState(dynamicStates);
+            setIsLoading(false);
+          }
+        }
+      }, 2000);
     } catch (error) {
       setIsLoading(false);
       console.error(error);
@@ -71,18 +110,6 @@ function JournalAdditionRemade() {
     getJournalEntries();
   }, []);
   const [inputValues, setInputValues] = useState({});
-
-  const onInputChange = (event: any) => {
-    const { id, value } = event.target;
-    setInputValues((prevInputValues) => ({
-      ...prevInputValues,
-      [id]: value,
-    }));
-  };
-
-  useEffect(() => {
-    console.log("Input Values:", inputValues);
-  }, [inputValues]);
 
   const history = useHistory();
 
@@ -153,7 +180,7 @@ function JournalAdditionRemade() {
     return `${dayOfWeek}, ${dayOfMonth} ${month}`;
   };
 
-  function formatDates(inputDate) {
+  function formatDates(inputDate: any) {
     let month =
       +inputDate.getMonth() + 1 < 10
         ? "0" + (+inputDate.getMonth() + 1)
@@ -189,24 +216,19 @@ function JournalAdditionRemade() {
   const [clickedDate, setClickedDate] = useState(
     formatDates(new Date(dateParam))
   );
+  const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
 
   const [journalDate, setJournalDate] = useState(null);
 
-  const daysIcon = (dateIndex, mIndex): string => {
-    if (dateIndex === 5 && mIndex === 8) {
-      return newMoon;
-    } else if (dateIndex === 9 && mIndex === 8) {
-      return fullMoon;
-    } else {
-      return "";
-    }
-  };
-
-  function weekdays(loopDate, loopEndDate) {
+  function weekdays(loopDate: any, loopEndDate: any, moonPhaseIcon: any) {
     const today = formatDates(new Date());
-
     let newWeekDays = [];
+
     while (loopDate <= loopEndDate) {
+      const matchingIcon = moonPhaseIcon.find(
+        (icon) => icon.date === formatDates(loopDate)
+      );
+
       newWeekDays.push({
         fullDate: loopDate.toLocaleString("default", {
           weekday: "short",
@@ -217,6 +239,7 @@ function JournalAdditionRemade() {
         isActive: false,
         month: loopDate.getMonth(),
         year: loopDate.getFullYear(),
+        icon: matchingIcon ? matchingIcon.phase_name : null, // Store the associated icon
       });
 
       let newDate = loopDate.setDate(loopDate.getDate() + 1);
@@ -226,7 +249,11 @@ function JournalAdditionRemade() {
     return newWeekDays;
   }
 
-  let days = weekdays(new Date(dateRange[0]), new Date(dateRange[1]));
+  let days = weekdays(
+    new Date(dateRange[0]),
+    new Date(dateRange[1]),
+    moonPhaseIcon
+  );
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -266,6 +293,7 @@ function JournalAdditionRemade() {
           },
         ],
       },
+
       tokenService.getWPToken()
     ).then(
       (data) => {
@@ -276,6 +304,39 @@ function JournalAdditionRemade() {
       }
     );
   };
+
+  const getIcons = async () => {
+    try {
+      const data = await MoonPhasesServce.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
+      );
+
+      console.log("moon data", data);
+
+      const newArray = [];
+
+      for (const date in data.moonphase) {
+        const dateObjects = data.moonphase[date];
+        for (const dateObject of dateObjects) {
+          const transformedObject = {
+            date: date,
+            phase_id: dateObject.phase_id,
+            phase_name: dateObject.phase_name,
+          };
+          newArray.push(transformedObject);
+        }
+      }
+
+      setMoonPhaseIcon(newArray);
+      console.log("moon phases", newArray);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getIcons();
+  }, []);
 
   return (
     <IonPage>
@@ -327,14 +388,22 @@ function JournalAdditionRemade() {
                     onClick={() => handleDateClick(day)}
                     id={day.actualDate}
                   >
-                    {daysIcon(day.dayNo, day.month) && (
-                      <img
-                        className="daysIcon"
-                        src={daysIcon(day.dayNo, day.month)}
-                        alt=""
-                      />
-                    )}
-                    {day.dayNo}
+                    <div>
+                      {day.icon && (
+                        <div className="moonPhases">
+                          {day.icon === "Full Moon" ? (
+                            <img src={fullMoon} alt="Full Moon" />
+                          ) : day.icon === "New Moon" ? (
+                            <img src={newMoon} alt="New Moon" />
+                          ) : day.icon === "First Quarter" ? (
+                            <img src={cervicalMucus} alt="First Quarter" />
+                          ) : day.icon === "Last Quarter" ? (
+                            <img src={menstruation} alt="Last Quarter" />
+                          ) : null}
+                        </div>
+                      )}
+                    </div>
+                    <p> {day.dayNo}</p>
                   </div>
                 </div>
               ))}
@@ -392,11 +461,29 @@ function JournalAdditionRemade() {
                                     {entry.fields.map((fields: any) => (
                                       <IonCol size="4" key={fields.key}>
                                         <IonItem lines="none">
-                                          <img
-                                            style={{ marginRight: "5px" }}
-                                            src={fields.icon}
-                                            height={10}
-                                          />
+                                          {fields.true_false ? (
+                                            <>
+                                              <img
+                                                style={{
+                                                  marginRight: "5px",
+                                                  // fill: fields.true_false ? "white" : "black",
+                                                }}
+                                                src={fields.svg}
+                                                height={10}
+                                              />
+                                            </>
+                                          ) : (
+                                            <>
+                                              <img
+                                                style={{
+                                                  marginRight: "5px",
+                                                  // fill: fields.true_false ? "white" : "black",
+                                                }}
+                                                src={fields.icon}
+                                                height={10}
+                                              />
+                                            </>
+                                          )}
                                           <IonLabel>{fields.label}</IonLabel>
                                           <IonCheckbox
                                             checked={fields.true_false}
@@ -441,6 +528,7 @@ function JournalAdditionRemade() {
                                               src={field.icon}
                                               height={20}
                                               alt=""
+                                              style={{}}
                                             />
                                             <h3>{field.label}</h3>
                                           </div>
