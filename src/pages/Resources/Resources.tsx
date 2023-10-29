@@ -399,10 +399,9 @@ const Resources: React.FC = () => {
                                 lines="none"
                                 onClick={() => getCategoryByID(item.id)}
                               >
-                                <div className="icon-img">
-                                  {item.icon_url ? (
-                                    <img src={item.icon_url} alt={item.name} />
-
+                                <div>
+                                  {item.svg_url ? (
+                                    <div className="icon-img" dangerouslySetInnerHTML={{ __html: item.svg_url }} />
                                   ) : (
                                     "null"
                                   )}

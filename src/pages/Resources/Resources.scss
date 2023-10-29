@@ -355,11 +355,11 @@
     margin-right: 5px;
     margin-top: 20px;
 }
-.icon-img{
+.icon-img svg{
     width: 20px;
     height: 20px;
-    margin-left: 10px;
     margin-top: 5px;
+    fill: var(--ion-color-primary);
 }
 
 .Resources
