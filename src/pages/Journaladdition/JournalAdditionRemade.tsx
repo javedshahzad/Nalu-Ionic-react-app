@@ -39,6 +39,7 @@ function JournalAdditionRemade() {
   const [typeState, setTypeState] = useState({});
   const [year, setYear] = useState(new Date().getFullYear());
   const [isLoading, setIsLoading] = useState(false);
+  const [icons2, setIcons2] = useState([]);
 
   const getJournalEntries = async () => {
     try {
@@ -281,7 +282,7 @@ function JournalAdditionRemade() {
   };
 
   const updateField = (val: any, fields: any) => {
-    console.log("feilds data");
+    fields.value = val;
 
     CustomCategoryApiService.post(
       `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`,
@@ -333,9 +334,23 @@ function JournalAdditionRemade() {
       console.error(error);
     }
   };
+  const getIcons2 = async () => {
+    const year = "2023-10";
+    const lang = "en";
+    try {
+      const data = await MoonPhasesServce.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${year}?lang=${lang}`
+      );
+      setIcons2(data);
+
+      console.log("icons 2", icons2);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    getIcons();
+    getIcons2();
   }, []);
 
   return (
@@ -466,7 +481,7 @@ function JournalAdditionRemade() {
                                               marginRight: "5px",
                                             }}
                                             src={
-                                              fields.true_false
+                                              fields.value
                                                 ? fields.svg
                                                 : fields.icon
                                             }
@@ -474,7 +489,7 @@ function JournalAdditionRemade() {
                                           />
                                           <IonLabel>{fields.label}</IonLabel>
                                           <IonCheckbox
-                                            checked={fields.true_false}
+                                            checked={fields.value}
                                             onIonChange={(event) =>
                                               updateField(
                                                 event.target.value,
