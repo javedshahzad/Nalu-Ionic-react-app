@@ -461,29 +461,17 @@ function JournalAdditionRemade() {
                                     {entry.fields.map((fields: any) => (
                                       <IonCol size="4" key={fields.key}>
                                         <IonItem lines="none">
-                                          {fields.true_false ? (
-                                            <>
-                                              <img
-                                                style={{
-                                                  marginRight: "5px",
-                                                  // fill: fields.true_false ? "white" : "black",
-                                                }}
-                                                src={fields.svg}
-                                                height={10}
-                                              />
-                                            </>
-                                          ) : (
-                                            <>
-                                              <img
-                                                style={{
-                                                  marginRight: "5px",
-                                                  // fill: fields.true_false ? "white" : "black",
-                                                }}
-                                                src={fields.icon}
-                                                height={10}
-                                              />
-                                            </>
-                                          )}
+                                          <img
+                                            style={{
+                                              marginRight: "5px",
+                                            }}
+                                            src={
+                                              fields.true_false
+                                                ? fields.svg
+                                                : fields.icon
+                                            }
+                                            height={10}
+                                          />
                                           <IonLabel>{fields.label}</IonLabel>
                                           <IonCheckbox
                                             checked={fields.true_false}
