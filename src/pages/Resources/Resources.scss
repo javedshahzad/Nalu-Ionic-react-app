@@ -360,7 +360,18 @@
     height: 20px;
     margin-left: 10px;
     margin-top: 5px;
+    fill: #EE5F64 !important;
 }
+.red-filter {
+    filter: hue-rotate(120deg) !important; /* Adjust the hue-rotate value to get the desired red color */
+  }
+  .red_icon{
+      fill: #EE5F64 !important;
+      width: 20px;
+      height: 20px;
+
+  }
+  
 
 .Resources
 {

@@ -110,6 +110,9 @@ const Courseoverviewpaid: React.FC = () => {
               <div className="the-list">
                 {courseData?.map((course) => (
                   <div key={course.id}>
+                    <div className="the-title">
+                      <h3>{course.title}</h3>
+                    </div>
                     {course?.progress && (
                       <div className="progress-holder">
                         <p>Course Progress</p>
@@ -117,7 +120,7 @@ const Courseoverviewpaid: React.FC = () => {
                           <IonProgressBar
                             value={course.progress / 100}
                           ></IonProgressBar>
-                          <h6>{course.progress}</h6>
+                          <h6>{course.progress}%</h6>
                         </div>
                       </div>
                     )}
@@ -134,10 +137,6 @@ const Courseoverviewpaid: React.FC = () => {
                         </IonItem>
                       </div>
                     )}
-
-                    <div className="the-title">
-                      <h3>{course.title}</h3>
-                    </div>
                     <IonAccordionGroup multiple={false}>
                       {course.items.map((module, moduleIndex) => (
                         <IonAccordion
@@ -159,8 +158,7 @@ const Courseoverviewpaid: React.FC = () => {
                                 <IonAccordion
                                   value={chapterIndex}
                                   disabled={
-                                    chapter.protected &&
-                                    !chapter.preview
+                                    chapter.protected && !chapter.preview
                                   }
                                 >
                                   <IonItem
@@ -178,8 +176,14 @@ const Courseoverviewpaid: React.FC = () => {
                                         color: "#636363",
                                       }}
                                     >
-                                      Chapter: {chapter.title}
+                                      <div
+                                        className="paragraph"
+                                        dangerouslySetInnerHTML={{
+                                          __html: `Chapter: ${chapter.title}`,
+                                        }}
+                                      ></div>
                                     </IonLabel>
+
                                     {!chapter?.items ? (
                                       <IonIcon
                                         src={
@@ -191,11 +195,14 @@ const Courseoverviewpaid: React.FC = () => {
                                         size="small"
                                         className="ion-accordion-toggle-icon no-rotation"
                                       ></IonIcon>
-                                    ) : chapter?.items && chapter.protected && !chapter.preview? (
+                                    ) : chapter?.items &&
+                                      chapter.protected &&
+                                      !chapter.preview ? (
                                       <>
                                         <IonIcon
                                           src={
-                                            chapter.protected && !chapter.preview
+                                            chapter.protected &&
+                                            !chapter.preview
                                               ? "assets/imgs/icn-lock.svg"
                                               : "assets/imgs/right-arrow.svg"
                                           }
@@ -206,12 +213,12 @@ const Courseoverviewpaid: React.FC = () => {
                                       </>
                                     ) : (
                                       <>
-                                      <IonIcon
-                                          src={ "assets/imgs/right-arrow.svg"}
+                                        {/* <IonIcon
+                                          src={"assets/imgs/right-arrow.svg"}
                                           slot="end"
                                           size="small"
                                           className="ion-accordion-toggle-icon"
-                                        ></IonIcon>
+                                        ></IonIcon> */}
                                       </>
                                     )}
                                   </IonItem>
@@ -235,8 +242,8 @@ const Courseoverviewpaid: React.FC = () => {
                                                 lines="inset"
                                                 onClick={() => {
                                                   if (
-                                                    sub_chapter.protected &&
-                                                    sub_chapter.preview
+                                                    // sub_chapter.protected &&
+                                                    !sub_chapter.preview
                                                   ) {
                                                     navigateToCourseInner(
                                                       sub_chapter.id
@@ -251,12 +258,12 @@ const Courseoverviewpaid: React.FC = () => {
                                                 </IonLabel>
                                                 <IonIcon
                                                   src={
-                                                    sub_chapter.protected &&
+                                                    // sub_chapter.protected &&
                                                     !sub_chapter.preview
                                                       ? "assets/imgs/icn-lock.svg"
                                                       : "assets/imgs/right-arrow.svg"
                                                   }
-                                                  className="ion-accordion-toggle-icon custom-icon custom_icon"
+                                                  className="ion-accordion-toggle-icon custom-icon custom_icon no-rotation"
                                                   slot="end"
                                                 ></IonIcon>
                                               </IonItem>

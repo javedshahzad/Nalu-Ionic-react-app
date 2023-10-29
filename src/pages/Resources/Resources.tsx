@@ -374,10 +374,17 @@ const Resources: React.FC = () => {
                                 onClick={() => getParentCategoryByID(item.id)}
                               >
                                 <div className="icon-img">
-                                  {item.icon_url ? (
-                                    <img src={item.icon_url} alt={item.name} />
+                                  {item?.icon_url ? (
+                                    // <img src={item.icon_url} alt={item.name} />
+                                    <object 
+data={item?.icon_url} 
+type="image/svg+xml"
+style={{"width": "20px","height": "20px", "fill": "red"}}>
+ </object>
 
-                                  ) : (
+
+                                    
+                                    ) : (
                                     "null"
                                   )}
                                 </div>

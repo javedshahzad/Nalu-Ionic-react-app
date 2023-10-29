@@ -78,7 +78,7 @@ const CourseInnerOverview: React.FC = () => {
 
 
   useEffect(() => {
-    getData(courseId);
+    getData(courseId,null);
   }, []);
 
 
@@ -87,14 +87,22 @@ const CourseInnerOverview: React.FC = () => {
   // };
   const handleComplete = (id) => {
     // history.push(`/tabs/tab2/courseinneroverview/${id}`);
-    getData(id)
+    getData(id,null)
   };
 
-  const getData = (id) => {
+  const getData = (id,next_chapter) => {
     setIsLoading(true);
+    let URL;
+    if(id){
+       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`
+    }
+    else{
+     URL =   next_chapter
+    }
+    console.log(URL)
     try {
       axios
-        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`,{
+        .get(URL,{
           headers:{
             Authorization:`Bearer ${localStorage.getItem('jwtToken')}`
           }
@@ -113,11 +121,11 @@ const CourseInnerOverview: React.FC = () => {
       console.log(error);
     }
   };
-  const markAsDone = (URL) => {
+  const markAsDone = (course) => {
     setIsMarlLoading(true);
     try {
       axios
-        .post(URL,null,{
+        .post(course?.completion_link,null,{
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
           }
@@ -125,7 +133,7 @@ const CourseInnerOverview: React.FC = () => {
         .then((response) => {
           console.log(response.data);
           if(response.data.status = "success"){
-            getData(courseId)
+            getData(null,course?.next_chapter)
             // history.push('/tabs/tab2')
           }
           setIsMarlLoading(false);
@@ -257,7 +265,7 @@ const CourseInnerOverview: React.FC = () => {
                     <div
                       
                       className={`mark-done-button`}
-                      onClick={()=> markAsDone(courseData?.completion_link)}
+                      onClick={()=> markAsDone(courseData)}
                       
                     >
                       {ismarkLoading ? (
