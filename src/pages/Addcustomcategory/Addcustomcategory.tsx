@@ -146,23 +146,14 @@ const Addcustomcategory: React.FC = () => {
 
   const isFormValid =
     !!customName &&
-    // !!selectedValue &&
     !!selectedLogoValue &&
     !customNameError &&
-    // !selectedValueError &&
     !selectedLogoError;
 
   const handleCustomNameChange = (event) => {
     const value = event.target.value;
     setCustomName(value);
     setcustomNameError(value.trim() === "" ? "Please enter Custom name." : "");
-  };
-  const handleGeneralLabelChange = (event) => {
-    const value = event.target.value;
-    setGeneralLabel(value);
-    setGeneralLabelError(
-      value.trim() === "" ? "Please enter Custom name." : ""
-    );
   };
 
   const handleDeleteField = (id: any) => {
@@ -221,17 +212,31 @@ const Addcustomcategory: React.FC = () => {
   };
 
   const saveCustomCategoryData = () => {
+    const newCategory: any = {
+      label: customName,
+      type: selectedType,
+      icon: selectedLogoValue,
+      value: null,
+    };
+
+    newCategory.key = Date.now().toString(32) + Math.random().toString(16);
+
+    // setCustomCategoryData([...customCategoryData, newCategory]);
+
+    setCustomName("");
+    setSelectedLogoValue("");
+    setSelectedType("");
+
     const body = {
       key: "custom_user_fields",
-      label: generalLabel,
+      label: customName,
       type: "group",
-      fields: customCategoryData,
+      fields: [newCategory],
     };
 
     CustomCategoryApiService.post(
-      `https://app.mynalu.com/wp-json/nalu-app/v1/add-custom-field?category\_name=${generalLabel}&category_icon=${categoryIcon}&type="group"`,
-      body,
-      tokenService.getWPToken()
+      `https://app.mynalu.com/wp-json/nalu-app/v1/add-custom-field?category\_name=${customName}&category_icon=${selectedLogoValue}&type=group`,
+      body
     ).then(
       (data) => {
         console.log("data from custom category api", data);
@@ -255,16 +260,16 @@ const Addcustomcategory: React.FC = () => {
       <IonContent className="ion-padding" fullscreen>
         <div className="section">
           <div className="title flex al-center jc-between ion-padding-bottom">
-            <h3>Add General Label</h3>
+            <h3>Add Custom Category Name</h3>
           </div>
           <div className="the-form up">
             <div className="input-item">
               <IonItem lines="none">
                 <IonInput
-                  placeholder="Input Text"
-                  value={generalLabel}
-                  onIonFocus={handleGeneralLabelChange}
-                  onIonInput={handleGeneralLabelChange}
+                  placeholder="Add Preferred Custom Name"
+                  value={customName}
+                  onIonFocus={handleCustomNameChange}
+                  onIonInput={handleCustomNameChange}
                 />
               </IonItem>
 
@@ -274,194 +279,62 @@ const Addcustomcategory: React.FC = () => {
             </div>
           </div>
         </div>
+
         <div className="section ion-padding-bottom">
           <div className="title flex al-center jc-between ion-padding-bottom">
-            <h3 style={{ fontSize: "15px" }}>Category Icon</h3>
+            <h3 style={{ fontSize: "15px" }}>Choose Category Type</h3>
           </div>
-          <IonRadioGroup value={categoryIcon} onIonChange={handleCategoryIcon}>
+          <IonRadioGroup
+            value={selectedType}
+            onIonChange={(event) => handleTypeChange(event, event.target.value)}
+          >
             <IonRow>
-              {icons.map((icon, index) => (
-                <IonCol id="imgg" key={index}>
+              {types.map((type) => (
+                <IonCol id="imgg" key={type}>
                   <IonItem lines="none">
-                    <IonLabel className="ion-text-center">
-                      <img src={icon} alt={`Icon ${index}`} height={20} />
-                    </IonLabel>
-                    <IonRadio value={icon} mode="md"></IonRadio>
+                    <IonLabel className="ion-text-center">{type}</IonLabel>
+                    <IonRadio value={type} mode="md"></IonRadio>
                   </IonItem>
                 </IonCol>
               ))}
             </IonRow>
           </IonRadioGroup>
         </div>
-        <IonButtons>
-          <IonButton id="open-modal" expand="block" onClick={addNewField}>
-            <IonLabel>Add field</IonLabel>
-            <IonIcon icon={addOutline} />
-          </IonButton>
-        </IonButtons>
-
-        <div>
-          {customCategoryData.map((data, index) => (
-            <>
-              <ul style={{ padding: "0px" }}>
-                <li className="custom-category">
-                  <span style={{ width: "70%" }}>{data.label}</span>
-                  <div
-                    style={{
-                      width: "30%",
-                      display: "flex",
-                      justifyContent: "end",
-                    }}
-                  >
-                    <button
-                      style={{
-                        backgroundColor: "transparent",
-                        marginRight: "5px",
-                      }}
-                      id="open-modal"
-                      onClick={() => handleLabelClick(data)}
-                      type="button"
-                    >
-                      <img src={pen} />
-                    </button>
-                    <button
-                      style={{
-                        backgroundColor: "transparent",
-                      }}
-                      onClick={() => handleDeleteField(data.key)}
-                      type="button"
-                    >
-                      <IonIcon icon={trashBin} style={{ color: "#f06f74" }} />
-                    </button>
-                  </div>
-                </li>
-              </ul>
-            </>
-          ))}
-        </div>
-
-        <IonModal
-          ref={modal}
-          className="Addcustomcategory"
-          isOpen={modalOpen}
-          backdropDismiss={false}
-        >
-          <IonHeader>
-            <IonToolbar>
-              <IonButtons slot="start">
-                <IonButton
-                  onClick={() => {
-                    setModalOpen(false);
-                    setFieldId(null);
-                  }}
-                >
-                  Cancel
-                </IonButton>
-              </IonButtons>
-              <IonTitle>Add Field</IonTitle>
-
-              <IonButtons slot="end">
-                {fieldId == null ? (
-                  <>
-                    <IonButton strong={true} onClick={() => confirm()}>
-                      Confirm
-                    </IonButton>
-                  </>
-                ) : (
-                  <>
-                    <IonButton
-                      strong={true}
-                      onClick={() => handleUpdateField(fieldId)}
-                    >
-                      Save
-                    </IonButton>
-                  </>
-                )}
-              </IonButtons>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent className="ion-padding">
-            <div className="section ion-padding-bottom">
-              <div className="title flex al-center jc-between ion-padding-bottom">
-                <h3 style={{ fontSize: "15px" }}>Add General Label</h3>
-              </div>
-              <div className="the-form up">
-                <div className="input-item">
-                  <IonItem lines="none">
-                    <IonInput
-                      placeholder="Add Preferred Custom Name"
-                      value={customName}
-                      onIonFocus={handleCustomNameChange}
-                      onIonInput={handleCustomNameChange}
-                    />
-                  </IonItem>
-
-                  {customNameError && (
-                    <p className="error-message">{customNameError}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="section ion-padding-bottom">
-              <div className="title flex al-center jc-between ion-padding-bottom">
-                <h3 style={{ fontSize: "15px" }}>Choose Category Type</h3>
-              </div>
-              <IonRadioGroup
-                value={selectedType}
-                onIonChange={(event) =>
-                  handleTypeChange(event, event.target.value)
-                }
-              >
-                <IonRow>
-                  {types.map((type) => (
-                    <IonCol id="imgg" key={type}>
-                      <IonItem lines="none">
-                        <IonLabel className="ion-text-center">{type}</IonLabel>
-                        <IonRadio value={type} mode="md"></IonRadio>
-                      </IonItem>
-                    </IonCol>
-                  ))}
-                </IonRow>
-              </IonRadioGroup>
-            </div>
-            <div className="section">
-              <div className="title flex al-center jc-between ion-padding-bottom">
-                <h3 style={{ fontSize: "15px" }}>Choose a Logo</h3>
-              </div>
-              {isLoading ? (
-                <IonRow>
-                  <IonCol size="1">
+        <div className="section">
+          <div className="title flex al-center jc-between ion-padding-bottom">
+            <h3 style={{ fontSize: "15px" }}>Choose a Logo</h3>
+          </div>
+          {isLoading ? (
+            <IonRow>
+              <IonCol size="1">
+                <IonItem lines="none">
+                  <IonSpinner name="crescent"></IonSpinner>
+                </IonItem>
+              </IonCol>
+            </IonRow>
+          ) : (
+            <IonRadioGroup
+              value={selectedLogoValue}
+              onIonChange={handleLogoChange}
+            >
+              <IonRow>
+                {icons.map((icon, index) => (
+                  <IonCol id="imgg" key={index}>
                     <IonItem lines="none">
-                      <IonSpinner name="crescent"></IonSpinner>
+                      <IonLabel className="ion-text-center">
+                        <img src={icon} alt={`Icon ${index}`} height={20} />
+                      </IonLabel>
+                      <IonRadio value={icon} mode="md"></IonRadio>
                     </IonItem>
                   </IonCol>
-                </IonRow>
-              ) : (
-                <IonRadioGroup
-                  value={selectedLogoValue}
-                  onIonChange={handleLogoChange}
-                >
-                  <IonRow>
-                    {icons.map((icon, index) => (
-                      <IonCol id="imgg" key={index}>
-                        <IonItem lines="none">
-                          <IonLabel className="ion-text-center">
-                            <img src={icon} alt={`Icon ${index}`} height={20} />
-                          </IonLabel>
-                          <IonRadio value={icon} mode="md"></IonRadio>
-                        </IonItem>
-                      </IonCol>
-                    ))}
-                  </IonRow>
-                </IonRadioGroup>
-              )}
-              {selectedLogoError && (
-                <p className="error-message">{selectedLogoError}</p>
-              )}
-            </div>
-          </IonContent>
-        </IonModal>
+                ))}
+              </IonRow>
+            </IonRadioGroup>
+          )}
+          {selectedLogoError && (
+            <p className="error-message">{selectedLogoError}</p>
+          )}
+        </div>
 
         <div className="btn-holder ion-text-center ion-padding-vertical">
           <IonButton

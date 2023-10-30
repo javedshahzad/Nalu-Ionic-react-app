@@ -32,6 +32,7 @@ $config-black: #2d2d2d;
     .isToday {
       background-color: $config-black;
       border-radius: 10px;
+      content: "Today";
       color: $config-white;
       display: flex;
       flex-direction: column;
@@ -40,13 +41,24 @@ $config-black: #2d2d2d;
       &:hover {
         background-color: $config-pink !important;
         border-radius: 10px;
-        .daysIcon {
-          display: none !important;
-        }
       }
       &::before {
+        position: relative;
+        top: 16px;
         content: "Today";
         font-size: 8px;
+        color: $config-white !important;
+      }
+
+      .active {
+        background-color: $config-pink;
+        &::before {
+          position: relative !important;
+          top: 16px !important;
+          content: "Today" !important;
+          font-size: 8px;
+          color: $config-white !important;
+        }
       }
     }
 
@@ -93,13 +105,6 @@ $config-black: #2d2d2d;
     .active {
       background-color: $config-pink !important;
       color: $config-white !important;
-
-      .daysIcon {
-        display: none !important;
-        &:hover {
-          display: none !important;
-        }
-      }
     }
     .date {
       font-size: 16px;

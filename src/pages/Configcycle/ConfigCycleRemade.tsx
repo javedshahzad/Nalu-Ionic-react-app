@@ -295,7 +295,7 @@ function ConfigCycleRemade() {
     CustomCategoryApiService.postCall2(
       `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`,
 
-      tokenService.getWPToken()
+      tokenService.getToken()
     ).then(
       (data) => {
         console.log("data from custom category api", data);

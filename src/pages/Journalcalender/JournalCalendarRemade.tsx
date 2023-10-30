@@ -23,6 +23,7 @@ import NotificationBell from "../../components/NotificationBell";
 import { useParams } from "react-router-dom";
 import "./journalcalendarremade.scss";
 import MoonPhasesServce from "../../MoonPhasesService";
+import CustomCategoryApiService from "../../CustomCategoryService";
 
 const months = [
   "January",
@@ -52,6 +53,7 @@ const JournalCalendarRemade = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeMonthIndex, setActiveMonthIndex] = useState(null);
   const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
+  const [todayPeriod, setTodayPeriod] = useState("false");
 
   const history = useHistory(); // Use useHistory for navigation
 
@@ -82,6 +84,8 @@ const JournalCalendarRemade = () => {
     }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
     url = `/journaladditionremade/${dateParam}`;
+
+    history.push(url);
   };
 
   const getIcons = async () => {
@@ -112,13 +116,107 @@ const JournalCalendarRemade = () => {
       console.error(error);
     }
   };
+  const getIcons2 = async () => {
+    let lang = "en";
+    let month: any = new Date().getMonth();
+    if (parseInt(month) < 10) {
+      month = "0" + month;
+    }
+    let year = new Date().getFullYear();
+
+    let yearMonth = `${year}-${month}`;
+    try {
+      const data = await MoonPhasesServce.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=${lang}`
+      );
+
+      const todayData = data["today"];
+
+      if (todayData) {
+        setTodayPeriod(todayData.active_period.toString());
+
+        console.log("Today's data:", todayData);
+      } else {
+        console.log("No data found for today");
+      }
+
+      // setIcons2(data);
+      console.log("getIcons 2", data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     getIcons();
+    getIcons2();
   }, []);
 
-  const goToJournalAddition = () => {
-    history.push(url);
+  const handleStartStop = () => {
+    let body = {};
+
+    let date: any = new Date().getDate();
+
+    if (parseInt(date) < 10) {
+      date = "0" + date;
+    }
+
+    let month: any = new Date().getMonth();
+
+    if (parseInt(month) < 10) {
+      month = "0" + month;
+    }
+
+    let year = new Date().getFullYear();
+
+    let curDate = `${year}-${month}-${date}`;
+
+    console.log("today period", todayPeriod);
+    if (todayPeriod == "false") {
+      body = {
+        entries: [
+          {
+            key: "period_bleeding",
+            value: "3",
+          },
+        ],
+      };
+      CustomCategoryApiService.post(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${curDate}`,
+        body
+      ).then(
+        (data) => {
+          console.log("data from custom category api", data);
+        },
+        (err) => {
+          console.log("err sending data", err);
+        }
+      );
+    }
+    if (todayPeriod == "true") {
+      body = {
+        entries: [
+          {
+            key: "period_bleeding",
+            value: "0",
+          },
+        ],
+      };
+
+      CustomCategoryApiService.post(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${curDate}`,
+        body
+      ).then(
+        (data) => {
+          console.log("data from custom category api", data);
+        },
+        (err) => {
+          console.log("err sending data", err);
+        }
+      );
+    }
+
+    // history.push(url);
   };
 
   const handleClick = () => {
@@ -236,11 +334,13 @@ const JournalCalendarRemade = () => {
                   <img src={fullMoon} />
                 ) : moonPhase.phase_name === "New Moon" ? (
                   <img src={newMoon} />
-                ) : moonPhase.phase_name === "First Quarter" ? (
-                  <img src={cervicalMucus} />
-                ) : moonPhase.phase_name === "Last Quarter" ? (
-                  <img src={menstruation} />
-                ) : null}
+                ) : // : moonPhase.phase_name === "First Quarter" ? (
+                //   <img src={cervicalMucus} />
+                // ) : moonPhase.phase_name === "Last Quarter" ? (
+                //   <img src={menstruation} />
+                // )
+
+                null}
               </div>
               {/* Added "null" for the empty condition */}
               <p>{i}</p>
@@ -370,8 +470,12 @@ const JournalCalendarRemade = () => {
               <img src={setting} alt="" />
             </IonButton>
           </div>
-          <IonButton className="period-btn" onClick={goToJournalAddition}>
-            End of Period
+          <IonButton className="period-btn" onClick={handleStartStop}>
+            {todayPeriod == "false" ? (
+              <IonLabel>Start of Period</IonLabel>
+            ) : (
+              <IonLabel>Stop of Period</IonLabel>
+            )}
           </IonButton>
         </div>
       </IonContent>
