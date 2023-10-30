@@ -23,6 +23,9 @@ import NotificationBell from "../../components/NotificationBell";
 import { useParams } from "react-router-dom";
 import "./journalcalendarremade.scss";
 import MoonPhasesServce from "../../MoonPhasesService";
+import tokenService from "../../token";
+import apiService from "../../Services";
+import token from "../../token";
 
 const months = [
   "January",
@@ -52,6 +55,7 @@ const JournalCalendarRemade = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeMonthIndex, setActiveMonthIndex] = useState(null);
   const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
+  const [icons2, setSetIcons2] = useState([]);
 
   const history = useHistory(); // Use useHistory for navigation
 
@@ -112,9 +116,25 @@ const JournalCalendarRemade = () => {
       console.error(error);
     }
   };
+  const getIcons2 = async () => {
+    const year = "2023-10";
+    const lang = "en";
+
+    try {
+      const data = await apiService.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${year}?lang=${lang}`,
+        token
+      );
+      setSetIcons2(data);
+      console.log("icons2 ", icons2);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     getIcons();
+    getIcons2();
   }, []);
 
   const goToJournalAddition = () => {
