@@ -1,36 +1,21 @@
+const USER_TOKEN = localStorage.getItem("jwtToken") || "";
 let user = "65194710d160530510955d7d";
-
-let token =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcC5teW5hbHUuY29tIiwiaWF0IjoxNjk4NjAzNzExLCJuYmYiOjE2OTg2MDM3MTEsImV4cCI6MTY5OTIwODUxMSwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.632hTUg58TGGbqyNx4aDGtQN9DMHm_KNBT69HBGjfb4";
-
-let wp_token =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcC5teW5hbHUuY29tIiwiaWF0IjoxNjk3MjkyMTk2LCJuYmYiOjE2OTcyOTIxOTYsImV4cCI6MTY5Nzg5Njk5NiwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMTY1In19fQ.1WZS1O5JTm3koX5u90o_Cjce5BnqJrrWg-ZW16uwqEg";
+let token = USER_TOKEN;
+let wp_token = USER_TOKEN;
 
 const tokenService = {
-  updateToken: (tken?: any) => {
-    token = tken
-      ? tken
-      : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcC5teW5hbHUuY29tIiwiaWF0IjoxNjk4NjAzNzExLCJuYmYiOjE2OTg2MDM3MTEsImV4cCI6MTY5OTIwODUxMSwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.632hTUg58TGGbqyNx4aDGtQN9DMHm_KNBT69HBGjfb4";
+  updateToken: (tken: string = USER_TOKEN) => {
+    token = tken;
   },
-  updateWPToken: (tken?: any) => {
-    wp_token = tken
-      ? tken
-      : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcC5teW5hbHUuY29tIiwiaWF0IjoxNjk3MjkyMTk2LCJuYmYiOjE2OTcyOTIxOTYsImV4cCI6MTY5Nzg5Njk5NiwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMTY1In19fQ.1WZS1O5JTm3koX5u90o_Cjce5BnqJrrWg-ZW16uwqEg";
+  updateWPToken: (tken: string = USER_TOKEN) => {
+    wp_token = tken;
   },
-  updateUserId: (tken?: any) => {
-    user = tken ? tken : "65194710d160530510955d7d";
+  updateUserId: (usr: string = "65194710d160530510955d7d") => {
+    user = usr;
   },
-
-  getToken: () => {
-    return token;
-  },
-  getWPToken: () => {
-    return wp_token;
-  },
-
-  getUserId: () => {
-    return user;
-  },
+  getToken: () => token,
+  getWPToken: () => wp_token,
+  getUserId: () => user,
 };
 
 export default tokenService;

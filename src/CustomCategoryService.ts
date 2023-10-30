@@ -1,42 +1,20 @@
 import axios from "axios";
 
+const jwtToken = localStorage.getItem("jwtToken");
+const customHeaders = {
+  headers: {
+    Authorization: `Bearer ${jwtToken}`,
+  },
+};
+
 const CustomCategoryApiService = {
-  get: async (url: string) => {
-    const response = await axios.get(url);
+  get: async (url: string) => (await axios.get(url)).data,
 
-    return response.data;
-  },
+  post: async (url: string, data: any) => (await axios.post(url, data, customHeaders)).data,
 
-  post: async (url: string, data: any, token: any) => {
-    const customHeaders = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const response = await axios.post(url, data, customHeaders);
-    return response.data;
-  },
+  postCall2: async (url: string) => (await axios.post(url, customHeaders)).data,
 
-  postCall2: async (url: string, token: any) => {
-    const customHeaders = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const response = await axios.post(url, customHeaders);
-
-    return response.data;
-  },
-  put: async (url: string, token: any) => {
-    const customHeaders = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const response = await axios.put(url, customHeaders);
-
-    return response.data;
-  },
+  put: async (url: string) => (await axios.put(url, customHeaders)).data,
 };
 
 export default CustomCategoryApiService;

@@ -6,6 +6,7 @@ import {
   IonItem,
   IonPage,
   IonRippleEffect,
+  IonRouterLink,
 } from "@ionic/react";
 
 import "./Login.scss";
@@ -33,10 +34,11 @@ const Login: React.FC = () => {
   const handlePasswordChange = (event) => {
     const value = event.target.value;
     setPassword(value);
-    setPasswordError(value.trim() === '' ? 'Please enter your password.' : value.length < 8 ? 'Password must be at least 8 characters long.' : '');
+    setPasswordError(value.trim() === '' ? 'Please enter your password.' : value.length < 6 ? 'Password must be at least 6 characters long.' : '');
     setErrorMessage(value.trim() === '' ? '': '')
 
   };
+
 
   const handleEmailChange = (event) => {
     const value = event.target.value;
@@ -73,10 +75,12 @@ const Login: React.FC = () => {
 
           // naviagtion
           history.push("/tabs/tab1")
+
+
         }
       } catch (error) {
         console.log('Error', error.response.data.message);
-        setErrorMessage("Invalid email or password. Please try again.")
+        setErrorMessage("Invalid credentials")
       }
     };
   
@@ -85,7 +89,6 @@ const Login: React.FC = () => {
       <IonContent className="ion-padding" fullscreen>
         <div className="title-holder ion-text-center">
           <h3> {t('login.login')}</h3>
-          <h6>{t('login.account')}</h6>
         </div>
         <div className="the-form">
     
@@ -102,23 +105,29 @@ const Login: React.FC = () => {
           <div className="input-item">
             <IonItem lines="none">
               <IonIcon src="assets/imgs/icn-lock.svg" slot="start" />
-              <IonInput placeholder={t('login.password')} type="password" autocomplete="password" value={password} onIonInput={handlePasswordChange}
+              <IonInput
+                placeholder={t('login.password')}
+                type="password"
+                value={password}
+                onIonInput={handlePasswordChange}
               />
             </IonItem>
             {passwordError && <p className="error-message">{passwordError}</p>}
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
           </div>
+
+         
         </div>
         <div className="btn-holder ion-text-center ion-padding-vertical">
           <IonButton expand="block" disabled={!isFormValid} onClick={() => handleLogin()}>{t('login.continue_button')}</IonButton>
         </div>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
 
         <div className="or ion-text-center">
           <p>{t('login.or')}</p>
         </div>
       
 
-        <div className="social-holder ion-text-center">
+        {/*<div className="social-holder ion-text-center">
         <IonButton expand="block" routerLink="/questioning">
           <IonIcon slot="start" src="assets/imgs/icn-google.svg" />
           {t('login.google')}
@@ -128,16 +137,18 @@ const Login: React.FC = () => {
           <IonIcon slot="start" src="assets/imgs/icn-fb.svg" />
           {t('login.facebook')}
         </IonButton>
-        </div>
+        </div>*/}
 
+      <IonRouterLink routerLink="/registeration">
         <div className="bottom-holder flex al-center jc-center">
         <h6>{t('login.no_account')} &nbsp;&nbsp;</h6>
         <div className="btn ion-activatable ripple-parent rectangle">
         <IonRippleEffect></IonRippleEffect>
         <h5>{t('login.sign_up')}</h5>
       </div>
+      </div>
+      </IonRouterLink>
 
-        </div>
       </IonContent>
     </IonPage>
   );

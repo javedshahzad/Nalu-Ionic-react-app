@@ -295,7 +295,6 @@ function JournalAdditionRemade() {
         ],
       },
 
-      tokenService.getWPToken()
     ).then(
       (data) => {
         console.log("data from custom category api", data);
