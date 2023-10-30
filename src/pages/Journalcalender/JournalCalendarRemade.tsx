@@ -23,7 +23,13 @@ import NotificationBell from "../../components/NotificationBell";
 import { useParams } from "react-router-dom";
 import "./journalcalendarremade.scss";
 import MoonPhasesServce from "../../MoonPhasesService";
+<<<<<<< HEAD
 import CustomCategoryApiService from "../../CustomCategoryService";
+=======
+import tokenService from "../../token";
+import apiService from "../../Services";
+import token from "../../token";
+>>>>>>> f8254eda3e9bc814e267947144dc92eaeaabe768
 
 const months = [
   "January",
@@ -53,7 +59,11 @@ const JournalCalendarRemade = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeMonthIndex, setActiveMonthIndex] = useState(null);
   const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
+<<<<<<< HEAD
   const [todayPeriod, setTodayPeriod] = useState("false");
+=======
+  const [icons2, setSetIcons2] = useState([]);
+>>>>>>> f8254eda3e9bc814e267947144dc92eaeaabe768
 
   const history = useHistory(); // Use useHistory for navigation
 
@@ -117,6 +127,7 @@ const JournalCalendarRemade = () => {
     }
   };
   const getIcons2 = async () => {
+<<<<<<< HEAD
     let lang = "en";
     let month: any = new Date().getMonth();
     if (parseInt(month) < 10) {
@@ -142,6 +153,18 @@ const JournalCalendarRemade = () => {
 
       // setIcons2(data);
       console.log("getIcons 2", data);
+=======
+    const year = "2023-10";
+    const lang = "en";
+
+    try {
+      const data = await apiService.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${year}?lang=${lang}`,
+        token
+      );
+      setSetIcons2(data);
+      console.log("icons2 ", icons2);
+>>>>>>> f8254eda3e9bc814e267947144dc92eaeaabe768
     } catch (error) {
       console.error(error);
     }
