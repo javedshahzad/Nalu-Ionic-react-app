@@ -32,6 +32,9 @@ import cervicalMucus from "../../assets/images/Cervical Mucus.svg";
 import CustomCategoryApiService from "../../CustomCategoryService";
 import tokenService from "../../token";
 import MoonPhasesServce from "../../MoonPhasesService";
+import { useDispatch } from "react-redux";
+import journalReducer from "../../reducers/journalReducer";
+import { journalAction } from "../../actions/journalAction";
 
 function JournalAdditionRemade() {
   const { dateParam } = useParams<{ dateParam: string }>();
@@ -40,6 +43,7 @@ function JournalAdditionRemade() {
   const [year, setYear] = useState(new Date().getFullYear());
   const [isLoading, setIsLoading] = useState(false);
   const [icons2, setIcons2] = useState([]);
+  const dispatch = useDispatch();
 
   const getJournalEntries = async () => {
     try {
@@ -49,60 +53,27 @@ function JournalAdditionRemade() {
         `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`
       );
 
-      let journalEntryObj = JSON.parse(localStorage.getItem(dateParam));
+      console.log("data++", data);
 
-      console.log("jou obj", journalEntryObj);
+      if (data.entries.length > 0) {
+        const types = [...new Set(data.entries.map((item: any) => item.type))];
 
-      if (data === journalEntryObj) {
-        if (journalEntryObj === null || journalEntryObj === undefined) {
-          const data = await JournalAdditionApiService.get(
-            `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`
+        const dynamicStates = {};
+
+        types.forEach((type: any) => {
+          dynamicStates[type] = data.entries.filter(
+            (item: any) => item.type === type
           );
+        });
 
-          if (data.entries.length > 0) {
-            const types = [
-              ...new Set(data.entries.map((item: any) => item.type)),
-            ];
+        console.log("dynamic state", dynamicStates);
 
-            const dynamicStates = {};
+        setTypeState(dynamicStates);
+        dispatch(journalAction(dynamicStates));
 
-            types.forEach((type: any) => {
-              dynamicStates[type] = data.entries.filter(
-                (item: any) => item.type === type
-              );
-            });
-
-            console.log("dynamic state", dynamicStates);
-            localStorage.setItem(dateParam, JSON.stringify(dynamicStates));
-            // setTypeState(dynamicStates);
-            setIsLoading(false);
-          }
-        } else {
-          // setTypeState(JSON.parse(journalEntryObj));
-          setIsLoading(false);
-        }
-      } else {
-        console.log("data++", data);
-
-        if (data.entries.length > 0) {
-          const types = [
-            ...new Set(data.entries.map((item: any) => item.type)),
-          ];
-
-          const dynamicStates = {};
-
-          types.forEach((type: any) => {
-            dynamicStates[type] = data.entries.filter(
-              (item: any) => item.type === type
-            );
-          });
-
-          console.log("dynamic state", dynamicStates);
-          // localStorage.setItem(dateParam, JSON.stringify(dynamicStates));
-          setTypeState(dynamicStates);
-          setIsLoading(false);
-        }
+        setIsLoading(false);
       }
+
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -340,6 +311,37 @@ function JournalAdditionRemade() {
     getIcons();
   }, []);
 
+  const changeColor = (key) => {
+    const divElement = document.getElementById(key);
+
+    if (!divElement) {
+      console.log("Element with the specified ID not found.");
+      return;
+    }
+
+    // Get the computed style of the div
+    const svgElement = divElement.firstElementChild;
+    const divComputedStyle = window.getComputedStyle(svgElement);
+
+    const desiredValue = "#FFFFFF"; // Replace with the initial fill value of your SVG
+    if (divComputedStyle.getPropertyValue("fill") === desiredValue) {
+      // svgElement.style.fill = "#000000"; // Change to black
+      console.log("The div has the desired style.");
+    } else {
+      // svgElement.style.fill = "#FFFFFF"; // Change to white
+      console.log("The div does not have the desired style.");
+      // svgElement.
+    }
+
+    // Access the first child of the div, which is the SVG element
+
+    // Define the desired fill color
+    const desiredFillColor = "red";
+
+    // Set the fill color for the SVG
+    svgElement.querySelector("circle").setAttribute("fill", desiredFillColor);
+  };
+
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
@@ -460,18 +462,21 @@ function JournalAdditionRemade() {
                                 <IonRow>
                                   {entry.fields.map((fields: any) => (
                                     <IonCol size="4" key={fields.key}>
-                                      <IonItem lines="none">
-                                        <img
-                                          style={{
-                                            marginRight: "5px",
+                                      <IonItem
+                                        lines="none"
+                                        onClick={() => (fields.value = true)}
+                                      >
+                                        <div
+                                          className="svgIconss"
+                                          dangerouslySetInnerHTML={{
+                                            __html: fields.svg,
                                           }}
-                                          src={
-                                            fields.value
-                                              ? fields.svg
-                                              : fields.icon
+                                          id={fields.key}
+                                          onClick={() =>
+                                            changeColor(fields.key)
                                           }
-                                          height={10}
                                         />
+
                                         <IonLabel>{fields.label}</IonLabel>
                                         <IonCheckbox
                                           checked={fields.value}
@@ -507,8 +512,20 @@ function JournalAdditionRemade() {
                                 <IonRow>
                                   {entry.fields.map((field: any) => (
                                     <>
-                                      <IonCol size="3.5" class="flex al-center">
+                                      <IonCol size="3" class="flex al-center">
                                         <div className="start-slot flex al-center">
+                                          {/* <div
+                                            className="svgIcons"
+                                            dangerouslySetInnerHTML={{
+                                              __html: field.svg,
+                                            }}
+                                            style={{
+                                              fill: "red",
+                                              height: "15px",
+                                            }}
+                                          />
+                                          <h3>{field.label}</h3>*/}
+
                                           <img
                                             src={field.icon}
                                             height={20}
@@ -518,7 +535,7 @@ function JournalAdditionRemade() {
                                           <h3>{field.label}</h3>
                                         </div>
                                       </IonCol>
-                                      <IonCol size="8.5">
+                                      <IonCol size="9">
                                         <IonRange
                                           className="custom-tick"
                                           aria-label="Dual Knobs Range"
@@ -575,10 +592,15 @@ function JournalAdditionRemade() {
                                   {entry.fields.map((fields: any) => (
                                     <IonCol size="4" key={fields.key}>
                                       <IonItem lines="none">
-                                        <img
-                                          style={{ marginRight: "5px" }}
-                                          src={fields.icon}
-                                          height={10}
+                                        <div
+                                          className="svgIconss"
+                                          dangerouslySetInnerHTML={{
+                                            __html: fields.svg,
+                                          }}
+                                          id={fields.key}
+                                          onClick={() =>
+                                            changeColor(fields.key)
+                                          }
                                         />
                                         <IonLabel>{fields.label}</IonLabel>
                                         <IonCheckbox
@@ -616,10 +638,15 @@ function JournalAdditionRemade() {
                                   {entry.fields.map((fields: any) => (
                                     <IonCol size="4" key={fields.key}>
                                       <IonItem lines="none">
-                                        <img
-                                          style={{ marginRight: "5px" }}
-                                          src={fields.icon}
-                                          height={10}
+                                        <div
+                                          className="svgIconss"
+                                          dangerouslySetInnerHTML={{
+                                            __html: fields.svg,
+                                          }}
+                                          id={fields.key}
+                                          onClick={() =>
+                                            changeColor(fields.key)
+                                          }
                                         />
                                         <IonLabel>{fields.label}</IonLabel>
                                         <IonCheckbox
@@ -657,10 +684,15 @@ function JournalAdditionRemade() {
                                   {entry.fields.map((fields: any) => (
                                     <IonCol size="4" key={fields.key}>
                                       <IonItem lines="none">
-                                        <img
-                                          style={{ marginRight: "5px" }}
-                                          src={fields.icon}
-                                          height={10}
+                                        <div
+                                          className="svgIconss"
+                                          dangerouslySetInnerHTML={{
+                                            __html: fields.svg,
+                                          }}
+                                          id={fields.key}
+                                          onClick={() =>
+                                            changeColor(fields.key)
+                                          }
                                         />
                                         <IonLabel>{fields.label}</IonLabel>
                                         <IonCheckbox
@@ -698,10 +730,15 @@ function JournalAdditionRemade() {
                                   {entry.fields.map((fields: any) => (
                                     <IonCol size="4" key={fields.key}>
                                       <IonItem lines="none">
-                                        <img
-                                          style={{ marginRight: "5px" }}
-                                          src={fields.icon}
-                                          height={10}
+                                        <div
+                                          className="svgIconss"
+                                          dangerouslySetInnerHTML={{
+                                            __html: fields.svg,
+                                          }}
+                                          id={fields.key}
+                                          onClick={() =>
+                                            changeColor(fields.key)
+                                          }
                                         />
                                         <IonLabel>{fields.label}</IonLabel>
                                         <IonCheckbox
@@ -739,10 +776,15 @@ function JournalAdditionRemade() {
                                   {entry.fields.map((fields: any) => (
                                     <IonCol size="4" key={fields.key}>
                                       <IonItem lines="none">
-                                        <img
-                                          style={{ marginRight: "5px" }}
-                                          src={fields.icon}
-                                          height={10}
+                                        <div
+                                          className="svgIconss"
+                                          dangerouslySetInnerHTML={{
+                                            __html: fields.svg,
+                                          }}
+                                          id={fields.key}
+                                          onClick={() =>
+                                            changeColor(fields.key)
+                                          }
                                         />
                                         <IonLabel>{fields.label}</IonLabel>
                                         <IonCheckbox

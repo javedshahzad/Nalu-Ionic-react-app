@@ -26,6 +26,7 @@ import {
   addOutline,
   closeOutline,
   filterOutline,
+  happyOutline,
   optionsOutline,
   pencilOutline,
   trashBin,
@@ -37,9 +38,21 @@ import { useEffect, useRef, useState } from "react";
 import CustomCategoryApiService from "../../CustomCategoryService";
 import { OverlayEventDetail } from "@ionic/core";
 import tokenService from "../../token";
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import { RootState } from "../../store/store";
 
 const Addcustomcategory: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
+
+  const [journalData, setJournalData] = useState({});
+
+  const groups = useSelector((state: RootState) => state.journalReducer);
+
+  useEffect(() => {
+    console.log("redux data", groups);
+    setJournalData(groups);
+  }, []);
+
   const [types, setTypes] = useState([
     "group",
     "number",
@@ -61,7 +74,7 @@ const Addcustomcategory: React.FC = () => {
 
   const [selectedLogoValue, setSelectedLogoValue] = useState("");
   const [categoryIcon, setCategoryIcon] = useState("");
-  const [selectedType, setSelectedType] = useState("");
+  const [selectedType, setSelectedType] = useState(null);
   const [selectedLogoError, setSelectedLogoError] = useState("");
   const [allFields, setAllFields] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -87,6 +100,9 @@ const Addcustomcategory: React.FC = () => {
   useEffect(() => {
     getIcons();
   }, []);
+
+  const rangeValues5 = [1, 2, 3, 4, 5];
+  const rangeValues15 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
   const modal = useRef<HTMLIonModalElement>(null);
   const fieldModal = useRef<HTMLIonModalElement>(null);
@@ -219,6 +235,8 @@ const Addcustomcategory: React.FC = () => {
       value: null,
     };
 
+    // get redux state and set in a local array
+
     newCategory.key = Date.now().toString(32) + Math.random().toString(16);
 
     // setCustomCategoryData([...customCategoryData, newCategory]);
@@ -226,25 +244,6 @@ const Addcustomcategory: React.FC = () => {
     setCustomName("");
     setSelectedLogoValue("");
     setSelectedType("");
-
-    const body = {
-      key: "custom_user_fields",
-      label: customName,
-      type: "group",
-      fields: [newCategory],
-    };
-
-    CustomCategoryApiService.post(
-      `https://app.mynalu.com/wp-json/nalu-app/v1/add-custom-field?category\_name=${customName}&category_icon=${selectedLogoValue}&type=group`,
-      body
-    ).then(
-      (data) => {
-        console.log("data from custom category api", data);
-      },
-      (err) => {
-        console.log("err sending data", err);
-      }
-    );
   };
 
   return (
@@ -289,14 +288,49 @@ const Addcustomcategory: React.FC = () => {
             onIonChange={(event) => handleTypeChange(event, event.target.value)}
           >
             <IonRow>
-              {types.map((type) => (
-                <IonCol id="imgg" key={type}>
-                  <IonItem lines="none">
-                    <IonLabel className="ion-text-center">{type}</IonLabel>
-                    <IonRadio value={type} mode="md"></IonRadio>
-                  </IonItem>
-                </IonCol>
-              ))}
+              <IonCol id="imgg" size="6">
+                <IonItem lines="none" className="customType">
+                  <IonLabel className="ion-text-center">
+                    <IonIcon icon={happyOutline} />
+                  </IonLabel>
+                  <IonRadio mode="md"></IonRadio>
+                </IonItem>
+              </IonCol>
+              <IonCol id="imgg" size="6">
+                <IonItem>
+                  <IonLabel className="ion-text-center">
+                    <IonRange
+                      className="custom-tick ion-no-padding"
+                      dualKnobs={false}
+                      ticks={true}
+                      snaps={true}
+                      min={1}
+                      max={5}
+                    />
+                    <IonLabel>1-5</IonLabel>
+                  </IonLabel>
+
+                  <IonRadio mode="md"></IonRadio>
+                </IonItem>
+              </IonCol>
+
+              <IonCol id="imgg" size="6">
+                <IonItem>
+                  <IonLabel className="ion-text-center">
+                    <IonRange
+                      className="custom-tick ion-no-padding"
+                      dualKnobs={false}
+                      ticks={true}
+                      snaps={true}
+                      min={1}
+                      max={10}
+                    />
+                    <IonLabel>1-10</IonLabel>
+                  </IonLabel>
+
+                  <IonRadio mode="md"></IonRadio>
+                </IonItem>
+              </IonCol>
             </IonRow>
           </IonRadioGroup>
         </div>

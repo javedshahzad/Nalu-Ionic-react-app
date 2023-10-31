@@ -61,7 +61,13 @@ const JournalCalendarRemade = () => {
   // const toJounralAddition = () => {};
 
   const date: Date = new Date();
+
+  const curMonth = new Date().getMonth();
+  const isCurDate = new Date().getDate();
+
   const curDate: string = date.toLocaleDateString();
+
+  console.log("currdate", curDate);
   const curDay: string = [
     "Sunday",
     "Monday",
@@ -86,6 +92,20 @@ const JournalCalendarRemade = () => {
     url = `/journaladditionremade/${dateParam}`;
 
     history.push(url);
+  };
+
+  useEffect(() => {
+    const isItToday = document.getElementById(curDate);
+    if (isItToday) {
+      console.log("first");
+      setTimeout(() => {
+        isItToday.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 1000);
+    }
+  }, []);
+
+  const getBackgroundColor = (date) => {
+    // console.log("date", date);
   };
 
   const getIcons = async () => {
@@ -187,6 +207,7 @@ const JournalCalendarRemade = () => {
       ).then(
         (data) => {
           console.log("data from custom category api", data);
+          setTodayPeriod("true");
         },
         (err) => {
           console.log("err sending data", err);
@@ -209,6 +230,7 @@ const JournalCalendarRemade = () => {
       ).then(
         (data) => {
           console.log("data from custom category api", data);
+          setTodayPeriod("false");
         },
         (err) => {
           console.log("err sending data", err);
@@ -322,6 +344,7 @@ const JournalCalendarRemade = () => {
       monthData.push(
         <li
           key={`currentDay-${i}`}
+          id={`${m + 1}/${i}/${year}`}
           className={`calendar-day ${isToday} ${
             activeIndex === i && activeMonthIndex === m ? "dayActive" : ""
           }`}
@@ -346,7 +369,7 @@ const JournalCalendarRemade = () => {
               <p>{i}</p>
             </>
           ) : (
-            <>{i}</>
+            <div>{i}</div>
           )}
         </li>
       );
