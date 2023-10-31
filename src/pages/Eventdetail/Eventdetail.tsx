@@ -233,16 +233,16 @@ const Eventdetail: React.FC = () => {
                       </IonLabel>
                     </IonItem>
 
-{/* <div className="desc">
+<div className="desc">
   {event?.content?.trim() === "" ? (
     <p>No content available</p>
   ) : (
     <p
       className="ion-text-wrap"
-      dangerouslySetInnerHTML={{ __html: event.content }}
+      dangerouslySetInnerHTML={{ __html: event?.content }}
     ></p>
   )}
-</div> */}
+</div>
 
 
                   </div>
@@ -290,7 +290,8 @@ const Eventdetail: React.FC = () => {
     <IonRow>
       
       {event?.type === "everwebinar" && isDateSelected && (
-        <IonCol size="4" id={"register"}>
+        <IonCol size="12" id={"register"}>
+          <div style={{display:"flex",justifyContent:"center"}}>
           <IonButton
             fill="clear"
           >
@@ -299,6 +300,8 @@ const Eventdetail: React.FC = () => {
               Register
             </p>
           </IonButton>
+
+          </div>
         </IonCol>
       )}
       {event?.type === "series" || event?.type === "single" && (
