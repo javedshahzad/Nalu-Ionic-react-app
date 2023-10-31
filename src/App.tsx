@@ -160,6 +160,16 @@ const App: React.FC = () => {
         <IonRouterOutlet>
           <Route path="/tabs" render={() => <MainTabs />} />
 
+          {/* <Route path="/tabs/tab2" render={() => <PrivateRoute><Courseoverviewpaid /></PrivateRoute>} exact={true} />
+
+          <Route path="/tabs/tab4" render={() => <PrivateRoute><Resources /></PrivateRoute>} exact={true}/>
+        <Route path="/tabs/tab4/resourcesubcateggory" render={() => <PrivateRoute><ResourceSubCategory /></PrivateRoute>} />
+        <Route path="/tabs/tab4/resourcedetail" render={() => <PrivateRoute><Resourcedetail /></PrivateRoute>} /> */}
+
+
+
+
+
           <Route exact path="/chat">
             {/* <PrivateRoute>
               <Chat />
@@ -173,6 +183,18 @@ const App: React.FC = () => {
               <Community />
             </PrivateRoute>
           </Route>
+          {/* <Route exact path="/resourcedetail">
+            <PrivateRoute>
+              <Resourcedetail />
+            </PrivateRoute>
+          </Route> */}
+          {/* <Route exact path="/resourcesubcateggory">
+            <PrivateRoute>
+              <ResourceSubCategory />
+            </PrivateRoute>
+          </Route> */}
+        {/* <Route path="/tabs/tab4" render={() => <PrivateRoute><Resources /></PrivateRoute>} exact={true}/> */}
+
           <Route exact path="/configcycle">
             <PrivateRoute>
               <Configcycle />

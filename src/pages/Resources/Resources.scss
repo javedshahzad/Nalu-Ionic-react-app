@@ -78,10 +78,13 @@
                     .img-holder
                     {
                         position: relative;
+                        height: 160px;
                         img
                         {
                             border-radius: 10px;
                             width: 100%;
+                            height: 100%;
+
                         }
 
                         .btn
@@ -104,10 +107,16 @@
                     }
 
                     h4
-                    {
+                    { 
                         font-family: 'GBold';
-                        font-size: 16px;
-                        margin: 10px 0;
+  font-size: 16px;
+  margin: 10px 0;
+  width: -webkit-fill-available;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit to three lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
                     }
 
 
@@ -300,6 +309,7 @@
                         font-family: 'GBold';
                         font-size: 16px;
                         margin: 10px 0;
+                        
                     }
 
 
@@ -532,9 +542,7 @@ ion-icon.heart-icon.filled {
     width:fit-content !important;
   }
   .red_icon {
-    fill: #EE5F64 !important;
-    // margin-top: 5px;
-  
+    fill: #EE5F64 !important;  
     svg {
         width: 20px;
         height: 20px;

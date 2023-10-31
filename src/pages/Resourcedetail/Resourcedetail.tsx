@@ -30,22 +30,28 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useState } from 'react';
 import NotificationBell from "../../components/NotificationBell";
+import ReactPlayer from "react-player";
+import { Player } from './../../components/videoPlayer/Player';
 
 const Resourcedetail: React.FC = () => {
   const location = useLocation();
   const data: any = location.state;
-  console.log(data);
+  // const dataParam = new URLSearchParams(location.search).get('data');
+  // const data = dataParam ? JSON.parse(decodeURIComponent(dataParam)) : null;
+
+  // console.log(data);
   const [resourseData, setResourceData] = useState(data);
 
   const handleUpvote = async (is_upvoted, id, is_downvoted) => {
     let URL;
     if (is_upvoted) {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false`;
-    } else if (!is_upvoted && !is_downvoted) {
+    } else {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
-    } else if (!is_upvoted && is_downvoted) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
-    }
+    } 
+    // else if (!is_upvoted && is_downvoted) {
+    //   URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
+    // }
   
     try {
       const response = await axios.post(
@@ -59,8 +65,10 @@ const Resourcedetail: React.FC = () => {
       );
       console.log(response.data);
       if (
-        response.data.message === "Upvote added successfully" ||
-        response.data.message === "Downvote removed successfully"
+        response.data.message === "Upvote handled successfully" ||
+        response.data.message === "Downvote removed successfully" ||
+        response.data.message === "Upvote removed successfully"
+
       ) {
         getResourceDetailsByID(resourseData.data.id);
       }
@@ -71,14 +79,15 @@ const Resourcedetail: React.FC = () => {
   
   const handleDownvote = async (is_upvoted, id, is_downvoted) => {
     let URL;
-    if (!is_downvoted && !is_upvoted) {
+    if (is_downvoted) {
       // <-
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=true`;
-    } else if (!is_downvoted && is_upvoted) {
+    } else {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false`;
-    } else if (is_downvoted) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
-    }
+    } 
+    // else if (is_downvoted) {
+    //   URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
+    // }
 
     try {
       const response = await axios.post(URL, {}, {
@@ -86,7 +95,10 @@ const Resourcedetail: React.FC = () => {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
         },
       });
-      if ((response.data.message === "Downvote removed successfully" || response.data.message === "Downvote added successfully")) {
+      if ((response.data.message === "Downvote removed successfully" || 
+      response.data.message === "Downvote added successfully" ||
+      response.data.message === "Upvote removed successfully"
+      )) {
           getResourceDetailsByID(resourseData.data.id)
       }
     } catch (error) {
@@ -145,18 +157,14 @@ const Resourcedetail: React.FC = () => {
   }
  
   return (
-    <div className="Resourcedetail">
+    <IonPage className="Resourcedetail">
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton color="dark" text={""} defaultHref="/tabs/tab4" />
           </IonButtons>
           <IonTitle>{resourseData?.data.title}</IonTitle>
-          <IonButtons slot="end">
-            <IonButton color="dark">
-              <IonIcon icon={heartOutline} />
-            </IonButton>
-          </IonButtons>
+
           <IonButtons slot="end">
             <IonButton slot="end" fill="clear">
               <NotificationBell />
@@ -166,10 +174,12 @@ const Resourcedetail: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         <div className="top-img-holder ion-text-center">
-          {!resourseData?.data.image_url ? (
-            <div>
-              <div dangerouslySetInnerHTML={{ __html: resourseData.data.featured_video }}></div>
-            </div>
+          {!resourseData?.data?.image_url ? (
+           
+            <div className="player-wrapper">
+<ReactPlayer url={resourseData?.data?.featured_video} width="100%" height="100%" class="react-player" />
+
+</div>
 
             ) : (
         <img src={resourseData?.data.image_url} alt="No image" />
@@ -187,7 +197,7 @@ const Resourcedetail: React.FC = () => {
 
           <div className="rec">
             <div className="details">
-              <h2>{resourseData?.data.authority.title}</h2>
+              <h2>{resourseData?.data?.authority?.title}</h2>
 
               <IonItem lines="none">
                 <div className="start-slot flex al-start " slot="start">
@@ -201,11 +211,19 @@ const Resourcedetail: React.FC = () => {
                   />
                 </div>
                 <IonLabel>
-                  <p>Recommended by</p>
+                  
+                  
+                  {
+                    resourseData?.data.authority?.title && (
+                      <>
+                    <p>Recommended by</p>
                   <h6 className="ion-text-wrap">
-                    <span>{resourseData?.data.authority.title}</span> Specialist for
-                    gynecology and obstetrics
-                  </h6>
+                    <span>{resourseData?.data.authority?.title}</span> 
+                    {resourseData?.data?.authority?.description}
+                  </h6>                      
+                      </>
+                    )
+                  }
                   <div className="btns-holder flex al-center">
                     <div 
                     onClick={()=>handleUpvote(resourseData?.data.is_upvoted,
@@ -213,10 +231,10 @@ const Resourcedetail: React.FC = () => {
                       resourseData?.data.is_downvoted)}
                     className="btn ion-activatable ripple-parent flex al-center">
                       {resourseData?.data.is_upvoted ? (
-                                    <IonIcon src="assets/imgs/like-unfilled.svg"/>
+                                    <IonIcon src="assets/imgs/like-filled.svg"/>
 
                                   ) : (
-                                    <IonIcon src="assets/imgs/like-filled.svg"/>
+                                    <IonIcon src="assets/imgs/like-unfilled.svg"/>
 
                                   )}
 
@@ -232,11 +250,11 @@ const Resourcedetail: React.FC = () => {
                     }
                     className="btn ion-activatable ripple-parent flex al-center" style={{"marginLeft": "29px"}}>
                           {resourseData?.data.is_downvoted ? (
-                                    <IonIcon src="assets/imgs/dislike-unfilled.svg"/>
+                                    <IonIcon src="assets/imgs/dislike-filled.svg"/>
 
                                   ) : (
                                     <IonIcon
-                                    src="assets/imgs/dislike-filled.svg"
+                                    src="assets/imgs/dislike-unfilled.svg"
                                     ></IonIcon>
                                   )}
                     </div>
@@ -247,13 +265,14 @@ const Resourcedetail: React.FC = () => {
                         resourseData?.data.id
                       )
                     }
+                    
                     className="btn ion-activatable ripple-parent flex al-center" style={{"marginLeft": "29px"}}>
                           {resourseData?.data.favourite ? (
                                     <IonIcon src="assets/imgs/heart-filled.svg"/>
                                   ) : (
                                     <IonIcon src="assets/imgs/heart-unfilled.svg" ></IonIcon>
                                   )}
-                      <h6 style={{"marginLeft":"5px","color":"#636363"}}> Save</h6> 
+                      <h6 style={{"marginLeft":"5px","color":"#636363"}}></h6> 
                     </div>
                   </div>
                 </IonLabel>
@@ -266,7 +285,7 @@ const Resourcedetail: React.FC = () => {
           </div>
         </div>
       </IonContent>
-    </div>
+    </IonPage>
   );
 };
 

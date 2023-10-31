@@ -77,23 +77,23 @@ const Courseoverviewpaid: React.FC = () => {
   };
   return (
     <>
-      {isLoading ? (
-        <>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100vh",
-            }}
-          >
-            <IonSpinner name="crescent"></IonSpinner>
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="Courseoverviewpaid">
-            <IonHeader className="ion-no-border">
+      
+          <IonPage className="Courseoverviewpaid">
+            {
+              isLoading?(
+                <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100vh",
+                }}
+              >
+                <IonSpinner name="crescent"></IonSpinner>
+              </div>
+              ):(
+                <>
+                <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButton color={"dark"} fill="clear">
                   <IonIcon icon={menuOutline} />
@@ -286,9 +286,12 @@ const Courseoverviewpaid: React.FC = () => {
                 ))}
               </div>
             </IonContent>
-          </div>
-        </>
-      )}
+                </>
+              )
+            }
+            
+          </IonPage>
+       
     </>
   );
 };

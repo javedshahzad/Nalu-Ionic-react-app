@@ -161,8 +161,11 @@ const Eventdetail: React.FC = () => {
 
   return (
     <>
-      {isLoading ? (
-        <div
+      
+          <IonPage className="Eventdetail">
+            {
+              isLoading?(
+                <div
           style={{
             display: "flex",
             justifyContent: "center",
@@ -172,10 +175,9 @@ const Eventdetail: React.FC = () => {
         >
           <IonSpinner name="crescent"></IonSpinner>
         </div>
-      ) : (
-        <>
-          <div className="Eventdetail">
-            <IonHeader className="ion-no-border">
+              ):(
+<>
+<IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
                   <IonBackButton
@@ -370,15 +372,16 @@ const Eventdetail: React.FC = () => {
     </IonRow>
   </div>
 ) : null}
-
-
                   </div>
                 </div>
               </div>
             </IonContent>
-          </div>
-        </>
-      )}
+</>
+              )
+            }
+            
+          </IonPage>
+       
     </>
   );
 };

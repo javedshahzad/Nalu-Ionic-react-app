@@ -60,7 +60,7 @@
                     --border-width: 3px !important;
                     --border-radius: 10px;
     ion-label{
-        color: white;
+        color: rgb(0, 0, 0);
     }
 
     p{
@@ -78,8 +78,36 @@
     width: 20px;
     height: 20px;
     margin-left: 10px;
+    margin-right: 5px;
     margin-top: 5px;
 }
+.icon_img{
+    width: 20px !important;
+    height: 20px !important;
+    // margin-left: 10px;
+    // margin-top: 5px;
+    // ion-label{
+    //     margin-left: 10px;
+    // }
+}
+.icon__.blackIcon {
+    // fill: #000000 !important; 
+    svg {
+        width: 20px;
+        height: 20px;
+        // stroke: #000000;
+        // stroke-width: 3;
+      }
+  }
+.icon__.whiteIcon {
+    fill: #ffffff !important; 
+    svg {
+        width: 20px;
+        height: 20px;
+        stroke: #ffffff;
+        stroke-width: 3;
+      }
+  }
 
 .Resources
 {
@@ -185,6 +213,9 @@
                                 color: #2D2D2D;
                                 font-family: 'GBold';
                                 font-size: 18px;
+                                width: -webkit-fill-available;
+                                overflow: hidden;
+                                text-overflow: ellipsis; 
                             }
 
                             ion-icon

@@ -24,14 +24,17 @@ import Eventdetail from './../Eventdetail/Eventdetail';
 import Resourcedetail from './../Resourcedetail/Resourcedetail';
 import PrivateRoute from "../../auth/PrivateRoute";
 import JournalCalendarRemade from "../Journalcalender/JournalCalendarRemade";
+import { useHistory } from 'react-router-dom';
 interface MainTabsProps {}
 
 const MainTabs: React.FC<MainTabsProps> = () => {
- 
+  const history = useHistory();
+
   const tabChanged = (e: any) => {
-    console.log(e.detail.tab);
-    // setSelectedTab(e.detail.tab);
+    const activeTab = e.detail.tab;
   };
+  
+  
 
   return (
     <IonTabs onIonTabsDidChange={(e) => tabChanged(e)}>
@@ -40,17 +43,16 @@ const MainTabs: React.FC<MainTabsProps> = () => {
       
         <Route path="/tabs/tab1" render={() => <PrivateRoute><JournalCalendarRemade /></PrivateRoute>} exact={true} />
         <Route path="/tabs/tab2" render={() => <PrivateRoute><Courseoverviewpaid /></PrivateRoute>} exact={true} />
-        <Route path="/tabs/tab2/courseinneroverview" render={() => <PrivateRoute><CourseInnerOverview /></PrivateRoute>}  exact={true}/>
-        <Route path="/tabs/tab2/courseinneroverview/:id" render={() => <PrivateRoute><CourseSubOverview /></PrivateRoute>} exact={true} />
-
-
+        <Route path="/tabs/tab2/courseinneroverview" render={() => <PrivateRoute><CourseInnerOverview /></PrivateRoute>} />
+        <Route path="/tabs/tab2/courseinneroverview/:id" render={() => <PrivateRoute><CourseSubOverview /></PrivateRoute>} />
 
         <Route path="/tabs/tab3" render={() => <PrivateRoute><Mygroups /></PrivateRoute>} exact={true} />
         <Route path="/tabs/tab3/eventdetail" render={() => <PrivateRoute><Eventdetail /></PrivateRoute>} exact={true} />
 
-        <Route path="/tabs/tab4" render={() => <PrivateRoute><Resources /></PrivateRoute>} exact={true} />
-        <Route path="/tabs/tab4/resourcesubcateggory" render={() => <PrivateRoute><ResourceSubCategory /></PrivateRoute>} exact={true} />
-        <Route path="/tabs/tab4/resourcedetail" render={() => <PrivateRoute><Resourcedetail /></PrivateRoute>} exact={true} />
+        <Route path="/tabs/tab4" render={() => <PrivateRoute><Resources /></PrivateRoute>} exact={true}/>
+        <Route path="/tabs/tab4/resourcesubcateggory" render={() => <PrivateRoute><ResourceSubCategory /></PrivateRoute>} />
+        <Route path="/tabs/tab4/resourcedetail" render={() => <PrivateRoute><Resourcedetail /></PrivateRoute>} />
+
 
 
       </IonRouterOutlet>

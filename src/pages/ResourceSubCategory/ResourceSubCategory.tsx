@@ -38,6 +38,7 @@ import axios from "axios";
 import filter from "../../Images/filter.png";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import image_not_found from '../../Images/image-not-found.png'
 
 const ResourceSubCategory: React.FC = () => {
   const [activeSegment, setActiveSegment] = useState<string>("overview");
@@ -104,12 +105,13 @@ const ResourceSubCategory: React.FC = () => {
     let URL;
     if (is_upvoted) {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false}`;
-    } else if (!is_upvoted && !is_downvoted) {
+    } else {
       // <-
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
-    } else if (!is_upvoted && is_downvoted) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
-    }
+    } 
+    // else if (!is_upvoted && is_downvoted) {
+    //   URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
+    // }
 
     try {
       const response = await axios.post(
@@ -122,8 +124,12 @@ const ResourceSubCategory: React.FC = () => {
         }
       );
       console.log(response.data);
-       if (
-        (response.data.message = "Upvote added successfully")) {
+       if(
+        response.data.message === "Upvote handled successfully" ||
+        response.data.message === "Downvote removed successfully" ||
+        response.data.message === "Upvote removed successfully"
+
+      ) {
         getCategoryByID(parentId);
       }
     } catch (error) {
@@ -132,14 +138,15 @@ const ResourceSubCategory: React.FC = () => {
   };
   const handleDownvote = async (is_upvoted, id, is_downvoted) => {
     let URL;
-    if (!is_downvoted && !is_upvoted) {
+    if (is_downvoted) {
       // <-
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=true`;
-    } else if (!is_downvoted && is_upvoted) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false`;
-    } else if (is_downvoted) {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
-    }
+    } else{
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
+    } 
+    // else if (is_downvoted) {
+    //   URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
+    // }
 
     try {
       const response = await axios.post(
@@ -151,8 +158,10 @@ const ResourceSubCategory: React.FC = () => {
           },
         }
       );
-       if (
-        (response.data.message = "Downvote removed successfully")) {
+       if ((response.data.message === "Downvote removed successfully" || 
+       response.data.message === "Downvote added successfully" ||
+       response.data.message === "Upvote removed successfully"
+       )){
         getCategoryByID(parentId);
       }
     } catch (error) {
@@ -211,9 +220,11 @@ const ResourceSubCategory: React.FC = () => {
   };
   return (
     <>
-      {isLoading ? (
-        <>
-          <div
+     
+          <IonPage>
+            {
+              isLoading? (
+                <div
             style={{
               display: "flex",
               justifyContent: "center",
@@ -223,11 +234,9 @@ const ResourceSubCategory: React.FC = () => {
           >
             <IonSpinner name="crescent"></IonSpinner>
           </div>
-        </>
-      ) : (
-        <>
-          <div className="Overview">
-            <IonHeader className="ion-no-border">
+              ):(
+                <>
+                <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
                   <IonButton color={"dark"}>
@@ -247,9 +256,8 @@ const ResourceSubCategory: React.FC = () => {
               </IonToolbar>
             </IonHeader>
 
-            <IonContent fullscreen>
+            <IonContent className="ion-padding" fullscreen>
               <div className="Resources">
-                <IonContent className="ion-padding" fullscreen>
                   <div className="selector mtype">
                     <IonRadioGroup>
                       <IonItem
@@ -273,16 +281,17 @@ const ResourceSubCategory: React.FC = () => {
                           className={`img_div ${categoryID === item.id ? "selected" : "non_selected"}`}
                           onClick={() => getCategoryByID(item.id)}
                         >
-                          <div>
-                            {item.icon_url && (
-                              <img
-                                src={item.icon_url}
-                                alt={item.name}
-                                className="icon-img custom-icon"
-                              />
-                            )}
+                          <div className="icon_img">
+                            {item?.icon_url ? (
+                                <div
+                                  className={`icon__ ${categoryID === item.id ? "blackIcon" : "blackIcon"}`}
+                                  dangerouslySetInnerHTML={{
+                                    __html: item.svg_url,
+                                  }}
+                                />
+                              ) : null}
                           </div>
-                          <IonLabel>{item.name}</IonLabel>
+                          <IonLabel style={{marginLeft:"10px"}}>{item.name}</IonLabel>
                         </IonItem>
                       ))}
                     </IonRadioGroup>
@@ -299,7 +308,9 @@ const ResourceSubCategory: React.FC = () => {
                             {card?.thumbnail_url ? (
                               <img src={card.thumbnail_url} alt="" />
                             ) : (
-                              <img src="Not found" alt="Image not found" />
+                              // <img src={image_not_found} alt="Image not found" />
+                              <img style={{'width':'100%'}} src={''} alt="Image not found" />
+
                             )}
                           </div>
 
@@ -328,9 +339,9 @@ const ResourceSubCategory: React.FC = () => {
                                   }
                                   className="btn ion-activatable ripple-parent flex al-center">
                                 {card.is_upvoted ? (
-                                  <IonIcon src="assets/imgs/like-unfilled.svg" />
-                                ) : (
                                   <IonIcon src="assets/imgs/like-filled.svg" />
+                                ) : (
+                                  <IonIcon src="assets/imgs/like-unfilled.svg" />
                                 )}
                                 <h6>{card.upvotes_number}</h6>
                               </div>
@@ -346,9 +357,9 @@ const ResourceSubCategory: React.FC = () => {
                                   }
                                   className="btn ion-activatable ripple-parent flex al-center">
                                 {card.is_downvoted ? (
-                                  <IonIcon src="assets/imgs/dislike-unfilled.svg" />
+                                  <IonIcon src="assets/imgs/dislike-filled.svg" />
                                 ) : (
-                                  <IonIcon src="assets/imgs/dislike-filled.svg"></IonIcon>
+                                  <IonIcon src="assets/imgs/dislike-unfilled.svg"></IonIcon>
                                 )}
                               </div>
                               <div
@@ -364,7 +375,6 @@ const ResourceSubCategory: React.FC = () => {
                                 ) : (
                                   <IonIcon src="assets/imgs/heart-filled.svg" />
                                 )}
-                                <h6>Save</h6>
                               </div>
                             </div>
                           </IonLabel>
@@ -372,12 +382,14 @@ const ResourceSubCategory: React.FC = () => {
                       </div>
                     ))}
                   </div>
-                </IonContent>
               </div>
             </IonContent>
-          </div>
-        </>
-      )}
+                </>
+              )
+            }
+            
+          </IonPage>
+       
     </>
   );
 };

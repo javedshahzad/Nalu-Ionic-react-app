@@ -197,9 +197,11 @@ const Filtermodal: React.FC = () => {
 
   return (
     <>
-      {isLoading ? (
-        <>
-          <div
+      
+          <IonPage className="Filtermodal">
+            {
+              isLoading? (
+                <div
            style={{
             display: "flex",
             justifyContent: "center",
@@ -209,11 +211,9 @@ const Filtermodal: React.FC = () => {
           >
             <IonSpinner name="crescent"></IonSpinner>
           </div>
-        </>
-      ) : (
-        <>
-          <IonPage className="Filtermodal">
-            <IonHeader className="ion-no-border">
+              ):(
+                <>
+                  <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
                   <IonButton routerLink="/tabs/tab4">
@@ -325,9 +325,12 @@ const Filtermodal: React.FC = () => {
                 </IonButton>
               </div>
             </IonContent>
+                </>
+              )
+            }
+          
           </IonPage>
-        </>
-      )}
+        
     </>
   );
 };

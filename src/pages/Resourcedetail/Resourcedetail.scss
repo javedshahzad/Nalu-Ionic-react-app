@@ -29,10 +29,10 @@
         {
             ion-item
                 {
-                    --border-color: #F0F0F0;
-                    --border-style: solid;
-                    --border-width: 1px;
-                    --border-radius: 10px;
+                    // --border-color: #F0F0F0;
+                    // --border-style: solid;
+                    // --border-width: 1px;
+                    // --border-radius: 10px;
                     --padding-start:10px;
                     width: fit-content;
 
@@ -121,8 +121,24 @@
                     }
             }
         }
+        .player-wrapper { 
+                        
+            position: relative;   
+                      padding-top: 56.25%; 
+                      
+                      .react-player { 
+                          
+                        position: absolute; 
+                                      top: 0;  
+                                      
+                                      
+                                      left: 0;
+                                    
+                                    
+                                    }
 
     }
+}
 }
 // ion-icon.vote-icon.filled {
 //     color: blue;

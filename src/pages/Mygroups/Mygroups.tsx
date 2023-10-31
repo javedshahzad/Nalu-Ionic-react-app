@@ -89,22 +89,23 @@ const Mygroups: React.FC = () => {
 
   return (
     <>
-      {isLoading? (
-        <>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100vh",
-            }}
-          >
-            <IonSpinner name="crescent"></IonSpinner>
-          </div>
-        </>
-      ) : (
-        <div className="Mygroups">
-          <IonHeader className="ion-no-border">
+    
+        <IonPage className="Mygroups">
+          {
+            isLoading? (
+              <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100vh",
+              }}
+            >
+              <IonSpinner name="crescent"></IonSpinner>
+            </div>
+            ):(
+              <>
+              <IonHeader className="ion-no-border">
             <IonToolbar>
               <IonButtons slot="start">
                 <IonBackButton
@@ -250,8 +251,12 @@ const Mygroups: React.FC = () => {
               </div>
             </div>
           </IonContent>
-        </div>
-      )}
+              </>
+            )
+          }
+          
+        </IonPage>
+     
     </>
   );
 };
