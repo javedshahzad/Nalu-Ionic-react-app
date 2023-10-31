@@ -161,7 +161,7 @@
                         font-size: 16px;
                         margin-left: 10px;
                         color: #636363;
-                        margin-top: 19px;
+                        // margin-top: 19px;
                     }
                     
                     ion-radio
@@ -353,11 +353,11 @@
     margin-right: 5px;
     margin-top: 20px;
 }
-.icon-img{
+.icon_img{
     width: 20px !important;
     height: 20px !important;
-    margin-left: 10px;
-    margin-top: 5px;
+    // margin-left: 10px;
+    // margin-top: 5px;
 }
 .red-filter {
     filter: hue-rotate(120deg) !important; /* Adjust the hue-rotate value to get the desired red color */
@@ -432,7 +432,7 @@
              ion-item
              {
                 display: inline-block;
-                margin: 0 10px;
+                margin: 0 0px;
                 width: fit-content;
              }
         }
@@ -533,7 +533,7 @@ ion-icon.heart-icon.filled {
   }
   .red_icon {
     fill: #EE5F64 !important;
-    margin-top: 5px;
+    // margin-top: 5px;
   
     svg {
         width: 20px;
@@ -544,7 +544,7 @@ ion-icon.heart-icon.filled {
   }
   .brown_icon {
     fill: #8F5F2F !important;
-    margin-top: 5px;
+    // margin-top: 5px;
   
     svg {
         width: 20px;
@@ -552,6 +552,15 @@ ion-icon.heart-icon.filled {
         stroke: #8F5F2F;
         stroke-width: 3;
       }
+  }
+  .red_circle{
+      background-color: #fff0f0;
+      border-radius: 40px;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
   }
   
   

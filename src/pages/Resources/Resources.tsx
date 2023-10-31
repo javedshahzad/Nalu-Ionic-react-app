@@ -364,7 +364,9 @@ const Resources: React.FC = () => {
                             lines="none"
                             onClick={() => getParentCategoryByID(item.id)}
                           >
-                            <div className="icon-img">
+                            <div className="red_circle">
+
+                            <div className="icon_img">
                               {item?.icon_url ? (
                                 <div
                                   className="red_icon"
@@ -373,6 +375,7 @@ const Resources: React.FC = () => {
                                   }}
                                 />
                               ) : null}
+                            </div>
                             </div>
 
                             <IonLabel style={{ color: "#636363" }}>
