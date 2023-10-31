@@ -242,7 +242,7 @@ const JournalCalendarRemade = () => {
       <IonContent>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton color="dark">
+            <IonButton color="dark" onClick={() => history.push('/menu')}>
               <IonIcon icon={menuOutline} />
             </IonButton>
           </IonButtons>

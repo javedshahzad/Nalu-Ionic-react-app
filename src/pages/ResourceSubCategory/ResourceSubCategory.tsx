@@ -282,7 +282,7 @@ console.log('useEffect of resourcesubcateggory',subCategory);
             <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
-                  <IonButton color={"dark"}>
+                  <IonButton color={"dark"} onClick={() => history.push('/menu')}>
                     <IonIcon icon={menuOutline} />
                   </IonButton>
                 </IonButtons>

@@ -83,7 +83,7 @@ history.push('/tabs/tab2/courseinneroverview',{
           <IonPage className="Courseoverviewpaid">
             <IonHeader className="ion-no-border">
               <IonToolbar>
-                <IonButton color={"dark"} fill="clear">
+                <IonButton color={"dark"} fill="clear" onClick={() => history.push('/menu')}>
                   <IonIcon icon={menuOutline} />
                 </IonButton>
 

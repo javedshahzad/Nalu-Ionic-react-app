@@ -72,7 +72,8 @@ import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
 import MyGroups from "./pages/Chat/mygroups/MyGroups";
 import JournalAdditionRemade from './pages/Journaladdition/JournalAdditionRemade';
 import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
-import Addcustomcategory from "./pages/Addcustomcategory/addcustomcategory";
+import Addcustomcategory from "./pages/Addcustomcategory/Addcustomcategory";
+import Menu from "./pages/Menu/Menu";
 
 setupIonicReact({
   mode: "ios",
@@ -163,6 +164,10 @@ const App: React.FC = () => {
             {/* <PrivateRoute>
               <Chat />
             </PrivateRoute> */}
+          </Route>
+          {/* Temporary Rout to Menu */}
+          <Route exact path="/menu">
+            <Menu />
           </Route>
           <Route exact path="/addcustomcategory">
             <Addcustomcategory />

@@ -347,11 +347,11 @@ const Resources: React.FC = () => {
           <IonPage className="Overview">
             <IonHeader className="ion-no-border">
               <IonToolbar>
-                <IonButtons slot="start">
-                  <IonButton color={"dark"}>
-                    <IonIcon icon={menuOutline} />
+              <IonButtons slot="start">
+                  <IonButton color="dark" onClick={() => history.push('/menu')}>
+                      <IonIcon icon={menuOutline} />
                   </IonButton>
-                </IonButtons>
+              </IonButtons>
                 <IonButtons slot="end">
                   <IonButton color="dark">
                     <IonIcon icon={searchOutline} />
