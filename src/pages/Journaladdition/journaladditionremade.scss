@@ -148,6 +148,17 @@ ion-toolbar {
   font-size: 16px;
 }
 
+.tick-label2 {
+  width: calc(
+    10% - 5px
+  ); /* Adjust as needed based on the number of tick values */
+  text-align: center;
+  font-size: 12px; /* Adjust as needed */
+  margin-right: calc(10% - 5px); /* Adjust as needed based on your layout */
+  color: #a9a8aa;
+  font-size: 16px;
+}
+
 .search-holder {
   ion-item {
     --background: #f8f8f8;
@@ -204,6 +215,10 @@ ion-toolbar {
     .item-checkbox-checked {
       --background: #8fcaed;
 
+      svg {
+        fill: $config-white;
+      }
+
       ion-label {
         color: white;
       }
@@ -237,7 +252,7 @@ ion-toolbar {
     }
 
     .item-checkbox-checked {
-      --background: green;
+      --background: rgb(0, 0, 0);
 
       ion-label {
         color: white;

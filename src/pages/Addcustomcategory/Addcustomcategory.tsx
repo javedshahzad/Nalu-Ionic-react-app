@@ -40,17 +40,20 @@ import { OverlayEventDetail } from "@ionic/core";
 import tokenService from "../../token";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../../store/store";
+import { useDispatch } from "react-redux";
+import { journalAction } from "../../actions/journalAction";
 
 const Addcustomcategory: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [journalData, setJournalData] = useState({});
 
-  const groups = useSelector((state: RootState) => state.journalReducer);
+  const typeObj: any = useSelector((state: RootState) => state.journalReducer);
 
+  const dispatch = useDispatch();
   useEffect(() => {
-    console.log("redux data", groups);
-    setJournalData(groups);
+    console.log("redux data", typeObj);
+    setJournalData(typeObj);
   }, []);
 
   const [types, setTypes] = useState([
@@ -88,7 +91,18 @@ const Addcustomcategory: React.FC = () => {
       const data = await CustomCategoryApiService.get(
         `https://app.mynalu.com/wp-json/nalu-app/v1/custom-field-icon`
       );
-      setIcons(data);
+      const filteredItems = [];
+      const encounteredNames = new Set();
+
+      for (const item of data) {
+        if (!encounteredNames.has(item.name)) {
+          encounteredNames.add(item.name);
+          filteredItems.push(item);
+        }
+      }
+      setIcons(filteredItems);
+
+      console.log("data icons", filteredItems);
 
       setIsLoading(false);
     } catch (error) {
@@ -100,9 +114,6 @@ const Addcustomcategory: React.FC = () => {
   useEffect(() => {
     getIcons();
   }, []);
-
-  const rangeValues5 = [1, 2, 3, 4, 5];
-  const rangeValues15 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
   const modal = useRef<HTMLIonModalElement>(null);
   const fieldModal = useRef<HTMLIonModalElement>(null);
@@ -215,6 +226,7 @@ const Addcustomcategory: React.FC = () => {
 
   const handleLogoChange = (event: any) => {
     const value = event.target.value;
+    console.log("valaye", value);
     setSelectedLogoValue(event.detail.value);
   };
   const handleCategoryIcon = (event: any) => {
@@ -224,6 +236,9 @@ const Addcustomcategory: React.FC = () => {
 
   const handleTypeChange = (event: any, clickedType: any) => {
     const value = event.target.value;
+    console.log("event", event);
+
+    console.log("event.target.value", value);
     setSelectedType(clickedType);
   };
 
@@ -235,15 +250,29 @@ const Addcustomcategory: React.FC = () => {
       value: null,
     };
 
+    console.log("newCareaawawaw", newCategory);
+
     // get redux state and set in a local array
 
     newCategory.key = Date.now().toString(32) + Math.random().toString(16);
+
+    typeObj[0].group.map((obj) => {
+      if (obj.key === "custom_user_fields") {
+        obj.fields.push(newCategory);
+      }
+    });
+
+    dispatch(journalAction(typeObj[0]));
+
+    console.log("type obj", typeObj[0]);
+    // typeObj.group.custom_user_fields;
 
     // setCustomCategoryData([...customCategoryData, newCategory]);
 
     setCustomName("");
     setSelectedLogoValue("");
     setSelectedType("");
+    history.back();
   };
 
   return (
@@ -293,7 +322,7 @@ const Addcustomcategory: React.FC = () => {
                   <IonLabel className="ion-text-center">
                     <IonIcon icon={happyOutline} />
                   </IonLabel>
-                  <IonRadio mode="md"></IonRadio>
+                  <IonRadio mode="md" value="true_false"></IonRadio>
                 </IonItem>
               </IonCol>
               <IonCol id="imgg" size="6">
@@ -310,7 +339,7 @@ const Addcustomcategory: React.FC = () => {
                     <IonLabel>1-5</IonLabel>
                   </IonLabel>
 
-                  <IonRadio mode="md"></IonRadio>
+                  <IonRadio mode="md" value="range-5"></IonRadio>
                 </IonItem>
               </IonCol>
 
@@ -328,7 +357,7 @@ const Addcustomcategory: React.FC = () => {
                     <IonLabel>1-10</IonLabel>
                   </IonLabel>
 
-                  <IonRadio mode="md"></IonRadio>
+                  <IonRadio mode="md" value="range-10"></IonRadio>
                 </IonItem>
               </IonCol>
             </IonRow>
@@ -351,18 +380,20 @@ const Addcustomcategory: React.FC = () => {
               value={selectedLogoValue}
               onIonChange={handleLogoChange}
             >
-              <IonRow>
-                {icons.map((icon, index) => (
-                  <IonCol id="imgg" key={index}>
-                    <IonItem lines="none">
-                      <IonLabel className="ion-text-center">
-                        <img src={icon} alt={`Icon ${index}`} height={20} />
-                      </IonLabel>
-                      <IonRadio value={icon} mode="md"></IonRadio>
-                    </IonItem>
-                  </IonCol>
-                ))}
-              </IonRow>
+              <div className="tags-holders">
+                <IonRow>
+                  {icons.map((icon, index) => (
+                    <IonCol id="imgg" key={index}>
+                      <IonItem lines="none">
+                        <IonLabel className="ion-text-center">
+                          <IonIcon icon={happyOutline} />
+                        </IonLabel>
+                        <IonRadio value={icon} mode="md"></IonRadio>
+                      </IonItem>
+                    </IonCol>
+                  ))}
+                </IonRow>
+              </div>
             </IonRadioGroup>
           )}
           {selectedLogoError && (
