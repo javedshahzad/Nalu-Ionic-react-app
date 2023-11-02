@@ -55,8 +55,6 @@ function JournalAdditionRemade() {
 
   const typeObj: any = useSelector((state: RootState) => state.journalReducer);
 
-  console.log("type obhahahhahaah", typeObj);
-
   const dispatch = useDispatch();
 
   const getJournalEntries = async () => {
@@ -66,8 +64,6 @@ function JournalAdditionRemade() {
       const data = await JournalAdditionApiService.get(
         `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`
       );
-
-      // console.log("data++", data);
 
       if (data.entries.length > 0) {
         const types = [...new Set(data.entries.map((item: any) => item.type))];
@@ -80,13 +76,10 @@ function JournalAdditionRemade() {
           );
         });
 
-        // console.log("dynamic state", dynamicStates);
-
         // setTypeState(dynamicStates);
         dispatch(journalAction(dynamicStates));
 
         setTimeout(() => {
-          console.log("tyoe osva", typeObj);
           setIsLoading(false);
         }, 10000);
       }
@@ -101,13 +94,6 @@ function JournalAdditionRemade() {
   useEffect(() => {
     getJournalEntries();
   }, []);
-
-  useIonViewWillEnter(() => {
-    setTimeout(() => {
-      console.log("redux data2", typeObj);
-    }, 2000);
-    // setJournalData(groupsFromRedux);
-  });
 
   const [inputValues, setInputValues] = useState({});
 
@@ -310,8 +296,6 @@ function JournalAdditionRemade() {
         `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
       );
 
-      console.log("moon data", data);
-
       const newArray = [];
 
       for (const date in data.moonphase) {
@@ -327,7 +311,6 @@ function JournalAdditionRemade() {
       }
 
       setMoonPhaseIcon(newArray);
-      // console.log("moon phases", newArray);
     } catch (error) {
       console.error(error);
     }
@@ -867,32 +850,35 @@ function JournalAdditionRemade() {
                                     </IonCol>
                                   </IonRow>
                                   <IonRow>
-                                    <IonCol>
-                                      {field.type === "true_false" && (
-                                        <IonCol key={field.key} size="4">
-                                          <IonItem
-                                            lines="none"
-                                            onClick={() => (field.value = true)}
-                                          >
-                                            <IonLabel>
-                                              <img
-                                                src={field.icon}
-                                                height="20px"
-                                              />
-                                            </IonLabel>
-                                            <IonCheckbox
-                                              checked={field.value}
-                                              onIonChange={(event) =>
-                                                updateField(
-                                                  event.target.value,
-                                                  field
-                                                )
-                                              }
+                                    {field.type === "true_false" && (
+                                      <IonCol key={field.key}>
+                                        <IonItem
+                                          lines="none"
+                                          onClick={() => (field.value = true)}
+                                          className="customIcon"
+                                        >
+                                          <IonLabel>
+                                            <div
+                                              dangerouslySetInnerHTML={{
+                                                __html: field.svg,
+                                              }}
+                                              style={{
+                                                textAlign: "center",
+                                              }}
                                             />
-                                          </IonItem>
-                                        </IonCol>
-                                      )}
-                                    </IonCol>
+                                          </IonLabel>
+                                          <IonCheckbox
+                                            checked={field.value}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                field
+                                              )
+                                            }
+                                          />
+                                        </IonItem>
+                                      </IonCol>
+                                    )}
                                   </IonRow>
                                 </>
                               ))}

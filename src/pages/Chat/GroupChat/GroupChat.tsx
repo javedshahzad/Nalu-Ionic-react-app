@@ -178,9 +178,7 @@ const GroupChat: React.FC = () => {
       conversation: groupId,
     });
 
-    socket.on("join", (data) => {
-      // console.log("joined", data);
-    });
+    socket.on("join", (data) => {});
 
     socket.emit("message-list", {
       page: 1,
@@ -190,12 +188,10 @@ const GroupChat: React.FC = () => {
     });
 
     socket.on("message-list", (data) => {
-      // console.log("data", data);
-
       if (data.results.length > 0) {
         // setgrpMessage(data.results);
         const invertedArray = data.results.reverse();
-        // console.log("invertedArray", invertedArray);
+
         setgrpMessage(
           invertedArray.map((msg: any) => {
             const timestamp = moment(msg.createdAt);
@@ -282,7 +278,6 @@ const GroupChat: React.FC = () => {
     setLimit(10);
     // Check if the chatContentRef has been initialized
     if (chatContentRef.current) {
-      console.log("chatContentRef", chatContentRef.current);
       // Scroll to the bottom of the chat content
       setTimeout(() => {
         chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
@@ -292,7 +287,7 @@ const GroupChat: React.FC = () => {
 
   const loadMore = () => {
     setLimit((prevLimit) => prevLimit + 10);
-    console.log("limit", limit);
+
     socket.emit("message-list", {
       page: 1,
       limit: limit,
@@ -301,11 +296,10 @@ const GroupChat: React.FC = () => {
     });
 
     socket.on("message-list", (data) => {
-      console.log("data", data);
       if (data.results.length > 0) {
         // setgrpMessage(data.results);
         const invertedArray = data.results.reverse();
-        console.log("invertedArray", invertedArray);
+
         setgrpMessage(
           invertedArray.map((msg: any) => {
             const timestamp = moment(msg.createdAt);
@@ -359,7 +353,6 @@ const GroupChat: React.FC = () => {
   };
 
   const handleScroll = (event) => {
-    console.log("event scroll", event.currentTarget.scrollTop);
     const scrollTop = event.currentTarget.scrollTop;
     if (scrollTop === 0) {
       setLoading(true);

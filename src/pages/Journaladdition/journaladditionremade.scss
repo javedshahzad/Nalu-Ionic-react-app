@@ -340,3 +340,13 @@ ion-modal#example-modal ion-icon {
 ion-modal#example-modal .wrapper {
   margin-bottom: 10px;
 }
+
+.customIcon svg {
+  height: 20px;
+}
+
+.customIcon {
+  ion-item {
+    padding: 0 !important;
+  }
+}

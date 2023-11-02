@@ -52,7 +52,6 @@ const Addcustomcategory: React.FC = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log("redux data", typeObj);
     setJournalData(typeObj);
   }, []);
 
@@ -91,6 +90,7 @@ const Addcustomcategory: React.FC = () => {
       const data = await CustomCategoryApiService.get(
         `https://app.mynalu.com/wp-json/nalu-app/v1/custom-field-icon`
       );
+
       const filteredItems = [];
       const encounteredNames = new Set();
 
@@ -101,8 +101,6 @@ const Addcustomcategory: React.FC = () => {
         }
       }
       setIcons(filteredItems);
-
-      console.log("data icons", filteredItems);
 
       setIsLoading(false);
     } catch (error) {
@@ -226,7 +224,7 @@ const Addcustomcategory: React.FC = () => {
 
   const handleLogoChange = (event: any) => {
     const value = event.target.value;
-    console.log("valaye", value);
+
     setSelectedLogoValue(event.detail.value);
   };
   const handleCategoryIcon = (event: any) => {
@@ -236,9 +234,7 @@ const Addcustomcategory: React.FC = () => {
 
   const handleTypeChange = (event: any, clickedType: any) => {
     const value = event.target.value;
-    console.log("event", event);
 
-    console.log("event.target.value", value);
     setSelectedType(clickedType);
   };
 
@@ -246,11 +242,10 @@ const Addcustomcategory: React.FC = () => {
     const newCategory: any = {
       label: customName,
       type: selectedType,
+      svg: selectedLogoValue,
       icon: selectedLogoValue,
       value: null,
     };
-
-    console.log("newCareaawawaw", newCategory);
 
     // get redux state and set in a local array
 
@@ -264,7 +259,6 @@ const Addcustomcategory: React.FC = () => {
 
     dispatch(journalAction(typeObj[0]));
 
-    console.log("type obj", typeObj[0]);
     // typeObj.group.custom_user_fields;
 
     // setCustomCategoryData([...customCategoryData, newCategory]);

@@ -67,7 +67,6 @@ const JournalCalendarRemade = () => {
 
   const curDate: string = date.toLocaleDateString();
 
-  console.log("currdate", curDate);
   const curDay: string = [
     "Sunday",
     "Monday",
@@ -97,24 +96,19 @@ const JournalCalendarRemade = () => {
   useEffect(() => {
     const isItToday = document.getElementById(curDate);
     if (isItToday) {
-      console.log("first");
       setTimeout(() => {
         isItToday.scrollIntoView({ behavior: "smooth", block: "center" });
       }, 1000);
     }
   }, []);
 
-  const getBackgroundColor = (date) => {
-    // console.log("date", date);
-  };
+  const getBackgroundColor = (date) => {};
 
   const getIcons = async () => {
     try {
       const data = await MoonPhasesServce.get(
         `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
       );
-
-      console.log("moon data", data);
 
       const newArray = [];
 
@@ -131,7 +125,6 @@ const JournalCalendarRemade = () => {
       }
 
       setMoonPhaseIcon(newArray);
-      console.log("moon phases", newArray);
     } catch (error) {
       console.error(error);
     }
@@ -154,14 +147,11 @@ const JournalCalendarRemade = () => {
 
       if (todayData) {
         setTodayPeriod(todayData.active_period.toString());
-
-        console.log("Today's data:", todayData);
       } else {
         console.log("No data found for today");
       }
 
       // setIcons2(data);
-      console.log("getIcons 2", data);
     } catch (error) {
       console.error(error);
     }
@@ -191,7 +181,6 @@ const JournalCalendarRemade = () => {
 
     let curDate = `${year}-${month}-${date}`;
 
-    console.log("today period", todayPeriod);
     if (todayPeriod == "false") {
       body = {
         entries: [
