@@ -46,7 +46,7 @@ function ConfigCycleRemade() {
 
   const navigation = useIonRouter();
   const toLogin = () => {
-    CustomCategoryApiService.put(
+    CustomCategoryApiService.put_2(
       `https://app.mynalu.com/wp-json/nalu-app/v1/no-period`,
       tokenService.getWPToken()
     ).then(
@@ -292,7 +292,7 @@ function ConfigCycleRemade() {
 
     console.log("first");
 
-    CustomCategoryApiService.postCall2(
+    CustomCategoryApiService.postCall_3(
       `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`,
 
       tokenService.getToken()

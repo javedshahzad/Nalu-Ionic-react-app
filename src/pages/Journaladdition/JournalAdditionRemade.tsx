@@ -767,92 +767,86 @@ function JournalAdditionRemade() {
                               </IonButton>
                             </div>
                             <div className="tags-holder">
-                              {entry.fields.map((field: any) => (
-                                <>
-                                  <IonRow>
-                                    <IonCol key={field.key}>
+                              <IonRow>
+                                {entry.fields.map((field: any) => (
+                                  <>
+                                    <IonCol key={field.key} size="6">
                                       {field.type === "range-5" && (
                                         <>
-                                          <IonCol>
-                                            <IonRange
-                                              className="custom-tick"
-                                              aria-label="Dual Knobs Range"
-                                              dualKnobs={false}
-                                              ticks={true}
-                                              snaps={true}
-                                              min={1}
-                                              max={5}
-                                              value={
-                                                field.value ? field.value : 1
-                                              }
-                                              pin={true}
-                                              pinFormatter={(value: number) =>
-                                                `${value}`
-                                              }
-                                              onIonChange={(event) =>
-                                                updateField(
-                                                  event.target.value,
-                                                  field
-                                                )
-                                              }
-                                            ></IonRange>
-                                            <div className="tick-labels">
-                                              {rangeValues.map((values) => (
-                                                <div
-                                                  key={values}
-                                                  className="tick-label"
-                                                >
-                                                  {values}
-                                                </div>
-                                              ))}
-                                            </div>
-                                          </IonCol>
+                                          <IonRange
+                                            className="custom-tick"
+                                            aria-label="Dual Knobs Range"
+                                            dualKnobs={false}
+                                            ticks={true}
+                                            snaps={true}
+                                            min={1}
+                                            max={5}
+                                            value={
+                                              field.value ? field.value : 1
+                                            }
+                                            pin={true}
+                                            pinFormatter={(value: number) =>
+                                              `${value}`
+                                            }
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                field
+                                              )
+                                            }
+                                          ></IonRange>
+                                          <div className="tick-labels">
+                                            {rangeValues.map((values) => (
+                                              <div
+                                                key={values}
+                                                className="tick-label"
+                                              >
+                                                {values}
+                                              </div>
+                                            ))}
+                                          </div>
                                         </>
                                       )}
                                       {field.type === "range-10" && (
                                         <>
-                                          <IonCol>
-                                            <IonRange
-                                              className="custom-tick"
-                                              aria-label="Dual Knobs Range"
-                                              dualKnobs={false}
-                                              ticks={true}
-                                              snaps={true}
-                                              min={1}
-                                              max={10}
-                                              value={
-                                                field.value ? field.value : 1
-                                              }
-                                              pin={true}
-                                              pinFormatter={(value: number) =>
-                                                `${value}`
-                                              }
-                                              onIonChange={(event) =>
-                                                updateField(
-                                                  event.target.value,
-                                                  field
-                                                )
-                                              }
-                                            ></IonRange>
-                                            <div className="tick-labels">
-                                              {rangeValues10.map((values) => (
-                                                <div
-                                                  key={values}
-                                                  className="tick-label2"
-                                                >
-                                                  {values}
-                                                </div>
-                                              ))}
-                                            </div>
-                                          </IonCol>
+                                          <IonRange
+                                            className="custom-tick"
+                                            aria-label="Dual Knobs Range"
+                                            dualKnobs={false}
+                                            ticks={true}
+                                            snaps={true}
+                                            min={1}
+                                            max={10}
+                                            value={
+                                              field.value ? field.value : 1
+                                            }
+                                            pin={true}
+                                            pinFormatter={(value: number) =>
+                                              `${value}`
+                                            }
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                field
+                                              )
+                                            }
+                                          ></IonRange>
+                                          <div className="tick-labels">
+                                            {rangeValues10.map((values) => (
+                                              <div
+                                                key={values}
+                                                className="tick-label2"
+                                              >
+                                                {values}
+                                              </div>
+                                            ))}
+                                          </div>
                                         </>
                                       )}
-                                    </IonCol>
-                                  </IonRow>
-                                  <IonRow>
-                                    {field.type === "true_false" && (
-                                      <IonCol key={field.key}>
+
+                                      {field.type === "true_false" && (
                                         <IonItem
+                                          key={field.key}
                                           lines="none"
                                           onClick={() => (field.value = true)}
                                           className="customIcon"
@@ -877,11 +871,11 @@ function JournalAdditionRemade() {
                                             }
                                           />
                                         </IonItem>
-                                      </IonCol>
-                                    )}
-                                  </IonRow>
-                                </>
-                              ))}
+                                      )}
+                                    </IonCol>
+                                  </>
+                                ))}
+                              </IonRow>
                             </div>
                           </>
                         )}

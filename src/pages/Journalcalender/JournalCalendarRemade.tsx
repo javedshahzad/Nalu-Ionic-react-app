@@ -54,13 +54,15 @@ const JournalCalendarRemade = () => {
   const [activeMonthIndex, setActiveMonthIndex] = useState(null);
   const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
   const [todayPeriod, setTodayPeriod] = useState("false");
-
+  const [icons2, setIcons2] = useState([]);
   const history = useHistory(); // Use useHistory for navigation
 
   // const navigation = useIonRouter();
   // const toJounralAddition = () => {};
 
   const date: Date = new Date();
+
+  const moonColorData = icons2;
 
   const curMonth = new Date().getMonth();
   const isCurDate = new Date().getDate();
@@ -102,8 +104,6 @@ const JournalCalendarRemade = () => {
     }
   }, []);
 
-  const getBackgroundColor = (date) => {};
-
   const getIcons = async () => {
     try {
       const data = await MoonPhasesServce.get(
@@ -132,6 +132,7 @@ const JournalCalendarRemade = () => {
   const getIcons2 = async () => {
     let lang = "en";
     let month: any = new Date().getMonth();
+
     if (parseInt(month) < 10) {
       month = "0" + month;
     }
@@ -151,10 +152,42 @@ const JournalCalendarRemade = () => {
         console.log("No data found for today");
       }
 
-      // setIcons2(data);
+      setIcons2(data);
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const getColors: any = (year, month, date) => {
+    if (month < 10) {
+      month = "0" + month;
+    }
+    if (date < 10) {
+      date = "0" + date;
+    }
+
+    let x = `${year}-${month}-${date}`;
+
+    const data = icons2;
+
+    let style: any = {};
+    // console.log("data in function", data);
+
+    Object.keys(moonColorData).map((obj) => {
+      if (obj === x) {
+        moonColorData[obj].entries.map((obj) => {
+          console.log("obj", obj);
+          if (obj.key === "period_bleeding" && parseInt(obj.value) > 0) {
+            style.backgroundColor = "yellow";
+          }
+          if (obj.key === "cervical_mucus" && parseInt(obj.value) > 0) {
+            style.backgroundColor = "blue";
+          }
+        });
+      }
+    });
+
+    return style;
   };
 
   useEffect(() => {
@@ -195,7 +228,6 @@ const JournalCalendarRemade = () => {
         body
       ).then(
         (data) => {
-          console.log("data from custom category api", data);
           setTodayPeriod("true");
         },
         (err) => {
@@ -218,7 +250,6 @@ const JournalCalendarRemade = () => {
         body
       ).then(
         (data) => {
-          console.log("data from custom category api", data);
           setTodayPeriod("false");
         },
         (err) => {
@@ -338,6 +369,7 @@ const JournalCalendarRemade = () => {
             activeIndex === i && activeMonthIndex === m ? "dayActive" : ""
           }`}
           onClick={() => handleOnClick(i, m)}
+          style={getColors(year, m, i)}
         >
           {moonPhase ? (
             <>

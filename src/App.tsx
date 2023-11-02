@@ -72,7 +72,7 @@ import GroupChat from "./pages/Chat/GroupChat/GroupChat";
 import GroupDetails from "./pages/Chat/GroupDetails/GroupDetails";
 import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
 import MyGroups from "./pages/Chat/mygroups/MyGroups";
-import JournalEntries from "./pages/Journaladdition/JournalEntries";
+// import JournalEntries from "./pages/Journaladdition/JournalEntries";
 import Addcustomcategory from "./pages/Addcustomcategory/Addcustomcategory";
 
 setupIonicReact({
@@ -267,9 +267,9 @@ const App: React.FC = () => {
           <Route exact path="/configcycleremade">
             <ConfigCycleRemade />
           </Route>
-          <Route exact path="/journalentries">
+          {/* <Route exact path="/journalentries">
             <JournalEntries />
-          </Route>
+          </Route> */}
           <Route exact path="/addcustomcategory/:dateParam">
             <Addcustomcategory />
           </Route>

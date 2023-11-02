@@ -377,7 +377,7 @@ const Addcustomcategory: React.FC = () => {
               <div className="tags-holders">
                 <IonRow>
                   {icons.map((icon, index) => (
-                    <IonCol id="imgg" key={index}>
+                    <IonCol id="imgg" key={index} size="6">
                       <IonItem lines="none">
                         <IonLabel className="ion-text-center">
                           <IonIcon icon={happyOutline} />
