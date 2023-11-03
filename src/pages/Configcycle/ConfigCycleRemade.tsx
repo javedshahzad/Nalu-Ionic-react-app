@@ -7,10 +7,13 @@ import {
   IonIcon,
 } from "@ionic/react";
 import "./configcycleremade.scss";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import newMoon from "../../assets/images/new moon.svg";
 import fullMoon from "../../assets/images/full moon.svg";
 import { chevronDownOutline } from "ionicons/icons";
+import CustomCategoryApiService from "../../CustomCategoryService";
+import tokenService from "../../token";
+import MoonPhasesServce from "../../MoonPhasesService";
 
 const months = [
   "January",
@@ -29,6 +32,8 @@ const months = [
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
+let url = "";
+
 function ConfigCycleRemade() {
   const [isOpen, setIsOpen] = useState(false);
   const [year, setYear] = useState(new Date().getFullYear());
@@ -36,14 +41,25 @@ function ConfigCycleRemade() {
   const popoverRef = useRef(null);
   const [currentdivInView, setCurrentDivInView] = useState("January");
   const [activeIndex, setActiveIndex] = useState(0);
+  const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
   const [activeMonthIndex, setActiveMonthIndex] = useState(null);
 
   const navigation = useIonRouter();
   const toLogin = () => {
-    navigation.push("/learnmore");
+    CustomCategoryApiService.put(
+      `https://app.mynalu.com/wp-json/nalu-app/v1/no-period`,
+      tokenService.getWPToken()
+    ).then(
+      (data) => {
+        navigation.push("/onboarding");
+      },
+      (err) => {
+        console.log("err sending data", err);
+      }
+    );
   };
 
-  const daysIcon = (dateIndex, mIndex): string => {
+  const daysIcon = (dateIndex: any, mIndex: any): string => {
     if (dateIndex === 12 && mIndex === 7) {
       return newMoon;
     } else if (dateIndex === 6 && mIndex === 7) {
@@ -56,6 +72,15 @@ function ConfigCycleRemade() {
   const handleOnClick = (dateIndex, monthIndex) => {
     setActiveIndex(dateIndex);
     setActiveMonthIndex(monthIndex);
+
+    const tempMonthIndex = monthIndex + 1 + "";
+    const tempDateIndex = dateIndex + "";
+
+    const dateParam = `${year}-${
+      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+
+    // url = `/journaladditionremade/${dateParam}`;
   };
 
   const handleClick = () => {
@@ -139,6 +164,39 @@ function ConfigCycleRemade() {
       );
     }
 
+    const getIcons = async () => {
+      try {
+        const data = await MoonPhasesServce.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
+        );
+
+        console.log("moon data", data);
+
+        const newArray = [];
+
+        for (const date in data.moonphase) {
+          const dateObjects = data.moonphase[date];
+          for (const dateObject of dateObjects) {
+            const transformedObject = {
+              date: date,
+              phase_id: dateObject.phase_id,
+              phase_name: dateObject.phase_name,
+            };
+            newArray.push(transformedObject);
+          }
+        }
+
+        setMoonPhaseIcon(newArray);
+        console.log("moon phases", newArray);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    useEffect(() => {
+      getIcons();
+    }, []);
+
     for (let i = 1; i <= lastDateOfMonth; i++) {
       const isToday =
         i === new Date().getDate() &&
@@ -146,6 +204,17 @@ function ConfigCycleRemade() {
         year === new Date().getFullYear()
           ? "currentDay"
           : "";
+      const moonPhase = moonPhaseIcon.find((item) => {
+        return (
+          item.date ===
+          year +
+            "-" +
+            (m + 1).toString().padStart(2, "0") +
+            "-" +
+            i.toString().padStart(2, "0")
+        );
+      });
+
       monthData.push(
         <li
           key={`currentDay-${i}`}
@@ -154,14 +223,21 @@ function ConfigCycleRemade() {
           }`}
           onClick={() => handleOnClick(i, m)}
         >
-          {daysIcon(i, m) && (
-            <img
-              className="daysIcon" // Apply custom styles to control image display
-              src={daysIcon(i, m)}
-              alt=""
-            />
+          {moonPhase ? (
+            <>
+              <div className="moonPhases">
+                {moonPhase.phase_name === "Full Moon" ? (
+                  <img src={fullMoon} />
+                ) : moonPhase.phase_name === "New Moon" ? (
+                  <img src={newMoon} />
+                ) : null}
+              </div>
+              {/* Added "null" for the empty condition */}
+              <p>{i}</p>
+            </>
+          ) : (
+            <>{i}</>
           )}
-          {i}
         </li>
       );
     }
@@ -205,6 +281,31 @@ function ConfigCycleRemade() {
       </div>
     );
   }
+
+  const goToLearnMore = () => {
+    const tempMonthIndex = activeMonthIndex + 1 + "";
+    const tempDateIndex = activeIndex + "";
+
+    const dateParam = `${year}-${
+      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+
+    console.log("first");
+
+    CustomCategoryApiService.postCall2(
+      `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`,
+
+      tokenService.getWPToken()
+    ).then(
+      (data) => {
+        console.log("data from custom category api", data);
+        navigation.push("/learnmore");
+      },
+      (err) => {
+        console.log("err sending data", err);
+      }
+    );
+  };
 
   return (
     <IonPage>
@@ -260,7 +361,11 @@ function ConfigCycleRemade() {
               the moon phases to introduce you to the cyclical lifestyle.
             </h3>
           </div>
-          <IonButton className="continue-btn" disabled={!activeIndex}>
+          <IonButton
+            className="continue-btn"
+            disabled={!activeIndex}
+            onClick={goToLearnMore}
+          >
             Continue
           </IonButton>
         </div>

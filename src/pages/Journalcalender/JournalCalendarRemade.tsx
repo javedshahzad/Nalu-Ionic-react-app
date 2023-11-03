@@ -7,6 +7,7 @@ import {
   IonPopover,
   useIonRouter,
   IonToolbar,
+  IonLabel,
 } from "@ionic/react";
 import { menuOutline, notificationsOutline } from "ionicons/icons";
 import { useState, useRef, useEffect } from "react";
@@ -19,8 +20,9 @@ import setting from "../../assets/images/setting.svg";
 import { chevronDownOutline, searchOutline } from "ionicons/icons";
 import { useHistory } from "react-router-dom";
 import NotificationBell from "../../components/NotificationBell";
-
+import { useParams } from "react-router-dom";
 import "./journalcalendarremade.scss";
+import MoonPhasesServce from "../../MoonPhasesService";
 
 const months = [
   "January",
@@ -39,6 +41,8 @@ const months = [
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
+let url = "";
+
 const JournalCalendarRemade = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [year, setYear] = useState(new Date().getFullYear());
@@ -47,6 +51,7 @@ const JournalCalendarRemade = () => {
   const [currentdivInView, setCurrentDivInView] = useState("January");
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeMonthIndex, setActiveMonthIndex] = useState(null);
+  const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
 
   const history = useHistory(); // Use useHistory for navigation
 
@@ -65,16 +70,6 @@ const JournalCalendarRemade = () => {
     "Saturday",
   ][date.getDay()];
 
-  const daysIcon = (dateIndex, mIndex): string => {
-    if (dateIndex === 12 && mIndex === 7) {
-      return newMoon;
-    } else if (dateIndex === 6 && mIndex === 7) {
-      return fullMoon;
-    } else {
-      return "";
-    }
-  };
-
   const handleOnClick = (dateIndex, monthIndex) => {
     setActiveIndex(dateIndex);
     setActiveMonthIndex(monthIndex);
@@ -86,7 +81,43 @@ const JournalCalendarRemade = () => {
       +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
     }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
-    const url = `/journaladditionremade/${dateParam}`;
+    url = `/journaladditionremade/${dateParam}`;
+  };
+
+  const getIcons = async () => {
+    try {
+      const data = await MoonPhasesServce.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
+      );
+
+      console.log("moon data", data);
+
+      const newArray = [];
+
+      for (const date in data.moonphase) {
+        const dateObjects = data.moonphase[date];
+        for (const dateObject of dateObjects) {
+          const transformedObject = {
+            date: date,
+            phase_id: dateObject.phase_id,
+            phase_name: dateObject.phase_name,
+          };
+          newArray.push(transformedObject);
+        }
+      }
+
+      setMoonPhaseIcon(newArray);
+      console.log("moon phases", newArray);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getIcons();
+  }, []);
+
+  const goToJournalAddition = () => {
     history.push(url);
   };
 
@@ -94,7 +125,7 @@ const JournalCalendarRemade = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleMonthChange = (event) => {
+  const handleMonthChange = (event: any) => {
     setCurrentMonth(event.target.value);
   };
 
@@ -177,6 +208,19 @@ const JournalCalendarRemade = () => {
         year === new Date().getFullYear()
           ? "currentDay"
           : "";
+
+      // Find the corresponding moon phase name for the current date
+      const moonPhase = moonPhaseIcon.find((item) => {
+        return (
+          item.date ===
+          year +
+            "-" +
+            (m + 1).toString().padStart(2, "0") +
+            "-" +
+            i.toString().padStart(2, "0")
+        );
+      });
+
       monthData.push(
         <li
           key={`currentDay-${i}`}
@@ -185,17 +229,29 @@ const JournalCalendarRemade = () => {
           }`}
           onClick={() => handleOnClick(i, m)}
         >
-          {daysIcon(i, m) && (
-            <img
-              className="daysIcon" // Apply custom styles to control image display
-              src={daysIcon(i, m)}
-              alt=""
-            />
+          {moonPhase ? (
+            <>
+              <div className="moonPhases">
+                {moonPhase.phase_name === "Full Moon" ? (
+                  <img src={fullMoon} />
+                ) : moonPhase.phase_name === "New Moon" ? (
+                  <img src={newMoon} />
+                ) : moonPhase.phase_name === "First Quarter" ? (
+                  <img src={cervicalMucus} />
+                ) : moonPhase.phase_name === "Last Quarter" ? (
+                  <img src={menstruation} />
+                ) : null}
+              </div>
+              {/* Added "null" for the empty condition */}
+              <p>{i}</p>
+            </>
+          ) : (
+            <>{i}</>
           )}
-          {i}
         </li>
       );
     }
+
     calendarMonths.push(
       <div className="calendar-month" key={`month-${m}`}>
         <div className="cur-month-year">
@@ -254,7 +310,7 @@ const JournalCalendarRemade = () => {
               <NotificationBell />
             </IonButton>
           </IonButtons>
-        </IonToolbar>{" "}
+        </IonToolbar>
         <div className="journalcalendar-main">
           <div className="calendar-container" onScroll={() => handleScroll()}>
             <div className="calendar-scrollable">
@@ -314,7 +370,9 @@ const JournalCalendarRemade = () => {
               <img src={setting} alt="" />
             </IonButton>
           </div>
-          <IonButton className="period-btn">End of Period</IonButton>
+          <IonButton className="period-btn" onClick={goToJournalAddition}>
+            End of Period
+          </IonButton>
         </div>
       </IonContent>
     </IonPage>

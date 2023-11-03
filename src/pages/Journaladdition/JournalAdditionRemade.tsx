@@ -9,6 +9,7 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonInput,
   IonItem,
   IonLabel,
   IonModal,
@@ -16,7 +17,7 @@ import {
   IonRange,
   IonRow,
   IonSearchbar,
-  IonTextarea,
+  IonSpinner,
   IonToolbar,
 } from "@ionic/react";
 import { useParams } from "react-router-dom";
@@ -24,53 +25,108 @@ import newMoon from "../../assets/images/new moon.svg";
 import fullMoon from "../../assets/images/full moon.svg";
 import { add, filterOutline, optionsOutline } from "ionicons/icons";
 import Additionfilter from "../modals/Additionfilter/Additionfilter";
+import JournalAdditionApiService from "../../JournalService";
+import { useHistory } from "react-router-dom";
+import menstruation from "../../assets/images/Menstruation.svg";
+import cervicalMucus from "../../assets/images/Cervical Mucus.svg";
+import CustomCategoryApiService from "../../CustomCategoryService";
+import tokenService from "../../token";
+import MoonPhasesServce from "../../MoonPhasesService";
 
 function JournalAdditionRemade() {
   const { dateParam } = useParams<{ dateParam: string }>();
 
-  const tickValues = [1, 2, 3, 4, 5]; // Custom tick values
+  const [typeState, setTypeState] = useState({});
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [isLoading, setIsLoading] = useState(false);
+  const [icons2, setIcons2] = useState([]);
+
+  const getJournalEntries = async () => {
+    try {
+      setIsLoading(true);
+
+      const data = await JournalAdditionApiService.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`
+      );
+
+      setTimeout(async () => {
+        let journalEntryObj = JSON.parse(localStorage.getItem(dateParam));
+
+        if (data === journalEntryObj) {
+          if (journalEntryObj === null || journalEntryObj === undefined) {
+            const data = await JournalAdditionApiService.get(
+              `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`
+            );
+
+            if (data.entries.length > 0) {
+              const types = [
+                ...new Set(data.entries.map((item: any) => item.type)),
+              ];
+
+              const dynamicStates = {};
+
+              types.forEach((type: any) => {
+                dynamicStates[type] = data.entries.filter(
+                  (item: any) => item.type === type
+                );
+              });
+
+              console.log("dynamic state", dynamicStates);
+              localStorage.setItem(dateParam, JSON.stringify(dynamicStates));
+              setTypeState(dynamicStates);
+              setIsLoading(false);
+            }
+          } else {
+            setTypeState(JSON.parse(journalEntryObj));
+            setIsLoading(false);
+          }
+        } else {
+          if (data.entries.length > 0) {
+            const types = [
+              ...new Set(data.entries.map((item: any) => item.type)),
+            ];
+
+            const dynamicStates = {};
+
+            types.forEach((type: any) => {
+              dynamicStates[type] = data.entries.filter(
+                (item: any) => item.type === type
+              );
+            });
+
+            console.log("dynamic state", dynamicStates);
+            localStorage.setItem(dateParam, JSON.stringify(dynamicStates));
+            setTypeState(dynamicStates);
+            setIsLoading(false);
+          }
+        }
+      }, 2000);
+    } catch (error) {
+      setIsLoading(false);
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getJournalEntries();
+  }, []);
+  const [inputValues, setInputValues] = useState({});
+
+  const history = useHistory();
+
+  const addCustomCategory = () => {
+    history.push(`/addcustomcategory/${dateParam}`);
+  };
+
+  const rangeValues = [1, 2, 3, 4, 5];
+
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleModalClose = () => {
     setModalOpen(false);
   };
 
-  const [intentionItems, setIntentionItems] = useState([
-    { label: "Gratitude", icon: "it1.svg", active: false },
-    { label: "Self love", icon: "it2.svg", active: false },
-    { label: "Creativity", icon: "it3.svg", active: false },
-    { label: "Letting go", icon: "it4.svg", active: false },
-    { label: "Intuition", icon: "it5.svg", active: false },
-    { label: "Forgive", icon: "it6.svg", active: false },
-    { label: "Rest", icon: "it7.svg", active: false },
-    { label: "Emotions", icon: "it8.svg", active: false },
-    { label: "Trust", icon: "it9.svg", active: false },
-    { label: "Recieve", icon: "it10.svg", active: false },
-    { label: "Add", icon: "it11.svg", active: false },
-  ]);
-
-  const [symptomItems, setSymptomItems] = useState([
-    { label: "Happy", icon: "sm1.svg", active: false },
-    { label: "Sad", icon: "sm2.svg", active: false },
-    { label: "Angry", icon: "sm3.svg", active: false },
-    { label: "Pain", icon: "sm4.svg", active: false },
-    { label: "Cry", icon: "sm5.svg", active: false },
-    { label: "Disturb", icon: "sm6.svg", active: false },
-    { label: "Restless", icon: "sm7.svg", active: false },
-  ]);
-  const [exerciseItems, setexerciseItems] = useState([
-    { label: "Happy", icon: "sm1.svg", active: false, colSize: "4" },
-    { label: "Sad", icon: "sm2.svg", active: false, colSize: "4" },
-    { label: "Angry", icon: "sm3.svg", active: false, colSize: "4" },
-    { label: "Pain", icon: "sm4.svg", active: false, colSize: "4" },
-    { label: "Cry", icon: "sm5.svg", active: false, colSize: "4" },
-    { label: "Disturb", icon: "sm6.svg", active: false, colSize: "4" },
-    { label: "Restless", icon: "sm7.svg", active: false, colSize: "5" },
-  ]);
-
   useEffect(() => {
-    console.log("first", dateParam);
-
     let date = new Date(dateParam);
 
     const monthName = date.toLocaleDateString("en-US", { month: "long" });
@@ -82,7 +138,7 @@ function JournalAdditionRemade() {
     setActiveYear(new Date(dateParam).getFullYear());
 
     const goTo = document.getElementById(dateParam);
-    console.log(goTo);
+
     setTimeout(() => {
       if (goTo !== null) {
         goTo.scrollIntoView({ behavior: "smooth", inline: "center" });
@@ -125,7 +181,7 @@ function JournalAdditionRemade() {
     return `${dayOfWeek}, ${dayOfMonth} ${month}`;
   };
 
-  function formatDates(inputDate) {
+  function formatDates(inputDate: any) {
     let month =
       +inputDate.getMonth() + 1 < 10
         ? "0" + (+inputDate.getMonth() + 1)
@@ -138,7 +194,6 @@ function JournalAdditionRemade() {
   }
 
   const handleDateClick = (date) => {
-    console.log("Clicked date:", date);
     setClickedDate(formatDates(new Date(date.actualDate)));
 
     setActiveDate(date.dayNo);
@@ -162,54 +217,19 @@ function JournalAdditionRemade() {
   const [clickedDate, setClickedDate] = useState(
     formatDates(new Date(dateParam))
   );
-
-  const toggleIntentionItemsActive = (index) => {
-    const updatedItems = intentionItems.map((item, i) => {
-      if (i === index) {
-        return { ...item, active: !item.active };
-      }
-      return item;
-    });
-    setIntentionItems(updatedItems);
-  };
-
-  const togglesymptomItemsActive = (index) => {
-    const updatedItems = symptomItems.map((item, i) => {
-      if (i === index) {
-        return { ...item, active: !item.active };
-      }
-      return item;
-    });
-    setSymptomItems(updatedItems);
-  };
-  const toggleexerciseItemsActive = (index) => {
-    const updatedItems = exerciseItems.map((item, i) => {
-      if (i === index) {
-        return { ...item, active: !item.active };
-      }
-      return item;
-    });
-    setexerciseItems(updatedItems);
-  };
+  const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
 
   const [journalDate, setJournalDate] = useState(null);
 
-  const daysIcon = (dateIndex, mIndex): string => {
-    if (dateIndex === 5 && mIndex === 8) {
-      return newMoon;
-    } else if (dateIndex === 9 && mIndex === 8) {
-      return fullMoon;
-    } else {
-      return "";
-    }
-  };
-
-  function weekdays(loopDate, loopEndDate) {
+  function weekdays(loopDate: any, loopEndDate: any, moonPhaseIcon: any) {
     const today = formatDates(new Date());
-    // console.log("today", today);
     let newWeekDays = [];
+
     while (loopDate <= loopEndDate) {
-      // console.log("toffy", today);
+      const matchingIcon = moonPhaseIcon.find(
+        (icon) => icon.date === formatDates(loopDate)
+      );
+
       newWeekDays.push({
         fullDate: loopDate.toLocaleString("default", {
           weekday: "short",
@@ -220,6 +240,7 @@ function JournalAdditionRemade() {
         isActive: false,
         month: loopDate.getMonth(),
         year: loopDate.getFullYear(),
+        icon: matchingIcon ? matchingIcon.phase_name : null, // Store the associated icon
       });
 
       let newDate = loopDate.setDate(loopDate.getDate() + 1);
@@ -229,7 +250,11 @@ function JournalAdditionRemade() {
     return newWeekDays;
   }
 
-  let days = weekdays(new Date(dateRange[0]), new Date(dateRange[1]));
+  let days = weekdays(
+    new Date(dateRange[0]),
+    new Date(dateRange[1]),
+    moonPhaseIcon
+  );
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -237,28 +262,96 @@ function JournalAdditionRemade() {
     let e = document.getElementById("day-heading");
 
     if (Math.ceil(e.scrollLeft) + e.clientWidth >= e.scrollWidth) {
-      console.log("reached Right");
-
       let date = new Date(dateRange[1]);
       let y = date.getFullYear(),
         m = date.getMonth();
 
       let lastDay = formatDates(new Date(y, m + 2, 0));
-      console.log("lastDay", dateRange[1], lastDay, m, [dateRange[0], lastDay]);
+
       setDateRange([dateRange[0], lastDay]);
     } else if (e.scrollLeft <= 0) {
-      console.log("reached Left");
       let date = new Date(dateRange[0]);
       date.setMonth(date.getMonth() - 1);
       let y = date.getFullYear(),
         m = date.getMonth();
 
       let firstDay = formatDates(new Date(y, m, 1));
-      console.log("firstDay", firstDay);
-      console.log("scrollWidth", e.scrollWidth, e.clientWidth);
+
       setDateRange([firstDay, dateRange[1]]);
     }
   };
+
+  const updateField = (val: any, fields: any) => {
+    fields.value = val;
+
+    CustomCategoryApiService.post(
+      `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`,
+      {
+        entries: [
+          {
+            key: fields.key,
+            value: val,
+          },
+        ],
+      },
+
+      tokenService.getWPToken()
+    ).then(
+      (data) => {
+        console.log("data from custom category api", data);
+      },
+      (err) => {
+        console.log("err sending data", err);
+      }
+    );
+  };
+
+  const getIcons = async () => {
+    try {
+      const data = await MoonPhasesServce.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
+      );
+
+      console.log("moon data", data);
+
+      const newArray = [];
+
+      for (const date in data.moonphase) {
+        const dateObjects = data.moonphase[date];
+        for (const dateObject of dateObjects) {
+          const transformedObject = {
+            date: date,
+            phase_id: dateObject.phase_id,
+            phase_name: dateObject.phase_name,
+          };
+          newArray.push(transformedObject);
+        }
+      }
+
+      setMoonPhaseIcon(newArray);
+      console.log("moon phases", newArray);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const getIcons2 = async () => {
+    const year = "2023-10";
+    const lang = "en";
+    try {
+      const data = await MoonPhasesServce.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${year}?lang=${lang}`
+      );
+      setIcons2(data);
+
+      console.log("icons 2", icons2);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getIcons2();
+  }, []);
 
   return (
     <IonPage>
@@ -310,14 +403,22 @@ function JournalAdditionRemade() {
                     onClick={() => handleDateClick(day)}
                     id={day.actualDate}
                   >
-                    {daysIcon(day.dayNo, day.month) && (
-                      <img
-                        className="daysIcon"
-                        src={daysIcon(day.dayNo, day.month)}
-                        alt=""
-                      />
-                    )}
-                    {day.dayNo}
+                    <div>
+                      {day.icon && (
+                        <div className="moonPhases">
+                          {day.icon === "Full Moon" ? (
+                            <img src={fullMoon} alt="Full Moon" />
+                          ) : day.icon === "New Moon" ? (
+                            <img src={newMoon} alt="New Moon" />
+                          ) : day.icon === "First Quarter" ? (
+                            <img src={cervicalMucus} alt="First Quarter" />
+                          ) : day.icon === "Last Quarter" ? (
+                            <img src={menstruation} alt="Last Quarter" />
+                          ) : null}
+                        </div>
+                      )}
+                    </div>
+                    <p> {day.dayNo}</p>
                   </div>
                 </div>
               ))}
@@ -330,327 +431,408 @@ function JournalAdditionRemade() {
           >
             <Additionfilter onClose={() => setModalOpen(false)} />
           </IonModal>
-          <div className="search-holder">
-            <IonItem lines="none">
-              <IonSearchbar></IonSearchbar>
-              <IonButton slot="end" fill="clear" color="dark">
-                <IonIcon icon={filterOutline} />
-              </IonButton>
-            </IonItem>
-          </div>
-          <div className="section">
-            <div className="title flex al-center jc-between">
-              <h3>Intention</h3>
-              <IonButton fill="clear">
-                <IonIcon src="assets/imgs/Pen.svg" />
-              </IonButton>
-            </div>
-            <div className="tags-holder">
-              <IonRow>
-                {intentionItems.map((item, index) => (
-                  <IonCol size="4" key={index}>
-                    <IonItem lines="none">
-                      <IonIcon
-                        slot="start"
-                        src={
-                          item.active
-                            ? `assets/imgs/${item.icon.replace(
-                                ".svg",
-                                "active.svg"
-                              )}`
-                            : `assets/imgs/${item.icon}`
-                        }
-                      />
-                      <IonLabel>{item.label}</IonLabel>
-                      <IonCheckbox
-                        checked={item.active}
-                        onIonChange={() => toggleIntentionItemsActive(index)}
-                      />
-                    </IonItem>
-                  </IonCol>
-                ))}
-              </IonRow>
-            </div>
-          </div>
-          <div className="section">
-            <div className="title flex al-center jc-between">
-              <h3>Symptoms</h3>
-              <IonButton fill="clear">
-                <IonIcon src="assets/imgs/Pen.svg" />
-              </IonButton>
-            </div>
-            <div className="tags-holder">
-              <IonRow>
-                {symptomItems.map((item, index) => (
-                  <IonCol size="4" key={index}>
-                    <IonItem lines="none">
-                      <IonIcon
-                        slot="start"
-                        src={
-                          item.active
-                            ? `assets/imgs/${item.icon.replace(
-                                ".svg",
-                                "active.svg"
-                              )}`
-                            : `assets/imgs/${item.icon}`
-                        }
-                      />
-                      <IonLabel>{item.label}</IonLabel>
-                      <IonCheckbox
-                        checked={item.active}
-                        onIonChange={() => togglesymptomItemsActive(index)}
-                      />
-                    </IonItem>
-                  </IonCol>
-                ))}
-              </IonRow>
-            </div>
-          </div>
-          <div className="section">
-            <div className="title flex al-center jc-between">
-              <h3>Pain</h3>
-              <IonButton fill="clear">
-                <IonIcon src="assets/imgs/Pen.svg" />
-              </IonButton>
-            </div>
-
-            <div className="range-holder">
-              <IonRow>
-                <IonCol size="3.5" class="flex al-center">
-                  <div className="start-slot flex al-center">
-                    <img src="assets/imgs/p1.svg" alt="" />
-                    <h3>Head</h3>
-                  </div>
-                </IonCol>
-                <IonCol size="8.5">
-                  <IonRange
-                    className="custom-tick"
-                    aria-label="Dual Knobs Range"
-                    dualKnobs={false}
-                    ticks={true}
-                    snaps={true}
-                    min={1}
-                    max={5}
-                    value={3}
-                    pin={true}
-                    pinFormatter={(value: number) => `${value}`}
-                  ></IonRange>
-                  <div className="tick-labels">
-                    {tickValues.map((tickValue) => (
-                      <div key={tickValue} className="tick-label">
-                        {tickValue}
-                      </div>
-                    ))}
-                  </div>
-                </IonCol>
-              </IonRow>
-            </div>
-            <div className="range-holder">
-              <IonRow>
-                <IonCol size="3.5" class="flex al-center">
-                  <div className="start-slot flex al-center">
-                    <img src="assets/imgs/p2.svg" alt="" />
-                    <h3>Hand</h3>
-                  </div>
-                </IonCol>
-                <IonCol size="8.5">
-                  <IonRange
-                    className="custom-tick"
-                    aria-label="Dual Knobs Range"
-                    dualKnobs={false}
-                    ticks={true}
-                    snaps={true}
-                    min={1}
-                    max={5}
-                    value={4}
-                    pin={true}
-                    pinFormatter={(value: number) => `${value}`}
-                  ></IonRange>
-                  <div className="tick-labels">
-                    {tickValues.map((tickValue) => (
-                      <div key={tickValue} className="tick-label">
-                        {tickValue}
-                      </div>
-                    ))}
-                  </div>
-                </IonCol>
-              </IonRow>
-            </div>
-            <div className="range-holder">
-              <IonRow>
-                <IonCol size="3.5" class="flex al-center">
-                  <div className="start-slot flex al-center">
-                    <img src="assets/imgs/p3.svg" alt="" />
-                    <h3>Abdomen</h3>
-                  </div>
-                </IonCol>
-                <IonCol size="8.5">
-                  <IonRange
-                    className="custom-tick"
-                    aria-label="Dual Knobs Range"
-                    dualKnobs={false}
-                    ticks={true}
-                    snaps={true}
-                    min={1}
-                    max={5}
-                    value={3}
-                    pin={true}
-                    pinFormatter={(value: number) => `${value}`}
-                  ></IonRange>
-                  <div className="tick-labels">
-                    {tickValues.map((tickValue) => (
-                      <div key={tickValue} className="tick-label">
-                        {tickValue}
-                      </div>
-                    ))}
-                  </div>
-                </IonCol>
-              </IonRow>
-            </div>
-            <div className="range-holder">
-              <IonRow>
-                <IonCol size="3.5" class="flex al-center">
-                  <div className="start-slot flex al-center">
-                    <img src="assets/imgs/p4.svg" alt="" />
-                    <h3>Knee</h3>
-                  </div>
-                </IonCol>
-                <IonCol size="8.5">
-                  <IonRange
-                    className="custom-tick"
-                    aria-label="Dual Knobs Range"
-                    dualKnobs={false}
-                    ticks={true}
-                    snaps={true}
-                    min={1}
-                    max={5}
-                    value={2}
-                    pin={true}
-                    pinFormatter={(value: number) => `${value}`}
-                  ></IonRange>
-                  <div className="tick-labels">
-                    {tickValues.map((tickValue) => (
-                      <div key={tickValue} className="tick-label">
-                        {tickValue}
-                      </div>
-                    ))}
-                  </div>
-                </IonCol>
-              </IonRow>
-            </div>
-          </div>
-          <div className="section">
-            <div className="title flex al-center jc-between">
-              <h3>Exercise</h3>
-              <IonButton fill="clear">
-                <IonIcon src="assets/imgs/Pen.svg" />
-              </IonButton>
-            </div>
-            <div className="ex-tags-holder">
-              <IonRow>
-                {exerciseItems.map((item, index) => (
-                  <IonCol size={item.colSize} key={index}>
-                    <IonItem lines="none">
-                      <IonIcon
-                        slot="start"
-                        src={
-                          item.active
-                            ? `assets/imgs/${item.icon.replace(
-                                ".svg",
-                                "active.svg"
-                              )}`
-                            : `assets/imgs/${item.icon}`
-                        }
-                      />
-                      <IonLabel>{item.label}</IonLabel>
-                      <IonCheckbox
-                        mode="md"
-                        checked={item.active}
-                        onIonChange={() => toggleexerciseItemsActive(index)}
-                      />
-                    </IonItem>
-                  </IonCol>
-                ))}
-              </IonRow>
-            </div>
-          </div>
-          <div className="section">
-            <div className="title flex al-center jc-between">
-              <h3>Custom</h3>
-              <IonButton fill="clear">
-                <IonIcon src="assets/imgs/Pen.svg" />
-              </IonButton>
-            </div>
-            <div className="tags-holder">
-              <IonRow>
-                <IonCol size="4">
-                  <IonItem lines="none">
-                    <IonIcon slot="start" src="assets/imgs/sm1.svg" />
-                    <IonLabel>Happy</IonLabel>
-                    <IonCheckbox></IonCheckbox>
-                  </IonItem>
-                </IonCol>
-                <IonCol size="4.5">
-                  <IonItem lines="none">
-                    <IonIcon slot="start" src="assets/imgs/sm2.svg" />
-                    <IonLabel>Nervousness</IonLabel>
-                    <IonCheckbox></IonCheckbox>
-                  </IonItem>
-                </IonCol>
-              </IonRow>
-            </div>
-            <div className="range-holder">
-              <IonRow>
-                <IonCol size="3.5" class="flex al-center">
-                  <div className="start-slot flex al-center">
-                    <img src="assets/imgs/p3.svg" alt="" />
-                    <h3>Abdomen</h3>
-                  </div>
-                </IonCol>
-                <IonCol size="8.5">
-                  <IonRange
-                    className="custom-tick"
-                    aria-label="Dual Knobs Range"
-                    dualKnobs={false}
-                    ticks={true}
-                    snaps={true}
-                    min={1}
-                    max={5}
-                    value={3}
-                    pin={true}
-                    pinFormatter={(value: number) => `${value}`}
-                  ></IonRange>
-                  <div className="tick-labels">
-                    {tickValues.map((tickValue) => (
-                      <div key={tickValue} className="tick-label">
-                        {tickValue}
-                      </div>
-                    ))}
-                  </div>
-                </IonCol>
-              </IonRow>
-            </div>
-          </div>
-          <div className="add-custom-category ion-text-center ion-padding-top">
-            <IonButton>
-              <IonIcon icon={add} />
-            </IonButton>
-            <h4>Add Custom Category</h4>
-          </div>
-          <div className="section last">
-            <div className="title">
-              <h3>How I feel today</h3>
-            </div>
-
-            <div className="the-form">
-              <div className="input-item">
-                <IonItem lines="none">
-                  <IonTextarea placeholder="Input Text" />
-                </IonItem>
-              </div>
-            </div>
-          </div>{" "}
         </div>
+        <div className="search-holder">
+          <IonItem lines="none">
+            <IonSearchbar></IonSearchbar>
+            <IonButton slot="end" fill="clear" color="dark">
+              <IonIcon icon={filterOutline} />
+            </IonButton>
+          </IonItem>
+        </div>
+        {/* Journal Entries */}
+        {isLoading ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+            }}
+          >
+            <IonSpinner name="crescent"></IonSpinner>
+          </div>
+        ) : (
+          <>
+            {Object.keys(typeState)
+              .sort()
+              .map((type: any, typeIndex: any) => (
+                <div key={typeIndex}>
+                  {typeState[type].map((entry: any, entryIndex: any) => (
+                    <div key={entryIndex}>
+                      <div className="section">
+                        {entry.type === "group" && (
+                          <div>
+                            {entry.key === "symptoms" && (
+                              <>
+                                <div className="title flex al-center jc-between">
+                                  <h3>{entry.label}</h3>
+                                  <IonButton fill="clear">
+                                    <IonIcon src="assets/imgs/Pen.svg" />
+                                  </IonButton>
+                                </div>
+                                <div className="tags-holder">
+                                  <IonRow>
+                                    {entry.fields.map((fields: any) => (
+                                      <IonCol size="4" key={fields.key}>
+                                        <IonItem lines="none">
+                                          <img
+                                            style={{
+                                              marginRight: "5px",
+                                            }}
+                                            src={
+                                              fields.value
+                                                ? fields.svg
+                                                : fields.icon
+                                            }
+                                            height={10}
+                                          />
+                                          <IonLabel>{fields.label}</IonLabel>
+                                          <IonCheckbox
+                                            checked={fields.value}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                fields
+                                              )
+                                            }
+                                          />
+                                        </IonItem>
+                                      </IonCol>
+                                    ))}
+                                  </IonRow>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <div className="section">
+                        {entry.type === "group" && (
+                          <div>
+                            {entry.key === "pain" && (
+                              <>
+                                <div className="title flex al-center jc-between">
+                                  <h3>{entry.label}</h3>
+                                  <IonButton fill="clear">
+                                    <IonIcon src="assets/imgs/Pen.svg" />
+                                  </IonButton>
+                                </div>
+                                <div className="range-holder">
+                                  <IonRow>
+                                    {entry.fields.map((field: any) => (
+                                      <>
+                                        <IonCol
+                                          size="3.5"
+                                          class="flex al-center"
+                                        >
+                                          <div className="start-slot flex al-center">
+                                            <img
+                                              src={field.icon}
+                                              height={20}
+                                              alt=""
+                                              style={{}}
+                                            />
+                                            <h3>{field.label}</h3>
+                                          </div>
+                                        </IonCol>
+                                        <IonCol size="8.5">
+                                          <IonRange
+                                            className="custom-tick"
+                                            aria-label="Dual Knobs Range"
+                                            dualKnobs={false}
+                                            ticks={true}
+                                            snaps={true}
+                                            min={1}
+                                            max={5}
+                                            value={
+                                              field.value ? field.value : 1
+                                            }
+                                            pin={true}
+                                            pinFormatter={(value: number) =>
+                                              `${value}`
+                                            }
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                field
+                                              )
+                                            }
+                                          ></IonRange>
+                                          <div className="tick-labels">
+                                            {rangeValues.map((values) => (
+                                              <div
+                                                key={values}
+                                                className="tick-label"
+                                              >
+                                                {values}
+                                              </div>
+                                            ))}
+                                          </div>
+                                        </IonCol>
+                                      </>
+                                    ))}
+                                  </IonRow>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <div className="section">
+                        {entry.type === "group" && (
+                          <div>
+                            {entry.key === "mood" && (
+                              <>
+                                <div className="title flex al-center jc-between">
+                                  <h3>{entry.label}</h3>
+                                  <IonButton fill="clear">
+                                    <IonIcon src="assets/imgs/Pen.svg" />
+                                  </IonButton>
+                                </div>
+                                <div className="tags-holder">
+                                  <IonRow>
+                                    {entry.fields.map((fields: any) => (
+                                      <IonCol size="4" key={fields.key}>
+                                        <IonItem lines="none">
+                                          <img
+                                            style={{ marginRight: "5px" }}
+                                            src={fields.icon}
+                                            height={10}
+                                          />
+                                          <IonLabel>{fields.label}</IonLabel>
+                                          <IonCheckbox
+                                            checked={fields.true_false}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                fields
+                                              )
+                                            }
+                                          />
+                                        </IonItem>
+                                      </IonCol>
+                                    ))}
+                                  </IonRow>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <div className="section">
+                        {entry.type === "group" && (
+                          <div>
+                            {entry.key === "sexual_activity" && (
+                              <>
+                                <div className="title flex al-center jc-between">
+                                  <h3>{entry.label}</h3>
+                                  <IonButton fill="clear">
+                                    <IonIcon src="assets/imgs/Pen.svg" />
+                                  </IonButton>
+                                </div>
+                                <div className="tags-holder">
+                                  <IonRow>
+                                    {entry.fields.map((fields: any) => (
+                                      <IonCol size="4" key={fields.key}>
+                                        <IonItem lines="none">
+                                          <img
+                                            style={{ marginRight: "5px" }}
+                                            src={fields.icon}
+                                            height={10}
+                                          />
+                                          <IonLabel>{fields.label}</IonLabel>
+                                          <IonCheckbox
+                                            checked={fields.true_false}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                fields
+                                              )
+                                            }
+                                          />
+                                        </IonItem>
+                                      </IonCol>
+                                    ))}
+                                  </IonRow>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <div className="section">
+                        {entry.type === "group" && (
+                          <div>
+                            {entry.key === "outflows" && (
+                              <>
+                                <div className="title flex al-center jc-between">
+                                  <h3>{entry.label}</h3>
+                                  <IonButton fill="clear">
+                                    <IonIcon src="assets/imgs/Pen.svg" />
+                                  </IonButton>
+                                </div>
+                                <div className="tags-holder">
+                                  <IonRow>
+                                    {entry.fields.map((fields: any) => (
+                                      <IonCol size="4" key={fields.key}>
+                                        <IonItem lines="none">
+                                          <img
+                                            style={{ marginRight: "5px" }}
+                                            src={fields.icon}
+                                            height={10}
+                                          />
+                                          <IonLabel>{fields.label}</IonLabel>
+                                          <IonCheckbox
+                                            checked={fields.true_false}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                fields
+                                              )
+                                            }
+                                          />
+                                        </IonItem>
+                                      </IonCol>
+                                    ))}
+                                  </IonRow>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <div className="section">
+                        {entry.type === "group" && (
+                          <div>
+                            {entry.key === "medication" && (
+                              <>
+                                <div className="title flex al-center jc-between">
+                                  <h3>{entry.label}</h3>
+                                  <IonButton fill="clear">
+                                    <IonIcon src="assets/imgs/Pen.svg" />
+                                  </IonButton>
+                                </div>
+                                <div className="tags-holder">
+                                  <IonRow>
+                                    {entry.fields.map((fields: any) => (
+                                      <IonCol size="4" key={fields.key}>
+                                        <IonItem lines="none">
+                                          <img
+                                            style={{ marginRight: "5px" }}
+                                            src={fields.icon}
+                                            height={10}
+                                          />
+                                          <IonLabel>{fields.label}</IonLabel>
+                                          <IonCheckbox
+                                            checked={fields.true_false}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                fields
+                                              )
+                                            }
+                                          />
+                                        </IonItem>
+                                      </IonCol>
+                                    ))}
+                                  </IonRow>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <div className="section">
+                        {entry.type === "group" && (
+                          <div>
+                            {entry.key === "activities" && (
+                              <>
+                                <div className="title flex al-center jc-between">
+                                  <h3>{entry.label}</h3>
+                                  <IonButton fill="clear">
+                                    <IonIcon src="assets/imgs/Pen.svg" />
+                                  </IonButton>
+                                </div>
+                                <div className="tags-holder">
+                                  <IonRow>
+                                    {entry.fields.map((fields: any) => (
+                                      <IonCol size="4" key={fields.key}>
+                                        <IonItem lines="none">
+                                          <img
+                                            style={{ marginRight: "5px" }}
+                                            src={fields.icon}
+                                            height={10}
+                                          />
+                                          <IonLabel>{fields.label}</IonLabel>
+                                          <IonCheckbox
+                                            checked={fields.true_false}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                fields
+                                              )
+                                            }
+                                          />
+                                        </IonItem>
+                                      </IonCol>
+                                    ))}
+                                  </IonRow>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <div className="section">
+                        {entry.type === "textarea" && (
+                          <div>
+                            <div className="title flex al-center jc-between">
+                              <h3>{entry.label}</h3>
+                              <IonButton fill="clear">
+                                <IonIcon src="assets/imgs/Pen.svg" />
+                              </IonButton>
+                            </div>
+                            <div className="tags-holder">
+                              <div>
+                                {
+                                  <div className="section last">
+                                    <div className="the-form">
+                                      <div className="input-item">
+                                        <IonItem lines="none">
+                                          <IonInput
+                                            id={entry.key}
+                                            placeholder="Input Text"
+                                            value={inputValues[entry.key]}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                entry
+                                              )
+                                            }
+                                          />
+                                        </IonItem>
+                                      </div>
+                                    </div>
+                                  </div>
+                                }
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            <div className="add-custom-category ion-text-center ion-padding-top">
+              <IonButton onClick={addCustomCategory}>
+                <IonIcon icon={add} />
+              </IonButton>
+              <h4>Add Custom Category</h4>
+            </div>
+          </>
+        )}
       </IonContent>
     </IonPage>
   );
