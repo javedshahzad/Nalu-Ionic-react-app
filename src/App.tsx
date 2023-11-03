@@ -72,7 +72,6 @@ import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
 import MyGroups from "./pages/Chat/mygroups/MyGroups";
 import JournalAdditionRemade from './pages/Journaladdition/JournalAdditionRemade';
 import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
-import Addcustomcategory from "./pages/Addcustomcategory/addcustomcategory";
 import UserAuthentication from "./auth/UserAuthentication";
 import Addcustomcategory from "./pages/Addcustomcategory/Addcustomcategory";
 import Menu from "./pages/Menu/Menu";
