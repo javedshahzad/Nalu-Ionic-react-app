@@ -62,29 +62,31 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
     try {
       axios
         .post("https://app.mynalu.com/wp-json/nalu-app/v1/recommendation", {
-          params: {
-            category: selectedCategory,
-            name: title,
-            description: note,
-          },
+          category: selectedCategory,
+          name: title,
+          description: note,
+        }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          }
         })
         .then((response) => {
           console.log(response.data);
-          if(response.data.message === 'Email sent successfully') {
+          if (response.data.message === 'Email sent successfully') {
             onClose('Your recommendation was successfully shared. A representative from the NALU team will carefully check your recommendation before publishing it within the app');
           }
         })
         .catch((error) => {
           console.error(error);
         });
-    } catch (error) {
+    }catch (error) {
       console.error(error);
     }
   };
 
   return (
     <IonPage className="Addrecmodal">
-      <IonContent className="ion-padding-horizontal" fullscreen>
+      <div className="model_content">
         <div
           className="back"
           onClick={() => {
@@ -159,7 +161,7 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
             </div>
           </IonRow>
         </IonGrid>
-      </IonContent>
+      </div>
     </IonPage>
   );
 };

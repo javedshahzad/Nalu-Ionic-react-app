@@ -1,4 +1,4 @@
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, useHistory } from "react-router-dom";
 import {
   IonApp,
   IonRouterOutlet,
@@ -72,6 +72,8 @@ import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
 import MyGroups from "./pages/Chat/mygroups/MyGroups";
 import JournalAdditionRemade from './pages/Journaladdition/JournalAdditionRemade';
 import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
+import Addcustomcategory from "./pages/Addcustomcategory/addcustomcategory";
+import UserAuthentication from "./auth/UserAuthentication";
 import Addcustomcategory from "./pages/Addcustomcategory/Addcustomcategory";
 import Menu from "./pages/Menu/Menu";
 
@@ -201,12 +203,6 @@ const App: React.FC = () => {
             </PrivateRoute>
           </Route>
 
-          <Route exact path="/eventdetail">
-            <PrivateRoute>
-              <Eventdetail />
-            </PrivateRoute>
-          </Route>
-
           <Route exact path="/filter">
             <PrivateRoute>
               <Filtermodal />
@@ -244,7 +240,7 @@ const App: React.FC = () => {
             </PrivateRoute>
           </Route>
           <Route exact path="/onboarding">
-            <Onboarding />
+          <Onboarding />
           </Route>
           <Route exact path="/questioning">
             <Questioning />
@@ -252,11 +248,7 @@ const App: React.FC = () => {
           <Route exact path="/registeration">
             <Registeration />
           </Route>
-          <Route exact path="/resourcedetail">
-            <PrivateRoute>
-              <Resourcedetail />
-            </PrivateRoute>
-          </Route>
+         
 
           <Route exact path="/stayup">
             <PrivateRoute>

@@ -20,8 +20,10 @@ import Journalcalender from "../Journalcalender/Journalcalender";
 import CourseInnerOverview from "../Courseoverviewpaid/CourseInnerOverview/CourseInnerOverview";
 import CourseSubOverview from "../Courseoverviewpaid/CourseInnerOverview/CourseSubOverview/CourseSubOverview";
 import ResourceSubCategory from '../ResourceSubCategory/ResourceSubCategory';
-import JournalCalendarRemade from '../Journalcalender/JournalCalendarRemade';
-import PrivateRoute from './../../auth/PrivateRoute';
+import Eventdetail from './../Eventdetail/Eventdetail';
+import Resourcedetail from './../Resourcedetail/Resourcedetail';
+import PrivateRoute from "../../auth/PrivateRoute";
+import JournalCalendarRemade from "../Journalcalender/JournalCalendarRemade";
 interface MainTabsProps {}
 
 const MainTabs: React.FC<MainTabsProps> = () => {
@@ -44,8 +46,12 @@ const MainTabs: React.FC<MainTabsProps> = () => {
 
 
         <Route path="/tabs/tab3" render={() => <PrivateRoute><Mygroups /></PrivateRoute>} exact={true} />
+        <Route path="/tabs/tab3/eventdetail" render={() => <PrivateRoute><Eventdetail /></PrivateRoute>} exact={true} />
+
         <Route path="/tabs/tab4" render={() => <PrivateRoute><Resources /></PrivateRoute>} exact={true} />
         <Route path="/tabs/tab4/resourcesubcateggory" render={() => <PrivateRoute><ResourceSubCategory /></PrivateRoute>} exact={true} />
+        <Route path="/tabs/tab4/resourcedetail" render={() => <PrivateRoute><Resourcedetail /></PrivateRoute>} exact={true} />
+
 
       </IonRouterOutlet>
 

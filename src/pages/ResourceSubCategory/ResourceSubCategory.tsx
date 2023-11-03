@@ -53,38 +53,24 @@ const ResourceSubCategory: React.FC = () => {
   const history = useHistory();
   const location = useLocation();
 
-  const { filteredData, subCategory } = (location?.state || {}) as {
+  const { filteredData, subCategory,parent_id } = (location?.state || {}) as {
     filteredData: any;
     subCategory: any;
+    parent_id: any
   };
   const [filtered, setFiltered] = useState(filteredData);
   const [subCategories, setSubCategories] = useState(subCategory);
+  const [parentId, setParentId] = useState(parent_id);
 
  
 
   useEffect(()=>{
-console.log('useEffect of resourcesubcateggory',subCategory);
     setFiltered(filteredData)
     setSubCategories(subCategory)
-  },[subCategory,filteredData])
+    setParentId(parent_id)
 
+  },[subCategory,filteredData,parent_id])
 
-
-
-
-
-
- 
-
-
-
- 
-
-  
-
-  
-  
-  
  
   const getCategoryByID = (id) => {
     console.log(id);
@@ -136,31 +122,9 @@ console.log('useEffect of resourcesubcateggory',subCategory);
         }
       );
       console.log(response.data);
-      if (
-        (response.data.message = "Upvote added successfully") &&
-        !isFilterSelected
-      ) {
-        axios
-          .get(
-            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-              },
-            }
-          )
-          .then((response) => {
-            console.log(response.data);
-            setCategoriesFavourites(response.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } else if (
-        (response.data.message = "Upvote added successfully") &&
-        isFilterSelected
-      ) {
-        getCategoryByID(id);
+       if (
+        (response.data.message = "Upvote added successfully")) {
+        getCategoryByID(parentId);
       }
     } catch (error) {
       console.error(error);
@@ -187,30 +151,9 @@ console.log('useEffect of resourcesubcateggory',subCategory);
           },
         }
       );
-      if (
-        (response.data.message = "Downvote removed successfully") &&
-        !isFilterSelected
-      ) {
-        axios
-          .get(
-            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-              },
-            }
-          )
-          .then((response) => {
-            setCategoriesFavourites(response.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } else if (
-        (response.data.message = "Downvote removed successfully") &&
-        isFilterSelected
-      ) {
-        getCategoryByID(categoryID);
+       if (
+        (response.data.message = "Downvote removed successfully")) {
+        getCategoryByID(parentId);
       }
     } catch (error) {
       console.error(error);
@@ -234,6 +177,10 @@ console.log('useEffect of resourcesubcateggory',subCategory);
         }
       );
       console.log(response.data);
+      if(response.data.message = "Post added to favourites successfully"){
+        console.log(parent_id);
+        getCategoryByID(parentId)
+      }
     } catch (error) {
       console.error(error);
     }
@@ -250,8 +197,9 @@ console.log('useEffect of resourcesubcateggory',subCategory);
         .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`)
         .then((response) => {
           console.log(response.data);
-          history.push("/resourcedetail", {
+          history.push("/tabs/tab4/resourcedetail", {
             data: response.data,
+            // resource_id: id
           });
         })
         .catch((error) => {
@@ -278,7 +226,7 @@ console.log('useEffect of resourcesubcateggory',subCategory);
         </>
       ) : (
         <>
-          <IonPage className="Overview">
+          <div className="Overview">
             <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
@@ -368,15 +316,17 @@ console.log('useEffect of resourcesubcateggory',subCategory);
                             </div>
                             <h5 className="ion-text-wrap">{card.title}</h5>
                             <div className="btns-holder flex al-center jc-between">
-                              {/* <div
-                                  onClick={() =>
+                              <div
+                                  onClick={(e) =>{
+                                    e.stopPropagation();
                                     handleUpvote(
                                       card.is_upvoted,
                                       card.id,
                                       card.is_downvoted
                                     )
-                                  } */}
-                              <div className="btn ion-activatable ripple-parent flex al-center">
+                                  }
+                                  }
+                                  className="btn ion-activatable ripple-parent flex al-center">
                                 {card.is_upvoted ? (
                                   <IonIcon src="assets/imgs/like-unfilled.svg" />
                                 ) : (
@@ -384,27 +334,31 @@ console.log('useEffect of resourcesubcateggory',subCategory);
                                 )}
                                 <h6>{card.upvotes_number}</h6>
                               </div>
-                              {/* <div
-                                  onClick={() =>
+                              <div
+                                  onClick={(e) =>{
+                                    e.stopPropagation();
                                     handleDownvote(
                                       card.is_upvoted,
                                       card.id,
                                       card.is_downvoted
                                     )
-                                  } */}
-                              <div className="btn ion-activatable ripple-parent flex al-center">
+                                  }
+                                  }
+                                  className="btn ion-activatable ripple-parent flex al-center">
                                 {card.is_downvoted ? (
                                   <IonIcon src="assets/imgs/dislike-unfilled.svg" />
                                 ) : (
                                   <IonIcon src="assets/imgs/dislike-filled.svg"></IonIcon>
                                 )}
-                                {/* <h6>{card.downvotes_number}</h6> */}
                               </div>
-                              {/* <div
-                                  onClick={() =>
-                                    handleSave(card.favourite, card.id)
-                                  } */}
-                              <div className="btn ion-activatable ripple-parent flex al-center">
+                              <div
+                                  onClick={(e) =>
+                                    {
+                                      e.stopPropagation()
+                                      handleSave(card.favourite, card.id)
+                                    }
+                                  }
+                                  className="btn ion-activatable ripple-parent flex al-center">
                                 {!card.favourite ? (
                                   <IonIcon src="assets/imgs/heart-unfilled.svg"></IonIcon>
                                 ) : (
@@ -421,7 +375,7 @@ console.log('useEffect of resourcesubcateggory',subCategory);
                 </IonContent>
               </div>
             </IonContent>
-          </IonPage>
+          </div>
         </>
       )}
     </>

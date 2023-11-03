@@ -36,12 +36,13 @@ import { Browser } from '@capacitor/browser';
 const Resourcedetail: React.FC = () => {
   const location = useLocation();
   const data: any = location.state;
+  console.log(data);
   const [resourseData, setResourceData] = useState(data);
 
   const handleUpvote = async (is_upvoted, id, is_downvoted) => {
     let URL;
     if (is_upvoted) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false}`;
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false`;
     } else if (!is_upvoted && !is_downvoted) {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
     } else if (!is_upvoted && is_downvoted) {
@@ -74,7 +75,7 @@ const Resourcedetail: React.FC = () => {
     let URL;
     if (!is_downvoted && !is_upvoted) {
       // <-
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=true}`;
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=true`;
     } else if (!is_downvoted && is_upvoted) {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false`;
     } else if (is_downvoted) {
@@ -87,7 +88,7 @@ const Resourcedetail: React.FC = () => {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
         },
       });
-      if ((response.data.message = "Downvote removed successfully")) {
+      if ((response.data.message === "Downvote removed successfully" || response.data.message === "Downvote added successfully")) {
           getResourceDetailsByID(resourseData.data.id)
       }
     } catch (error) {
@@ -102,7 +103,7 @@ const Resourcedetail: React.FC = () => {
 
     let URL;
     if (favourite) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=false}`;
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=false`;
     } else {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=true`;
     } 
@@ -144,14 +145,7 @@ const Resourcedetail: React.FC = () => {
       console.log(error);
     }
   }
-  const getFavouriteColor = (fav) => {
-    if (fav) {
-      return "filled";
-    } else {
-      return "not-filled";
-    }
-  };
-
+ 
   const contentRef = useRef<HTMLIonContentElement>(null);
 
   const openLink = async (url: string) => {
@@ -185,7 +179,7 @@ const Resourcedetail: React.FC = () => {
     };
   }, []);
   return (
-    <IonPage className="Resourcedetail">
+    <div className="Resourcedetail">
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
@@ -306,7 +300,7 @@ const Resourcedetail: React.FC = () => {
           </div>
         </div>
       </IonContent>
-    </IonPage>
+    </div>
   );
 };
 

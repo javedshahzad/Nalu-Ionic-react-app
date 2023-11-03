@@ -13,6 +13,8 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
+  useIonViewDidLeave,
+  useIonViewWillLeave,
 } from "@ionic/react";
 import {
   checkmarkCircle,
@@ -30,26 +32,44 @@ import NotificationBell from "../../components/NotificationBell";
 
 const Mygroups: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [event, setEvents] = useState(null);
+  const [events, setEvents] = useState(null);
 
   const history = useHistory();
+  let axiosCancelToken;
 
   useEffect(() => {
     getEvents();
-  }, []);
+    return () => {
+      if (axiosCancelToken) {
+        axiosCancelToken.cancel("Component unmounted");
+      }
+    };
+  },[]);
 
-  const navigateToNextPage = () => {
-    history.push("/Eventdetail"); // Navigate to the "/next" route
+  useIonViewDidLeave(() => {
+    axiosCancelToken.cancel("Component unmounted");
+  });
+ 
+  
+  const navigateToNextPage = (id) => {
+    console.log(id);
+    history.push("/tabs/tab3/eventdetail", {
+      event_id: id,
+    });
   };
 
   const getEvents = () => {
     setIsLoading(true);
+    const source = axios.CancelToken.source();
+    axiosCancelToken = source;
 
     axios
-      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/event/2146?lang=en`, {
+      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=en`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
         },
+        cancelToken: source.token,
+
       })
       .then((response) => {
         console.log(response.data);
@@ -59,12 +79,17 @@ const Mygroups: React.FC = () => {
       .catch((error) => {
         console.log(error);
         setIsLoading(false);
+        if (axios.isCancel(error)) {
+          console.log("Request was canceled:", error.message);
+        } else {
+          console.log(error);
+        }
       });
   };
 
   return (
     <>
-      {isLoading ? (
+      {isLoading? (
         <>
           <div
             style={{
@@ -78,7 +103,7 @@ const Mygroups: React.FC = () => {
           </div>
         </>
       ) : (
-        <IonPage className="Mygroups">
+        <div className="Mygroups">
           <IonHeader className="ion-no-border">
             <IonToolbar>
               <IonButtons slot="start">
@@ -90,9 +115,9 @@ const Mygroups: React.FC = () => {
               </IonButtons>
               <IonTitle>My Groups</IonTitle>
               <IonButtons slot="end">
-              <IonButton slot="end" fill="clear">
-              <NotificationBell />
-            </IonButton>
+                <IonButton slot="end" fill="clear">
+                  <NotificationBell />
+                </IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
@@ -146,38 +171,51 @@ const Mygroups: React.FC = () => {
               </div>
 
               <div className="next-list">
-                <div className="next-card" onClick={() => navigateToNextPage()}>
-                  <div className="img-holder">
-                    <img src={event?.image_url} alt="" />
-                  </div>
-                  <div className="dates flex al-center jc-between">
-                    <div>
-                      <p>{event?.schedule}</p>
-                      <h4>{event?.title}</h4>
+                {events?.map((event, event_index) => (
+                  <div
+                    className="next-card"
+                    key={event_index}
+                    onClick={() => navigateToNextPage(event?.id)}
+                  >
+                    <div className="img-holder">
+                      <img src={event?.thumbnail_url} alt="" />
                     </div>
-                    {/* <IonIcon icon={checkmarkCircle} /> */}
-                    <IonIcon slot="start" src="assets/imgs/bookmark-blue.svg" />
-                    {/* <IonIcon slot="start" src="assets/imgs/cross-icon.svg" /> */}
+                    <div className="dates flex al-center jc-between">
+                      <div>
+                        <p>{event?.schedule}</p>
+                        <h4 dangerouslySetInnerHTML={{ __html: event?.title }}></h4>
 
-
-                  </div>
-                  <IonItem lines="none">
-                    <div className="start-slot flex al-start " slot="start">
-                      <IonAvatar>
-                        <img src={event?.event_host.image} alt="" />
-
-                      </IonAvatar>
+                      </div>
+                      <IonIcon
+                        slot="start"
+                        src={
+                          event?.is_bookmarked
+                            ? "assets/imgs/bookmark-blue.svg"
+                            : event?.is_cancelled
+                            ? "assets/imgs/cross-icon.svg"
+                            : event?.is_registered
+                            ? checkmarkCircle
+                            : "assets/imgs/closed-letterr.svg"
+                        }
+                      />
                     </div>
-                    <IonLabel>
-                      <p>Hosted by</p>
-                      <h6 className="ion-text-wrap">
-                        <span>{event?.event_host.title}</span>,
-                        {event?.event_host.description}
-                      </h6>
-                      <p>Coach for Cycle Health</p>
-                    </IonLabel>
-                  </IonItem>
-                </div>
+                    <IonItem lines="none">
+                      <div className="start-slot flex al-start " slot="start">
+                        <IonAvatar>
+                          <img src={event?.event_host.image} alt="" />
+                        </IonAvatar>
+                      </div>
+                      <IonLabel>
+                        <p>Hosted by</p>
+                        <h6 className="ion-text-wrap">
+                          <span>{event?.event_host.title}</span>,
+                          {event?.event_host.description}
+                        </h6>
+                        <p>Coach for Cycle Health</p>
+                      </IonLabel>
+                    </IonItem>
+                  </div>
+                ))}
 
                 {/* <div className="next-card closed">
             
@@ -212,7 +250,7 @@ const Mygroups: React.FC = () => {
               </div>
             </div>
           </IonContent>
-        </IonPage>
+        </div>
       )}
     </>
   );

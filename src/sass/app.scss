@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .flex {
   display: flex;
 }
@@ -44,6 +48,7 @@
 
 .modaaal {
   --background: rgba(255, 255, 255, 0.26) !important;
+  
 }
 
 .ripple-parent {
@@ -181,4 +186,8 @@ ion-range::part(knob) {
 
 .unread {
   opacity: 1;
+}
+:root {
+  --media-brand: 245 245 245;
+  --media-focus: 78 156 246;
 }

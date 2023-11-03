@@ -23,6 +23,14 @@ const Login: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [emailError, setEmailError] = useState('');
   const [token, setToken] = useState('');
+  const [emailTouched, setEmailTouched] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
+  const [emailRegexx, setEmailRegex] = useState(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+
+
+
+
+
   const history = useHistory();
   const { t} = useTranslation();  
 
@@ -34,22 +42,37 @@ const Login: React.FC = () => {
   const handlePasswordChange = (event) => {
     const value = event.target.value;
     setPassword(value);
-    setPasswordError(value.trim() === '' ? 'Please enter your password.' : value.length < 6 ? 'Password must be at least 6 characters long.' : '');
+    setPasswordError(value.trim() === '' ? '' : value.length < 6 ? '' : '');
     setErrorMessage(value.trim() === '' ? '': '')
 
   };
-
 
   const handleEmailChange = (event) => {
     const value = event.target.value;
     setEmail(value);
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setEmailError(value.trim() === '' ? 'Please enter your email address.' : !emailRegex.test(value) ? 'Please enter a valid email address.' : '');
-    setErrorMessage(value.trim() === '' ? '': '')
-  
+     setEmailError(value.trim() === '' ? '' : !emailRegexx.test(value) ? '' : '');
+     setErrorMessage(value.trim() === '' ? '': '')
   };
 
-    const isFormValid = password && email && !passwordError && !emailError;
+    const handleEmailInputBlur = (e) => {
+    setEmailTouched(true);
+    if(emailTouched) {
+      setEmailError(e.target.focusedValue.trim() === '' ? 'Please enter your email address.' : !emailRegexx.test(e.target.focusedValue) ? 'Please enter a valid email address.' : '');
+      setErrorMessage(e.target.focusedValue.trim() === '' ? '': '')
+    }
+
+  };
+  const handlePasswprdInputBlur = (e) => {
+    setPasswordTouched(true);
+    if(passwordTouched) {
+      setPasswordError(e.target.focusedValue.trim() === '' ? 'Please enter your password.' : e.target.focusedValue.length < 6 ? 'Password must be at least 6 characters long.' : '');
+      setErrorMessage(e.target.focusedValue.trim() === '' ? '': '')
+    }
+
+  };
+ 
+
+    const isFormValid = password && email && emailRegexx.test(email) && password.length >= 6 && !passwordError && !emailError;
 
     const handleLogin = async () => {
       try {
@@ -95,10 +118,15 @@ const Login: React.FC = () => {
           <div className="input-item">
           <IonItem lines="none">
               <IonIcon src="assets/imgs/icn-email.svg" slot="start"/>
-              <IonInput placeholder={t('login.email')} autocomplete="email" type="email"  value={email} onIonInput={handleEmailChange} />
+              <IonInput placeholder={t('login.email')} autocomplete="email" type="email"
+                value={email} 
+                onIonChange={() => setEmailTouched(false)} // Reset emailTouched when input changes
+                onIonBlur={handleEmailInputBlur}
+
+                onIonInput={handleEmailChange} />
             </IonItem>
 
-            {emailError && <p className="error-message">{emailError}</p>}
+            {emailTouched && emailError && <p className="error-message">{emailError}</p>}
 
           </div>
 
@@ -109,10 +137,13 @@ const Login: React.FC = () => {
                 placeholder={t('login.password')}
                 type="password"
                 value={password}
+                onIonBlur={handlePasswprdInputBlur}
                 onIonInput={handlePasswordChange}
               />
             </IonItem>
             {passwordError && <p className="error-message">{passwordError}</p>}
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+
           </div>
 
          
@@ -120,7 +151,6 @@ const Login: React.FC = () => {
         <div className="btn-holder ion-text-center ion-padding-vertical">
           <IonButton expand="block" disabled={!isFormValid} onClick={() => handleLogin()}>{t('login.continue_button')}</IonButton>
         </div>
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
 
         <div className="or ion-text-center">
           <p>{t('login.or')}</p>

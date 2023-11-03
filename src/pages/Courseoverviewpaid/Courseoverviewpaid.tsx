@@ -14,8 +14,10 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
+  useIonViewDidLeave,
 } from "@ionic/react";
 import {
+  chevronForwardOutline,
   menuOutline,
   notificationsOutline,
 } from "ionicons/icons";
@@ -24,26 +26,35 @@ import "./Courseoverviewpaid.scss";
 import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useHistory } from 'react-router';
+import { useHistory } from "react-router";
 import NotificationBell from "../../components/NotificationBell";
 
 const Courseoverviewpaid: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [courseData, setCourseData] = useState(null);
   const history = useHistory();
+  let axiosCancelToken;
 
   useEffect(() => {
     getData();
+    return () => {
+      if (axiosCancelToken) {
+        axiosCancelToken.cancel("Component unmounted");
+      }
+    };
   }, []);
 
   const getData = () => {
     setIsLoading(true);
+    const source = axios.CancelToken.source();
+    axiosCancelToken = source;
     try {
       axios
         .get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=en`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           },
+          cancelToken: source.token,
         })
         .then((response) => {
           console.log(response.data);
@@ -58,11 +69,12 @@ const Courseoverviewpaid: React.FC = () => {
     }
   };
 
-  const navigateToCourseInner = (id)=>{
-history.push('/tabs/tab2/courseinneroverview',{
-    course_id:id
-})
-  }
+  const navigateToCourseInner = (id) => {
+    console.log(id);
+    history.push("/tabs/tab2/courseinneroverview", {
+      course_id: id,
+    });
+  };
   return (
     <>
       {isLoading ? (
@@ -80,7 +92,7 @@ history.push('/tabs/tab2/courseinneroverview',{
         </>
       ) : (
         <>
-          <IonPage className="Courseoverviewpaid">
+          <div className="Courseoverviewpaid">
             <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButton color={"dark"} fill="clear" onClick={() => history.push('/menu')}>
@@ -88,16 +100,19 @@ history.push('/tabs/tab2/courseinneroverview',{
                 </IonButton>
 
                 <IonButtons slot="end">
-            <IonButton slot="end" fill="clear">
-              <NotificationBell />
-            </IonButton>
-          </IonButtons>
+                  <IonButton slot="end" fill="clear">
+                    <NotificationBell />
+                  </IonButton>
+                </IonButtons>
               </IonToolbar>
             </IonHeader>
             <IonContent className="ion-padding-horizontal" fullscreen>
               <div className="the-list">
                 {courseData?.map((course) => (
                   <div key={course.id}>
+                    <div className="the-title">
+                      <h3>{course.title}</h3>
+                    </div>
                     {course?.progress && (
                       <div className="progress-holder">
                         <p>Course Progress</p>
@@ -105,13 +120,16 @@ history.push('/tabs/tab2/courseinneroverview',{
                           <IonProgressBar
                             value={course.progress / 100}
                           ></IonProgressBar>
-                          <h6>{course.progress}</h6>
+                          <h6>{course.progress}%</h6>
                         </div>
                       </div>
                     )}
                     {course?.next_chapter?.title && (
-                      <div className="resume-holder" 
-                      onClick={()=> navigateToCourseInner(course.next_chapter.id)}
+                      <div
+                        className="resume-holder"
+                        onClick={() =>
+                          navigateToCourseInner(course.next_chapter.id)
+                        }
                       >
                         <h3>Resume Course</h3>
                         <IonItem button detail lines="none">
@@ -119,10 +137,6 @@ history.push('/tabs/tab2/courseinneroverview',{
                         </IonItem>
                       </div>
                     )}
-
-                    <div className="the-title">
-                      <h3>{course.title}</h3>
-                    </div>
                     <IonAccordionGroup multiple={false}>
                       {course.items.map((module, moduleIndex) => (
                         <IonAccordion
@@ -141,67 +155,126 @@ history.push('/tabs/tab2/courseinneroverview',{
                                 key={chapterIndex}
                                 multiple={false}
                               >
-                                {/* <IonAccordion value={chapterIndex} disabled={!chapter.preview}> */}
-                                <IonAccordion value={chapterIndex}>
-
-                                  <IonItem slot="header" lines="inset">
+                                <IonAccordion
+                                  value={chapterIndex}
+                                  disabled={
+                                    chapter.protected && !chapter.preview
+                                  }
+                                >
+                                  <IonItem
+                                    slot="header"
+                                    lines="inset"
+                                    onClick={() => {
+                                      if (!chapter?.items && chapter.preview) {
+                                        navigateToCourseInner(chapter.id);
+                                      }
+                                    }}
+                                  >
                                     <IonLabel
                                       style={{
                                         marginLeft: "10px",
                                         color: "#636363",
                                       }}
                                     >
-                                      Chapter: {chapter.title}
+                                      <div
+                                        className="paragraph"
+                                        dangerouslySetInnerHTML={{
+                                          __html: `Chapter: ${chapter.title}`,
+                                        }}
+                                      ></div>
                                     </IonLabel>
-                                    {/* {
-                                      !chapter.preview && (
+
+                                    {!chapter?.items ? (
+                                      <IonIcon
+                                        src={
+                                          chapter.protected && !chapter.preview
+                                            ? "assets/imgs/icn-lock.svg"
+                                            : "assets/imgs/right-arrow.svg"
+                                        }
+                                        slot="end"
+                                        size="small"
+                                        className="ion-accordion-toggle-icon no-rotation"
+                                      ></IonIcon>
+                                    ) : chapter?.items &&
+                                      chapter.protected &&
+                                      !chapter.preview ? (
+                                      <>
                                         <IonIcon
-                                                    src={"assets/imgs/icn-lock.svg"}
-                                                    className="ion-accordion-toggle-icon custom-icon"
-                                                    slot="end"
-                                                  ></IonIcon>
-                                      )
-                                    } */}
-                                  </IonItem>
-                                  <div className="ion-padding" slot="content">
-                                    {chapter?.items?.map(
-                                      (sub_chapter, sub_chapter_index) => (
-                                        <IonAccordionGroup
-                                          key={sub_chapter_index}
-                                          multiple={false}
-                                        >
-                                          <IonAccordion
-                                            value={sub_chapter_index}
-                                            disabled={
-                                              sub_chapter.protected &&
-                                              !sub_chapter.preview
-                                            }
-                                          >
-                                            <IonItem
-                                              slot="header"
-                                              lines="inset"
-                                            >
-                                              <IonLabel
-                                                style={{ color: "#636363" }}
-                                              >
-                                                {sub_chapter.title}
-                                              </IonLabel>
-                                              <IonIcon
-                                                src={
-                                                  sub_chapter.protected &&
-                                                  !sub_chapter.preview
-                                                    ? "assets/imgs/icn-lock.svg"
-                                                    : "assets/imgs/right-arrow.svg"
-                                                }
-                                                className="ion-accordion-toggle-icon custom-icon"
-                                                slot="end"
-                                              ></IonIcon>
-                                            </IonItem>
-                                          </IonAccordion>
-                                        </IonAccordionGroup>
-                                      )
+                                          src={
+                                            chapter.protected &&
+                                            !chapter.preview
+                                              ? "assets/imgs/icn-lock.svg"
+                                              : "assets/imgs/right-arrow.svg"
+                                          }
+                                          slot="end"
+                                          size="small"
+                                          className="ion-accordion-toggle-icon no-rotation"
+                                        ></IonIcon>
+                                      </>
+                                    ) : (
+                                      <>
+                                        {/* <IonIcon
+                                          src={"assets/imgs/right-arrow.svg"}
+                                          slot="end"
+                                          size="small"
+                                          className="ion-accordion-toggle-icon"
+                                        ></IonIcon> */}
+                                      </>
                                     )}
-                                  </div>
+                                  </IonItem>
+                                  {chapter?.items ? (
+                                    <div className="ion-padding" slot="content">
+                                      {chapter?.items?.map(
+                                        (sub_chapter, sub_chapter_index) => (
+                                          <IonAccordionGroup
+                                            key={sub_chapter_index}
+                                            multiple={false}
+                                          >
+                                            <IonAccordion
+                                              value={sub_chapter_index}
+                                              disabled={
+                                                sub_chapter.protected &&
+                                                !sub_chapter.preview
+                                              }
+                                            >
+                                              <IonItem
+                                                slot="header"
+                                                lines="inset"
+                                                onClick={() => {
+                                                  if (
+                                                    // sub_chapter.protected &&
+                                                    !sub_chapter.preview
+                                                  ) {
+                                                    navigateToCourseInner(
+                                                      sub_chapter.id
+                                                    );
+                                                  }
+                                                }}
+                                              >
+                                                <IonLabel
+                                                  style={{ color: "#636363" }}
+                                                >
+                                                  {sub_chapter.title}
+                                                </IonLabel>
+                                                <IonIcon
+                                                  src={
+                                                    // sub_chapter.protected &&
+                                                    !sub_chapter.preview
+                                                      ? "assets/imgs/icn-lock.svg"
+                                                      : "assets/imgs/right-arrow.svg"
+                                                  }
+                                                  className="ion-accordion-toggle-icon custom-icon custom_icon no-rotation"
+                                                  slot="end"
+                                                ></IonIcon>
+                                              </IonItem>
+                                            </IonAccordion>
+                                          </IonAccordionGroup>
+                                        )
+                                      )}
+                                    </div>
+                                  ) : (
+                                    ""
+                                  )}
                                 </IonAccordion>
                               </IonAccordionGroup>
                             ))}
@@ -213,7 +286,7 @@ history.push('/tabs/tab2/courseinneroverview',{
                 ))}
               </div>
             </IonContent>
-          </IonPage>
+          </div>
         </>
       )}
     </>

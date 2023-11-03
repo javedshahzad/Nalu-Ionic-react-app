@@ -62,12 +62,14 @@ import {
 } from "@vidstack/react/player/layouts/default";
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
+import { Player } from './../../../components/videoPlayer/Player';
 
 
 const CourseInnerOverview: React.FC = () => {
   const history = useHistory();
   const location = useLocation();
    const data : any = location?.state;
+   const [courseId, setCourseId] = useState(data?.course_id);
  
   const [togglePlay, setTogglePlay] = useState("video");
   const [courseData, setCourseData] = useState(null);
@@ -76,23 +78,31 @@ const CourseInnerOverview: React.FC = () => {
 
 
   useEffect(() => {
-    console.log(data?.course_id);
-    getData(data?.course_id);
-  }, [0]);
+    getData(courseId,null);
+  }, []);
 
 
-  const handleVideoClick = (value) => {
-    setTogglePlay(value);
-  };
+  // const handleVideoClick = (value) => {
+  //   setTogglePlay(value);
+  // };
   const handleComplete = (id) => {
-    history.push(`/tabs/tab2/courseinneroverview/${id}`);
+    // history.push(`/tabs/tab2/courseinneroverview/${id}`);
+    getData(id,null)
   };
 
-  const getData = (id) => {
+  const getData = (id,next_chapter) => {
     setIsLoading(true);
+    let URL;
+    if(id){
+       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`
+    }
+    else{
+     URL =   next_chapter
+    }
+    console.log(URL)
     try {
       axios
-        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`,{
+        .get(URL,{
           headers:{
             Authorization:`Bearer ${localStorage.getItem('jwtToken')}`
           }
@@ -111,17 +121,21 @@ const CourseInnerOverview: React.FC = () => {
       console.log(error);
     }
   };
-  const markAsDone = (URL) => {
+  const markAsDone = (course) => {
     setIsMarlLoading(true);
     try {
       axios
-        .post(URL)
+        .post(course?.completion_link,null,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
+          }
+        })
         .then((response) => {
           console.log(response.data);
-          // setCourseData(response.data);
-          // if(response.data.status = "success"){
-          //   getData()
-          // }
+          if(response.data.status = "success"){
+            getData(null,course?.next_chapter)
+            // history.push('/tabs/tab2')
+          }
           setIsMarlLoading(false);
         })
         .catch((error) => {
@@ -150,7 +164,7 @@ const CourseInnerOverview: React.FC = () => {
         </>
       ) : (
         <>
-          <IonPage className="CourseInnerOverview">
+          <div className="CourseInnerOverview">
             <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
@@ -168,70 +182,23 @@ const CourseInnerOverview: React.FC = () => {
                 </IonButtons>
               </IonToolbar>
             </IonHeader>
-            <IonContent fullscreen>
+            <IonContent fullscreen className="ion-no-padding">
               <div className="main_div">
                 <div className="player_div">
                   {togglePlay === "video" && courseData?.video_url ? (
-                    <MediaPlayer className="player" src={courseData?.video_url? courseData?.video_url : ""}>
-                      <MediaProvider>
-                        <DefaultVideoLayout
-                          thumbnails={courseData?.video_thumbnail}
-                          icons={defaultLayoutIcons}
-                        />
-                      </MediaProvider>
-                    </MediaPlayer>
+                    <Player url ={courseData?.video_url} 
+                    video_thumbnail={courseData?.video_thumbnail}
+                     source={'video'}/>
+
                   ) : (
                     <>
-                      <div className="audio_player_div">
-                        <IonGrid>
-                          <IonRow>
-                            <IonCol size="6">
-                              <img src={img3} alt="" />
-                            </IonCol>
-                            <IonCol size="6">
-                              <div className="title">
-                                <h3>{courseData?.title}</h3>
-                              </div>
-                            </IonCol>
-                          </IonRow>
-                        </IonGrid>
+                      
 
-                        <MediaPlayer
-                          src={
-                            "https://media-files.vidstack.io/sprite-fight/audio.mp3"
-                          }
-                        >
-                          <MediaProvider></MediaProvider>
-                          <DefaultAudioLayout icons={defaultLayoutIcons} />
-                          <DefaultVideoLayout
-                            icons={defaultLayoutIcons}
-                            thumbnails={courseData?.audio_thumbnail}
-                          />
-                        </MediaPlayer>
-                      </div>
+                        
                     </>
                   )}
 
-                  <div className="playbuttons ">
-                    <div
-                      className={`video_span togglePlay ${
-                        togglePlay === "video" ? "active" : ""
-                      }`}
-                      onClick={() => handleVideoClick("video")}
-                    >
-                      <img src={audioIcon} alt="" />
-                      <span>Video</span>
-                    </div>
-                    <div
-                      className={`audio_span togglePlay ${
-                        togglePlay === "audio" ? "active" : ""
-                      }`}
-                      onClick={() => handleVideoClick("audio")}
-                    >
-                      <img src={audioIcon} alt="" />
-                      <span>Audio</span>
-                    </div>
-                  </div>
+                 
                 </div>
                 <div className="title">
                   <h3>{courseData?.ttile}</h3>
@@ -241,7 +208,7 @@ const CourseInnerOverview: React.FC = () => {
                     <IonCol size="3">
                       <div className="img_relative">
                         <div className="img_absolute">
-                          <img src={courseData?.authority?.image} />
+                          <img src={courseData?.authority?.image? courseData?.authority?.image : null} />
                         </div>
                       </div>
                     </IonCol>
@@ -293,20 +260,13 @@ const CourseInnerOverview: React.FC = () => {
                     </IonRow>
                   ))}
                 </IonGrid>
-                {!courseData?.completed ? (
+                {
+                  !courseData?.completed && (
                     <div
-                      style={{
-                        borderRadius: "10px",
-                        fontSize: "18px",
-                        height: "54px",
-                        marginLeft: "15px",
-                        marginRight: "15px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        backgroundColor: "#EE5F64",
-                      }}
-                      onClick={()=> markAsDone(courseData?.completion_link)}
+                      
+                      className={`mark-done-button`}
+                      onClick={()=> markAsDone(courseData)}
+                      
                     >
                       {ismarkLoading ? (
                         <IonSpinner
@@ -318,12 +278,12 @@ const CourseInnerOverview: React.FC = () => {
                         <p style={{"color":"white"}}>Mark as Done</p>
                       )}
                     </div>
-                ) : (
-                  ""
-                )}
+                  )
+                }
+               
               </div>
             </IonContent>
-          </IonPage>
+          </div>
         </>
       )}
     </>
