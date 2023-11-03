@@ -42,6 +42,8 @@ import {
 } from "ionicons/icons";
 import "./Menu.scss";
 import { Browser } from '@capacitor/browser';
+import { useHistory } from 'react-router-dom';
+import axios from "axios";
 
 async function openExternalLink(url: string) {
   await Browser.open({ url: url });
@@ -55,77 +57,97 @@ interface AppPage {
   url: string;
   Icon: string;
   title: string;
+  onClick?: () => void;
 }
-
-const appPages: AppPage[] = [
-  /*{
-    title: "Edit Profile",
-    url: "/page/Inbox",
-    Icon: 'assets/imgs/menu1.svg',
-    
-  },
-  {
-    title: "Preferences",
-    url: "/page/Outbox",
-    Icon: 'assets/imgs/menu2.svg',
-   
-  },
-  {
-    title: "Notifications",
-    url: "/page/Favorites",
-    Icon: 'assets/imgs/menu3.svg',
-   
-  },
-  {
-    title: "Get Full Access",
-    url: "/page/Archived",
-    Icon: 'assets/imgs/menu4.svg',
-  },
-  {
-    title: "Emergency Plan",
-    url: "/page/Trash",
-    Icon: 'assets/imgs/menu5.svg',
-  },*/
-  {
-    title: "Sources",
-    url: "https://app.mynalu.com/quellen/",
-    Icon: 'assets/imgs/menu6.svg',
-  },
-
-  {
-    title: "Privacy Policy",
-    url: "https://app.mynalu.com/datenschutzerklaerung/",
-    Icon: 'assets/imgs/menu7.svg',
-    
-  },
-  {
-    title: "Imprint",
-    url: "https://app.mynalu.com/impressum/",
-    Icon: 'assets/imgs/menu8.svg',
-   
-  },
-  {
-    title: "support@mynalu.com",
-    url: "mailto:support@mynalu.com",
-    Icon: 'assets/imgs/menu9.svg',
-   
-  },
-  {
-    title: "lisafilipe.nalu",
-    url: "https://www.instagram.com/lisafilipe.nalu/",
-    Icon: 'assets/imgs/menu10.svg',
-  },
-  {
-    title: "lisafilipe.nalu",
-    url: "https://www.facebook.com/lisafilipe.nalu",
-    Icon: 'assets/imgs/menu11.svg',
-  },
-  
-];
 
 const Menu: React.FC = () => {
   const location = useLocation();
+  const history = useHistory();
 
+  const getResourceDetailsByID = (id) => {
+    try {
+      axios
+        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`)
+        .then((response) => {
+          console.log(response.data);
+          history.push("/resourcedetail", {
+            data: response.data,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const appPages: AppPage[] = [
+    /*{
+      title: "Edit Profile",
+      url: "/page/Inbox",
+      Icon: 'assets/imgs/menu1.svg',
+      
+    },
+    {
+      title: "Preferences",
+      url: "/page/Outbox",
+      Icon: 'assets/imgs/menu2.svg',
+     
+    },
+    {
+      title: "Notifications",
+      url: "/page/Favorites",
+      Icon: 'assets/imgs/menu3.svg',
+     
+    },
+    {
+      title: "Get Full Access",
+      url: "/page/Archived",
+      Icon: 'assets/imgs/menu4.svg',
+    },*/
+    {
+      title: "Emergency Plan",
+      url: "",
+      Icon: 'assets/imgs/menu5.svg',
+      onClick: () => getResourceDetailsByID(6999),
+    },
+    {
+      title: "Sources",
+      url: "https://app.mynalu.com/quellen/",
+      Icon: 'assets/imgs/menu6.svg',
+    },
+  
+    {
+      title: "Privacy Policy",
+      url: "https://app.mynalu.com/datenschutzerklaerung/",
+      Icon: 'assets/imgs/menu7.svg',
+      
+    },
+    {
+      title: "Imprint",
+      url: "https://app.mynalu.com/impressum/",
+      Icon: 'assets/imgs/menu8.svg',
+     
+    },
+    {
+      title: "support@mynalu.com",
+      url: "mailto:support@mynalu.com",
+      Icon: 'assets/imgs/menu9.svg',
+     
+    },
+    {
+      title: "lisafilipe.nalu",
+      url: "https://www.instagram.com/lisafilipe.nalu/",
+      Icon: 'assets/imgs/menu10.svg',
+    },
+    {
+      title: "lisafilipe.nalu",
+      url: "https://www.facebook.com/lisafilipe.nalu",
+      Icon: 'assets/imgs/menu11.svg',
+    },
+    
+  ];
 
   // Function to close the menu
   const closeMenu = () => {
@@ -171,11 +193,11 @@ const Menu: React.FC = () => {
                           location.pathname === appPage.url ? "selected" : ""
                       }
                       onClick={() => {
-                          if (appPage.url.startsWith("https://") || appPage.url.startsWith("mailto:")) {
-                              openLink(appPage.url);
-                              return;
-                          }
-                          // Handle other links as usual
+                        if (appPage.onClick) {
+                          appPage.onClick();
+                        } else if (appPage.url.startsWith("https://") || appPage.url.startsWith("mailto:") || appPage.url.startsWith("tel:")) {
+                          openLink(appPage.url);
+                        }
                       }}
                       routerLink={!appPage.url.startsWith("https://") ? appPage.url : undefined}
                       routerDirection="none"

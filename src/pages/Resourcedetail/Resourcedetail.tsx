@@ -30,6 +30,8 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useState } from 'react';
 import NotificationBell from "../../components/NotificationBell";
+import React, { useRef, useEffect } from 'react';
+import { Browser } from '@capacitor/browser';
 
 const Resourcedetail: React.FC = () => {
   const location = useLocation();
@@ -149,6 +151,39 @@ const Resourcedetail: React.FC = () => {
       return "not-filled";
     }
   };
+
+  const contentRef = useRef<HTMLIonContentElement>(null);
+
+  const openLink = async (url: string) => {
+    await Browser.open({ url: url });
+  };
+
+  useEffect(() => {
+    const content = contentRef.current;
+
+    const clickListener = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (target.tagName === 'A' && target instanceof HTMLAnchorElement) {
+        const href = target.href;
+        if (href && (href.startsWith("https://") || href.startsWith("mailto:") || href.startsWith("tel:"))) {
+          event.preventDefault(); // Prevent the default link behavior
+          openLink(href); // Open the link with the Browser plugin
+        }
+      }
+    };
+
+    // Use getScrollElement() to get the correct scrollable element to attach the event
+    content?.getScrollElement().then((scrollElement) => {
+      scrollElement.addEventListener('click', clickListener);
+    });
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      content?.getScrollElement().then((scrollElement) => {
+        scrollElement.removeEventListener('click', clickListener);
+      });
+    };
+  }, []);
   return (
     <IonPage className="Resourcedetail">
       <IonHeader className="ion-no-border">
@@ -169,7 +204,7 @@ const Resourcedetail: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent fullscreen ref={contentRef}>
         <div className="top-img-holder ion-text-center">
           {!resourseData?.data.image_url ? (
             <div>
