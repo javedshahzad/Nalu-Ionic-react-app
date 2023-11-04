@@ -8,44 +8,44 @@
     "description":"Wenn wir Schmerzen in unserem Körper verspüren, reagiert unser Körper normalerweise mit einer Erhöhung der Muskelspannung",
     "block":"Bauch: Bauchatmung",
     "timeline": "3 Minuten",
-    "continue_button":"Weitermachen"
+    "continue_button":"Weiter"
     },
     
         "login": {
-          "login": "Anmeldung",
-          "account": "Erstelle einen kostenlosen Account",
-          "continue_button": "Weitermachen",
+          "login": "Login",
+          "account": "Melde dich mit deinem Konto an",
+          "continue_button": "Anmelden",
           "or": "oder",
           "google": "Weiter mit Google",
           "facebook": "Weiter mit Facebook",
-          "no_account": "Ich habe noch kein Konto?",
-          "sign_up": "Melden Sie sich an",
-          "email":"email",
-         "password":"passwort"
+          "no_account": "Du hast noch kein Konto?",
+          "sign_up": "Registriere dich jetzt",
+          "email":"E-Mail-Adresse",
+         "password":"Passwort"
         },
         "community": {
             "browse_groups": "Gruppen durchsuchen"
           },
         "config_cycle": {
-              "config_title": "Konfigurieren Sie Ihr Zyklusjournal",
-              "description_1": "Wann war Ihre letzte Periode?",
-              "description_2": "Ich weiß es nicht / Ich hatte nie eines",
-              "description_3": "Wenn Sie Ihre Periode nicht kennen oder nie hatten, wird Ihr Zyklus auf die Mondphasen eingestellt, um Sie an den zyklischen Lebensstil heranzuführen.",
-              "continue_button": "Weitermachen"
+              "config_title": "Wann war deine letzte Periode?",
+              "description_1": "Konfiguriere dein Zyklusjournal",
+              "description_2": "Ich weiss es nicht / Ich hatte nie eine",
+              "description_3": "Wenn du das Datum deiner letzten Periode nicht kennst oder nie eine hattest, wird dein Zyklus auf die Mondphasen abgestimmt, um dich mit dem zyklischen Lebensstil vertraut zu machen.",
+              "continue_button": "Weiter"
             },
             "onboarding": {
-                "description_1": "Harmonisieren Sie Ihren Menstruationszyklus",
-                "description_2": "Lernen Sie, Ihren Zyklus auf natürliche Weise zu regulieren und sich ausgeglichener und voller Energie zu fühlen.",
-                "get_started": "Loslegen",
-                "account": "Ich habe einen Account"
+                "description_1": "Harmonisiere deinen Menstruationszyklus",
+                "description_2": "Lernen deinen Zyklus auf natürliche Weise zu regulieren, um in Balance zu sein und mehr Energie zu haben. ",
+                "get_started": "Starten",
+                "account": "Ich habe bereits ein Konto"
               },
               "questioning": {
-                "description_1": "Wie können wir Sie unterstützen?",
-                "description_2": "Wir konfigurieren Ihr Erlebnis entsprechend Ihren Zielen.",
-                "description_3": "Verbessern Sie Ihr Leben mit Endometriose",
-                "description_4": "Holen Sie sich regelmäßige Periode",
-                "description_5": "Harmonisieren Sie Ihren Zyklus",
-                "description_6": "Ich weiß nicht"
+                "description_1": "Wie können wir dich unterstützen?",
+                "description_2": "Wähle dein Ziel.",
+                "description_3": "Leben mit Endometriose optimieren",
+                "description_4": "Regelmässige Periode erhalten",
+                "description_5": "Zyklus harmonisieren",
+                "description_6": "Ich weiss nicht / Keines der Ziele passt"
 
               }
            

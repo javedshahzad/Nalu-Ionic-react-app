@@ -39,7 +39,7 @@ i18n
       useSuspense: false 
     },
    fallbackLng: false,
-    lng: 'en',
+    lng: 'de',
     resources,
 
     //debug: true,

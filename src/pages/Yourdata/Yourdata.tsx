@@ -66,16 +66,16 @@ const Yourdata: React.FC = () => {
       <IonContent className="ion-padding" fullscreen>
       <div className="title-holder ion-text-center">
           <h3>
-          Your Data is Yours
+          Deine Daten gehören dir
           </h3>
           <h6 className="ion-text-wrap">
-          We keep your data confidential and do not sell it to third parties. Accept our terms to create your account and get an email to set your password.
+          Wir behandeln deine Daten vertraulich und verkaufen sie nicht an Dritte. Akzeptiere unsere Bedingungen, um Fortzufahren und erhalte eine E-Mail, um dein Passwort festzulegen.
           </h6>
         </div>
         <div className="list">
           <IonItem lines="none">
             <IonLabel>
-            I accept your Privacy Policy
+            Ich akzeptiere die <a href="https://app.mynalu.com/datenschutzerklaerung/">Datenschutzbestimmungen</a>
             </IonLabel>
             <IonToggle checked={acceptPrivacyPolicy} onIonChange={handlePrivacyPolicyToggle}></IonToggle>
           </IonItem>
@@ -85,7 +85,7 @@ const Yourdata: React.FC = () => {
 
           <IonItem lines="none">
             <IonLabel className="ion-text-wrap">
-            I accept your Terms & Conditions
+            Ich akzeptiere die <a href="https://app.mynalu.com/datenschutzerklaerung/">Allgemeinen Geschäftsbedingungen</a>
             </IonLabel>
             <IonToggle checked={acceptTermsConditions} onIonChange={handleTermsConditionsToggle}></IonToggle>
           </IonItem>
@@ -94,7 +94,7 @@ const Yourdata: React.FC = () => {
         </div>
 
         <div className="btn-holder ion-text-center ion-padding-vertical">
-          <IonButton expand="block" routerLink="/configcycle" disabled={!isFormValid} onClick={handleSubmit}>Register</IonButton>
+          <IonButton expand="block" routerLink="/configcycle" disabled={!isFormValid} onClick={handleSubmit}>Registrieren</IonButton>
         </div>
       </IonContent>
     </IonPage>

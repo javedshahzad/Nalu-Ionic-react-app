@@ -33,6 +33,11 @@
                 --color: white;
                 font-size: 18px;
                 height: 54px;
+
+                ion-spinner {
+                  color: white;
+                  height: 60%;
+                }
             }
         }
 
