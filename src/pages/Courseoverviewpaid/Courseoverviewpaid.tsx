@@ -88,9 +88,9 @@ history.push('/tabs/tab2/courseinneroverview',{
                 </IonButton>
 
                 <IonButtons slot="end">
-            <IonButton slot="end" fill="clear">
+            {/*<IonButton slot="end" fill="clear">
               <NotificationBell />
-            </IonButton>
+             </IonButton>*/}
           </IonButtons>
               </IonToolbar>
             </IonHeader>
