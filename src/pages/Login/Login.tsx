@@ -47,6 +47,7 @@ const Login: React.FC = () => {
 
   };
 
+
   const handleEmailChange = (event) => {
     const value = event.target.value;
     setEmail(value);
@@ -151,6 +152,7 @@ const Login: React.FC = () => {
         <div className="btn-holder ion-text-center ion-padding-vertical">
           <IonButton expand="block" disabled={!isFormValid} onClick={() => handleLogin()}>{t('login.continue_button')}</IonButton>
         </div>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
 
         <div className="or ion-text-center">
           <p>{t('login.or')}</p>

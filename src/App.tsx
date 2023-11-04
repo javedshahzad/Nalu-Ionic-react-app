@@ -49,13 +49,12 @@ import Membership from "./pages/Membership/Membership";
 import Journalcalender from "./pages/Journalcalender/Journalcalender";
 import Community from "./pages/Community/Community";
 import Login from "./pages/Login/Login";
-import './i18n';
-import { Suspense } from "react";
-import ResourceSubCategory from './pages/ResourceSubCategory/ResourceSubCategory';
-// import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
 import Resources from "./pages/Resources/Resources";
 import PrivateRoute from "./auth/PrivateRoute";
-import './i18n';
+import "./i18n";
+// import { Suspense } from "react";
+import ResourceSubCategory from "./pages/ResourceSubCategory/ResourceSubCategory";
+import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
 import ConfigCycleRemade from "./pages/Configcycle/ConfigCycleRemade";
 import Pusher from "pusher-js";
 import { addNotification } from "./actions/notificationAction";
@@ -70,10 +69,9 @@ import GroupChat from "./pages/Chat/GroupChat/GroupChat";
 import GroupDetails from "./pages/Chat/GroupDetails/GroupDetails";
 import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
 import MyGroups from "./pages/Chat/mygroups/MyGroups";
-import JournalAdditionRemade from './pages/Journaladdition/JournalAdditionRemade';
-import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
-import Addcustomcategory from "./pages/Addcustomcategory/addcustomcategory";
-import UserAuthentication from "./auth/UserAuthentication";
+// import JournalEntries from "./pages/Journaladdition/JournalEntries";
+import Addcustomcategory from "./pages/Addcustomcategory/Addcustomcategory";
+import JournalAdditionRemade from "./pages/Journaladdition/JournalAdditionRemade";
 
 setupIonicReact({
   mode: "ios",
@@ -283,6 +281,12 @@ const App: React.FC = () => {
           </Route>
           <Route exact path="/configcycleremade">
             <ConfigCycleRemade />
+          </Route>
+          {/* <Route exact path="/journalentries">
+            <JournalEntries />
+          </Route> */}
+          <Route exact path="/addcustomcategory/:dateParam">
+            <Addcustomcategory />
           </Route>
 
           <Route
