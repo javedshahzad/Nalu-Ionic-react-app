@@ -251,6 +251,10 @@ ion-toolbar {
       h3 {
         margin: 0 10px 0 0;
         font-size: 16px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        hyphens: auto;
       }
     }
   }

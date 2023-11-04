@@ -99,11 +99,11 @@ const Courseoverviewpaid: React.FC = () => {
                   <IonIcon icon={menuOutline} />
                 </IonButton>
 
-                <IonButtons slot="end">
+                {/*<IonButtons slot="end">
                   <IonButton slot="end" fill="clear">
                     <NotificationBell />
                   </IonButton>
-                </IonButtons>
+                </IonButtons>*/}
               </IonToolbar>
             </IonHeader>
             <IonContent className="ion-padding-horizontal" fullscreen>

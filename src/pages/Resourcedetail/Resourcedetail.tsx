@@ -186,7 +186,7 @@ const Resourcedetail: React.FC = () => {
             <IonBackButton color="dark" text={""} defaultHref="/tabs/tab4" />
           </IonButtons>
           <IonTitle>{resourseData?.data.title}</IonTitle>
-          <IonButtons slot="end">
+          {/*<IonButtons slot="end">
             <IonButton color="dark">
               <IonIcon icon={heartOutline} />
             </IonButton>
@@ -195,7 +195,7 @@ const Resourcedetail: React.FC = () => {
             <IonButton slot="end" fill="clear">
               <NotificationBell />
             </IonButton>
-          </IonButtons>
+          </IonButtons>*/}
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen ref={contentRef}>
