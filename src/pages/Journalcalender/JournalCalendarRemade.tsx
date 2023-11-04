@@ -442,19 +442,19 @@ const JournalCalendarRemade = () => {
       <IonContent>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton color="dark">
+            <IonButton color="dark" onClick={() => history.push('/menu')}>
               <IonIcon icon={menuOutline} />
             </IonButton>
           </IonButtons>
-          <IonButtons slot="end">
+          {/*<IonButtons slot="end">
             <IonButton color="dark">
               <IonIcon icon={searchOutline} />
             </IonButton>
             <IonButton color="dark">
               <NotificationBell />
             </IonButton>
-          </IonButtons>
-        </IonToolbar>
+          </IonButtons>*/}
+        </IonToolbar>{" "}
         <div className="journalcalendar-main">
           <div className="calendar-container" onScroll={() => handleScroll()}>
             <div className="calendar-scrollable">

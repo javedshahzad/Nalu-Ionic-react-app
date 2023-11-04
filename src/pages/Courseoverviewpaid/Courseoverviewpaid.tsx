@@ -95,15 +95,15 @@ const Courseoverviewpaid: React.FC = () => {
                 <>
                 <IonHeader className="ion-no-border">
               <IonToolbar>
-                <IonButton color={"dark"} fill="clear">
+                <IonButton color={"dark"} fill="clear" onClick={() => history.push('/menu')}>
                   <IonIcon icon={menuOutline} />
                 </IonButton>
 
                 <IonButtons slot="end">
-                  <IonButton slot="end" fill="clear">
-                    <NotificationBell />
-                  </IonButton>
-                </IonButtons>
+            {/*<IonButton slot="end" fill="clear">
+              <NotificationBell />
+             </IonButton>*/}
+          </IonButtons>
               </IonToolbar>
             </IonHeader>
             <IonContent className="ion-padding-horizontal" fullscreen>

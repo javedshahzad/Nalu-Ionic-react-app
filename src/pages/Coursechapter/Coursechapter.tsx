@@ -88,11 +88,11 @@ const Coursechapter: React.FC = () => {
             <IonBackButton color="dark" text={""} defaultHref="/mygroups" />
           </IonButtons>
           <IonTitle>Stretching & Loosening</IonTitle>
-          <IonButtons slot="end">
+          {/*<IonButtons slot="end">
             <IonButton slot="end" fill="clear">
               <NotificationBell />
             </IonButton>
-          </IonButtons>
+          </IonButtons>*/}
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
