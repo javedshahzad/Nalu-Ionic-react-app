@@ -115,11 +115,11 @@ const Mygroups: React.FC = () => {
                 />
               </IonButtons>
               <IonTitle>My Groups</IonTitle>
-              <IonButtons slot="end">
+              {/*<IonButtons slot="end">
                 <IonButton slot="end" fill="clear">
                   <NotificationBell />
                 </IonButton>
-              </IonButtons>
+              </IonButtons>*/}
             </IonToolbar>
           </IonHeader>
           <IonContent className="ion-padding" fullscreen>

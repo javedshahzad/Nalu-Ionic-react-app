@@ -54,7 +54,6 @@ import PrivateRoute from "./auth/PrivateRoute";
 import "./i18n";
 // import { Suspense } from "react";
 import ResourceSubCategory from "./pages/ResourceSubCategory/ResourceSubCategory";
-import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
 import ConfigCycleRemade from "./pages/Configcycle/ConfigCycleRemade";
 import Pusher from "pusher-js";
 import { addNotification } from "./actions/notificationAction";
@@ -70,9 +69,11 @@ import GroupDetails from "./pages/Chat/GroupDetails/GroupDetails";
 import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
 import MyGroups from "./pages/Chat/mygroups/MyGroups";
 import JournalAdditionRemade from './pages/Journaladdition/JournalAdditionRemade';
-// import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
-import Addcustomcategory from "./pages/Addcustomcategory/Addcustomcategory";
+import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
+import UserAuthentication from "./auth/UserAuthentication";
 import Menu from "./pages/Menu/Menu";
+import JournalEntries from "./pages/Journaladdition/JournalEntries";
+import Addcustomcategory from "./pages/Addcustomcategory/Addcustomcategory";
 
 setupIonicReact({
   mode: "ios",

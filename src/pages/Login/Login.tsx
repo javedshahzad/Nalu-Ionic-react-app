@@ -7,6 +7,7 @@ import {
   IonPage,
   IonRippleEffect,
   IonRouterLink,
+  IonSpinner,
 } from "@ionic/react";
 
 import "./Login.scss";
@@ -26,8 +27,7 @@ const Login: React.FC = () => {
   const [emailTouched, setEmailTouched] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
   const [emailRegexx, setEmailRegex] = useState(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
-
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
 
 
@@ -58,7 +58,7 @@ const Login: React.FC = () => {
     const handleEmailInputBlur = (e) => {
     setEmailTouched(true);
     if(emailTouched) {
-      setEmailError(e.target.focusedValue.trim() === '' ? 'Please enter your email address.' : !emailRegexx.test(e.target.focusedValue) ? 'Please enter a valid email address.' : '');
+      setEmailError(e.target.focusedValue.trim() === '' ? 'Bitte gebe deine E-Mail-Adresse ein.' : !emailRegexx.test(e.target.focusedValue) ? 'Bitte gebe eine gültige E-Mail-Adresse ein.' : '');
       setErrorMessage(e.target.focusedValue.trim() === '' ? '': '')
     }
 
@@ -66,7 +66,7 @@ const Login: React.FC = () => {
   const handlePasswprdInputBlur = (e) => {
     setPasswordTouched(true);
     if(passwordTouched) {
-      setPasswordError(e.target.focusedValue.trim() === '' ? 'Please enter your password.' : e.target.focusedValue.length < 6 ? 'Password must be at least 6 characters long.' : '');
+      setPasswordError(e.target.focusedValue.trim() === '' ? 'Bitte gebe dein Passwort ein.' : e.target.focusedValue.length < 6 ? 'Das Passwort muss mindestens 6 Zeichen lang sein.' : '');
       setErrorMessage(e.target.focusedValue.trim() === '' ? '': '')
     }
 
@@ -76,6 +76,7 @@ const Login: React.FC = () => {
     const isFormValid = password && email && emailRegexx.test(email) && password.length >= 6 && !passwordError && !emailError;
 
     const handleLogin = async () => {
+      setIsSubmitting(true);
       try {
         const response = await axios.post(`${apiHost}/jwt-auth/v1/token`, {
           username: email,
@@ -87,6 +88,7 @@ const Login: React.FC = () => {
           setToken(response.data.token);
           localStorage.setItem('jwtToken', response.data.token);
           localStorage.setItem('roles', response.data.roles);
+          localStorage.setItem('userId', response.data.user_id);
 
         // config code
           axios.interceptors.request.use(config => {
@@ -102,9 +104,11 @@ const Login: React.FC = () => {
 
 
         }
+        setIsSubmitting(false);
       } catch (error) {
         console.log('Error', error.response.data.message);
-        setErrorMessage("Invalid credentials")
+        setErrorMessage("E-Mail-Adresse oder Kennwort ungültig");
+        setIsSubmitting(false);
       }
     };
   
@@ -150,7 +154,13 @@ const Login: React.FC = () => {
          
         </div>
         <div className="btn-holder ion-text-center ion-padding-vertical">
-          <IonButton expand="block" disabled={!isFormValid} onClick={() => handleLogin()}>{t('login.continue_button')}</IonButton>
+          <IonButton expand="block" disabled={!isFormValid || isSubmitting} onClick={handleLogin}>
+            {isSubmitting ? (
+              <IonSpinner name="crescent" />
+            ) : (
+              t('login.continue_button')
+            )}
+          </IonButton>
         </div>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
 
@@ -171,7 +181,7 @@ const Login: React.FC = () => {
         </IonButton>
         </div>*/}
 
-      <IonRouterLink routerLink="/registeration">
+      <IonRouterLink routerLink="/questioning">
         <div className="bottom-holder flex al-center jc-center">
         <h6>{t('login.no_account')} &nbsp;&nbsp;</h6>
         <div className="btn ion-activatable ripple-parent rectangle">

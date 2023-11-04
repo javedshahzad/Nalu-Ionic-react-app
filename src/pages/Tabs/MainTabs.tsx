@@ -66,7 +66,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           <IonTabButton tab="tab2" href="/tabs/tab2">
           <IonIcon src="assets/imgs/tabicns/tab2.svg" className="tab-icon-inactive" id="inactive" />
           <IonIcon src="assets/imgs/tabicns/tab2a.svg" className="tab-icon-active" id="active" />
-            <IonLabel>Course</IonLabel>
+            <IonLabel>Kurs</IonLabel>
           </IonTabButton>
           <IonTabButton tab="tab3" href="/tabs/tab3">
           <IonIcon src="assets/imgs/tabicns/tab3.svg" className="tab-icon-inactive" id="inactive" />
@@ -76,7 +76,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           <IonTabButton tab="tab4" href="/tabs/tab4">
           <IonIcon src="assets/imgs/tabicns/tab4.svg" className="tab-icon-inactive" id="inactive" />
           <IonIcon src="assets/imgs/tabicns/tab4a.svg" className="tab-icon-active" id="active" />
-            <IonLabel>Resources</IonLabel>
+            <IonLabel>Ressourcen</IonLabel>
           </IonTabButton>
         </IonTabBar>
     </IonTabs>

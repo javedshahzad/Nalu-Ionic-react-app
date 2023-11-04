@@ -18,6 +18,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonToolbar,
+  IonSpinner,
 } from "@ionic/react";
 
 import "./Learnmore.scss";
@@ -33,8 +34,10 @@ const Learnmore: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [dateError, setDateError] = useState('');
   const [event, setEvent] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    setLoading(true); // Enable loading when the component mounts or when the effect is triggered again
     axios.get("https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/2133", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -42,9 +45,11 @@ const Learnmore: React.FC = () => {
     })
     .then((response) => {
       setEvent(response.data);
+      setLoading(false); // Disable loading after the data is fetched
     })
     .catch((error) => {
       console.error("Error fetching event data:", error);
+      setLoading(false); // Disable loading if there is an error
     });
   }, []);
 
@@ -53,31 +58,47 @@ const Learnmore: React.FC = () => {
   const handleDateChangeWebinar = (event, date_event) => {
     const value = event.target.value;
     setSelectedDate(value);
-    setDateError(value.trim() === "" ? "Please select a date to continue." : "");
+    setDateError(value.trim() === "" ? "Bitte wähle ein Datum aus, um fortzufahren." : "");
 }
 
-const handleRegistration = () => {
-  if (isFormValid) {
-      const updatedRegistrationLink = event?.registration_link.replace('{webinar_id}', selectedDate);
-      axios.post(updatedRegistrationLink, {}, {
-          headers: {
-              Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-      })
-      .then((response) => {
-          console.log(response.data);
-      })
-      .catch((error) => {
-          console.log(error);
-      });
+  const handleRegistration = () => {
+    if (isFormValid) {
+        const updatedRegistrationLink = event?.registration_link.replace('{webinar_id}', selectedDate);
+        axios.post(updatedRegistrationLink, {}, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            },
+        })
+        .then((response) => {
+            console.log(response.data);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
   }
-}
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh", // Takes full height of the viewport
+        }}
+      >
+        <IonSpinner name="crescent"></IonSpinner>
+      </div>
+    );
+  }
+
   return (
     <IonPage className="learnmore">
       <IonContent className="ion-padding" fullscreen>
         <div className="title-holder ion-text-center">
           <h3>
-            Learn more about <br /> the NALU method
+          {event?.title}
           </h3>
         </div>
         
@@ -96,9 +117,7 @@ const handleRegistration = () => {
                 <div className="inside flex al-center ion-padding-horizontal">
                   <img className="quote2" src="assets/imgs/quote2.svg" alt="" />
                   <h6 className="ion-text-wrap">
-                    I have worked on myself a lot with your <br /> program so that
-                    after 3.5 years I finally ovulated again and got my cycle
-                    back.
+                  {event?.slides?.slide1}
                   </h6>
                 </div>
               </div>
@@ -109,21 +128,29 @@ const handleRegistration = () => {
                 <div className="inside flex al-center ion-padding-horizontal">
                   <img className="quote2" src="assets/imgs/quote2.svg" alt="" />
                   <h6 className="ion-text-wrap">
-                    I have worked on myself a lot with your <br /> program so that
-                    after 3.5 years I finally ovulated again and got my cycle
-                    back.
+                  {event?.slides?.slide2}
                   </h6>
                 </div>
               </div>
             </SwiperSlide>
-            <SwiperSlide>Slide 3</SwiperSlide>
+            <SwiperSlide>
+              <div className="quote-holder">
+                <img src="assets/imgs/quote1.svg" alt="" />
+                <div className="inside flex al-center ion-padding-horizontal">
+                  <img className="quote2" src="assets/imgs/quote2.svg" alt="" />
+                  <h6 className="ion-text-wrap">
+                  {event?.slides?.slide3}
+                  </h6>
+                </div>
+              </div>
+            </SwiperSlide>
           </Swiper>
         </div>
 
         <div className="webinar">
-          <div className="title">
-            <h3>Free Webinar:</h3>
-            <h6>{event?.title}</h6>
+          <div className="title ion-text-center">
+            <h3>Gratis Webinar</h3>
+            <h6>Erfahre mehr über die NALU Methode</h6>
           </div>
 
           <div className="webinar-card">
@@ -132,23 +159,26 @@ const handleRegistration = () => {
                 <img src={event?.event_host?.image} alt="" />
               </IonAvatar>
               <IonLabel>
-                <p>Hosted by</p>
+                <p>Kursleiterin</p>
                 <h6>
-                  <span>{event?.event_host?.title}</span>{event?.event_host?.description}
+                  <span>{event?.event_host?.title}</span>
                 </h6>
+                <p>NALU Co-Gründerin, zert. Coach für Zyklusgesundheit & Medizinethnologin</p>
               </IonLabel>
             </IonItem>
 
-            <h5 className="ion-text-wrap">
+            <h4 className="ion-text-wrap">
               {event?.excerpt}
-            </h5>
+            </h4>
           </div>
 
           <div>
             <IonItem lines="none" className="ion-text-left">
               <IonSelect
                 className="ion-text-left "
-                placeholder={"Select Date"}
+                placeholder={"Datum wählen"}
+                cancelText="Abbrechen" // Übersetzung für "Cancel"
+                okText="Bestätigen"
                 mode="md"
                 value={selectedDate}
                 onIonChange={(e) => {
@@ -167,15 +197,15 @@ const handleRegistration = () => {
         </div>
 
         <div className="btn-holder ion-text-center ion-padding-vertical">
-          <IonButton expand="block" routerLink="/stayup" onClick={handleRegistration} disabled={!isFormValid}>Register</IonButton>
+          <IonButton expand="block" routerLink="/stayup" onClick={handleRegistration} disabled={!isFormValid}>Jetzt anmelden</IonButton>
         </div>
 
-        <div className="bottom-holder flex al-center jc-center ion-activatable ripple-parent">
+        <div className="bottom-holder flex al-center jc-center ion-activatable ripple-parent ion-text-center">
         
         <IonRouterLink routerLink="/stayup">
-        <h6>I'm not interesetd,&nbsp;&nbsp;</h6>
+        <h6>Ich habe kein Interesse,</h6>
         <IonRippleEffect></IonRippleEffect>
-        <h5>Continue the app</h5>
+        <h5>weiter zur App</h5>
         </IonRouterLink>
 
         </div>

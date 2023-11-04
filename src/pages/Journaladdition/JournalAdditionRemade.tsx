@@ -136,27 +136,27 @@ function JournalAdditionRemade() {
 
   const showClickDate = (date) => {
     const daysOfWeek = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
+      "Sonntag",
+      "Montag",
+      "Dienstag",
+      "Mittwoch",
+      "Donnerstag",
+      "Freitag",
+      "Samstag",
     ];
     const months = [
-      "January",
-      "February",
-      "March",
+      "Januar",
+      "Februar",
+      "März",
       "April",
-      "May",
-      "June",
-      "July",
+      "Mai",
+      "Juni",
+      "Juli",
       "August",
       "September",
-      "October",
+      "Oktober",
       "November",
-      "December",
+      "Dezember",
     ];
 
     const inputDate = new Date(date);
@@ -164,7 +164,7 @@ function JournalAdditionRemade() {
     const dayOfMonth = inputDate.getDate();
     const month = months[inputDate.getMonth()];
 
-    return `${dayOfWeek}, ${dayOfMonth} ${month}`;
+    return `${dayOfWeek}, ${dayOfMonth}. ${month}`;
   };
 
   function formatDates(inputDate: any) {
@@ -328,18 +328,18 @@ function JournalAdditionRemade() {
             <IonBackButton defaultHref="/" text="" color="dark" />
           </IonButtons>
 
-          <IonButtons slot="end">
+          {/*<IonButtons slot="end">
             <IonButton color="dark" onClick={() => setModalOpen(true)}>
               <IonIcon icon={optionsOutline} />
             </IonButton>
-          </IonButtons>
+           </IonButtons>*/}
         </IonToolbar>
       </IonHeader>
       <IonContent>
         <div className="journal-addition-main">
           <div className="today-clicked-date">
             <h4>{showClickDate(clickedDate)}</h4>
-            <h4>Cycle Day 5</h4>
+            {/*<h4>Cycle Day 5</h4>*/}
           </div>
           <div
             className="leave-calendar-content slide"
@@ -399,14 +399,14 @@ function JournalAdditionRemade() {
             <Additionfilter onClose={() => setModalOpen(false)} />
           </IonModal>
         </div>
-        <div className="search-holder">
+        {/*<div className="search-holder">
           <IonItem lines="none">
             <IonSearchbar></IonSearchbar>
             <IonButton slot="end" fill="clear" color="dark">
               <IonIcon icon={filterOutline} />
             </IonButton>
           </IonItem>
-        </div>
+        </div>*/}
         {/* Journal Entries */}
         {isLoading ? (
           <div
@@ -433,9 +433,9 @@ function JournalAdditionRemade() {
                               <>
                                 <div className="title flex al-center jc-between">
                                   <h3>{entry.label}</h3>
-                                  <IonButton fill="clear">
+                                  {/*<IonButton fill="clear">
                                     <IonIcon src="assets/imgs/Pen.svg" />
-                                  </IonButton>
+                                  </IonButton>*/}
                                 </div>
                                 <div className="tags-holder">
                                   <IonRow>
@@ -480,9 +480,9 @@ function JournalAdditionRemade() {
                               <>
                                 <div className="title flex al-center jc-between">
                                   <h3>{entry.label}</h3>
-                                  <IonButton fill="clear">
+                                  {/*<IonButton fill="clear">
                                     <IonIcon src="assets/imgs/Pen.svg" />
-                                  </IonButton>
+                                  </IonButton>*/}
                                 </div>
                                 <div className="range-holder">
                                   <IonRow>
@@ -549,9 +549,9 @@ function JournalAdditionRemade() {
                               <>
                                 <div className="title flex al-center jc-between">
                                   <h3>{entry.label}</h3>
-                                  <IonButton fill="clear">
+                                  {/*<IonButton fill="clear">
                                     <IonIcon src="assets/imgs/Pen.svg" />
-                                  </IonButton>
+                                  </IonButton>*/}
                                 </div>
                                 <div className="tags-holder">
                                   <IonRow>
@@ -592,9 +592,9 @@ function JournalAdditionRemade() {
                               <>
                                 <div className="title flex al-center jc-between">
                                   <h3>{entry.label}</h3>
-                                  <IonButton fill="clear">
+                                  {/*<IonButton fill="clear">
                                     <IonIcon src="assets/imgs/Pen.svg" />
-                                  </IonButton>
+                                  </IonButton>*/}
                                 </div>
                                 <div className="tags-holder">
                                   <IonRow>
@@ -635,9 +635,9 @@ function JournalAdditionRemade() {
                               <>
                                 <div className="title flex al-center jc-between">
                                   <h3>{entry.label}</h3>
-                                  <IonButton fill="clear">
+                                  {/*<IonButton fill="clear">
                                     <IonIcon src="assets/imgs/Pen.svg" />
-                                  </IonButton>
+                                  </IonButton>*/}
                                 </div>
                                 <div className="tags-holder">
                                   <IonRow>
@@ -678,9 +678,9 @@ function JournalAdditionRemade() {
                               <>
                                 <div className="title flex al-center jc-between">
                                   <h3>{entry.label}</h3>
-                                  <IonButton fill="clear">
+                                  {/*<IonButton fill="clear">
                                     <IonIcon src="assets/imgs/Pen.svg" />
-                                  </IonButton>
+                                  </IonButton>*/}
                                 </div>
                                 <div className="tags-holder">
                                   <IonRow>
@@ -721,9 +721,9 @@ function JournalAdditionRemade() {
                               <>
                                 <div className="title flex al-center jc-between">
                                   <h3>{entry.label}</h3>
-                                  <IonButton fill="clear">
+                                  {/*<IonButton fill="clear">
                                     <IonIcon src="assets/imgs/Pen.svg" />
-                                  </IonButton>
+                                  </IonButton>*/}
                                 </div>
                                 <div className="tags-holder">
                                   <IonRow>
@@ -886,9 +886,9 @@ function JournalAdditionRemade() {
                           <div>
                             <div className="title flex al-center jc-between">
                               <h3>{entry.label}</h3>
-                              <IonButton fill="clear">
+                              {/*<IonButton fill="clear">
                                 <IonIcon src="assets/imgs/Pen.svg" />
-                              </IonButton>
+                              </IonButton>*/}
                             </div>
                             <div className="tags-holder">
                               <div>

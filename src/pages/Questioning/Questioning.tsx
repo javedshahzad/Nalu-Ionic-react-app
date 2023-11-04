@@ -36,7 +36,7 @@ const Questioning: React.FC = () => {
       </IonHeader>*/}
       <IonContent className=" ion-padding" fullscreen>
       <div className="title-holder ion-text-center animate__animated animate__zoomIn">
-          <h3>How can we Support you?</h3>
+          <h3> {t('questioning.description_1')}</h3>
         </div>
         <div className="sub-title ion-text-center animate__animated animate__zoomIn">
           <p className="ion-text-wrap">
@@ -51,9 +51,9 @@ const Questioning: React.FC = () => {
             <IonLabel>
               <h4 className="ion-text-wrap"> {t('questioning.description_3')}</h4>
               <h6 className="ion-text-wrap">
-              Qui laboris qui do quis enim sunt nostrud.
+              Lerne als Frau mit Endometriose oder Verdacht auf Endometriose wie du Schmerzen reduzieren und deine Lebensqualität verbessern kannst.
               </h6>
-              <img src="assets/imgs/ce.png"/>
+              {/*<img src="assets/imgs/ce.png"/>*/}
             </IonLabel>
           </IonItem>
           <IonItem button lines="none" detail={false} routerLink="/registeration" onClick={() => setUserGoal('amenorrhea')}>
@@ -63,9 +63,9 @@ const Questioning: React.FC = () => {
             <IonLabel>
               <h4 className="ion-text-wrap"> {t('questioning.description_4')}</h4>
               <h6 className="ion-text-wrap">
-              Qui laboris qui do quis enim sunt nostrud. 
+              Lerne als Frau mit funktioneller Amenorrhoe, wie du deine Periode auf natürliche Weise regulieren kannst. 
               </h6>
-              <img src="assets/imgs/ce.png"/>
+              {/*<img src="assets/imgs/ce.png"/>*/}
             </IonLabel>
           </IonItem>
           <IonItem button lines="none" detail={false} routerLink="/registeration" onClick={() => setUserGoal('harmony')}>
@@ -75,9 +75,9 @@ const Questioning: React.FC = () => {
             <IonLabel>
               <h4 className="ion-text-wrap"> {t('questioning.description_5')}</h4>
               <h6 className="ion-text-wrap">
-              Qui laboris qui do quis enim sunt nostrud. 
+              Lerne, wie du unregelmässige Periode, PCOS oder starkes PMS auf natürliche Weise regulieren kannst. 
               </h6>
-              <img src="assets/imgs/lotus.png"/>
+              {/*<img src="assets/imgs/lotus.png"/>*/}
             </IonLabel>
           </IonItem>
         </div>

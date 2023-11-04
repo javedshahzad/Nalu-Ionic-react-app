@@ -7,6 +7,7 @@ import {
   IonPage,
   IonRippleEffect,
   IonRouterLink,
+  IonSpinner,
 } from "@ionic/react";
 import axios from 'axios'; // Import Axios
 import "./Registeration.scss";
@@ -19,18 +20,20 @@ const Registeration: React.FC = () => {
   const [firstNameError, setFirstNameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [token, setToken] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const handleFirstNameChange = (event) => {
     const value = event.target.value;
     setFirstName(value);
-    setFirstNameError(value.trim() === '' ? 'Please enter your first name.' : '');
+    setFirstNameError(value.trim() === '' ? 'Bitte gebe deinen Vornamen ein.' : '');
   };
 
   const handleEmailChange = (event) => {
     const value = event.target.value;
     setEmail(value);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setEmailError(value.trim() === '' ? 'Please enter your email address.' : !emailRegex.test(value) ? 'Please enter a valid email address.' : '');
+    setEmailError(value.trim() === '' ? 'Bitte gebe deine E-Mail-Adresse ein.' : !emailRegex.test(value) ? 'Bitte gebe eine gültige E-Mail-Adresse ein.' : '');
   };
 
   const isFormValid = firstName && email && !firstNameError && !emailError;
@@ -41,6 +44,7 @@ const Registeration: React.FC = () => {
 
   const onSubmit = async () => {
     if (isFormValid) {
+      setIsLoading(true);
       try {
         const response = await axios.post(`https://app.mynalu.com/wp-json/nalu-app/v1/add-freemium-user?email=${email}&first_name=${firstName}`);
 
@@ -50,6 +54,7 @@ const Registeration: React.FC = () => {
             setToken(receivedToken); // Assuming you have a state called token
             localStorage.setItem('jwtToken', receivedToken);
             localStorage.setItem('roles', roles);
+            localStorage.setItem('userId', response.data.user_id);
 
             // Clear any previous API errors when request succeeds
             setApiError('');
@@ -70,32 +75,34 @@ const Registeration: React.FC = () => {
 
             history.push('/yourdata');
         }
-        
+        setIsLoading(false);
       } catch (error) {
         console.error("There was a problem with the Axios operation:", error);
 
         if (error.response && error.response.data && error.response.data.code) {
           switch (error.response.data.code) {
             case "existing_user": 
-              setApiError("A user with this email is already registered. Please login or use another email.");
+              setApiError("Ein Benutzer mit dieser E-Mail-Adresse ist bereits registriert. Bitte logge dich ein oder verwende eine andere E-Mail.");
               break;
             case "too_many_attempts":
-              setApiError("Too many registration attempts. Please try again later.");
+              setApiError("Zu viele Registrierungsversuche. Bitte versuche es später noch einmal");
               break;
             case "junk_domain":
-              setApiError("Disposable emails are not accepted. Please use an email address that you regularly check.");
+              setApiError("Wegwerf-E-Mails werden nicht akzeptiert. Bitte verwende eine E-Mail-Adresse, die du regelmässig überprüfst.");
               break;
             case "invalid_email":
-              setApiError("Invalid email address. It appears there might be a typo. Please double-check your email address and try again.");
+              setApiError("Es scheint ein Tippfehler vorzuliegen. Bitte überprüfe deine E-Mail-Adresse und versuche es noch einmal.");
               break;
             case "catch_all_email":
-              setApiError("General email addresses like info@ or support@ are not permitted. Please use your personal email address instead.");
+              setApiError("Allgemeine E-Mail-Adressen wie info@ oder support@ sind nicht zulässig. Bitte verwende stattdessen deine persönliche E-Mail-Adresse.");
               break;
             default:
-              setApiError('An error occurred. Please try again or use another email.');
+              setApiError('Es ist ein Fehler aufgetreten, bitte versuche es erneut oder verwende eine andere E-Mail-Adresse.');
           }
+          setIsLoading(false);
         } else {
-          setApiError('An error occurred. Please try again or use another email.');
+          setApiError('Es ist ein Fehler aufgetreten, bitte versuche es erneut oder verwende eine andere E-Mail-Adresse.');
+          setIsLoading(false);
         }
       }
     }
@@ -106,14 +113,14 @@ const Registeration: React.FC = () => {
     <IonPage className="Registeration">
       <IonContent className="ion-padding" fullscreen>
         <div className="title-holder ion-text-center">
-          <h3>Registration</h3>
-          <h6>Create a free Account</h6>
+          <h3>Registrieren</h3>
+          <h6>Erstelle ein kostenloses Konto und personalisiere die App nach deinen Bedürfnissen</h6>
         </div>
         <div className="the-form">
           <div className="input-item">
             <IonItem lines="none">
               <IonIcon src="assets/imgs/icn-user.svg" slot="start"/>
-              <IonInput placeholder="First Name" autocomplete="given-name" type="text" value={firstName}
+              <IonInput placeholder="Vorname" autocomplete="given-name" type="text" value={firstName}
             onIonInput={handleFirstNameChange} onIonFocus={handleFirstNameChange} />
             </IonItem>
 
@@ -122,7 +129,7 @@ const Registeration: React.FC = () => {
           <div className="input-item">
           <IonItem lines="none">
               <IonIcon src="assets/imgs/icn-email.svg" slot="start"/>
-              <IonInput placeholder="Email" type="email" autocomplete="email"  value={email} onIonInput={handleEmailChange} />
+              <IonInput placeholder="E-Mail-Adresse" type="email" autocomplete="email"  value={email} onIonInput={handleEmailChange} />
             </IonItem>
 
             {emailError && <p className="error-message">{emailError}</p>}
@@ -131,10 +138,16 @@ const Registeration: React.FC = () => {
         </div>
         {apiError && <p className="error-message">{apiError}</p>}
         <div className="btn-holder ion-text-center ion-padding-vertical">
-          <IonButton expand="block" disabled={!isFormValid} onClick={onSubmit}>Continue</IonButton>
+          <IonButton expand="block" disabled={!isFormValid || isLoading} onClick={onSubmit}>
+            {isLoading ? (
+              <IonSpinner name="crescent" />
+            ) : (
+              "Weiter"
+            )}
+          </IonButton>
         </div>
         <div className="or ion-text-center">
-          <p>or</p>
+          <p>oder</p>
         </div>
 
         {/*<div className="social-holder ion-text-center">
@@ -154,7 +167,7 @@ const Registeration: React.FC = () => {
 
         <IonRouterLink routerLink="/login">
         <div className="bottom-holder flex al-center jc-center">
-        <h6>Already Have an Account?&nbsp;&nbsp;</h6>
+        <h6>Hast du bereits ein Konto?&nbsp;&nbsp;</h6>
         <IonRippleEffect></IonRippleEffect>
         <div className="btn ion-activatable ripple-parent rectangle">
         <h5>Login</h5>

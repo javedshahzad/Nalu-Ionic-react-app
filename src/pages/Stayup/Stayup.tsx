@@ -35,7 +35,7 @@ const Stayup: React.FC = () => {
     <IonPage className="Stayup">
       <IonContent className="ion-padding" fullscreen>
         <div className="title-holder ion-text-center ion-padding-top">
-          <h3>Stay Up To Date</h3>
+          <h3>Bleibe auf dem Laufenden</h3>
         </div>
 
         <div className="img-holder ion-text-center animate__animated animate__zoomIn">
@@ -44,16 +44,15 @@ const Stayup: React.FC = () => {
 
         <div className="desp ion-text-center">
           <p className="ion-text-wrap">
-            Would you like to recieve email news from our founder Lisa about
-            cyclical living as well as notifications about promotions?
+          Willst du per E-Mail Neuigkeiten von der NALU Gründerin Lisa über zyklisches Leben sowie Benachrichtigungen über Sonderangebote erhalten?
           </p>
         </div>
 
         <div className="btn-holder ion-text-center ion-padding-vertical">
-          <IonButton expand="block" routerLink="/tabs/tab1" onClick={handleSubscribe}>Yes, please</IonButton>
+          <IonButton expand="block" routerLink="/tabs/tab1" onClick={handleSubscribe}>Ja, gerne!</IonButton>
         </div>
         <div className="bottom-btn">
-          <IonButton expand="block" routerLink="/tabs/tab1" fill="clear" color="dark">No, thank you</IonButton>
+          <IonButton expand="block" routerLink="/tabs/tab1" fill="clear" color="dark">Nein, danke.</IonButton>
         </div>
       </IonContent>
     </IonPage>

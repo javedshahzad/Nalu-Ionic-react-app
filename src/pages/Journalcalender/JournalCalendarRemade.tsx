@@ -26,21 +26,21 @@ import MoonPhasesServce from "../../MoonPhasesService";
 import CustomCategoryApiService from "../../CustomCategoryService";
 
 const months = [
-  "January",
-  "February",
-  "March",
+  "Januar",
+  "Februar",
+  "März",
   "April",
-  "May",
-  "June",
-  "July",
+  "Mai",
+  "Juni",
+  "Juli",
   "August",
   "September",
-  "October",
+  "Oktober",
   "November",
-  "December",
+  "Dezember",
 ];
 
-const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 
 let url = "";
 
@@ -412,7 +412,7 @@ const JournalCalendarRemade = () => {
             ref={popoverRef}
           >
             <div className="popover-content">
-              <h5 className="popoverHeading"> Select Month:</h5>
+              <h5 className="popoverHeading"> Monat wählen:</h5>
               <label>
                 <select
                   value={currentMonth}
@@ -427,7 +427,7 @@ const JournalCalendarRemade = () => {
                 </select>
               </label>
               <button onClick={handleGo} className="go-button">
-                Go
+                Bestätigen
               </button>
             </div>
           </IonPopover>
@@ -454,7 +454,7 @@ const JournalCalendarRemade = () => {
               <NotificationBell />
             </IonButton>
           </IonButtons>*/}
-        </IonToolbar>{" "}
+        </IonToolbar>
         <div className="journalcalendar-main">
           <div className="calendar-container" onScroll={() => handleScroll()}>
             <div className="calendar-scrollable">
@@ -479,18 +479,19 @@ const JournalCalendarRemade = () => {
             </div>
             <div className="full-moon">
               <img src={cervicalMucus} alt="" />
-              <p className="moon-text">Cervical Mucus</p>
+              <p className="moon-text">Zervixschleim</p>
             </div>
+            <br />
             <div className="new-moon">
               <img src={newMoon} alt="" />
-              <p className="moon-text">New Moon</p>
+              <p className="moon-text">Neumond</p>
             </div>
             <div className="full-moon">
               <img src={fullMoon} alt="" />
-              <p className="moon-text">Full Moon</p>
+              <p className="moon-text">Vollmond</p>
             </div>
           </div>
-          <div className="gratitude-edit">
+          {/*<div className="gratitude-edit">
             <div className="journal-gratitude">
               <h3>
                 Intention: <span>Gratitude</span>
@@ -501,7 +502,7 @@ const JournalCalendarRemade = () => {
                 <IonIcon src={pen} />
               </IonButton>
             </div>
-          </div>
+                </div>
           <div className="journal-cycle-wrapper">
             <div className="journal-cycle">
               <h3>Cycle Day 5</h3>
@@ -514,13 +515,9 @@ const JournalCalendarRemade = () => {
               <img src={setting} alt="" />
             </IonButton>
           </div>
-          <IonButton className="period-btn" onClick={handleStartStop}>
-            {todayPeriod == "false" ? (
-              <IonLabel>Start of Period</IonLabel>
-            ) : (
-              <IonLabel>Stop of Period</IonLabel>
-            )}
-          </IonButton>
+          <IonButton className="period-btn" onClick={goToJournalAddition}>
+            End of Period
+          </IonButton>*/}
         </div>
       </IonContent>
     </IonPage>

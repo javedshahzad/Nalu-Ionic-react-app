@@ -93,7 +93,7 @@ const Community: React.FC = () => {
               <IonButton slot="end" fill="clear">
               <NotificationBell />
             </IonButton>
-            </IonButtons>*/}
+          </IonButtons>*/}
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding" fullscreen>

@@ -6,6 +6,7 @@ import {
   IonDatetime,
   IonHeader,
   IonPage,
+  IonRouterLink,
   IonToolbar,
 } from "@ionic/react";
 
@@ -44,14 +45,16 @@ const Configcycle: React.FC = () => {
         </div>
 
         <div className="calender-holder">
-          <IonDatetime presentation="date" onIonChange={handleDateSelect}
+          <IonDatetime presentation="date" firstDayOfWeek={1} onIonChange={handleDateSelect}
 ></IonDatetime>
         </div>
 
         <div className="bottom-holder ion-text-center">
-          <h3 className="ion-text-wrap">
-            {t('config_cycle.description_2')}
-            </h3>
+          <IonRouterLink routerLink="/learnmore">
+            <h5 className="ion-text-wrap">
+              {t('config_cycle.description_2')}
+            </h5>
+          </IonRouterLink>
           <h6 className="ion-text-wrap">{t('config_cycle.description_3')}</h6>
         </div>
 

@@ -336,16 +336,16 @@ const Journal: React.FC = () => {
                     <IonIcon icon={menuOutline} />
                   </IonButton>
                 </IonButtons>
-                <IonButtons slot="end">
+                {/*<IonButtons slot="end">
                   <IonButton color="dark">
                     <IonIcon icon={searchOutline} />
                   </IonButton>
                 </IonButtons>
                 <IonButtons slot="end">
                 <IonButton slot="end" fill="clear">
-              <NotificationBell />
-            </IonButton>
-                </IonButtons>
+                  <NotificationBell />
+                </IonButton>
+                </IonButtons>*/}
               </IonToolbar>
               <IonToolbar>
                 <IonSegment

@@ -157,14 +157,7 @@ const Resourcedetail: React.FC = () => {
       console.log(error);
     }
   }
-  const getFavouriteColor = (fav) => {
-    if (fav) {
-      return "filled";
-    } else {
-      return "not-filled";
-    }
-  };
-
+ 
   const contentRef = useRef<HTMLIonContentElement>(null);
 
   const openLink = async (url: string) => {
@@ -205,12 +198,16 @@ const Resourcedetail: React.FC = () => {
             <IonBackButton color="dark" text={""} defaultHref="/tabs/tab4" />
           </IonButtons>
           <IonTitle>{resourseData?.data.title}</IonTitle>
-
+          {/*<IonButtons slot="end">
+            <IonButton color="dark">
+              <IonIcon icon={heartOutline} />
+            </IonButton>
+          </IonButtons>
           <IonButtons slot="end">
             <IonButton slot="end" fill="clear">
               <NotificationBell />
             </IonButton>
-          </IonButtons>
+          </IonButtons>*/}
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen ref={contentRef}>

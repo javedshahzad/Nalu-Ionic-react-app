@@ -216,7 +216,7 @@ const GroupInfo: React.FC = () => {
             <IonButton slot="end" fill="clear">
               <NotificationBell />
             </IonButton>
-           </IonButtons>*/}
+          </IonButtons>*/}
         </IonToolbar>
       </IonHeader>
       <IonContent>

@@ -187,7 +187,7 @@ const Eventdetail: React.FC = () => {
                   />
                 </IonButtons>
                 <IonTitle>{event?.title}</IonTitle>
-                <IonButtons slot="end">
+                {/*<IonButtons slot="end">
                   <IonButton color="dark">
                     <IonIcon icon={heartOutline} />
                   </IonButton>
@@ -196,7 +196,7 @@ const Eventdetail: React.FC = () => {
                   <IonButton slot="end" fill="clear">
                     <NotificationBell />
                   </IonButton>
-                </IonButtons>
+                 </IonButtons>*/}
               </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>
