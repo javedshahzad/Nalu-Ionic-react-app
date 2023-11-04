@@ -29,6 +29,7 @@ import {
   happyOutline,
   optionsOutline,
   pencilOutline,
+  sadOutline,
   trashBin,
   trashBinOutline,
 } from "ionicons/icons";
@@ -256,7 +257,7 @@ const Addcustomcategory: React.FC = () => {
         obj.fields.push(newCategory);
       }
     });
-
+    console.log("type ibj", typeObj);
     dispatch(journalAction(typeObj[0]));
 
     // typeObj.group.custom_user_fields;
@@ -314,7 +315,7 @@ const Addcustomcategory: React.FC = () => {
               <IonCol id="imgg" size="6">
                 <IonItem lines="none" className="customType">
                   <IonLabel className="ion-text-center">
-                    <IonIcon icon={happyOutline} />
+                    <IonIcon icon={sadOutline} />
                   </IonLabel>
                   <IonRadio mode="md" value="true_false"></IonRadio>
                 </IonItem>

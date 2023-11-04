@@ -79,7 +79,7 @@ function ConfigCycleRemade() {
     const dateParam = `${year}-${
       +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
     }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
-
+    console.log("cliekced", dateParam);
     // url = `/journaladditionremade/${dateParam}`;
   };
 
@@ -197,6 +197,24 @@ function ConfigCycleRemade() {
       getIcons();
     }, []);
 
+    useEffect(() => {
+      const day = new Date().getDate();
+      const month = new Date().getMonth();
+      const year = new Date().getFullYear();
+
+      const full_date = day + "/" + (month + 1) + "/" + year;
+      console.log("full_date", full_date);
+
+      const isItToday = document.getElementById(full_date);
+      console.log("isittoday", isItToday);
+
+      if (isItToday) {
+        setTimeout(() => {
+          isItToday.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 1000);
+      }
+    }, []);
+
     for (let i = 1; i <= lastDateOfMonth; i++) {
       const isToday =
         i === new Date().getDate() &&
@@ -222,6 +240,7 @@ function ConfigCycleRemade() {
             activeIndex === i && activeMonthIndex === m ? "dayActive" : ""
           }`}
           onClick={() => handleOnClick(i, m)}
+          id={`${i}/${m + 1}/${year}`}
         >
           {moonPhase ? (
             <>

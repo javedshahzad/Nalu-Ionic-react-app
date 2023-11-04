@@ -52,6 +52,9 @@ function JournalAdditionRemade() {
   const [isLoading, setIsLoading] = useState(false);
   const [icons2, setIcons2] = useState([]);
   const [journalData, setJournalData] = useState({});
+  const [todayPeriod, setTodayPeriod] = useState("false");
+
+  const moonColorData = icons2;
 
   const typeObj: any = useSelector((state: RootState) => state.journalReducer);
 
@@ -316,8 +319,94 @@ function JournalAdditionRemade() {
     }
   };
 
+  const getIcons2 = async () => {
+    let lang = "en";
+    let month: any = new Date(dateParam).getMonth() + 1;
+
+    if (parseInt(month) < 10) {
+      month = "0" + month;
+    }
+    // console.log("month", month);
+
+    let year = new Date().getFullYear();
+
+    let yearMonth = `${year}-${month}`;
+    try {
+      const data = await MoonPhasesServce.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=${lang}`
+      );
+
+      const todayData = data["today"];
+
+      if (todayData) {
+        setTodayPeriod(todayData.active_period.toString());
+      } else {
+        console.log("No data found for today");
+      }
+
+      setIcons2(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getColors: any = (year, month, date) => {
+    month = parseInt(month + 1);
+
+    if (month < 10) {
+      month = "0" + month;
+    }
+    if (date < 10) {
+      date = "0" + date;
+    }
+
+    let x = `${year}-${month}-${date}`;
+
+    console.log("_XXX", x);
+
+    const data = icons2;
+
+    let style: any = {};
+    // console.log("data in function", data);
+
+    let _day: any = new Date().getDate();
+    let _month: any = new Date().getMonth() + 1;
+    let _year = new Date().getFullYear();
+
+    if (_month < 10) {
+      _month = "0" + _month;
+    }
+    if (_day < 10) {
+      _day = "0" + _day;
+    }
+
+    let _x = `${_year}-${_month}-${_day}`;
+
+    console.log("_x", _x);
+
+    Object.keys(moonColorData).map((obj) => {
+      if (obj === x && obj !== "2023-10-02") {
+        console.log("obj", obj);
+        moonColorData[obj].entries.map((phase) => {
+          if (phase.key === "period_bleeding" && parseInt(phase.value) > 0) {
+            style.backgroundColor = "#F0A6A9";
+            style.color = "white";
+          }
+          if (phase.key === "cervical_mucus" && parseInt(phase.value) > 0) {
+            style.backgroundColor = "#3684B3";
+            style.color = "white";
+          }
+        });
+      }
+    });
+
+    return style;
+  };
+
   useEffect(() => {
     getIcons();
+    getIcons2();
+    getColors();
   }, []);
 
   return (
@@ -353,7 +442,7 @@ function JournalAdditionRemade() {
               ref={scrollContainerRef}
             >
               {days.map((day, index) => (
-                <div key={index + "_" + day.dayNo} className="day ">
+                <div key={index + "_" + day.dayNo} className="day">
                   <div className="weekday">{day.fullDate}</div>
                   <div
                     className={
@@ -367,6 +456,7 @@ function JournalAdditionRemade() {
                           : ""
                       }`
                     }
+                    style={getColors(day.year, day.month, day.dayNo)}
                     onClick={() => handleDateClick(day)}
                     id={day.actualDate}
                   >
@@ -377,10 +467,6 @@ function JournalAdditionRemade() {
                             <img src={fullMoon} alt="Full Moon" />
                           ) : day.icon === "New Moon" ? (
                             <img src={newMoon} alt="New Moon" />
-                          ) : day.icon === "First Quarter" ? (
-                            <img src={cervicalMucus} alt="First Quarter" />
-                          ) : day.icon === "Last Quarter" ? (
-                            <img src={menstruation} alt="Last Quarter" />
                           ) : null}
                         </div>
                       )}
@@ -770,7 +856,7 @@ function JournalAdditionRemade() {
                               <IonRow>
                                 {entry.fields.map((field: any) => (
                                   <>
-                                    <IonCol key={field.key} size="6">
+                                    <IonCol key={field.key} size="12">
                                       {field.type === "range-5" && (
                                         <>
                                           <IonRange
@@ -843,7 +929,8 @@ function JournalAdditionRemade() {
                                           </div>
                                         </>
                                       )}
-
+                                    </IonCol>
+                                    <IonCol size="6">
                                       {field.type === "true_false" && (
                                         <IonItem
                                           key={field.key}

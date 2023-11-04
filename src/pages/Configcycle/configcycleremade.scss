@@ -8,236 +8,235 @@ $config-black: #2d2d2d;
 .configcycleMain {
   background-color: $config-white;
   padding: 0 15px 0 15px;
+}
+.ion-page {
+  justify-content: center !important;
+}
 
-  .ion-page {
-    justify-content: center !important;
-  }
+ion-toolbar {
+  --background: #fefcfa;
+}
 
-  ion-toolbar {
-    --background: #fefcfa;
-  }
+.fadeIn {
+  opacity: 1;
+}
+.fadeOut {
+  opacity: 0.5;
+}
 
-  .fadeIn {
-    opacity: 1;
-  }
-  .fadeOut {
-    opacity: 0.5;
-  }
-
-  .popover-content {
-    display: flex;
-    padding: 10px;
+.popover-content {
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  gap: 10px;
+  label {
     flex-direction: column;
-    gap: 10px;
-    label {
-      flex-direction: column;
-      display: flex;
-      gap: 5px;
-    }
+    display: flex;
+    gap: 5px;
   }
+}
 
-  .go-button {
+.go-button {
+  background-color: $config-pink !important;
+  color: $config-white !important;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: $config-pink !important;
+  }
+}
+
+.month-select {
+  padding: 5px;
+  transition: height 0.3s ease, opacity 0.3s ease;
+  overflow: hidden;
+  overflow-y: auto;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  background-color: $config-white !important;
+  border: 1px solid $config-pink !important;
+  option:hover {
     background-color: $config-pink !important;
     color: $config-white !important;
-    border: none;
-    border-radius: 4px;
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    &:hover {
-      background-color: $config-pink !important;
-    }
   }
-
-  .month-select {
-    padding: 5px;
-    transition: height 0.3s ease, opacity 0.3s ease;
-    overflow: hidden;
-    overflow-y: auto;
-    border-radius: 6px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-    background-color: $config-white !important;
-    border: 1px solid $config-pink !important;
-    option:hover {
-      background-color: $config-pink !important;
-      color: $config-white !important;
-    }
-    option:checked {
-      background-color: $config-pink !important;
-      color: $config-white !important;
-    }
-    &:focus-visible {
-      outline: none;
-    }
-  }
-
-  .configTextMain {
-    font-family: $config-font-family;
-    font-size: 28px;
-    font-weight: 700;
-    text-align: center;
-  }
-
-  .configTextSub {
-    font-family: $config-font-family;
-    font-size: 20px !important;
-    font-weight: 400;
-    text-align: center;
-  }
-
-  .moon-phases {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-  }
-
-  .new-moon {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    .moon-text {
-      font-size: 14px;
-    }
-  }
-
-  .full-moon {
-    display: flex;
-    gap: 8px;
-  }
-
-  .bottom-text {
-    text-align: center;
-    ion-button {
-      font-size: 18px !important;
-      font-weight: 700 !important;
-      color: $config-black !important;
-    }
-    h3 {
-      font-size: 16px !important;
-      font-weight: 400 !important;
-    }
-  }
-
-  .currentDay {
-    background-color: $config-black;
-    border-radius: 10px;
-    color: $config-white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 0;
-    &:hover {
-      background-color: $config-white !important;
-      border-radius: 10px;
-    }
-    &::before {
-      content: "Today";
-      font-size: 8px;
-    }
-  }
-
-  .continue-btn {
+  option:checked {
+    background-color: $config-pink !important;
     color: $config-white !important;
-    width: 100%;
-    font-weight: 400 !important;
-    font-size: 18px !important;
   }
-
-  .popoverHeading {
-    font-size: 15px;
-    font-weight: bold;
-    margin: 0;
+  &:focus-visible {
+    outline: none;
   }
+}
 
-  .daysIcon {
-    position: relative;
-    max-width: 100%;
-    top: 4px;
-    right: 2px;
+.configTextMain {
+  font-family: $config-font-family;
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.configTextSub {
+  font-family: $config-font-family;
+  font-size: 20px !important;
+  font-weight: 400;
+  text-align: center;
+}
+
+.moon-phases {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.new-moon {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  .moon-text {
+    font-size: 14px;
   }
+}
 
+.full-moon {
+  display: flex;
+  gap: 8px;
+}
+
+.bottom-text {
+  text-align: center;
   ion-button {
-    --padding-top: 0 !important;
-    --padding-bottom: 0 !important;
-    --padding-start: 0 !important;
-    --padding-end: 0 !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: $config-black !important;
   }
-
-  .calendar-container {
-    margin: 0 auto;
-    overflow-y: auto;
-    max-height: 70vh;
-    &::-webkit-scrollbar {
-      display: none;
-    }
+  h3 {
+    font-size: 16px !important;
+    font-weight: 400 !important;
   }
+}
 
-  .calendar-day {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
+.currentDay {
+  background-color: $config-black;
+  border-radius: 10px;
+  color: $config-white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+  &:hover {
+    background-color: $config-white !important;
     border-radius: 10px;
-    cursor: pointer;
-    &:hover {
-      background-color: $config-pink !important;
-      color: $config-white;
-      .daysIcon {
-        display: none !important;
-      }
-    }
   }
-  .dayActive {
-    background-color: $config-pink;
+  &::before {
+    content: "Today";
+    font-size: 8px;
+  }
+}
+
+.continue-btn {
+  color: $config-white !important;
+  width: 100%;
+  font-weight: 400 !important;
+  font-size: 18px !important;
+}
+
+.popoverHeading {
+  font-size: 15px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.daysIcon {
+  position: relative;
+  max-width: 100%;
+  top: 4px;
+  right: 2px;
+}
+
+ion-button {
+  --padding-top: 0 !important;
+  --padding-bottom: 0 !important;
+  --padding-start: 0 !important;
+  --padding-end: 0 !important;
+}
+
+.calendar-container {
+  margin: 0 auto;
+  overflow-y: auto;
+  max-height: 70vh;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.calendar-day {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  &:hover {
+    background-color: $config-pink !important;
     color: $config-white;
-  }
-
-  .inactive {
-    color: #00000042 !important;
-    &:hover {
-      background-color: transparent !important;
+    .daysIcon {
+      display: none !important;
     }
   }
+}
+.dayActive {
+  background-color: $config-pink;
+  color: $config-white;
+}
 
-  .day-of-week {
-    font-weight: 700;
-    &:hover {
-      background-color: transparent !important;
-      cursor: default !important;
-      color: $config-black;
+.inactive {
+  color: #00000042 !important;
+  &:hover {
+    background-color: transparent !important;
+  }
+}
+
+.day-of-week {
+  font-weight: 700;
+  &:hover {
+    background-color: transparent !important;
+    cursor: default !important;
+    color: $config-black;
+  }
+}
+
+.calendar-data {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.cur-month-year {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cur-month-year-text {
+  font-size: 18px;
+  font-weight: 700;
+  text-align: left;
+}
+#cur-month-year-icon {
+  ion-button {
+    ion-icon {
+      width: 15px;
     }
   }
-
-  .calendar-data {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-  }
-
-  .cur-month-year {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .cur-month-year-text {
-    font-size: 18px;
-    font-weight: 700;
-    text-align: left;
-  }
-  #cur-month-year-icon {
-    ion-button {
-      ion-icon {
-        width: 15px;
-      }
-    }
-  }
-  .moonPhases {
-    position: relative;
-    top: 7px;
-    right: 3px;
-  }
+}
+.moonPhases {
+  position: relative;
+  top: 7px;
+  right: 3px;
 }
