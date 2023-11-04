@@ -64,10 +64,9 @@ const JournalCalendarRemade = () => {
 
   const moonColorData = icons2;
 
-  const curMonth = new Date().getMonth();
-  const isCurDate = new Date().getDate();
-
   const curDate: string = date.toLocaleDateString();
+
+  console.log("current date", curDate);
 
   const curDay: string = [
     "Sunday",
@@ -96,7 +95,15 @@ const JournalCalendarRemade = () => {
   };
 
   useEffect(() => {
-    const isItToday = document.getElementById(curDate);
+    const day = new Date().getDate();
+    const month = new Date().getMonth();
+    const year = new Date().getFullYear();
+
+    const full_date = day + "/" + (month + 1) + "/" + year;
+    console.log("full_date", full_date);
+    const isItToday = document.getElementById(full_date);
+    console.log("isittoday", isItToday);
+
     if (isItToday) {
       setTimeout(() => {
         isItToday.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -131,11 +138,13 @@ const JournalCalendarRemade = () => {
   };
   const getIcons2 = async () => {
     let lang = "en";
-    let month: any = new Date().getMonth();
+    let month: any = new Date().getMonth() + 1;
 
     if (parseInt(month) < 10) {
       month = "0" + month;
     }
+    // console.log("month", month);
+
     let year = new Date().getFullYear();
 
     let yearMonth = `${year}-${month}`;
@@ -173,15 +182,32 @@ const JournalCalendarRemade = () => {
     let style: any = {};
     // console.log("data in function", data);
 
+    let _day: any = new Date().getDate();
+    let _month: any = new Date().getMonth() + 1;
+    let _year = new Date().getFullYear();
+
+    if (_month < 10) {
+      _month = "0" + _month;
+    }
+    if (_day < 10) {
+      _day = "0" + _day;
+    }
+
+    let _x = `${_year}-${_month}-${_day}`;
+
+    console.log("_x", _x);
+
     Object.keys(moonColorData).map((obj) => {
-      if (obj === x) {
-        moonColorData[obj].entries.map((obj) => {
-          console.log("obj", obj);
-          if (obj.key === "period_bleeding" && parseInt(obj.value) > 0) {
-            style.backgroundColor = "yellow";
+      if (obj === x && obj !== _x) {
+        console.log("obj", obj);
+        moonColorData[obj].entries.map((phase) => {
+          if (phase.key === "period_bleeding" && parseInt(phase.value) > 0) {
+            style.backgroundColor = "#F0A6A9";
+            style.color = "white";
           }
-          if (obj.key === "cervical_mucus" && parseInt(obj.value) > 0) {
-            style.backgroundColor = "blue";
+          if (phase.key === "cervical_mucus" && parseInt(phase.value) > 0) {
+            style.backgroundColor = "#3684B3";
+            style.color = "white";
           }
         });
       }
@@ -364,7 +390,7 @@ const JournalCalendarRemade = () => {
       monthData.push(
         <li
           key={`currentDay-${i}`}
-          id={`${m + 1}/${i}/${year}`}
+          id={`${i}/${m + 1}/${year}`}
           className={`calendar-day ${isToday} ${
             activeIndex === i && activeMonthIndex === m ? "dayActive" : ""
           }`}
