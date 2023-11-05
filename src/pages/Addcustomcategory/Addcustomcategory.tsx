@@ -257,7 +257,7 @@ const Addcustomcategory: React.FC = () => {
         obj.fields.push(newCategory);
       }
     });
-    console.log("type ibj", typeObj);
+    // console.log("type ibj", typeObj);
     dispatch(journalAction(typeObj[0]));
 
     // typeObj.group.custom_user_fields;
