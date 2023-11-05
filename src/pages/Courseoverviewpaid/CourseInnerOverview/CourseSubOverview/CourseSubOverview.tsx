@@ -141,11 +141,11 @@ import {
                     />
                   </IonButtons>
                   <IonTitle>{courseData?.title}</IonTitle>
-                  <IonButtons slot="end">
+                  {/*<IonButtons slot="end">
                     <IonButton color="dark">
                       <IonIcon icon={notificationsOutline} />
                     </IonButton>
-                  </IonButtons>
+                  </IonButtons>*/}
                 </IonToolbar>
               </IonHeader>
               <IonContent fullscreen>
@@ -229,7 +229,7 @@ import {
                         <div className="align_col">
                           {courseData?.authority?.title ? (
                             <>
-                              <div className="createdby">Created By</div>
+                              <div className="createdby">Erstellt durch</div>
                               <div className="message">
                                 <span>{courseData?.authority?.title},</span>{" "}
                                 {courseData?.authority?.description}

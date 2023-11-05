@@ -499,22 +499,25 @@ const JournalCalendarRemade = () => {
           </div>
 
           <div className="moon-phases">
+          <div className="period-group">
             <div className="full-moon">
               <img src={menstruation} alt="" />
               <p className="moon-text">Menstruation</p>
             </div>
+            <div className="new-moon bottom">
+              <img src={newMoon} alt="" />
+              <p className="moon-text">Neumond</p>
+            </div>
+            </div>
+          <div className="moon-group">
             <div className="full-moon">
               <img src={cervicalMucus} alt="" />
               <p className="moon-text">Zervixschleim</p>
             </div>
-            <br />
-            <div className="new-moon">
-              <img src={newMoon} alt="" />
-              <p className="moon-text">Neumond</p>
-            </div>
-            <div className="full-moon">
+            <div className="full-moon bottom">
               <img src={fullMoon} alt="" />
               <p className="moon-text">Vollmond</p>
+            </div>
             </div>
           </div>
           {/*<div className="gratitude-edit">

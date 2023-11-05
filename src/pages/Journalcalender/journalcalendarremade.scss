@@ -130,12 +130,14 @@ ion-toolbar {
   display: flex;
   gap: 16px;
   justify-content: center;
+  .bottom {
+    margin-top: -10px;
+  }
 }
 
 .new-moon {
   display: flex;
   gap: 8px;
-  align-items: center;
   .moon-text {
     font-size: 14px;
   }
@@ -144,6 +146,9 @@ ion-toolbar {
 .full-moon {
   display: flex;
   gap: 8px;
+  .moon-text {
+    font-size: 14px;
+  }
 }
 
 .currentDay {

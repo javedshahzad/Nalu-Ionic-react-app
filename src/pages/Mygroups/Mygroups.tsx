@@ -64,7 +64,7 @@ const Mygroups: React.FC = () => {
     axiosCancelToken = source;
 
     axios
-      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=en`, {
+      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
         },

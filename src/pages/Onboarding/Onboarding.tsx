@@ -76,7 +76,7 @@ const Onboarding: React.FC = () => {
             {t("onboarding.account")}
           </IonButton>
         </div>
-        <div className="btn-holder ion-text-center ion-padding-vertical">
+        {/*<div className="btn-holder ion-text-center ion-padding-vertical">
           <IonButton
             expand="block"
             onClick={() => handleEnglishLanguageChange()}
@@ -91,7 +91,7 @@ const Onboarding: React.FC = () => {
           >
             Set German
           </IonButton>
-        </div>
+      </div>*/}
       </IonContent>
     </IonPage>
   );

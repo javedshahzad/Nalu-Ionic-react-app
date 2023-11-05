@@ -50,7 +50,7 @@ const Courseoverviewpaid: React.FC = () => {
     axiosCancelToken = source;
     try {
       axios
-        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=en`, {
+        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           },
@@ -115,7 +115,7 @@ const Courseoverviewpaid: React.FC = () => {
                     </div>
                     {course?.progress && (
                       <div className="progress-holder">
-                        <p>Course Progress</p>
+                        <p>Fortschritt</p>
                         <div className="flex al-center jc-between">
                           <IonProgressBar
                             value={course.progress / 100}
@@ -131,7 +131,7 @@ const Courseoverviewpaid: React.FC = () => {
                           navigateToCourseInner(course.next_chapter.id)
                         }
                       >
-                        <h3>Resume Course</h3>
+                        <h3>Kurs fortsetzen</h3>
                         <IonItem button detail lines="none">
                           <IonLabel>{course?.next_chapter?.title}</IonLabel>
                         </IonItem>
@@ -179,7 +179,7 @@ const Courseoverviewpaid: React.FC = () => {
                                       <div
                                         className="paragraph"
                                         dangerouslySetInnerHTML={{
-                                          __html: `Chapter: ${chapter.title}`,
+                                          __html: `${chapter.title}`,
                                         }}
                                       ></div>
                                     </IonLabel>

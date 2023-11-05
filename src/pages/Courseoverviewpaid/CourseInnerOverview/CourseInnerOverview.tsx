@@ -177,11 +177,11 @@ const CourseInnerOverview: React.FC = () => {
                   />
                 </IonButtons>
                 <IonTitle>{courseData?.title}</IonTitle>
-                <IonButtons slot="end">
+                {/*<IonButtons slot="end">
                   <IonButton color="dark">
                     <IonIcon icon={notificationsOutline} />
                   </IonButton>
-                </IonButtons>
+                </IonButtons>*/}
               </IonToolbar>
             </IonHeader>
             <IonContent fullscreen className="ion-no-padding">
@@ -218,7 +218,7 @@ const CourseInnerOverview: React.FC = () => {
                       <div className="align_col">
                         {courseData?.authority?.title ? (
                           <>
-                            <div className="createdby">Created By</div>
+                            <div className="createdby">Erstellt durch</div>
                             <div className="message">
                               <span>{courseData?.authority?.title},</span>{" "}
                               {courseData?.authority?.description}
@@ -277,7 +277,7 @@ const CourseInnerOverview: React.FC = () => {
                           style={{"color":"white","width":"30px","height":"30px"}}
                         />
                       ) : (
-                        <p style={{"color":"white"}}>Mark as Done</p>
+                        <p style={{"color":"white"}}>Abschliessen</p>
                       )}
                     </div>
                   )

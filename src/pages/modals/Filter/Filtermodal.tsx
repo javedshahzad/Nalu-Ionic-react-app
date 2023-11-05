@@ -50,7 +50,7 @@ const Filtermodal: React.FC = () => {
     setIsLoading(true);
 
     axios
-      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/filter-values?lang=en`)
+      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/filter-values?lang=de`)
       .then((response) => {
         console.log(response.data);
         setFilterValues(response.data);

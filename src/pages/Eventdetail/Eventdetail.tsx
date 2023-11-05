@@ -63,7 +63,7 @@ const Eventdetail: React.FC = () => {
 
     axios
       .get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=en`,
+        `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
