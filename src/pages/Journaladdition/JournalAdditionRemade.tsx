@@ -47,16 +47,16 @@ import { RootState } from "../../store/store";
 function JournalAdditionRemade() {
   const { dateParam } = useParams<{ dateParam: string }>();
 
-  const [typeState, setTypeState] = useState({});
   const [year, setYear] = useState(new Date().getFullYear());
   const [isLoading, setIsLoading] = useState(false);
   const [icons2, setIcons2] = useState([]);
-  const [journalData, setJournalData] = useState({});
   const [todayPeriod, setTodayPeriod] = useState("false");
 
   const moonColorData = icons2;
 
   const typeObj: any = useSelector((state: RootState) => state.journalReducer);
+
+  // console.log("Journal Data", typeObj);
 
   const dispatch = useDispatch();
 
@@ -79,7 +79,7 @@ function JournalAdditionRemade() {
           );
         });
 
-        // setTypeState(dynamicStates);
+        // console.log("dynamic state", dynamicStates);
         dispatch(journalAction(dynamicStates));
 
         setTimeout(() => {
@@ -107,6 +107,8 @@ function JournalAdditionRemade() {
   };
 
   const rangeValues10 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const rangeValues16 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+
   const rangeValues = [1, 2, 3, 4, 5];
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -133,8 +135,6 @@ function JournalAdditionRemade() {
         goTo.scrollIntoView({ behavior: "smooth", inline: "center" });
       }
     }, 500);
-
-    return () => console.log("destroyed");
   }, []);
 
   const showClickDate = (date) => {
@@ -183,11 +183,17 @@ function JournalAdditionRemade() {
   }
 
   const handleDateClick = (date) => {
-    setClickedDate(formatDates(new Date(date.actualDate)));
-
+    const selectedDate = new Date(date.actualDate);
+    setClickedDate(formatDates(selectedDate));
     setActiveDate(date.dayNo);
     setActiveMonth(date.month);
     setActiveYear(date.year);
+
+    const selectedDateFormatted = formatDates(selectedDate);
+    const newUrl = `/journaladditionremade/${selectedDateFormatted}`;
+    window.location.href = newUrl;
+
+    // history.push(newUrl)
   };
 
   const parentRef = useRef(null);
@@ -362,8 +368,6 @@ function JournalAdditionRemade() {
 
     let x = `${year}-${month}-${date}`;
 
-    console.log("_XXX", x);
-
     const data = icons2;
 
     let style: any = {};
@@ -382,11 +386,8 @@ function JournalAdditionRemade() {
 
     let _x = `${_year}-${_month}-${_day}`;
 
-    console.log("_x", _x);
-
     Object.keys(moonColorData).map((obj) => {
       if (obj === x && obj !== "2023-10-02") {
-        console.log("obj", obj);
         moonColorData[obj].entries.map((phase) => {
           if (phase.key === "period_bleeding" && parseInt(phase.value) > 0) {
             style.backgroundColor = "#F0A6A9";
@@ -843,6 +844,185 @@ function JournalAdditionRemade() {
                           </div>
                         )}
                       </div>
+
+                      <div className="section">
+                        {entry.type === "textarea" && (
+                          <div>
+                            <div className="title flex al-center jc-between">
+                              <h3>{entry.label}</h3>
+                              <IonButton fill="clear">
+                                <IonIcon src="assets/imgs/Pen.svg" />
+                              </IonButton>
+                            </div>
+                            <div className="tags-holder">
+                              <div>
+                                {
+                                  <div className="section last">
+                                    <div className="the-form">
+                                      <div className="input-item">
+                                        <IonItem lines="none">
+                                          <IonInput
+                                            id={entry.key}
+                                            placeholder="Input Text"
+                                            value={inputValues[entry.key]}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                entry
+                                              )
+                                            }
+                                          />
+                                        </IonItem>
+                                      </div>
+                                    </div>
+                                  </div>
+                                }
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="section">
+                        {entry.type === "text" && (
+                          <div>
+                            <div className="title flex al-center jc-between">
+                              <h3>{entry.label}</h3>
+                              <IonButton fill="clear">
+                                <IonIcon src="assets/imgs/Pen.svg" />
+                              </IonButton>
+                            </div>
+                            <div className="tags-holder">
+                              <div>
+                                {
+                                  <div className="section last">
+                                    <div className="the-form">
+                                      <div className="input-item">
+                                        <IonItem lines="none">
+                                          <IonInput
+                                            id={entry.key}
+                                            placeholder="Input Text"
+                                            value={inputValues[entry.key]}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                entry
+                                              )
+                                            }
+                                          />
+                                        </IonItem>
+                                      </div>
+                                    </div>
+                                  </div>
+                                }
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="section">
+                        {entry.type === "range-5" && (
+                          <div>
+                            <div className="title flex al-center jc-between">
+                              <h3>{entry.label}</h3>
+                              <IonButton fill="clear">
+                                <IonIcon src="assets/imgs/Pen.svg" />
+                              </IonButton>
+                            </div>
+                            <div className="range-holder">
+                              <IonRow>
+                                <IonCol size="3" class="flex al-center">
+                                  <div className="start-slot flex al-center">
+                                    <img
+                                      src={entry.icon}
+                                      height={20}
+                                      alt=""
+                                      style={{}}
+                                    />
+                                    <h3>{entry.label}</h3>
+                                  </div>
+                                </IonCol>
+                                <IonCol size="9">
+                                  <IonRange
+                                    className="custom-tick"
+                                    aria-label="Dual Knobs Range"
+                                    dualKnobs={false}
+                                    ticks={true}
+                                    snaps={true}
+                                    min={1}
+                                    max={5}
+                                    value={entry.value ? entry.value : 1}
+                                    pin={true}
+                                    pinFormatter={(value: number) => `${value}`}
+                                    onIonChange={(event) =>
+                                      updateField(event.target.value, entry)
+                                    }
+                                  ></IonRange>
+                                  <div className="tick-labels">
+                                    {rangeValues.map((values) => (
+                                      <div key={values} className="tick-label">
+                                        {values}
+                                      </div>
+                                    ))}
+                                  </div>
+                                </IonCol>
+                              </IonRow>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="section">
+                        {entry.type === "range-16" && (
+                          <div>
+                            <div className="title flex al-center jc-between">
+                              <h3>{entry.label}</h3>
+                              <IonButton fill="clear">
+                                <IonIcon src="assets/imgs/Pen.svg" />
+                              </IonButton>
+                            </div>
+                            <div className="range-holder">
+                              <IonRow>
+                                <IonCol size="3" class="flex al-center">
+                                  <div className="start-slot flex al-center">
+                                    <img
+                                      src={entry.icon}
+                                      height={20}
+                                      alt=""
+                                      style={{}}
+                                    />
+                                    <h3>{entry.label}</h3>
+                                  </div>
+                                </IonCol>
+                                <IonCol size="9">
+                                  <IonRange
+                                    className="custom-tick"
+                                    aria-label="Dual Knobs Range"
+                                    dualKnobs={false}
+                                    ticks={true}
+                                    snaps={true}
+                                    min={1}
+                                    max={16}
+                                    value={entry.value ? entry.value : 1}
+                                    pin={true}
+                                    pinFormatter={(value: number) => `${value}`}
+                                    onIonChange={(event) =>
+                                      updateField(event.target.value, entry)
+                                    }
+                                  ></IonRange>
+                                  <div className="tick-labels">
+                                    {rangeValues16.map((values) => (
+                                      <div key={values} className="tick-label3">
+                                        {values}
+                                      </div>
+                                    ))}
+                                  </div>
+                                </IonCol>
+                              </IonRow>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
                       <div className="section">
                         {entry.key === "custom_user_fields" && (
                           <>
@@ -965,44 +1145,6 @@ function JournalAdditionRemade() {
                               </IonRow>
                             </div>
                           </>
-                        )}
-                      </div>
-
-                      <div className="section">
-                        {entry.type === "textarea" && (
-                          <div>
-                            <div className="title flex al-center jc-between">
-                              <h3>{entry.label}</h3>
-                              {/*<IonButton fill="clear">
-                                <IonIcon src="assets/imgs/Pen.svg" />
-                              </IonButton>*/}
-                            </div>
-                            <div className="tags-holder">
-                              <div>
-                                {
-                                  <div className="section last">
-                                    <div className="the-form">
-                                      <div className="input-item">
-                                        <IonItem lines="none">
-                                          <IonInput
-                                            id={entry.key}
-                                            placeholder="Input Text"
-                                            value={inputValues[entry.key]}
-                                            onIonChange={(event) =>
-                                              updateField(
-                                                event.target.value,
-                                                entry
-                                              )
-                                            }
-                                          />
-                                        </IonItem>
-                                      </div>
-                                    </div>
-                                  </div>
-                                }
-                              </div>
-                            </div>
-                          </div>
                         )}
                       </div>
                     </div>

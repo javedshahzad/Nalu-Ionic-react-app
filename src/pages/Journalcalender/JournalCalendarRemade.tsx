@@ -66,8 +66,6 @@ const JournalCalendarRemade = () => {
 
   const curDate: string = date.toLocaleDateString();
 
-  console.log("current date", curDate);
-
   const curDay: string = [
     "Sunday",
     "Monday",
@@ -100,9 +98,7 @@ const JournalCalendarRemade = () => {
     const year = new Date().getFullYear();
 
     const full_date = day + "/" + (month + 1) + "/" + year;
-    console.log("full_date", full_date);
     const isItToday = document.getElementById(full_date);
-    console.log("isittoday", isItToday);
 
     if (isItToday) {
       setTimeout(() => {
@@ -195,11 +191,8 @@ const JournalCalendarRemade = () => {
 
     let _x = `${_year}-${_month}-${_day}`;
 
-    console.log("_x", _x);
-
     Object.keys(moonColorData).map((obj) => {
       if (obj === x && obj !== _x) {
-        console.log("obj", obj);
         moonColorData[obj].entries.map((phase) => {
           if (phase.key === "period_bleeding" && parseInt(phase.value) > 0) {
             style.backgroundColor = "#F0A6A9";
