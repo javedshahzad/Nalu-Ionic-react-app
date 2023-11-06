@@ -186,24 +186,23 @@ const CourseInnerOverview: React.FC = () => {
             </IonHeader>
             <IonContent fullscreen className="ion-no-padding">
               <div className="main_div">
-                <div className="player_div">
-                  {togglePlay === "video" && courseData?.video_url ? (
-                    <Player url ={courseData?.video_url} 
-                    video_thumbnail={courseData?.video_thumbnail}
-                     source={'video'}/>
-
-                  ) : (
-                    <>
-                      
-
-                        
-                    </>
-                  )}
-
-                 
+                {courseData?.video_url ? (
+                <div className="player-wrapper">
+                  <ReactPlayer 
+                    url={courseData?.video_url} 
+                    width="100%" 
+                    height="100%" 
+                    className="react-player" 
+                    controls={true}
+                    playsinline={true}
+                  />
                 </div>
+                ) : (
+                  <>
+                  </>
+                )}
                 <div className="title">
-                  <h3>{courseData?.ttile}</h3>
+                  <h3>{courseData?.title}</h3>
                 </div>
                 <IonGrid>
                   <IonRow>

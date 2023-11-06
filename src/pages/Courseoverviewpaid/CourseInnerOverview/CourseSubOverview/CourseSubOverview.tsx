@@ -34,6 +34,7 @@ import {
   import playCircle from "../../../../Icons/Play Circle.jpg";
   
   import { useTranslation } from "react-i18next";
+  import ReactPlayer from "react-player";
   import "@vidstack/react/player/styles/default/theme.css";
   
   import {
@@ -150,71 +151,23 @@ import {
               </IonHeader>
               <IonContent fullscreen>
                 <div className="main_div">
-                  <div className="player_div">
-                    {togglePlay === "video" && courseData?.video_url ? (
-                      <MediaPlayer className="player" src={courseData?.video_url? courseData?.video_url : ""}>
-                        <MediaProvider>
-                          <DefaultVideoLayout
-                            thumbnails={courseData?.video_thumbnail}
-                            icons={defaultLayoutIcons}
-                          />
-                        </MediaProvider>
-                      </MediaPlayer>
-                    ) : (
-                      <>
-                        <div className="audio_player_div">
-                          <IonGrid>
-                            <IonRow>
-                              <IonCol size="6">
-                                <img src={img3} alt="" />
-                              </IonCol>
-                              <IonCol size="6">
-                                <div className="title">
-                                  <h3>{courseData?.title}</h3>
-                                </div>
-                              </IonCol>
-                            </IonRow>
-                          </IonGrid>
-  
-                          <MediaPlayer
-                            src={
-                              "https://media-files.vidstack.io/sprite-fight/audio.mp3"
-                            }
-                          >
-                            <MediaProvider></MediaProvider>
-                            <DefaultAudioLayout icons={defaultLayoutIcons} />
-                            <DefaultVideoLayout
-                              icons={defaultLayoutIcons}
-                              thumbnails={courseData?.audio_thumbnail}
-                            />
-                          </MediaPlayer>
-                        </div>
-                      </>
-                    )}
-  
-                    <div className="playbuttons ">
-                      <div
-                        className={`video_span togglePlay ${
-                          togglePlay === "video" ? "active" : ""
-                        }`}
-                        onClick={() => handleVideoClick("video")}
-                      >
-                        <img src={audioIcon} alt="" />
-                        <span>Video</span>
-                      </div>
-                      <div
-                        className={`audio_span togglePlay ${
-                          togglePlay === "audio" ? "active" : ""
-                        }`}
-                        onClick={() => handleVideoClick("audio")}
-                      >
-                        <img src={audioIcon} alt="" />
-                        <span>Audio</span>
-                      </div>
-                    </div>
+                  {courseData?.video_url ? (
+                  <div className="player-wrapper">
+                    <ReactPlayer 
+                      url={courseData?.video_url} 
+                      width="100%" 
+                      height="100%" 
+                      className="react-player" 
+                      controls={true}
+                      playsinline={true}
+                    />
                   </div>
+                  ) : (
+                    <>
+                    </>
+                  )}
                   <div className="title">
-                    <h3>{courseData?.ttile}</h3>
+                    <h3>{courseData?.title}</h3>
                   </div>
                   <IonGrid>
                     <IonRow>

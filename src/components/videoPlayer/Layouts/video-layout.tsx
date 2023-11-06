@@ -39,7 +39,6 @@ function Gestures() {
   return (
     <>
       <Gesture className={styles.gesture} event="pointerup" action="toggle:paused" />
-      <Gesture className={styles.gesture} event="dblpointerup" action="toggle:fullscreen" />
       <Gesture className={styles.gesture} event="pointerup" action="toggle:controls" />
       <Gesture className={styles.gesture} event="dblpointerup" action="seek:-10" />
       <Gesture className={styles.gesture} event="dblpointerup" action="seek:10" />

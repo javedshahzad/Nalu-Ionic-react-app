@@ -190,6 +190,7 @@ const Resourcedetail: React.FC = () => {
       });
     };
   }, []);
+  
   return (
     <IonPage className="Resourcedetail">
       <IonHeader className="ion-no-border">
@@ -212,18 +213,23 @@ const Resourcedetail: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen ref={contentRef}>
         <div className="top-img-holder ion-text-center">
-          {!resourseData?.data?.image_url ? (
-           
+          {resourseData?.data?.featured_video ? (
             <div className="player-wrapper">
-<ReactPlayer url={resourseData?.data?.featured_video} width="100%" height="100%" class="react-player" />
-
-</div>
-
-            ) : (
-        <img src={resourseData?.data.image_url} alt="No image" />
+              <ReactPlayer 
+                url={resourseData?.data?.featured_video}
+                width="100%" 
+                height="100%" 
+                className="react-player" 
+                controls={true}
+                playsinline={true}
+              />
+            </div>
+          ) : resourseData?.data?.image_url ? (
+            <img src={resourseData?.data?.image_url} alt="No image" />
+          ) : (
+            <span/>
           )}
         </div>
-
         <div className="content ion-padding">
           <div className="category-tag">
             <IonItem lines="none">

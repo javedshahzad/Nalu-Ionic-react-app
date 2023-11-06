@@ -90,6 +90,26 @@
                 margin-right: 15px;
             }
         }
+        
+        .player-wrapper { 
+                        
+          position: relative;   
+                    padding-top: 56.25%; 
+                    
+                    .react-player { 
+                        
+                      overflow: hidden;
+                      position: absolute; 
+                                    top: 0;  
+                                    
+                                    
+                                    left: 0;
+                                  
+                                  
+                                  }
+
+        }
+        
         .player_div{
            
         .playbuttons {

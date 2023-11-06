@@ -587,7 +587,7 @@ function JournalAdditionRemade() {
                                             <h3>{field.label}</h3>
                                           </div>
                                         </IonCol>
-                                        <IonCol size="9">
+                                        <IonCol size="8">
                                           <IonRange
                                             className="custom-tick"
                                             aria-label="Dual Knobs Range"
@@ -851,9 +851,9 @@ function JournalAdditionRemade() {
                           <div>
                             <div className="title flex al-center jc-between">
                               <h3>{entry.label}</h3>
-                              <IonButton fill="clear">
+                              {/*<IonButton fill="clear">
                                 <IonIcon src="assets/imgs/Pen.svg" />
-                              </IonButton>
+                              </IonButton>*/}
                             </div>
                             <div className="tags-holder">
                               <div>
@@ -864,8 +864,8 @@ function JournalAdditionRemade() {
                                         <IonItem lines="none">
                                           <IonInput
                                             id={entry.key}
-                                            placeholder="Input Text"
-                                            value={inputValues[entry.key]}
+                                            placeholder="Text eingeben"
+                                            value={entry.value || ''}
                                             onIonChange={(event) =>
                                               updateField(
                                                 event.target.value,
@@ -888,9 +888,9 @@ function JournalAdditionRemade() {
                           <div>
                             <div className="title flex al-center jc-between">
                               <h3>{entry.label}</h3>
-                              <IonButton fill="clear">
+                              {/*<IonButton fill="clear">
                                 <IonIcon src="assets/imgs/Pen.svg" />
-                              </IonButton>
+                              </IonButton>*/}
                             </div>
                             <div className="tags-holder">
                               <div>
@@ -901,8 +901,8 @@ function JournalAdditionRemade() {
                                         <IonItem lines="none">
                                           <IonInput
                                             id={entry.key}
-                                            placeholder="Input Text"
-                                            value={inputValues[entry.key]}
+                                            placeholder="Text eingeben"
+                                            value={entry.value || ''}
                                             onIonChange={(event) =>
                                               updateField(
                                                 event.target.value,
@@ -926,9 +926,9 @@ function JournalAdditionRemade() {
                           <div>
                             <div className="title flex al-center jc-between">
                               <h3>{entry.label}</h3>
-                              <IonButton fill="clear">
+                              {/*<IonButton fill="clear">
                                 <IonIcon src="assets/imgs/Pen.svg" />
-                              </IonButton>
+                              </IonButton>*/}
                             </div>
                             <div className="range-holder">
                               <IonRow>
@@ -943,7 +943,7 @@ function JournalAdditionRemade() {
                                     <h3>{entry.label}</h3>
                                   </div>
                                 </IonCol>
-                                <IonCol size="9">
+                                <IonCol size="8">
                                   <IonRange
                                     className="custom-tick"
                                     aria-label="Dual Knobs Range"
@@ -977,9 +977,9 @@ function JournalAdditionRemade() {
                           <div>
                             <div className="title flex al-center jc-between">
                               <h3>{entry.label}</h3>
-                              <IonButton fill="clear">
+                              {/*<IonButton fill="clear">
                                 <IonIcon src="assets/imgs/Pen.svg" />
-                              </IonButton>
+                              </IonButton>*/}
                             </div>
                             <div className="range-holder">
                               <IonRow>
@@ -994,7 +994,7 @@ function JournalAdditionRemade() {
                                     <h3>{entry.label}</h3>
                                   </div>
                                 </IonCol>
-                                <IonCol size="9">
+                                <IonCol size="8">
                                   <IonRange
                                     className="custom-tick"
                                     aria-label="Dual Knobs Range"
@@ -1046,7 +1046,7 @@ function JournalAdditionRemade() {
                                             <h3>{field.label}</h3>
                                           </div>
                                         </IonCol>
-                                        <IonCol size="9">
+                                        <IonCol size="8">
                                           <IonRange
                                             className="custom-tick"
                                             aria-label="Dual Knobs Range"
@@ -1084,7 +1084,7 @@ function JournalAdditionRemade() {
                                             <h3>{field.label}</h3>
                                           </div>
                                         </IonCol>
-                                        <IonCol size="9">
+                                        <IonCol size="8">
                                           <IonRange
                                             className="custom-tick"
                                             aria-label="Dual Knobs Range"
