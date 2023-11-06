@@ -43,6 +43,7 @@ import journalReducer from "../../reducers/journalReducer";
 import { journalAction } from "../../actions/journalAction";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
+import React from "react";
 
 function JournalAdditionRemade() {
   const { dateParam } = useParams<{ dateParam: string }>();
@@ -1026,19 +1027,26 @@ function JournalAdditionRemade() {
                       <div className="section">
                         {entry.key === "custom_user_fields" && (
                           <>
-                            <div className="title flex al-center jc-between">
+                            <div className="title flex al-center jc-between custom-user-fields">
                               <h3>{entry.label}</h3>
-                              <IonButton fill="clear">
+                              {/*<IonButton fill="clear">
                                 <IonIcon src="assets/imgs/Pen.svg" />
-                              </IonButton>
+                              </IonButton>*/}
                             </div>
-                            <div className="tags-holder">
-                              <IonRow>
+                            
                                 {entry.fields.map((field: any) => (
-                                  <>
-                                    <IonCol key={field.key} size="12">
-                                      {field.type === "range-5" && (
-                                        <>
+                                  <React.Fragment key={field.key}>
+                                    {field.type === "range-5" && (
+                                      <React.Fragment>
+                                        <div className="range-holder">
+                                        <IonRow>
+                                        <IonCol size="3">
+                                          <div className="start-slot flex al-center">
+                                            <img src={field.icon} height={20} alt="" />
+                                            <h3>{field.label}</h3>
+                                          </div>
+                                        </IonCol>
+                                        <IonCol size="9">
                                           <IonRange
                                             className="custom-tick"
                                             aria-label="Dual Knobs Range"
@@ -1047,34 +1055,36 @@ function JournalAdditionRemade() {
                                             snaps={true}
                                             min={1}
                                             max={5}
-                                            value={
-                                              field.value ? field.value : 1
-                                            }
+                                            value={field.value ? field.value : 1}
                                             pin={true}
-                                            pinFormatter={(value: number) =>
-                                              `${value}`
-                                            }
+                                            pinFormatter={(value: number) => `${value}`}
                                             onIonChange={(event) =>
-                                              updateField(
-                                                event.target.value,
-                                                field
-                                              )
+                                              updateField(event.target.value, field)
                                             }
                                           ></IonRange>
                                           <div className="tick-labels">
                                             {rangeValues.map((values) => (
-                                              <div
-                                                key={values}
-                                                className="tick-label"
-                                              >
+                                              <div key={values} className="tick-label">
                                                 {values}
                                               </div>
                                             ))}
                                           </div>
-                                        </>
-                                      )}
-                                      {field.type === "range-10" && (
-                                        <>
+                                        </IonCol>
+                                        </IonRow>
+                                        </div>
+                                      </React.Fragment>
+                                    )}
+                                    {field.type === "range-10" && (
+                                      <React.Fragment>
+                                      <div className="range-holder">
+                                      <IonRow>
+                                        <IonCol size="3">
+                                          <div className="start-slot flex al-center">
+                                            <img src={field.icon} height={20} alt="" />
+                                            <h3>{field.label}</h3>
+                                          </div>
+                                        </IonCol>
+                                        <IonCol size="9">
                                           <IonRange
                                             className="custom-tick"
                                             aria-label="Dual Knobs Range"
@@ -1083,67 +1093,55 @@ function JournalAdditionRemade() {
                                             snaps={true}
                                             min={1}
                                             max={10}
-                                            value={
-                                              field.value ? field.value : 1
-                                            }
+                                            value={field.value ? field.value : 1}
                                             pin={true}
-                                            pinFormatter={(value: number) =>
-                                              `${value}`
-                                            }
+                                            pinFormatter={(value: number) => `${value}`}
                                             onIonChange={(event) =>
-                                              updateField(
-                                                event.target.value,
-                                                field
-                                              )
+                                              updateField(event.target.value, field)
                                             }
                                           ></IonRange>
                                           <div className="tick-labels">
                                             {rangeValues10.map((values) => (
-                                              <div
-                                                key={values}
-                                                className="tick-label2"
-                                              >
+                                              <div key={values} className="tick-label2">
                                                 {values}
                                               </div>
                                             ))}
                                           </div>
-                                        </>
-                                      )}
-                                    </IonCol>
-                                    <IonCol size="6">
-                                      {field.type === "true_false" && (
-                                        <IonItem
-                                          key={field.key}
-                                          lines="none"
-                                          onClick={() => (field.value = true)}
-                                          className="customIcon"
-                                        >
-                                          <IonLabel>
-                                            <div
-                                              dangerouslySetInnerHTML={{
-                                                __html: field.svg,
-                                              }}
-                                              style={{
-                                                textAlign: "center",
-                                              }}
+                                        </IonCol>
+                                        </IonRow>
+                                        </div>
+                                      </React.Fragment>
+                                    )}
+                                    {field.type === "true_false" && (
+                                      <div className="tags-holder">
+                                      <IonRow>
+                                        <IonCol size="4">
+                                          <IonItem
+                                            key={field.key}
+                                            lines="none"
+                                            className="customIcon"
+                                          >
+                                            {field.svg && (
+                                              <div
+                                                className="svgIconss"
+                                                dangerouslySetInnerHTML={{ __html: field.svg }}
+                                                id={field.key}
+                                              />
+                                            )}
+                                            <IonLabel>{field.label}</IonLabel>
+                                            <IonCheckbox
+                                              checked={field.value}
+                                              onIonChange={(event) =>
+                                                updateField(event.target.value, field)
+                                              }
                                             />
-                                          </IonLabel>
-                                          <IonCheckbox
-                                            checked={field.value}
-                                            onIonChange={(event) =>
-                                              updateField(
-                                                event.target.value,
-                                                field
-                                              )
-                                            }
-                                          />
-                                        </IonItem>
-                                      )}
-                                    </IonCol>
-                                  </>
+                                          </IonItem>
+                                        </IonCol>
+                                      </IonRow>
+                                      </div>
+                                    )}
+                                  </React.Fragment>
                                 ))}
-                              </IonRow>
-                            </div>
                           </>
                         )}
                       </div>
