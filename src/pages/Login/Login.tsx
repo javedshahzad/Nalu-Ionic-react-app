@@ -87,7 +87,7 @@ const Login: React.FC = () => {
           const { token: receivedToken } = response.data;
           setToken(response.data.token);
           localStorage.setItem('jwtToken', response.data.token);
-          localStorage.setItem('roles', response.data.roles);
+          localStorage.setItem('roles', JSON.stringify(response.data.roles));
           localStorage.setItem('userId', response.data.user_id);
 
         // config code

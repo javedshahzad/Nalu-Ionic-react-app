@@ -53,7 +53,7 @@ const Registeration: React.FC = () => {
             const { token: receivedToken, roles } = response.data;
             setToken(receivedToken); // Assuming you have a state called token
             localStorage.setItem('jwtToken', receivedToken);
-            localStorage.setItem('roles', roles);
+            localStorage.setItem('roles', JSON.stringify(roles));
             localStorage.setItem('userId', response.data.user_id);
 
             // Clear any previous API errors when request succeeds

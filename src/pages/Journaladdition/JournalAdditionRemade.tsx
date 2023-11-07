@@ -1040,7 +1040,7 @@ function JournalAdditionRemade() {
                                       <React.Fragment>
                                         <div className="range-holder">
                                         <IonRow>
-                                        <IonCol size="3">
+                                        <IonCol size="3" className="flex">
                                           <div className="start-slot flex al-center">
                                             <img src={field.icon} height={20} alt="" />
                                             <h3>{field.label}</h3>
@@ -1078,7 +1078,7 @@ function JournalAdditionRemade() {
                                       <React.Fragment>
                                       <div className="range-holder">
                                       <IonRow>
-                                        <IonCol size="3">
+                                        <IonCol size="3" className="flex">
                                           <div className="start-slot flex al-center">
                                             <img src={field.icon} height={20} alt="" />
                                             <h3>{field.label}</h3>
@@ -1152,12 +1152,15 @@ function JournalAdditionRemade() {
             ) : (
               <></>
             )}
-            <div className="add-custom-category ion-text-center ion-padding-top">
-              <IonButton onClick={addCustomCategory}>
-                <IonIcon icon={add} />
-              </IonButton>
-              <h4>Add Custom Category</h4>
-            </div>
+           {localStorage.getItem('roles') && JSON.parse(localStorage.getItem('roles')).includes('premium') ? (
+              <div className="add-custom-category ion-text-center ion-padding-top">
+                <IonButton onClick={addCustomCategory}>
+                  <IonIcon icon={add} />
+                </IonButton>
+                <h4>Eigene Kategorie hinzufügen</h4>
+              </div>
+            ) : null
+          }
           </>
         )}
       </IonContent>

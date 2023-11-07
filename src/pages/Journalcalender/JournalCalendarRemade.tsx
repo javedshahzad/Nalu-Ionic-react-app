@@ -40,7 +40,7 @@ const months = [
   "Dezember",
 ];
 
-const days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
+const days = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
 
 let url = "";
 
@@ -337,6 +337,7 @@ const JournalCalendarRemade = () => {
   for (let m = 0; m < 12; m++) {
     const monthData = [];
     const firstDayOfMonth = new Date(year, m, 1).getDay();
+    const adjustedFirstDay = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
     let lastDateOfMonth = new Date(year, m + 1, 0).getDate();
     const lastDateOfPrevMonth = new Date(year, m, 0).getDate();
 
@@ -351,8 +352,8 @@ const JournalCalendarRemade = () => {
       );
     }
 
-    for (let i = 0; i < firstDayOfMonth; i++) {
-      const prevMonthDate = lastDateOfPrevMonth - firstDayOfMonth + i + 1;
+    for (let i = 0; i < adjustedFirstDay; i++) {
+      const prevMonthDate = lastDateOfPrevMonth - adjustedFirstDay + i + 1;
       monthData.push(
         <li key={`inactive-${i}`} className="inactive calendar-day">
           {prevMonthDate}

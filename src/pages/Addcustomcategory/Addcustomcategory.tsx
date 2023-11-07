@@ -2,7 +2,6 @@ import {
   IonBackButton,
   IonButton,
   IonButtons,
-  IonCheckbox,
   IonCol,
   IonContent,
   IonHeader,
@@ -10,7 +9,6 @@ import {
   IonInput,
   IonItem,
   IonLabel,
-  IonList,
   IonModal,
   IonPage,
   IonRadio,
@@ -33,7 +31,6 @@ import {
   trashBin,
   trashBinOutline,
 } from "ionicons/icons";
-import pen from "../../assets/images/Pen.svg";
 import "./Addcustomcategory.scss";
 import { useEffect, useRef, useState } from "react";
 import CustomCategoryApiService from "../../CustomCategoryService";
@@ -43,6 +40,7 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../../store/store";
 import { useDispatch } from "react-redux";
 import { journalAction } from "../../actions/journalAction";
+import axios from 'axios'; 
 
 const Addcustomcategory: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -64,7 +62,6 @@ const Addcustomcategory: React.FC = () => {
     "text",
     "textarea",
   ]);
-  const [icons, setIcons] = useState([]);
   const [customCategoryData, setCustomCategoryData] = useState([]);
   const [message, setMessage] = useState("");
   const [customName, setCustomName] = useState("");
@@ -72,11 +69,7 @@ const Addcustomcategory: React.FC = () => {
   const [customNameError, setcustomNameError] = useState("");
   const [generalLabelError, setGeneralLabelError] = useState("");
 
-  // //   const [selectedValue, setSelectedValue] = useState("");
-  //   const [selectedValueError, setValueError] = useState("");
-
   const [selectedLogoValue, setSelectedLogoValue] = useState("");
-  const [categoryIcon, setCategoryIcon] = useState("");
   const [selectedType, setSelectedType] = useState(null);
   const [selectedLogoError, setSelectedLogoError] = useState("");
   const [allFields, setAllFields] = useState([]);
@@ -84,35 +77,6 @@ const Addcustomcategory: React.FC = () => {
   const [editCategory, setEditCategory] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [fieldId, setFieldId] = useState(null);
-
-  const getIcons = async () => {
-    try {
-      setIsLoading(true);
-      const data = await CustomCategoryApiService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/custom-field-icon`
-      );
-
-      const filteredItems = [];
-      const encounteredNames = new Set();
-
-      for (const item of data) {
-        if (!encounteredNames.has(item.name)) {
-          encounteredNames.add(item.name);
-          filteredItems.push(item);
-        }
-      }
-      setIcons(filteredItems);
-
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getIcons();
-  }, []);
 
   const modal = useRef<HTMLIonModalElement>(null);
   const fieldModal = useRef<HTMLIonModalElement>(null);
@@ -179,7 +143,7 @@ const Addcustomcategory: React.FC = () => {
   const handleCustomNameChange = (event) => {
     const value = event.target.value;
     setCustomName(value);
-    setcustomNameError(value.trim() === "" ? "Please enter Custom name." : "");
+    setcustomNameError(value.trim() === "" ? "Bitte definiere einen Namen für deine Kategorie." : "");
   };
 
   const handleDeleteField = (id: any) => {
@@ -228,10 +192,6 @@ const Addcustomcategory: React.FC = () => {
 
     setSelectedLogoValue(event.detail.value);
   };
-  const handleCategoryIcon = (event: any) => {
-    const value = event.target.value;
-    setCategoryIcon(event.detail.value);
-  };
 
   const handleTypeChange = (event: any, clickedType: any) => {
     const value = event.target.value;
@@ -239,36 +199,66 @@ const Addcustomcategory: React.FC = () => {
     setSelectedType(clickedType);
   };
 
-  const saveCustomCategoryData = () => {
-    const newCategory: any = {
-      label: customName,
-      type: selectedType,
-      svg: selectedLogoValue,
-      icon: selectedLogoValue,
-      value: null,
-    };
-
-    // get redux state and set in a local array
-
-    newCategory.key = Date.now().toString(32) + Math.random().toString(16);
-
-    typeObj[0].group.map((obj) => {
-      if (obj.key === "custom_user_fields") {
-        obj.fields.push(newCategory);
+  const saveCustomCategoryData = async () => {
+    setIsSubmitting(true); // Start loading
+    setApiErrorMessage(''); // Reset error message
+    try {
+      // Perform the POST request with Axios
+      const response = await axios.post(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/add-custom-field`,
+        {
+          category_name: customName,
+          category_icon: selectedLogoValue,
+          type: selectedType
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          }
+        }
+      );
+  
+      // Handle the response here
+      console.log(response.data);
+  
+      // If the API call is successful, handle the rest of the logic, such as updating the Redux store
+      const newCategory = {
+        label: customName,
+        type: selectedType,
+        svg: selectedLogoValue,
+        icon: selectedLogoValue,
+        value: null,
+        key: Date.now().toString(32) + Math.random().toString(16),
+      };
+  
+      typeObj[0].group.map((obj) => {
+        if (obj.key === "custom_user_fields") {
+          obj.fields.push(newCategory);
+        }
+      });
+  
+      dispatch(journalAction(typeObj[0]));
+      setCustomName("");
+      setSelectedLogoValue("");
+      setSelectedType("");
+  
+      setIsSubmitting(false);
+      history.back();
+    } catch (error) {
+      setIsSubmitting(false);
+      if (error.response?.status === 400) {
+        // Specific error message for 400 status
+        setApiErrorMessage('Du kannst nur bis zu 5 benutzerdefinierte Kategorien erstellen. Bitte kontaktieren den Support, um Kategorien, die du nicht mehr benötigst, zu löschen.');
+      } else {
+        // Generic error message for other errors
+        const errorMessage = error.response?.data?.message || 'Es ist ein Fehler aufgetreten. Bitte versuche es in einigen Minuten erneut oder kontaktiere den Support.';
+        setApiErrorMessage(errorMessage);
       }
-    });
-    // console.log("type ibj", typeObj);
-    dispatch(journalAction(typeObj[0]));
-
-    // typeObj.group.custom_user_fields;
-
-    // setCustomCategoryData([...customCategoryData, newCategory]);
-
-    setCustomName("");
-    setSelectedLogoValue("");
-    setSelectedType("");
-    history.back();
+    }
   };
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [apiErrorMessage, setApiErrorMessage] = useState('');
 
   return (
     <IonPage className="Addcustomcategory">
@@ -277,19 +267,19 @@ const Addcustomcategory: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton text="" color="dark" />
           </IonButtons>
-          <IonTitle>Add Custom Category</IonTitle>
+          <IonTitle>Kategorie hinzufügen</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding" fullscreen>
         <div className="section">
           <div className="title flex al-center jc-between ion-padding-bottom">
-            <h3>Add Custom Category Name</h3>
+            <h3>Name</h3>
           </div>
           <div className="the-form up">
             <div className="input-item">
               <IonItem lines="none">
                 <IonInput
-                  placeholder="Add Preferred Custom Name"
+                  placeholder="Bevorzugter Name eingeben"
                   value={customName}
                   onIonFocus={handleCustomNameChange}
                   onIonInput={handleCustomNameChange}
@@ -305,21 +295,13 @@ const Addcustomcategory: React.FC = () => {
 
         <div className="section ion-padding-bottom">
           <div className="title flex al-center jc-between ion-padding-bottom">
-            <h3 style={{ fontSize: "15px" }}>Choose Category Type</h3>
+            <h3 style={{ fontSize: "15px" }}>Typ</h3>
           </div>
           <IonRadioGroup
             value={selectedType}
             onIonChange={(event) => handleTypeChange(event, event.target.value)}
           >
             <IonRow>
-              <IonCol id="imgg" size="6">
-                <IonItem lines="none" className="customType">
-                  <IonLabel className="ion-text-center">
-                    <IonIcon icon={sadOutline} />
-                  </IonLabel>
-                  <IonRadio mode="md" value="true_false"></IonRadio>
-                </IonItem>
-              </IonCol>
               <IonCol id="imgg" size="6">
                 <IonItem>
                   <IonLabel className="ion-text-center">
@@ -355,46 +337,74 @@ const Addcustomcategory: React.FC = () => {
                   <IonRadio mode="md" value="range-10"></IonRadio>
                 </IonItem>
               </IonCol>
+              <IonCol id="imgg" size="6">
+                <IonItem lines="none" className="customType">
+                  <img src="https://app.mynalu.com/wp-content/uploads/2023/10/sample-journal-icon.svg"/>
+                  <IonLabel className="ion-text-center">
+                    Deine Kategorie
+                  </IonLabel>
+                  <IonRadio mode="md" value="true_false"></IonRadio>
+                </IonItem>
+              </IonCol>
             </IonRow>
           </IonRadioGroup>
         </div>
         <div className="section">
           <div className="title flex al-center jc-between ion-padding-bottom">
-            <h3 style={{ fontSize: "15px" }}>Choose a Logo</h3>
+            <h3 style={{ fontSize: "15px" }}>Icon</h3>
           </div>
-          {isLoading ? (
-            <IonRow>
-              <IonCol size="1">
-                <IonItem lines="none">
-                  <IonSpinner name="crescent"></IonSpinner>
-                </IonItem>
-              </IonCol>
-            </IonRow>
-          ) : (
             <IonRadioGroup
               value={selectedLogoValue}
               onIonChange={handleLogoChange}
             >
               <div className="tags-holders">
                 <IonRow>
-                  {icons.map((icon, index) => (
-                    <IonCol id="imgg" key={index} size="6">
+                    <IonCol id="imgg" size="6">
                       <IonItem lines="none">
                         <IonLabel className="ion-text-center">
-                          <IonIcon icon={happyOutline} />
+                        <img src="https://app.mynalu.com/wp-content/uploads/2023/10/sample-journal-icon.svg"/>
                         </IonLabel>
-                        <IonRadio value={icon} mode="md"></IonRadio>
+                        <IonRadio value="https://app.mynalu.com/wp-content/uploads/2023/10/sample-journal-icon.svg" mode="md"></IonRadio>
                       </IonItem>
                     </IonCol>
-                  ))}
+                    
+                    <IonCol id="imgg" size="6">
+                      <IonItem lines="none">
+                        <IonLabel className="ion-text-center">
+                        <img src="https://app.mynalu.com/wp-content/uploads/2023/10/sad.svg"/>
+                        </IonLabel>
+                        <IonRadio value="https://app.mynalu.com/wp-content/uploads/2023/10/sad.svg" mode="md"></IonRadio>
+                      </IonItem>
+                    </IonCol>
+                    
+                    <IonCol id="imgg" size="6">
+                      <IonItem lines="none">
+                        <IonLabel className="ion-text-center">
+                        <img src="https://app.mynalu.com/wp-content/uploads/oral_contraceptives.svg"/>
+                        </IonLabel>
+                        <IonRadio value="https://app.mynalu.com/wp-content/uploads/oral_contraceptives.svg" mode="md"></IonRadio>
+                      </IonItem>
+                    </IonCol>
+                    
+                    <IonCol id="imgg" size="6">
+                      <IonItem lines="none">
+                        <IonLabel className="ion-text-center">
+                        <img src="https://app.mynalu.com/wp-content/uploads/perdiod_bleeding.svg"/>
+                        </IonLabel>
+                        <IonRadio value="https://app.mynalu.com/wp-content/uploads/perdiod_bleeding.svg" mode="md"></IonRadio>
+                      </IonItem>
+                    </IonCol>
                 </IonRow>
               </div>
             </IonRadioGroup>
-          )}
           {selectedLogoError && (
             <p className="error-message">{selectedLogoError}</p>
           )}
         </div>
+
+        {apiErrorMessage && (
+        <p className="error-message">{apiErrorMessage}</p>
+        )}
 
         <div className="btn-holder ion-text-center ion-padding-vertical">
           <IonButton
@@ -402,7 +412,11 @@ const Addcustomcategory: React.FC = () => {
             disabled={!isFormValid && customCategoryData.length === 0}
             onClick={saveCustomCategoryData}
           >
-            Save
+            {isSubmitting ? (
+              <IonSpinner name="crescent" />
+            ) : (
+              "Hinzufügen"
+            )}
           </IonButton>
         </div>
       </IonContent>
