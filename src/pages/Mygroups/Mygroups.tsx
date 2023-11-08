@@ -15,20 +15,34 @@ import {
   IonToolbar,
   useIonViewDidLeave,
   useIonViewWillLeave,
+  IonCheckbox,
+  IonList,
+  IonModal,
+  IonPopover,
+  IonText,
+  useIonActionSheet,
 } from "@ionic/react";
 import {
   checkmarkCircle,
   chevronForward,
   mailOutline,
   notificationsOutline,
+  addOutline,
+  arrowBackOutline,
+  cameraOutline,
+  chevronForwardOutline,
 } from "ionicons/icons";
 
 import "./Mygroups.scss";
 import { useHistory } from "react-router";
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { useEffect } from "react";
 import NotificationBell from "../../components/NotificationBell";
+import { RootState } from "../../store/store";
+import { createGroupAction } from "../../actions/groupsActions";
+import apiService from "../../Services";
+import tokenService from "../../token";
 
 const Mygroups: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -86,86 +100,242 @@ const Mygroups: React.FC = () => {
         }
       });
   };
+  const [showPopover, setShowPopover] = useState(false);
+  const [groupName, setGroupName] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
+
+  const [groupsList, setGroupsList] = useState([]);
+
+  const modal = useRef<HTMLIonModalElement>(null);
+  const page = useRef(null);
+
+  const [presentingElement, setPresentingElement] =
+    useState<HTMLElement | null>(null);
+  const [present] = useIonActionSheet();
+
+  const groups = useSelector((state: RootState) => state.groups);
+
+  const sortedGroups = [...groups].sort((a, b) => b.timestamp - a.timestamp);
+
+  const recentGroups = sortedGroups.slice(0, 2);
+
+  const wp_token = tokenService.getWPToken();
+
+  useEffect(() => {
+    setTimeout(() => {
+      setGroupsList(groups);
+    }, 5000);
+  });
+
+  const back = () => {
+    history.goBack();
+  };
+
+  const [users, setUsers] = useState<any[]>([]);
+
+  const dispatch = useDispatch();
+
+  const openPopover = () => {
+    setShowPopover(true);
+    GetAllUsers();
+  };
+
+  const handleGroupNameChange = (e: any) => {
+    setGroupName(e.target.value);
+  };
+
+  const newGroup = {
+    id: String(Date.now()),
+    name: groupName,
+    members: selectedUsers.map((userId) => userId),
+  };
+
+  const createGroup = () => {
+    const usersArr = [];
+    selectedUsers.map((user: any) => {
+      usersArr.push({
+        name: user.name,
+        userImage: user.avatar_urls["96"],
+        email: user.email,
+        slug: user.slug,
+        nickname: user.nickname,
+      });
+    });
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("groupName", groupName);
+    formDataToSend.append("participants[]", JSON.stringify(usersArr));
+
+    apiService
+      .post(
+        "https://apidev.mynalu.com/v1/conversation/create",
+        formDataToSend,
+        tokenService.getToken()
+      )
+      .then(
+        (data) => {
+          dispatch(createGroupAction(data.data));
+          dismiss();
+          setSelectedUsers([]);
+          setGroupName("");
+        },
+        (err) => {
+          console.log("err from creating group", err);
+        }
+      );
+  };
+
+  const handleUserSelection = (e: any, user: any) => {
+    const checked = e.target.checked;
+    if (checked) {
+      setSelectedUsers([...selectedUsers, user]);
+    } else {
+      setSelectedUsers(selectedUsers.filter((obj) => obj !== user));
+    }
+  };
+  const GetAllUsers = (keyword?: any) => {
+    apiService
+      .get(
+        `https://app.mynalu.com/wp-json/wp/v2/users?per_page=20&page=1&search=`,
+        wp_token
+      )
+      .then((data) => {
+        setUsers(data);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  };
+
+  const handleGroupClick = (groupId: any) => {
+    history.push(`/groupchat/${groupId}`);
+  };
+
+  const handleBrowseGroupsClick = () => {
+    history.push("/browsegroups");
+  };
+
+  useEffect(() => {
+    setPresentingElement(page.current);
+    GetAllUsers();
+  }, []);
+
+  function dismiss() {
+    modal.current?.dismiss();
+    setGroupName("");
+    setSelectedUsers([]);
+  }
 
   return (
-    <>
-    
-        <IonPage className="Mygroups">
-          {
-            isLoading? (
-              <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100vh",
-              }}
-            >
-              <IonSpinner name="crescent"></IonSpinner>
-            </div>
-            ):(
-              <>
-              <IonHeader className="ion-no-border">
+    <IonPage ref={page}>
+      <IonHeader className="ion-no-border">
+        <IonToolbar className="ion-no-border">
+          <IonButton slot="start" fill="clear" onClick={back}>
+            <IonIcon icon={arrowBackOutline} className="backBtn" />
+          </IonButton>
+          <div className="top-row">
+            <h1 className="group-title">My Groups</h1>
+          </div>
+          <IonButton slot="end" fill="clear">
+            <IonIcon icon={notificationsOutline} className="bell-icon" />
+          </IonButton>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent fullscreen>
+        {/*<IonButtons style={{ display: "flex", justifyContent: "end" }}>
+          <IonButton fill="clear" id="open-modal" expand="block">
+            <p className="addGrpLabel" style={{ marginRight: "5px" }}>
+              Add Group
+            </p>
+            <IonIcon icon={addOutline} className="addIcon" />
+          </IonButton>
+        </IonButtons>
+
+        <IonModal
+          ref={modal}
+          trigger="open-modal"
+          presentingElement={presentingElement!}
+        >
+          <IonHeader>
             <IonToolbar>
-              <IonButtons slot="start">
-                <IonBackButton
-                  color="dark"
-                  text={""}
-                  defaultHref="/tabs/tab2"
-                />
+              <h1>Create Group</h1>
+              <IonButtons slot="end">
+                <IonButton onClick={() => dismiss()}>Close</IonButton>
               </IonButtons>
-              <IonTitle>My Groups</IonTitle>
-              {/*<IonButtons slot="end">
-                <IonButton slot="end" fill="clear">
-                  <NotificationBell />
-                </IonButton>
-              </IonButtons>*/}
             </IonToolbar>
           </IonHeader>
-          <IonContent className="ion-padding" fullscreen>
-            <div className="list">
-              <div className="title ion-text-right">
-                <IonButton fill="clear">
-                  Edit
-                  <IonIcon slot="start" src="assets/imgs/Pen.svg" />
-                </IonButton>
-              </div>
-              <IonItem lines="none" detail={false}>
-                <IonAvatar className="flex al-center jc-center" slot="start">
-                  <h3>A</h3>
-                </IonAvatar>
-                <IonLabel>
-                  <h4>NALU Endo Flow - English</h4>
-                  <h6 className="ion-text-wrap">
-                    Nisi Quis voluptate esse pariatela
-                  </h6>
-                </IonLabel>
-                <div className="end-slot ion-text-right" slot="end">
-                  <p>6:27 PM</p>
-                </div>
-              </IonItem>
-              <IonItem lines="none" detail={false}>
-                <IonAvatar className="flex al-center jc-center" slot="start">
-                  <h3>A</h3>
-                </IonAvatar>
-                <IonLabel>
-                  <h4>NALU Endo Flow - English</h4>
-                  <h6 className="ion-text-wrap">
-                    Nisi Quis voluptate esse pariatela
-                  </h6>
-                </IonLabel>
-                <div className="end-slot ion-text-right" slot="end">
-                  <p>12.07.2023</p>
-                  <IonBadge className="flex al-center jc-center">2</IonBadge>
-                </div>
-              </IonItem>
+          <IonContent className="ion-padding">
+            <div style={{ paddingLeft: "10px", paddingRight: "10px" }}>
+              <input
+                style={{ padding: "20px" }}
+                value={groupName}
+                onChange={(e) => handleGroupNameChange(e)}
+                placeholder="Group Name"
+                className="group-name-input"
+              />
+
+              <h5 style={{ textAlign: "center" }}>Add Users</h5>
             </div>
-            <div className="browse-group">
-              <IonButton fill="clear">
-                Browse Group
-                <IonIcon slot="end" icon={chevronForward} />
-              </IonButton>
+
+            <div style={{ height: "100vh", overflow: "auto" }}>
+              {users.map((user: any, index) => (
+                <IonItem key={index}>
+                  <img
+                    src={user.avatar_urls["96"]}
+                    alt=""
+                    className="profile-image my-auto"
+                    style={{ marginRight: "10px" }}
+                  />
+                  <IonCheckbox
+                    mode="ios"
+                    checked={selectedUsers.includes(user)}
+                    onIonChange={(e) => handleUserSelection(e, user)}
+                  >
+                    <IonText>{user.name}</IonText>
+                  </IonCheckbox>
+                </IonItem>
+              ))}
             </div>
+          </IonContent>
+          <IonButton
+            expand="full"
+            onClick={createGroup}
+            disabled={groupName === ""}
+            className="createGrpBtn"
+          >
+            Create Group
+          </IonButton>
+        </IonModal>*/}
+
+        {recentGroups.map((group: any, index: any) => (
+          <ul key={index} className="browsed-grps">
+            <li
+              onClick={() => handleGroupClick(group._id)}
+              className="browse-grp-items"
+            >
+              <img
+                src={group.groupImage}
+                alt=""
+                className="profile-image my-auto"
+                style={{ marginRight: "10px" }}
+              />
+
+              <IonLabel>{group.groupName}</IonLabel>
+            </li>
+          </ul>
+        ))}
+
+        {/*<IonButton
+          fill="clear"
+          onClick={handleBrowseGroupsClick}
+          className="browse-grps-btn"
+        >
+          <IonText className="browse-grps-label">Browse Groups</IonText>
+          <IonIcon
+            size="small"
+            icon={chevronForwardOutline}
+            className="browse-grps-icon"
+          />
+        </IonButton>*/}
             <div className="next">
               <div className="title">
                 <h3>Next Calls</h3>
@@ -251,13 +421,7 @@ const Mygroups: React.FC = () => {
               </div>
             </div>
           </IonContent>
-              </>
-            )
-          }
-          
-        </IonPage>
-     
-    </>
+    </IonPage>
   );
 };
 

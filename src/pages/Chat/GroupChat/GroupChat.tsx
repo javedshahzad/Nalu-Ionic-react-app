@@ -524,7 +524,7 @@ const GroupChat: React.FC = () => {
             type="text"
             ref={inputRef}
             className="enter-msg"
-            placeholder="Type Message"
+            placeholder="Nachricht eingeben"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
           />
@@ -572,10 +572,10 @@ const GroupChat: React.FC = () => {
                   setFilesArray(fileArrays);
                 } else if (!isOnlyImage) {
                   presentToast(
-                    "you can upload only png, jpg, jpeg, webp and heic"
+                    "Du kannst nur png, jpg, jpeg, webp und heic Dateien hochladen"
                   );
                 } else if (!isFileSize) {
-                  presentToast("file maximum size limit is 5 MB");
+                  presentToast("Die maximale Dateigröße ist auf 5 MB begrenzt.");
                 }
 
                 e.target.files = null;
