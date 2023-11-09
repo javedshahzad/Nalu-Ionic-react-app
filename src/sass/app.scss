@@ -62,7 +62,7 @@ ion-button {
 
 ion-tab-bar
 {
-  --background: white !important;
+  --background: #F8F5F2 !important;
   border: none !important;
 }
 ion-tab-button {
@@ -164,6 +164,53 @@ ion-footer {
 //   counter-reset: tick-counter -1;
 // }
 
+ion-toolbar
+    {
+        --background: #F8F5F2;
+
+        [slot="start"]
+        {
+          min-width: 20%;
+        }
+
+        [slot="end"]
+        {
+          min-width: 20%;
+        }
+
+        ion-icon
+        {
+            color: #2D2D2D;
+            margin-right: 16px !important;
+        }
+
+        ion-title
+        {
+          font-size: 20px;
+          --color: #636363;
+          text-align: center;
+          width: 100%;
+          margin: 0 auto;
+          position: relative;
+          padding: 0 20% 0 0;
+        }
+
+        h1
+        {
+            font-size: 20px;
+            padding: 0;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+    }
+
+    ion-content {
+      --ion-background-color: #F8F5F2;
+      --padding-start: 20px;
+      --padding-end: 20px;
+    }
+
 ion-accordion.accordion-animated > [slot="header"] .ion-accordion-toggle-icon {
   color: #2d2d2d !important;
   opacity: 0.4;
@@ -190,4 +237,10 @@ ion-range::part(knob) {
 :root {
   --media-brand: 245 245 245;
   --media-focus: 78 156 246;
+}
+
+// WordPress Content
+
+.aligncenter {
+  text-align: center;
 }

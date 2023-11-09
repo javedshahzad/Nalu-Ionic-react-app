@@ -2,7 +2,7 @@
 {
     ion-toolbar
     {
-        --background: #FEFCFA;
+        --background: #F8F5F2;
 
         ion-title
         {
@@ -13,9 +13,7 @@
 
     ion-content
     {
-        --background: #FEFCFA;
-        .list
-        {
+        --background: #F8F5F2;
             .title
             {
                 ion-button
@@ -90,7 +88,6 @@
                     }
                 }
             }
-        }
 
         .browse-group
         {
@@ -117,9 +114,8 @@
         {
             .next-card
             {
-                background: white;
+                background: #F8F5F2;
                 border-radius: 10px;
-                padding: 10px;
                
                 margin-bottom: 20px;
 
@@ -186,25 +182,24 @@
                         width: 2rem;
                     }
 
-                ion-label
-                {
-                    p
+                    ion-label
                     {
-                        color: #636363;
-                        font-size: 16px;
-                    }
-
-                    h6
-                    {
-                        color: #2D2D2D;
-                        font-size: 16px;
-
-                        span
+                        p
                         {
+                            color: #636363;
+                            font-size: 16px;
+                        }
+
+                        h6
+                        {
+                            color: #2D2D2D;
+                            font-size: 16px;
+                        }
+
+                        span {
                             font-family: 'GBold';
                         }
                     }
-                }
                 }
             }
         }

@@ -1,192 +1,194 @@
-ion-menu ion-content {
-  --background: var(--ion-item-background, var(--ion-background-color, #fff));
-}
+.Menu {
+  ion-menu ion-content {
+    --background: var(--ion-item-background, var(--ion-background-color, #fff));
+  }
 
-ion-menu.md ion-content {
-  --padding-start: 8px;
-  --padding-end: 8px;
-  --padding-top: 20px;
-  --padding-bottom: 20px;
-}
+  ion-menu.md ion-content {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --padding-top: 20px;
+    --padding-bottom: 20px;
+  }
 
-ion-menu.md ion-list {
-  padding: 20px 0;
-}
+  ion-menu.md ion-list {
+    padding: 20px 0;
+  }
 
-ion-menu.md ion-note {
-  margin-bottom: 30px;
-}
+  ion-menu.md ion-note {
+    margin-bottom: 30px;
+  }
 
-ion-menu.md ion-list-header, ion-menu.md ion-note {
-  padding-left: 10px;
-}
+  ion-menu.md ion-list-header, ion-menu.md ion-note {
+    padding-left: 10px;
+  }
 
-ion-menu.md ion-list#inbox-list {
-  border-bottom: 1px solid var(--ion-color-step-150, #d7d8da);
-}
+  ion-menu.md ion-list#inbox-list {
+    border-bottom: 1px solid var(--ion-color-step-150, #d7d8da);
+  }
 
-ion-menu.md ion-list#inbox-list ion-list-header {
-  font-size: 22px;
-  font-weight: 600;
-  min-height: 20px;
-}
+  ion-menu.md ion-list#inbox-list ion-list-header {
+    font-size: 22px;
+    font-weight: 600;
+    min-height: 20px;
+  }
 
-ion-menu.md ion-list#labels-list ion-list-header {
-  font-size: 16px;
-  margin-bottom: 18px;
-  color: #757575;
-  min-height: 26px;
-}
+  ion-menu.md ion-list#labels-list ion-list-header {
+    font-size: 16px;
+    margin-bottom: 18px;
+    color: #757575;
+    min-height: 26px;
+  }
 
-ion-menu.md ion-item {
-  --padding-start: 10px;
-  --padding-end: 10px;
-  border-radius: 4px;
-}
+  ion-menu.md ion-item {
+    --padding-start: 10px;
+    --padding-end: 10px;
+    border-radius: 4px;
+  }
 
-ion-menu.md ion-item.selected {
-  --background: rgba(var(--ion-color-primary-rgb), 0.14);
-}
+  ion-menu.md ion-item.selected {
+    --background: rgba(var(--ion-color-primary-rgb), 0.14);
+  }
 
-ion-menu.md ion-item.selected ion-icon {
-  color: var(--ion-color-primary);
-}
+  ion-menu.md ion-item.selected ion-icon {
+    color: var(--ion-color-primary);
+  }
 
-ion-menu.md ion-item ion-icon {
-  color: #616e7e;
-}
+  ion-menu.md ion-item ion-icon {
+    color: #616e7e;
+  }
 
-ion-menu.md ion-item ion-label {
-  font-weight: 500;
-}
+  ion-menu.md ion-item ion-label {
+    font-weight: 500;
+  }
 
-ion-menu.ios ion-content {
-  --padding-bottom: 20px;
-}
+  ion-menu.ios ion-content {
+    --padding-bottom: 20px;
+  }
 
-ion-menu.ios ion-list {
-  padding: 20px 0 0 0;
-}
+  ion-menu.ios ion-list {
+    padding: 20px 0 0 0;
+  }
 
-ion-menu.ios ion-note {
-  line-height: 24px;
-  margin-bottom: 20px;
-}
+  ion-menu.ios ion-note {
+    line-height: 24px;
+    margin-bottom: 20px;
+  }
 
-ion-menu.ios ion-item {
-  --padding-start: 16px;
-  --padding-end: 16px;
-  --min-height: 50px;
-}
+  ion-menu.ios ion-item {
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --min-height: 50px;
+  }
 
-ion-menu.ios ion-item ion-icon {
-  font-size: 24px;
-  color: #73849a;
-}
+  ion-menu.ios ion-item ion-icon {
+    font-size: 24px;
+    color: #73849a;
+  }
 
-ion-menu.ios ion-item .selected ion-icon {
-  color: var(--ion-color-primary);
-}
+  ion-menu.ios ion-item .selected ion-icon {
+    color: var(--ion-color-primary);
+  }
 
-ion-menu.ios ion-list#labels-list ion-list-header {
-  margin-bottom: 8px;
-}
+  ion-menu.ios ion-list#labels-list ion-list-header {
+    margin-bottom: 8px;
+  }
 
-ion-menu.ios ion-list-header,
-ion-menu.ios ion-note {
-  padding-left: 16px;
-  padding-right: 16px;
-}
+  ion-menu.ios ion-list-header,
+  ion-menu.ios ion-note {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 
-ion-menu.ios ion-note {
-  margin-bottom: 8px;
-}
+  ion-menu.ios ion-note {
+    margin-bottom: 8px;
+  }
 
-ion-note {
-  display: inline-block;
-  font-size: 16px;
-  color: var(--ion-color-medium-shade);
-}
+  ion-note {
+    display: inline-block;
+    font-size: 16px;
+    color: var(--ion-color-medium-shade);
+  }
 
-ion-item.selected {
-  --color: var(--ion-color-primary);
-} 
+  ion-item.selected {
+    --color: var(--ion-color-primary);
+  } 
 
 
-.slide-menu
-{
-  .profile-holder
+  .slide-menu
   {
-    padding-top: 20px;
-    position: relative;
-    width: 100%;
-    ion-avatar
+    .profile-holder
     {
-      border: 1px solid #EE5F64;
-      border-radius: 50%;
-      --border-radius: 50%;
-      height: 85px;
-      margin: 0 auto;
-      width: 85px;
+      padding-top: 20px;
+      position: relative;
+      width: 100%;
+      ion-avatar
+      {
+        border: 1px solid #EE5F64;
+        border-radius: 50%;
+        --border-radius: 50%;
+        height: 85px;
+        margin: 0 auto;
+        width: 85px;
+      }
+
+      .btnn
+      {
+        background: #FBFBFB;
+        border-radius: 50%;
+        bottom: 60px;
+          height: 28px;
+          position: absolute;
+          right: 30vw;
+          width: 28px;
+
+          ion-icon
+          {
+            color: #EE5F64;
+          }
+      }
+
+      h1
+      {
+        color: #2D2D2D;
+        font-family: 'GBold';
+        font-size: 28px;
+        margin: 5px 0 0 0;
+      }
+
+      h6
+      {
+        color: #2D2D2D;
+        font-size: 22px;
+        margin: 5px 0 0 0;
+      }
     }
 
-    .btnn
+    ion-list
     {
-      background: #FBFBFB;
-      border-radius: 50%;
-      bottom: 60px;
-        height: 28px;
-        position: absolute;
-        right: 30vw;
-        width: 28px;
+      padding-top: 20px;
+      ion-item
+      {
+        ion-label
+        {
+          font-size: 20px !important;
+        }
+      }
+    }
+
+    .btnnn-holder
+    {
+      ion-button
+      {
+        --border-radius: 10px;
+        --color: white;
+        font-size: 20px;
+        height: 54px;
+        width: 150px;
 
         ion-icon
         {
-          color: #EE5F64;
+          font-size: 15px;
         }
-    }
-
-    h1
-    {
-      color: #2D2D2D;
-      font-family: 'GBold';
-      font-size: 28px;
-      margin: 5px 0 0 0;
-    }
-
-    h6
-    {
-      color: #2D2D2D;
-      font-size: 22px;
-      margin: 5px 0 0 0;
-    }
-  }
-
-  ion-list
-  {
-    padding-top: 20px;
-    ion-item
-    {
-      ion-label
-      {
-        font-size: 20px !important;
-      }
-    }
-  }
-
-  .btnnn-holder
-  {
-    ion-button
-    {
-      --border-radius: 10px;
-      --color: white;
-      font-size: 20px;
-      height: 54px;
-      width: 150px;
-
-      ion-icon
-      {
-        font-size: 15px;
       }
     }
   }

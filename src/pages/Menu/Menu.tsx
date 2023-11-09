@@ -70,7 +70,7 @@ const Menu: React.FC = () => {
         .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`)
         .then((response) => {
           console.log(response.data);
-          history.push("/resourcedetail", {
+          history.push("/tabs/tab4/resourcedetail", {
             data: response.data,
           });
         })
@@ -107,25 +107,25 @@ const Menu: React.FC = () => {
       Icon: 'assets/imgs/menu4.svg',
     },*/
     {
-      title: "Emergency Plan",
+      title: "Notfallplan",
       url: "",
       Icon: 'assets/imgs/menu5.svg',
       onClick: () => getResourceDetailsByID(6999),
     },
     {
-      title: "Sources",
+      title: "Quellen",
       url: "https://app.mynalu.com/quellen/",
       Icon: 'assets/imgs/menu6.svg',
     },
   
     {
-      title: "Privacy Policy",
+      title: "Datenschutzerklärung",
       url: "https://app.mynalu.com/datenschutzerklaerung/",
       Icon: 'assets/imgs/menu7.svg',
       
     },
     {
-      title: "Imprint",
+      title: "Impressum",
       url: "https://app.mynalu.com/impressum/",
       Icon: 'assets/imgs/menu8.svg',
      
@@ -163,7 +163,7 @@ const Menu: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton color="dark" text={""} defaultHref="/tabs/tab1" />
           </IonButtons>
-          <IonTitle>Menu</IonTitle>
+          <IonTitle>Menü</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="slide-menu">

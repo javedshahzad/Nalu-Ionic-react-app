@@ -1,11 +1,11 @@
-$config-font-family: var(--ion-font-family);
-$config-white: #fefcfa;
-$config-pink: #ee5f64;
-$config-black: #2d2d2d;
-
 .Addcustomcategory {
+  $config-font-family: var(--ion-font-family);
+  $config-white: #F8F5F2;
+  $config-pink: #ee5f64;
+  $config-black: #2d2d2d;
+  
   ion-toolbar {
-    --background: #fefcfa;
+    --background: #F8F5F2;
 
     ion-title {
       font-family: "GBold";
@@ -14,7 +14,7 @@ $config-black: #2d2d2d;
   }
 
   ion-content {
-    --background: #fefcfa;
+    --background: #F8F5F2;
 
     // .up {
     //   margin-top: 20px !important;
@@ -195,7 +195,7 @@ $config-black: #2d2d2d;
   .custom-category {
     display: flex;
     align-items: center;
-    background-color: #fefcfa;
+    background-color: #F8F5F2;
     padding: 16px 20px 16px 20px;
     border-radius: 10px;
     border: 1px solid #f0f0f0;

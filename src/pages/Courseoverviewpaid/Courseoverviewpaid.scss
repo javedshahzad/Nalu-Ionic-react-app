@@ -2,7 +2,7 @@
 {
     ion-toolbar
     {
-        --background: #FEFCFA;
+        --background: #F8F5F2;
 
         ion-title
         {
@@ -14,7 +14,7 @@
 
     ion-content
     {
-        --background: #FEFCFA;
+        --background: #F8F5F2;
 
         .the-title
         {
@@ -93,6 +93,24 @@
                     --border-radius: 10px;
                 }
             }
+
+            ion-accordion {
+
+                .ion-padding {
+                    padding: 0;
+                }
+
+                ion-accordion {
+
+                    ion-accordion {
+                        ion-label {
+                            padding-left
+                            : 20px;
+                        }
+                    }
+                }
+            }
+
             .sublist
             {
                 ion-item
@@ -124,5 +142,5 @@
     transform: none !important;
   }
   ion-icon.custom_icon{
-    font-size: 20px;
+    font-size: 18px;
   }

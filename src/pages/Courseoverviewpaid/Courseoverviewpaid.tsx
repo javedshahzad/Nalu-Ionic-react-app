@@ -44,6 +44,15 @@ const Courseoverviewpaid: React.FC = () => {
     };
   }, []);
 
+  const roles = JSON.parse(localStorage.getItem('roles')) || {};
+  let isPremium = false; // Default to false
+  try {
+    const roles = JSON.parse(localStorage.getItem('roles') || '{}'); // Parse the roles or default to an empty object
+    isPremium = Object.values(roles).includes('premium'); // Check if 'premium' is one of the roles
+  } catch (e) {
+    console.error('Error parsing roles from localStorage:', e);
+  }
+
   const getData = () => {
     setIsLoading(true);
     const source = axios.CancelToken.source();
@@ -127,9 +136,11 @@ const Courseoverviewpaid: React.FC = () => {
                     {course?.next_chapter?.title && (
                       <div
                         className="resume-holder"
-                        onClick={() =>
-                          navigateToCourseInner(course.next_chapter.id)
-                        }
+                        onClick={() => {
+                          if (!course.next_chapter.protected || course.next_chapter.preview || isPremium) {
+                            navigateToCourseInner(course.next_chapter.id);
+                          }
+                        }}                        
                       >
                         <h3>Kurs fortsetzen</h3>
                         <IonItem button detail lines="none">
@@ -157,18 +168,15 @@ const Courseoverviewpaid: React.FC = () => {
                               >
                                 <IonAccordion
                                   value={chapterIndex}
-                                  disabled={
-                                    chapter.protected && !chapter.preview
-                                  }
                                 >
                                   <IonItem
                                     slot="header"
                                     lines="inset"
                                     onClick={() => {
-                                      if (!chapter?.items && chapter.preview) {
+                                      if (!chapter.items && (!chapter.protected || chapter.preview || isPremium)) {
                                         navigateToCourseInner(chapter.id);
                                       }
-                                    }}
+                                    }}                                    
                                   >
                                     <IonLabel
                                       style={{
@@ -186,23 +194,21 @@ const Courseoverviewpaid: React.FC = () => {
 
                                     {!chapter?.items ? (
                                       <IonIcon
-                                        src={
-                                          chapter.protected && !chapter.preview
-                                            ? "assets/imgs/icn-lock.svg"
-                                            : "assets/imgs/right-arrow.svg"
-                                        }
+                                      src={
+                                        chapter.protected && !isPremium && !chapter.preview
+                                          ? "assets/imgs/icn-lock.svg"
+                                          : "assets/imgs/right-arrow.svg"
+                                      }
                                         slot="end"
                                         size="small"
                                         className="ion-accordion-toggle-icon no-rotation"
                                       ></IonIcon>
                                     ) : chapter?.items &&
-                                      chapter.protected &&
-                                      !chapter.preview ? (
+                                      chapter.protected && !isPremium && !chapter.preview ? (
                                       <>
                                         <IonIcon
                                           src={
-                                            chapter.protected &&
-                                            !chapter.preview
+                                            chapter.protected && !isPremium && !chapter.preview
                                               ? "assets/imgs/icn-lock.svg"
                                               : "assets/imgs/right-arrow.svg"
                                           }
@@ -232,24 +238,15 @@ const Courseoverviewpaid: React.FC = () => {
                                           >
                                             <IonAccordion
                                               value={sub_chapter_index}
-                                              disabled={
-                                                sub_chapter.protected &&
-                                                !sub_chapter.preview
-                                              }
                                             >
                                               <IonItem
                                                 slot="header"
                                                 lines="inset"
                                                 onClick={() => {
-                                                  if (
-                                                    // sub_chapter.protected &&
-                                                    !sub_chapter.preview
-                                                  ) {
-                                                    navigateToCourseInner(
-                                                      sub_chapter.id
-                                                    );
+                                                  if (!sub_chapter.items && (!sub_chapter.protected || sub_chapter.preview || isPremium)) {
+                                                    navigateToCourseInner(sub_chapter.id);
                                                   }
-                                                }}
+                                                }}                                                
                                               >
                                                 <IonLabel
                                                   style={{ color: "#636363" }}
@@ -258,8 +255,7 @@ const Courseoverviewpaid: React.FC = () => {
                                                 </IonLabel>
                                                 <IonIcon
                                                   src={
-                                                    // sub_chapter.protected &&
-                                                    !sub_chapter.preview
+                                                    sub_chapter.protected && !isPremium && !sub_chapter.preview
                                                       ? "assets/imgs/icn-lock.svg"
                                                       : "assets/imgs/right-arrow.svg"
                                                   }

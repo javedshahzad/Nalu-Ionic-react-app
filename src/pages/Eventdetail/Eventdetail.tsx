@@ -109,7 +109,7 @@ const Eventdetail: React.FC = () => {
 
     setSelectedDate(value);
     setDateError(
-      value.trim() === "" ? "Please select a date to continue." : ""
+      value.trim() === "" ? "Bitte wähle ein Datum, um fortzufahren." : ""
     );
   };
   const handleDateChangeWebinar = (event, date_event, registration_link)=> {
@@ -135,7 +135,7 @@ const Eventdetail: React.FC = () => {
       }); 
       setSelectedDate(value);
     setDateError(
-      value.trim() === "" ? "Please select a date to continue." : ""
+      value.trim() === "" ? "Bitte wähle ein Datum, um fortzufahren." : ""
     );
   }
 
@@ -227,17 +227,18 @@ const Eventdetail: React.FC = () => {
                         />
                       </div>
                       <IonLabel>
-                        <p>Hosted by</p>
+                        <p>Geleitet von</p>
                         <h6 className="ion-text-wrap">
-                          <span>{event?.event_host?.title}, </span>{" "}
-                          {event?.event_host?.description}
+                          <span className="host-title">{event?.event_host.title}</span>
+                          {event?.event_host.description && <>,&nbsp;</>}
+                          {event?.event_host.description}
                         </h6>
                       </IonLabel>
                     </IonItem>
 
 <div className="desc">
   {event?.content?.trim() === "" ? (
-    <p>No content available</p>
+    <span />
   ) : (
     <p
       className="ion-text-wrap"
@@ -258,7 +259,9 @@ const Eventdetail: React.FC = () => {
                             : (
                               <IonSelect
                                 className="ion-text-left "
-                                placeholder={"Select Date"}
+                                placeholder={"Datum wählen"}
+                                cancelText="Abbrechen"
+                                okText="Bestätigen"
                                 mode="md"
                                 value={selectedDate}
                                 onIonChange={(e) =>{
@@ -299,7 +302,7 @@ const Eventdetail: React.FC = () => {
           >
             <p>
               <IonIcon icon={checkmarkCircleOutline} /> <br />
-              Register
+              Anmelden
             </p>
           </IonButton>
 
@@ -343,7 +346,7 @@ const Eventdetail: React.FC = () => {
             >
               <p>
                 <IonIcon icon={bookmarkOutline} /> <br />
-                Bookmark
+                Vormerken
               </p>
             </IonButton>
           </IonCol>
@@ -363,7 +366,7 @@ const Eventdetail: React.FC = () => {
             >
               <p>
                 <IonIcon icon={closeCircleOutline} /> <br />
-                Cancel
+                Absagen
               </p>
             </IonButton>
           </IonCol>

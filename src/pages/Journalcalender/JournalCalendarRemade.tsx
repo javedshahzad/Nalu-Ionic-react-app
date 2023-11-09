@@ -458,7 +458,7 @@ const JournalCalendarRemade = () => {
   }
 
   return (
-    <IonPage>
+    <IonPage className="JournalCalendarRemade">
       <IonContent>
         <IonToolbar>
           <IonButtons slot="start">

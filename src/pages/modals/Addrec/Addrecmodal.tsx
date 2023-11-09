@@ -109,13 +109,16 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
                       <IonSelect
                         mode="md"
                         className="ion-text-left"
-                        placeholder="Category"
+                        placeholder="Kategorie"
+                        cancelText="Abbrechen"
+                        okText="Bestätigen"
                         value={selectedCategory}
                         onIonChange={handleCategoryChange}
                       >
-                        <IonSelectOption value="apple">Apple</IonSelectOption>
-                        <IonSelectOption value="banana">Banana</IonSelectOption>
-                        <IonSelectOption value="orange">Orange</IonSelectOption>
+                        <IonSelectOption value="apple">Anlaufstellen</IonSelectOption>
+                        <IonSelectOption value="banana">Medien</IonSelectOption>
+                        <IonSelectOption value="orange">Rezepte</IonSelectOption>
+                        <IonSelectOption value="orange">Gesundheitskosten</IonSelectOption>
                       </IonSelect>
                     </IonItem>
                     {categoryError && (
@@ -125,7 +128,7 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
                   <div className="input-item">
                     <IonItem>
                       <IonInput
-                        placeholder="Title"
+                        placeholder="Bezeichnung"
                         type="text"
                         value={title}
                         onIonChange={handleTitleChange}
@@ -138,7 +141,7 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
                   <div className="input-item">
                     <IonItem>
                       <IonTextarea
-                        placeholder="Note"
+                        placeholder="Beschreibung"
                         rows={5}
                         value={note}
                         onIonChange={(e) => setNote(e.target.value)}
@@ -153,7 +156,7 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
                   <div className="btn-holder ion-text-center ion-padding-vertical">
                     <IonButton expand="block" disabled={!isFormValid} 
                     onClick={()=> handleSubmit()}>
-                      Share Recommendation
+                      Empfehlung mit NALU teilen
                     </IonButton>
                   </div>
                 </div>

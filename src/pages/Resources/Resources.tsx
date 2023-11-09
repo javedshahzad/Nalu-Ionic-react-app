@@ -326,7 +326,7 @@ const Resources: React.FC = () => {
     <>
       <ToastContainer autoClose={19000} />
       
-          <IonPage className="Overview">
+          <IonPage className="Resources">
             {
               isLoading?(
 <div
@@ -349,7 +349,7 @@ const Resources: React.FC = () => {
                       <IonIcon icon={menuOutline} />
                   </IonButton>
               </IonButtons>
-                <IonButtons slot="end">
+              {/*<IonButtons slot="end">
                   <IonButton color="dark">
                     <IonIcon icon={searchOutline} />
                   </IonButton>
@@ -358,7 +358,7 @@ const Resources: React.FC = () => {
                   <IonButton color="dark">
                     <IonIcon icon={notificationsOutline} />
                   </IonButton>
-                </IonButtons>
+              </IonButtons>*/}
               </IonToolbar>
               <IonToolbar>
                 <IonSegment
@@ -367,10 +367,10 @@ const Resources: React.FC = () => {
                   value={activeSegment as any}
                 >
                   <IonSegmentButton value={"overview"}>
-                    <IonLabel>Overview</IonLabel>
+                    <IonLabel>Übersicht</IonLabel>
                   </IonSegmentButton>
                   <IonSegmentButton value={"favourites"}>
-                    <IonLabel>Favourites</IonLabel>
+                    <IonLabel>Favoriten</IonLabel>
                   </IonSegmentButton>
                 </IonSegment>
               </IonToolbar>
@@ -418,7 +418,7 @@ const Resources: React.FC = () => {
 
                     <div className="recommended">
                       <div className="title-holder">
-                        <h3>Recommended</h3>
+                        <h3>Für dich empfohlen</h3>
                       </div>
                       <IonRow>
                         {recommendations.map((item, index) => (
@@ -464,7 +464,7 @@ const Resources: React.FC = () => {
                       <IonButton onClick={() => setModalOpen(true)}>
                         <IonIcon icon={add} />
                       </IonButton>
-                      <h4>Add Recommendation</h4>
+                      <h4>Empfehlung hinzufügen</h4>
                     </div>
                   </div>
                 </>
@@ -488,19 +488,29 @@ const Resources: React.FC = () => {
 
                             <IonLabel>
                               <div className="first flex al-center">
-                                <h3>{card.title}</h3>
-                                <IonIcon src="assets/imgs/moviesm.svg" />
+                                <h3>{card?.title}</h3>
+                                {card.category && card.category.length > 0 && card.category[0].svg_url ? (
+                                  <div
+                                    className={`icon__ ${categoryID === card.category[0].id ? "blackIcon" : "blackIcon"}`}
+                                    dangerouslySetInnerHTML={{
+                                      __html: card.category[0].svg_url,
+                                    }}
+                                  />
+                                ) : null}
                               </div>
-                             
-                              {card?.authority && (
-                                <div className="second flex al-center">
-                                  <IonIcon icon={informationCircleOutline} />
-                                  <p className="ion-text-wrap">
-                                    {card?.authority.title}
-                                  </p>
-                                </div>
-                              )}
-                              <h5 className="ion-text-wrap">{card.title}</h5>
+                              <div className="second flex al-center">
+                                {card?.sponsored && (
+                                  <>
+                                    <IonIcon icon={informationCircleOutline} /> <p className="ion-text-wrap">Gesponsert</p>
+                                  </>
+                                )}
+                                {!card?.sponsored && card.authority && card.authority[0]?.title && (
+                                  <>
+                                    <IonIcon icon={informationCircleOutline} /> <p className="ion-text-wrap">Empfohlen von {card.authority[0].title}</p>
+                                  </>
+                                )}
+                              </div>
+                              <h5 className="ion-text-wrap">{card.description}</h5>
                               <div className="btns-holder flex al-center jc-between">
                                 <div
                                   className="btn ion-activatable ripple-parent flex al-center"

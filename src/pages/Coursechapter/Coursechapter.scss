@@ -2,11 +2,10 @@
 {
     ion-toolbar
     {
-        --background: #FEFCFA;
+        --background: #F8F5F2;
 
         ion-title
         {
-            font-family: 'GBold';
             font-size: 20px;
             padding: 0;
             margin: 0 auto;
@@ -15,7 +14,7 @@
 
     ion-content
     {
-        --background: #FEFCFA;
+        --background: #F8F5F2;
         .seg-holder
         {
             position: absolute;

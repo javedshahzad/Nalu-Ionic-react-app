@@ -70,6 +70,36 @@ const GroupChat: React.FC = () => {
     getGroupInfo();
   }, []);
 
+  const customI18n = {
+    "search": "Suchen",
+    "search_no_results_1": "Oh nein!",
+    "search_no_results_2": "Das Emoji konnte nicht gefunden werden",
+    "pick": "Wähle ein Emoji…",
+    "add_custom": "Füge ein benutzerdefiniertes Emoji hinzu",
+    "categories": {
+      "activity": "Aktivität",
+      "custom": "Benutzerdefiniert",
+      "flags": "Flaggen",
+      "foods": "Essen & Trinken",
+      "frequent": "Oft genutzt",
+      "nature": "Tiere & Natur",
+      "objects": "Objekte",
+      "people": "Smileys & Personen",
+      "places": "Reisen & Orte",
+      "search": "Suchergebnisse",
+      "symbols": "Symbole"
+    },
+    "skins": {
+      "choose": "Wähle eine Standard-Hautfarbe",
+      "1": "Standard",
+      "2": "Hell",
+      "3": "Mittelhell",
+      "4": "Mittel",
+      "5": "Mitteldunkel",
+      "6": "Dunkel"
+    }
+  };
+
   const getGroupInfo = () => {
     apiService
       .get(`https://apidev.mynalu.com/v1/conversation/get/${groupId}`, token)
@@ -368,7 +398,7 @@ const GroupChat: React.FC = () => {
   };
 
   return (
-    <IonPage>
+    <IonPage className="GroupChat">
       <IonHeader className="ion-no-border">
         <IonToolbar className="ion-no-border">
           <IonButton slot="start" fill="clear" onClick={back}>
@@ -467,7 +497,7 @@ const GroupChat: React.FC = () => {
 
       <IonFooter className="footer relative">
         {(filesArray || []).length > 0 && (
-          <div className="w-screen overflow-x-auto flex gap-4 py-4 px-4 bg-[#fefcfa]">
+          <div className="w-screen overflow-x-auto flex gap-4 py-4 px-4 bg-[#F8F5F2]">
             {(filesArray || []).map((element, index) => {
               return (
                 <div className="relative" key={index}>
@@ -516,6 +546,7 @@ const GroupChat: React.FC = () => {
                 onEmojiSelect={handleEmojiSelect}
                 navPosition="bottom"
                 perLine={8}
+                i18n={customI18n}
               />
             </div>
           )}

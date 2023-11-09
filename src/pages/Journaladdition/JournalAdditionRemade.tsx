@@ -61,6 +61,15 @@ function JournalAdditionRemade() {
 
   const dispatch = useDispatch();
 
+  const roles = JSON.parse(localStorage.getItem('roles')) || {};
+  let isPremium = false; // Default to false
+  try {
+    const roles = JSON.parse(localStorage.getItem('roles') || '{}'); // Parse the roles or default to an empty object
+    isPremium = Object.values(roles).includes('premium'); // Check if 'premium' is one of the roles
+  } catch (e) {
+    console.error('Error parsing roles from localStorage:', e);
+  }
+
   const getJournalEntries = async () => {
     try {
       setIsLoading(true);
@@ -412,7 +421,7 @@ function JournalAdditionRemade() {
   }, []);
 
   return (
-    <IonPage>
+    <IonPage className="JournalAdditionRemade">
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
@@ -1152,7 +1161,7 @@ function JournalAdditionRemade() {
             ) : (
               <></>
             )}
-           {localStorage.getItem('roles') && JSON.parse(localStorage.getItem('roles')).includes('premium') ? (
+           {isPremium ? (
               <div className="add-custom-category ion-text-center ion-padding-top">
                 <IonButton onClick={addCustomCategory}>
                   <IonIcon icon={add} />

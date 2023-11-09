@@ -221,7 +221,7 @@ const ResourceSubCategory: React.FC = () => {
   return (
     <>
      
-          <IonPage>
+          <IonPage className="ResourceSubCategory">
             {
               isLoading? (
                 <div
@@ -243,7 +243,7 @@ const ResourceSubCategory: React.FC = () => {
                     <IonIcon icon={menuOutline} />
                   </IonButton>
                 </IonButtons>
-                <IonButtons slot="end">
+                {/*<IonButtons slot="end">
                   <IonButton color="dark">
                     <IonIcon icon={searchOutline} />
                   </IonButton>
@@ -252,7 +252,7 @@ const ResourceSubCategory: React.FC = () => {
                   <IonButton color="dark">
                     <IonIcon icon={notificationsOutline} />
                   </IonButton>
-                </IonButtons>
+              </IonButtons>*/}
               </IonToolbar>
             </IonHeader>
 
@@ -260,7 +260,7 @@ const ResourceSubCategory: React.FC = () => {
               <div className="Resources">
                   <div className="selector mtype">
                     <IonRadioGroup>
-                      <IonItem
+                      {/*<IonItem
                         lines="none"
                         onClick={navigateFilter}
                       >
@@ -272,7 +272,7 @@ const ResourceSubCategory: React.FC = () => {
                           />
                         </div>
                         <IonLabel>Filter</IonLabel>
-                      </IonItem>
+                      </IonItem>*/}
 
                       {subCategories?.map((item, index) => (
                         <IonItem
@@ -316,16 +316,32 @@ const ResourceSubCategory: React.FC = () => {
 
                           <IonLabel>
                             <div className="first flex al-center">
-                              <h3>{card.title}</h3>
-                              <IonIcon src="assets/imgs/moviesm.svg" />
+                              <h3>{card?.title}</h3>
+                              {card.category && card.category.length > 0 && card.category[0].svg_url ? (
+                                <div
+                                  className={`icon__ ${categoryID === card.category[0].id ? "blackIcon" : "blackIcon"}`}
+                                  dangerouslySetInnerHTML={{
+                                    __html: card.category[0].svg_url,
+                                  }}
+                                />
+                              ) : null}
                             </div>
                             <div className="second flex al-center">
-                              <IonIcon icon={informationCircleOutline} />
-                              <p className="ion-text-wrap">
-                                {card?.authority?.title}
-                              </p>
+                              {card?.sponsored && (
+                                <>
+                                  <IonIcon icon={informationCircleOutline} /> <p className="ion-text-wrap">Gesponsert</p>
+                                </>
+                              )}
+                              {!card?.sponsored && card.authority && card.authority[0]?.title && (
+                                <>
+                                  <IonIcon icon={informationCircleOutline} /> <p className="ion-text-wrap">Empfohlen von {card.authority[0].title}</p>
+                                </>
+                              )}
+                              
+                                
+                              
                             </div>
-                            <h5 className="ion-text-wrap">{card.title}</h5>
+                            <h5 className="ion-text-wrap">{card?.description}</h5>
                             <div className="btns-holder flex al-center jc-between">
                               <div
                                   onClick={(e) =>{
@@ -342,8 +358,10 @@ const ResourceSubCategory: React.FC = () => {
                                   <IonIcon src="assets/imgs/like-filled.svg" />
                                 ) : (
                                   <IonIcon src="assets/imgs/like-unfilled.svg" />
+                                )}&ensp;
+                                {card?.upvotes_number > 0 && (
+                                  <h6>{card.upvotes_number}</h6>
                                 )}
-                                <h6>{card.upvotes_number}</h6>
                               </div>
                               <div
                                   onClick={(e) =>{

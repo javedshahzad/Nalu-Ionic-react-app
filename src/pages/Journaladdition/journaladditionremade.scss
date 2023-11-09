@@ -1,368 +1,370 @@
-$config-font-family: var(--ion-font-family);
-$config-white: #fefcfa;
-$config-pink: #ee5f64;
-$config-black: #2d2d2d;
+.JournalAdditionRemade {
+  $config-font-family: var(--ion-font-family);
+  $config-white: #F8F5F2;
+  $config-pink: #ee5f64;
+  $config-black: #2d2d2d;
 
-.journal-addition-main {
-  background-color: $config-white !important;
-}
-
-#week-view-wrapper {
-  max-width: 100dvw;
-  background-color: $config-white;
-  overflow-x: auto;
-
-  overflow-y: hidden;
-
-  display: flex;
-
-  flex-direction: column;
-  &::-webkit-scrollbar {
-    display: none;
+  .journal-addition-main {
+    background-color: $config-white !important;
   }
 
-  .day-heading {
-    display: flex;
-    overflow-y: hidden;
+  #week-view-wrapper {
+    max-width: 100dvw;
+    background-color: $config-white;
     overflow-x: auto;
+
+    overflow-y: hidden;
+
+    display: flex;
+
+    flex-direction: column;
     &::-webkit-scrollbar {
       display: none;
     }
 
-    .isToday {
-      background-color: $config-black;
-      border-radius: 10px;
-      content: "Today";
-      color: $config-white;
+    .day-heading {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 0;
-      &:hover {
-        background-color: $config-pink !important;
-        border-radius: 10px;
-      }
-      &::before {
-        position: relative;
-        top: 16px;
-        content: "Today";
-        font-size: 8px;
-        color: $config-white !important;
+      overflow-y: hidden;
+      overflow-x: auto;
+      &::-webkit-scrollbar {
+        display: none;
       }
 
-      .active {
-        background-color: $config-pink;
+      .isToday {
+        background-color: $config-black;
+        border-radius: 10px;
+        content: "Today";
+        color: $config-white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0;
+        &:hover {
+          background-color: $config-pink !important;
+          border-radius: 10px;
+        }
         &::before {
-          position: relative !important;
-          top: 16px !important;
-          content: "Today" !important;
+          position: relative;
+          top: 16px;
+          content: "Today";
           font-size: 8px;
           color: $config-white !important;
         }
-      }
-    }
 
-    .day {
-      min-width: calc(100% / 7 + 1px);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      align-items: center;
-      font-weight: 500;
-
-      .weekday,
-      .date {
-        display: flex;
-        width: 40px;
-        height: 40px;
-        align-items: center;
-        justify-content: center;
-        border-radius: 10px;
-      }
-      .weekday {
-        font-size: 16px;
-        font-weight: 700;
-      }
-      .date {
-        &:hover {
+        .active {
           background-color: $config-pink;
-          color: $config-white;
-          border-radius: 10px;
-          cursor: pointer;
-          .daysIcon {
-            display: none !important;
+          &::before {
+            position: relative !important;
+            top: 16px !important;
+            content: "Today" !important;
+            font-size: 8px;
+            color: $config-white !important;
           }
         }
       }
-    }
-    .daysIcon {
-      position: relative;
-      max-width: 100%;
-      top: 4px;
-      right: 2px;
-    }
 
-    .active {
-      background-color: $config-pink !important;
-      color: $config-white !important;
-    }
-    .date {
-      font-size: 16px;
-      font-weight: 400;
-    }
-  }
-}
+      .day {
+        min-width: calc(100% / 7 + 1px);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+        font-weight: 500;
 
-.today-clicked-date {
-  display: flex;
-  justify-content: space-between;
-  h4 {
-    font-size: 18px;
-    font-weight: 700;
-  }
-}
-
-ion-toolbar {
-  --background: #fefcfa;
-
-  ion-title {
-    font-family: "GBold";
-    font-size: 20px;
-  }
-}
-
-.tick-labels {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px; /* Adjust as needed */
-}
-
-.tick-label {
-  width: calc(
-    20% - 5px
-  ); /* Adjust as needed based on the number of tick values */
-  text-align: center;
-  font-size: 12px; /* Adjust as needed */
-  margin-right: calc(23% - 5px);
-  color: #a9a8aa;
-  font-size: 16px;
-}
-
-.tick-label2 {
-  width: calc(
-    10% - 5px
-  ); /* Adjust as needed based on the number of tick values */
-  text-align: center;
-  font-size: 12px; /* Adjust as needed */
-  margin-right: calc(10% - 5px); /* Adjust as needed based on your layout */
-  color: #a9a8aa;
-  font-size: 16px;
-}
-
-.tick-label3 {
-  text-align: center;
-  font-size: 12px; /* Adjust the font size as needed */
-  margin-right: 0; /* No margin between labels in this example */
-  color: #a9a8aa;
-  font-size: 16px;
-}
-
-.search-holder {
-  ion-item {
-    --background: #f8f8f8;
-    --padding-start: 0;
-    margin-top: 20px;
-
-    ion-button {
-      --background: #f8f8f8 !important ;
-    }
-  }
-  ion-searchbar .searchbar-input-container input {
-    background: #f8f8f8 !important;
-    box-shadow: none !important;
-    border: none !important;
-  }
-}
-.section {
-  .title {
-    h3 {
-      font-family: "GBold";
-      font-size: 24px;
-    }
-  }
-
-  .custom-user-fields {
-    margin-bottom: 20px;
-  }
-
-  .tags-holder {
-    ion-item {
-      --background: white;
-      --border-color: #f0f0f0;
-      --border-style: solid;
-      --border-radius: 10px;
-      --border-width: 1px;
-      --padding-start: 10px;
-      --inner-padding-end: 5px;
-
-      ion-icon {
-        font-size: 13px;
-        margin-right: 10px;
+        .weekday,
+        .date {
+          display: flex;
+          width: 40px;
+          height: 40px;
+          align-items: center;
+          justify-content: center;
+          border-radius: 10px;
+        }
+        .weekday {
+          font-size: 16px;
+          font-weight: 700;
+        }
+        .date {
+          &:hover {
+            background-color: $config-pink;
+            color: $config-white;
+            border-radius: 10px;
+            cursor: pointer;
+            .daysIcon {
+              display: none !important;
+            }
+          }
+        }
+      }
+      .daysIcon {
+        position: relative;
+        max-width: 100%;
+        top: 4px;
+        right: 2px;
       }
 
-      ion-label {
-        font-size: 14px;
+      .active {
+        background-color: $config-pink !important;
+        color: $config-white !important;
       }
-
-      ion-checkbox {
-        height: 100%;
-        left: 0;
-        opacity: 0;
-        position: absolute;
-        right: 0;
-        width: 100%;
-      }
-    }
-
-    .item-checkbox-checked {
-      --background: #8fcaed;
-
-      svg {
-        fill: $config-white;
-      }
-
-      ion-label {
-        color: white;
-      }
-    }
-  }
-
-  .ex-tags-holder {
-    ion-item {
-      --background: white;
-      --border-color: #f0f0f0;
-      --border-style: solid;
-      --border-radius: 10px;
-      --border-width: 1px;
-      --padding-start: 10px;
-      --inner-padding-end: 5px;
-
-      ion-icon {
-        font-size: 13px;
-        margin-right: 10px;
-      }
-
-      ion-label {
-        font-size: 14px;
-      }
-
-      ion-checkbox {
-        --border-color: white;
-        --checkbox-background-checked: white;
-        --border-color-checked: #3684b3;
-      }
-    }
-
-    .item-checkbox-checked {
-      --background: rgb(0, 0, 0);
-
-      ion-label {
-        color: white;
-      }
-    }
-  }
-
-  .range-holder {
-    margin-top: -20px;
-    .start-slot {
-      margin-top: -5px;
-      img {
-        margin-right: 5px;
-      }
-
-      h3 {
-        margin: 0 10px 0 0;
+      .date {
         font-size: 16px;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        word-break: break-word;
-        hyphens: auto;
+        font-weight: 400;
       }
     }
   }
-}
-.add-custom-category {
-  ion-button {
-    --border-radius: 50%;
-    height: 3rem;
-    width: 3rem;
 
-    ion-icon {
-      color: white;
-      transform: scale(2);
+  .today-clicked-date {
+    display: flex;
+    justify-content: space-between;
+    h4 {
+      font-size: 18px;
+      font-weight: 700;
     }
   }
 
-  h4 {
-    font-family: "GBold";
-    font-size: 20px;
-    margin-top: 10px;
+  ion-toolbar {
+    --background: #F8F5F2;
+
+    ion-title {
+      font-family: "GBold";
+      font-size: 20px;
+    }
   }
-}
 
-.last {
-  margin-top: 0px !important;
-  .the-form {
-    margin-top: 0 !important;
+  .tick-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px; /* Adjust as needed */
+  }
 
+  .tick-label {
+    width: calc(
+      20% - 5px
+    ); /* Adjust as needed based on the number of tick values */
+    text-align: center;
+    font-size: 12px; /* Adjust as needed */
+    margin-right: calc(23% - 5px);
+    color: #a9a8aa;
+    font-size: 16px;
+  }
+
+  .tick-label2 {
+    width: calc(
+      10% - 5px
+    ); /* Adjust as needed based on the number of tick values */
+    text-align: center;
+    font-size: 12px; /* Adjust as needed */
+    margin-right: calc(10% - 5px); /* Adjust as needed based on your layout */
+    color: #a9a8aa;
+    font-size: 16px;
+  }
+
+  .tick-label3 {
+    text-align: center;
+    font-size: 12px; /* Adjust the font size as needed */
+    margin-right: 0; /* No margin between labels in this example */
+    color: #a9a8aa;
+    font-size: 16px;
+  }
+
+  .search-holder {
     ion-item {
-      --border-color: #f0f0f0;
-      --border-radius: 10px;
-      --border-style: dashed;
-      --border-width: 1px;
+      --background: #f8f8f8;
+      --padding-start: 0;
+      margin-top: 20px;
+
+      ion-button {
+        --background: #f8f8f8 !important ;
+      }
+    }
+    ion-searchbar .searchbar-input-container input {
+      background: #f8f8f8 !important;
+      box-shadow: none !important;
+      border: none !important;
     }
   }
-}
+  .section {
+    .title {
+      h3 {
+        font-family: "GBold";
+        font-size: 24px;
+      }
+    }
 
-.svgIconss svg {
-  height: 10px;
-  width: 10px;
-  margin-right: 5px;
-}
+    .custom-user-fields {
+      margin-bottom: 20px;
+    }
 
-ion-modal#example-modal {
-  --width: fit-content;
-  --min-width: 250px;
-  --height: fit-content;
-  --border-radius: 6px;
-  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
-}
+    .tags-holder {
+      ion-item {
+        --background: white;
+        --border-color: #f0f0f0;
+        --border-style: solid;
+        --border-radius: 10px;
+        --border-width: 1px;
+        --padding-start: 10px;
+        --inner-padding-end: 5px;
 
-ion-modal#example-modal h1 {
-  margin: 20px 20px 10px 20px;
-}
+        ion-icon {
+          font-size: 13px;
+          margin-right: 10px;
+        }
 
-ion-modal#example-modal ion-icon {
-  margin-right: 6px;
+        ion-label {
+          font-size: 14px;
+        }
 
-  width: 48px;
-  height: 48px;
+        ion-checkbox {
+          height: 100%;
+          left: 0;
+          opacity: 0;
+          position: absolute;
+          right: 0;
+          width: 100%;
+        }
+      }
 
-  padding: 4px 0;
+      .item-checkbox-checked {
+        --background: #8fcaed;
 
-  color: #aaaaaa;
-}
+        svg {
+          fill: $config-white;
+        }
 
-ion-modal#example-modal .wrapper {
-  margin-bottom: 10px;
-}
+        ion-label {
+          color: white;
+        }
+      }
+    }
 
-.customIcon svg {
-  height: 20px;
-}
+    .ex-tags-holder {
+      ion-item {
+        --background: white;
+        --border-color: #f0f0f0;
+        --border-style: solid;
+        --border-radius: 10px;
+        --border-width: 1px;
+        --padding-start: 10px;
+        --inner-padding-end: 5px;
 
-.customIcon {
-  ion-item {
-    padding: 0 !important;
+        ion-icon {
+          font-size: 13px;
+          margin-right: 10px;
+        }
+
+        ion-label {
+          font-size: 14px;
+        }
+
+        ion-checkbox {
+          --border-color: white;
+          --checkbox-background-checked: white;
+          --border-color-checked: #3684b3;
+        }
+      }
+
+      .item-checkbox-checked {
+        --background: rgb(0, 0, 0);
+
+        ion-label {
+          color: white;
+        }
+      }
+    }
+
+    .range-holder {
+      margin-top: -20px;
+      .start-slot {
+        margin-top: -5px;
+        img {
+          margin-right: 5px;
+        }
+
+        h3 {
+          margin: 0 10px 0 0;
+          font-size: 16px;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          word-break: break-word;
+          hyphens: auto;
+        }
+      }
+    }
+  }
+  .add-custom-category {
+    ion-button {
+      --border-radius: 50%;
+      height: 3rem;
+      width: 3rem;
+
+      ion-icon {
+        color: white;
+        transform: scale(2);
+      }
+    }
+
+    h4 {
+      font-family: "GBold";
+      font-size: 20px;
+      margin-top: 10px;
+    }
+  }
+
+  .last {
+    margin-top: 0px !important;
+    .the-form {
+      margin-top: 0 !important;
+
+      ion-item {
+        --border-color: #f0f0f0;
+        --border-radius: 10px;
+        --border-style: dashed;
+        --border-width: 1px;
+      }
+    }
+  }
+
+  .svgIconss svg {
+    height: 10px;
+    width: 10px;
+    margin-right: 5px;
+  }
+
+  ion-modal#example-modal {
+    --width: fit-content;
+    --min-width: 250px;
+    --height: fit-content;
+    --border-radius: 6px;
+    --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+  }
+
+  ion-modal#example-modal h1 {
+    margin: 20px 20px 10px 20px;
+  }
+
+  ion-modal#example-modal ion-icon {
+    margin-right: 6px;
+
+    width: 48px;
+    height: 48px;
+
+    padding: 4px 0;
+
+    color: #aaaaaa;
+  }
+
+  ion-modal#example-modal .wrapper {
+    margin-bottom: 10px;
+  }
+
+  .customIcon svg {
+    height: 20px;
+  }
+
+  .customIcon {
+    ion-item {
+      padding: 0 !important;
+    }
   }
 }

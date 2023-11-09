@@ -67,12 +67,11 @@ import BrowseGroups from "./pages/Chat/BrowseGroups/BrowseGroups";
 import GroupChat from "./pages/Chat/GroupChat/GroupChat";
 import GroupDetails from "./pages/Chat/GroupDetails/GroupDetails";
 import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
-import MyGroups from "./pages/Chat/mygroups/MyGroups";
+{/*import MyGroups from "./pages/Chat/mygroups/MyGroups";*/}
 import JournalAdditionRemade from './pages/Journaladdition/JournalAdditionRemade';
 import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
 import UserAuthentication from "./auth/UserAuthentication";
 import Menu from "./pages/Menu/Menu";
-import JournalEntries from "./pages/Journaladdition/JournalEntries";
 import Addcustomcategory from "./pages/Addcustomcategory/Addcustomcategory";
 
 setupIonicReact({
@@ -318,7 +317,7 @@ const App: React.FC = () => {
             <GroupChat />
           </Route>
           <Route exact path="/mygroups">
-            <MyGroups />
+            <Mygroups />
           </Route>
           <Route exact path="/group-info/:groupId">
             <GroupInfo />

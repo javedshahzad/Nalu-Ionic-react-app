@@ -226,18 +226,31 @@ const Mygroups: React.FC = () => {
   }
 
   return (
-    <IonPage ref={page}>
+    <IonPage ref={page} className="Mygroups">
+      {isLoading ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+            }}
+          >
+            <IonSpinner name="crescent"></IonSpinner>
+          </div>
+        ) : (
+          <>
       <IonHeader className="ion-no-border">
         <IonToolbar className="ion-no-border">
           <IonButton slot="start" fill="clear" onClick={back}>
             <IonIcon icon={arrowBackOutline} className="backBtn" />
           </IonButton>
           <div className="top-row">
-            <h1 className="group-title">My Groups</h1>
+            <h1 className="group-title">Community</h1>
           </div>
           <IonButton slot="end" fill="clear">
-            <IonIcon icon={notificationsOutline} className="bell-icon" />
-          </IonButton>
+            {/*<IonIcon icon={notificationsOutline} className="bell-icon" />*/}
+            </IonButton>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -338,7 +351,7 @@ const Mygroups: React.FC = () => {
         </IonButton>*/}
             <div className="next">
               <div className="title">
-                <h3>Next Calls</h3>
+                <h3>Nächste Calls</h3>
               </div>
 
               <div className="next-list">
@@ -377,12 +390,12 @@ const Mygroups: React.FC = () => {
                         </IonAvatar>
                       </div>
                       <IonLabel>
-                        <p>Hosted by</p>
+                        <p>Geleitet von</p>
                         <h6 className="ion-text-wrap">
-                          <span>{event?.event_host.title}</span>,
+                          <span className="host-title">{event?.event_host.title}</span>
+                          {event?.event_host.description && <>,&nbsp;</>}
                           {event?.event_host.description}
                         </h6>
-                        <p>Coach for Cycle Health</p>
                       </IonLabel>
                     </IonItem>
                   </div>
@@ -421,6 +434,8 @@ const Mygroups: React.FC = () => {
               </div>
             </div>
           </IonContent>
+          </>
+        )}
     </IonPage>
   );
 };

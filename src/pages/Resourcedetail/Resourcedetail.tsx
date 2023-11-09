@@ -225,25 +225,35 @@ const Resourcedetail: React.FC = () => {
               />
             </div>
           ) : resourseData?.data?.image_url ? (
-            <img src={resourseData?.data?.image_url} alt="No image" />
+            <img src={resourseData?.data?.image_url} />
           ) : (
-            <span/>
+            null
           )}
         </div>
         <div className="content ion-padding">
+        {resourseData?.data?.parent_category[0]?.svg_url ? (
           <div className="category-tag">
             <IonItem lines="none">
-              <IonIcon slot="start" src="assets/imgs/f2.svg" />
-              <IonLabel>Movies</IonLabel>
+                                <div
+                                  slot="start"
+                                  dangerouslySetInnerHTML={{
+                                    __html: resourseData?.data?.parent_category[0]?.svg_url,
+                                  }}
+                                />
+              <IonLabel>{resourseData?.data?.parent_category[0]?.name}</IonLabel>
               <IonRadio value="Movies"></IonRadio>
             </IonItem>
           </div>
+          ) : null}
 
           <div className="rec">
             <div className="details">
+              {resourseData?.data?.authority?.title ? (
               <h2>{resourseData?.data?.authority?.title}</h2>
+              ) : null}
 
               <IonItem lines="none">
+              {resourseData?.data?.authority?.title ? (
                 <div className="start-slot flex al-start " slot="start">
                   <IonAvatar>
                     <img src={resourseData?.data?.authority?.image} alt="" />
@@ -254,6 +264,7 @@ const Resourcedetail: React.FC = () => {
                     src="assets/imgs/icn-verify.svg"
                   />
                 </div>
+                ) : null}
                 <IonLabel>
                   
                   
@@ -280,9 +291,10 @@ const Resourcedetail: React.FC = () => {
                                   ) : (
                                     <IonIcon src="assets/imgs/like-unfilled.svg"/>
 
-                                  )}
-
-                      <h6>{resourseData?.data.upvotes_number}</h6>
+                                  )}&ensp;
+                      {resourseData?.data.upvotes_number > 0 && (
+                        <h6>{resourseData?.data.upvotes_number}</h6>
+                       )}
                     </div>
                     <div 
                     onClick={() =>
@@ -323,6 +335,7 @@ const Resourcedetail: React.FC = () => {
               </IonItem>
 
               <div className="desc">
+              <h3>{resourseData?.data.title}</h3>
               <p className="ion-text-wrap" dangerouslySetInnerHTML={{ __html: resourseData?.data.content }}></p>
               </div>
             </div>

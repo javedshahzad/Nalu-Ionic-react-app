@@ -1,8 +1,8 @@
-.Overview
+.Resources
 {
     ion-toolbar
     {
-        --background: #FEFCFA;
+        --background: #F8F5F2;
 
         ion-segment
         {
@@ -19,7 +19,7 @@
     }
     ion-content
     {
-        --background: #FEFCFA;
+        --background: #F8F5F2;
 
         
         .overview
@@ -59,18 +59,17 @@
             .recommended
             {
 
-                background: white;
+                background: #F8F5F2;
                 padding: 10px;
 
                 .title-holder
                 {
                     margin-bottom: 20px;
-                    h3
-                    {
-                        font-family: 'GBold';
-                        font-size: 22px;
-                        margin-top: 0;
-                    }
+                            h3
+                            {
+                                color: #2D2D2D;
+                                font-family: "GBold";
+                            }
                 }
                 .rc-card
                 {
@@ -260,7 +259,7 @@
             .recommended
             {
 
-                background: white;
+                background: #F8F5F2;
                 padding: 10px;
 
                 .title-holder
@@ -370,12 +369,22 @@
     margin-top: 5px;
 }
 
+.icon__.blackIcon {
+    // fill: #000000 !important; 
+    svg {
+        width: 20px;
+        height: 20px;
+        // stroke: #000000;
+        // stroke-width: 3;
+    }
+}
+
 .Resources
 {
 
     ion-content
     {
-        --background: #FEFCFA;
+        --background: #F8F5F2;
 
         .selector
         {
@@ -459,6 +468,7 @@
                         margin-right: 10px;
                         img
                         {
+                            border-radius: 10px;
                             height: 120px;
                         }
                     }
@@ -467,11 +477,24 @@
                     {
                         .first
                         {
+                            white-space: normal;
+                            
                             h3
                             {
                                 color: #2D2D2D;
-                                font-family: 'GBold';
+                                font-family: "GBold";
                                 font-size: 18px;
+                                display: -webkit-box;
+                                -webkit-box-orient: vertical;
+                                -webkit-line-clamp: 3; /* Limit to three lines */
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                width: 100%; /* Adjust as necessary */
+                                line-height: 1.2; /* Or whatever line-height you desire */
+                                max-height: calc(1.2em * 3); /* This should match the line-height times the number of lines */
+                                margin: 0; /* Adjust as necessary */
+                                padding: 0; /* Adjust as necessary */
+                                white-space: normal;  
                             }
 
                             ion-icon

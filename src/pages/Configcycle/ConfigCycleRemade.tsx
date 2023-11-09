@@ -320,7 +320,7 @@ function ConfigCycleRemade() {
   };
 
   return (
-    <IonPage>
+    <IonPage className="ConfigCycleRemade">
       <IonContent>
         <div className="configcycleMain">
           <h1 className="configTextMain">

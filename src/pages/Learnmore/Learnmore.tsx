@@ -177,7 +177,7 @@ const Learnmore: React.FC = () => {
               <IonSelect
                 className="ion-text-left "
                 placeholder={"Datum wählen"}
-                cancelText="Abbrechen" // Übersetzung für "Cancel"
+                cancelText="Abbrechen"
                 okText="Bestätigen"
                 mode="md"
                 value={selectedDate}

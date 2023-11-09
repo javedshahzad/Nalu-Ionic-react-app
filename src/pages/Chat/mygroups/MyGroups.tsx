@@ -24,6 +24,7 @@ import {
   IonPopover,
   IonText,
   IonToolbar,
+  IonTitle,
   useIonActionSheet,
 } from "@ionic/react";
 import "./mygroups.scss";
@@ -169,7 +170,7 @@ const MyGroups: React.FC = () => {
             <IonIcon icon={arrowBackOutline} className="backBtn" />
           </IonButton>
           <div className="top-row">
-            <h1 className="group-title">My Groups</h1>
+            <IonTitle className="group-title">My Groups</IonTitle>
           </div>
           <IonButton slot="end" fill="clear">
             <IonIcon icon={notificationsOutline} className="bell-icon" />
