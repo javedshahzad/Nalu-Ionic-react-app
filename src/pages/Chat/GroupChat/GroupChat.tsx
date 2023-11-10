@@ -102,7 +102,7 @@ const GroupChat: React.FC = () => {
 
   const getGroupInfo = () => {
     apiService
-      .get(`https://apidev.mynalu.com/v1/conversation/get/${groupId}`, token)
+      .get(`https://apidev.mynalu.com/v1/conversation/get/${groupId}`)
       .then((data) => {
         setGroupName(data.data.groupName);
         setGroupImage(data.data.groupImage);
@@ -497,7 +497,7 @@ const GroupChat: React.FC = () => {
 
       <IonFooter className="footer relative">
         {(filesArray || []).length > 0 && (
-          <div className="w-screen overflow-x-auto flex gap-4 py-4 px-4 bg-[#F8F5F2]">
+          <div className="w-screen overflow-x-auto flex gap-4 py-4 px-4 bg-[#fefcfa]">
             {(filesArray || []).map((element, index) => {
               return (
                 <div className="relative" key={index}>

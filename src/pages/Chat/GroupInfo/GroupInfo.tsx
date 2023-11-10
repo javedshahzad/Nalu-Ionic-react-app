@@ -61,7 +61,7 @@ const GroupInfo: React.FC = () => {
 
   const getGroupInfo = () => {
     apiService
-      .get(`https://apidev.mynalu.com/v1/conversation/get/${groupId}`, token)
+      .get(`https://apidev.mynalu.com/v1/conversation/get/${groupId}`)
       .then((data: any) => {
         setGroupName(data.data.groupName);
         setGroupImage(data.data.groupImage);
@@ -73,8 +73,7 @@ const GroupInfo: React.FC = () => {
   const GetAllUsers = (keyword?: any) => {
     apiService
       .get(
-        `https://app.mynalu.com/wp-json/wp/v2/users?per_page=20&page=1&search=`,
-        wp_token
+        `https://app.mynalu.com/wp-json/wp/v2/users?per_page=20&page=1&search=`
       )
       .then((data) => {
         const usersObjArr = [];
@@ -161,8 +160,7 @@ const GroupInfo: React.FC = () => {
     apiService
       .put(
         `https://apidev.mynalu.com/v1/conversation/participant/${groupId}`,
-        body,
-        token
+        body
       )
       .then(
         (data) => {
@@ -190,8 +188,7 @@ const GroupInfo: React.FC = () => {
     apiService
       .put(
         `https://apidev.mynalu.com/v1/conversation/update/${groupId}`,
-        formDataToSend,
-        token
+        formDataToSend
       )
       .then(
         (data) => {

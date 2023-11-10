@@ -4,13 +4,17 @@
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom/extend-expect";
 
-// Mock matchmedia
-window.matchMedia =
-  window.matchMedia ||
-  function () {
-    return {
-      matches: false,
-      addListener: function () {},
-      removeListener: function () {},
-    };
+// Mock matchMedia
+window.matchMedia = window.matchMedia || function (query: string): MediaQueryList {
+  return {
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: function () {}, // Deprecated, use addEventListener instead
+    removeListener: function () {}, // Deprecated, use removeEventListener instead
+    addEventListener: function () {},
+    removeEventListener: function () {},
+    dispatchEvent: function (): boolean { return false; },
   };
+};
+

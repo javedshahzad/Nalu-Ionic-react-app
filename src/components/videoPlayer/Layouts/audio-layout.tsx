@@ -4,7 +4,7 @@ import { Captions, ChapterTitle, Controls } from '@vidstack/react';
 
 import * as Buttons from '../Layouts/shared/buttons';
 import * as Menus from '../Layouts/shared/menus';
-import * as Sliders from '../Layouts/shared/Sliders';
+import * as Sliders from '../Layouts/shared/sliders';
 import { TimeGroup } from '../Layouts/shared/time-group';
 
 export function AudioLayout() {
