@@ -170,8 +170,7 @@ const Mygroups: React.FC = () => {
     apiService
       .post(
         "https://apidev.mynalu.com/v1/conversation/create",
-        formDataToSend,
-        tokenService.getToken()
+        formDataToSend
       )
       .then(
         (data) => {
@@ -197,8 +196,7 @@ const Mygroups: React.FC = () => {
   const GetAllUsers = (keyword?: any) => {
     apiService
       .get(
-        `https://app.mynalu.com/wp-json/wp/v2/users?per_page=20&page=1&search=`,
-        wp_token
+        `https://app.mynalu.com/wp-json/wp/v2/users?per_page=20&page=1&search=`
       )
       .then((data) => {
         setUsers(data);
