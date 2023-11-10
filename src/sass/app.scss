@@ -216,6 +216,12 @@ ion-accordion.accordion-animated > [slot="header"] .ion-accordion-toggle-icon {
   opacity: 0.4;
 }
 
+ion-page {
+  --ion-background-color: #F8F5F2;
+  --background: #F8F5F2;
+}
+
+
 ion-range::part(knob) {
   --knob-size: 16px;
 }

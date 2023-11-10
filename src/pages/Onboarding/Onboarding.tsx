@@ -54,7 +54,7 @@ const Onboarding: React.FC = () => {
           <img src="assets/imgs/logo.svg" alt="" />
         </div>
         <div className="img-holder ion-text-center">
-          <img src="assets/imgs/Menstrual calendar.gif" alt="" />
+          <img src="assets/imgs/Zen Floaty Woman.gif" alt="" />
         </div>
         <div className="content-holder ion-text-center">
           <h3 className="ion-text-wrap">{t("onboarding.description_1")}</h3>

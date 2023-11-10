@@ -75,7 +75,7 @@ function JournalAdditionRemade() {
       setIsLoading(true);
 
       const data = await JournalAdditionApiService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`
       );
 
       if (data.entries.length > 0) {
@@ -290,7 +290,7 @@ function JournalAdditionRemade() {
     fields.value = val;
 
     CustomCategoryApiService.post(
-      `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`,
+      `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`,
       {
         entries: [
           {
@@ -349,7 +349,7 @@ function JournalAdditionRemade() {
     let yearMonth = `${year}-${month}`;
     try {
       const data = await MoonPhasesServce.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=${lang}`
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
       );
 
       const todayData = data["today"];
