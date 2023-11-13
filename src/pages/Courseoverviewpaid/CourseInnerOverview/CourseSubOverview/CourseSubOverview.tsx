@@ -31,7 +31,7 @@ import {
   import { useHistory, useParams } from "react-router";
   import img3 from "../../../../Images/image 3.png";  
   import audioIcon from "../../../../Icons/Music Note.png";
-  import playCircle from "../../../../Icons/Play Circle.jpg";
+  import playCircle from "../../../../Icons/play.svg";
   
   import { useTranslation } from "react-i18next";
   import ReactPlayer from "react-player";
@@ -200,7 +200,7 @@ import {
                     dangerouslySetInnerHTML={{ __html: courseData?.content }}
                   ></div>
   
-                  <IonGrid>
+                  <IonGrid className="chapter-exercises">
                     {courseData?.chapter_exercises?.map((item, index) => (
                       <IonRow key={index} onClick={() => handleComplete(item.id)}>
                         <IonCol size="5">

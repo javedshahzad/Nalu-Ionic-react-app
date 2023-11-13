@@ -133,7 +133,6 @@ const JournalCalendarRemade = () => {
     }
   };
   const getIcons2 = async () => {
-    let lang = "en";
     let month: any = new Date().getMonth() + 1;
 
     if (parseInt(month) < 10) {
@@ -146,7 +145,7 @@ const JournalCalendarRemade = () => {
     let yearMonth = `${year}-${month}`;
     try {
       const data = await MoonPhasesServce.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=${lang}`
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
       );
 
       const todayData = data["today"];

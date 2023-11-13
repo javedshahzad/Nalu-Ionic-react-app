@@ -148,7 +148,7 @@ const Courseoverviewpaid: React.FC = () => {
                         </IonItem>
                       </div>
                     )}
-                    <IonAccordionGroup multiple={false}>
+                    <IonAccordionGroup multiple={false} className="course-content">
                       {course.items.map((module, moduleIndex) => (
                         <IonAccordion
                           className="first_accord"

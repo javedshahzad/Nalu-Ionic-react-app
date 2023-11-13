@@ -604,14 +604,26 @@ function JournalAdditionRemade() {
                                             ticks={true}
                                             snaps={true}
                                             min={1}
-                                            max={5}
+                                            max={10}
                                             value={
                                               field.value ? field.value : 1
                                             }
                                             pin={true}
-                                            pinFormatter={(value: number) =>
-                                              `${value}`
-                                            }
+                                            pinFormatter={(value: number) => {
+                                              switch(value) {
+                                                case 1: return "Kein Schmerz";
+                                                case 2:
+                                                case 3: return "Leichter Schmerz";
+                                                case 4:
+                                                case 5: return "Mittlerer Schmerz";
+                                                case 6:
+                                                case 7: return "Starker Schmerz";
+                                                case 8:
+                                                case 9: return "Sehr starker Schmerz";
+                                                case 10: return "Stärkster vorstellbarer Schmerz";
+                                                default: return "Kein Schmerz";
+                                              }
+                                            }}
                                             onIonChange={(event) =>
                                               updateField(
                                                 event.target.value,
@@ -620,10 +632,10 @@ function JournalAdditionRemade() {
                                             }
                                           ></IonRange>
                                           <div className="tick-labels">
-                                            {rangeValues.map((values) => (
+                                            {rangeValues10.map((values) => (
                                               <div
                                                 key={values}
-                                                className="tick-label"
+                                                className="tick-label2"
                                               >
                                                 {values}
                                               </div>
@@ -932,7 +944,7 @@ function JournalAdditionRemade() {
 
                       <div className="section">
                         {entry.type === "range-5" && (
-                          <div>
+                          <div className={entry.key}>
                             <div className="title flex al-center jc-between">
                               <h3>{entry.label}</h3>
                               {/*<IonButton fill="clear">
