@@ -77,40 +77,57 @@ const Login: React.FC = () => {
 
     const handleLogin = async () => {
       setIsSubmitting(true);
+    
       try {
-        const response = await axios.post(`${apiHost}/jwt-auth/v1/token`, {
+        // WordPress API login
+        const response = await axios.post(`https://app.mynalu.com/wp-json/jwt-auth/v1/token`, {
           username: email,
           password: password,
         });
-        console.log("Response:",response);
-        if(response.status === 200){
-          const { token: receivedToken } = response.data;
+    
+        if (response.status === 200) {
           setToken(response.data.token);
           localStorage.setItem('jwtToken', response.data.token);
           localStorage.setItem('roles', JSON.stringify(response.data.roles));
           localStorage.setItem('userId', response.data.user_id);
-
-        // config code
-          axios.interceptors.request.use(config => {
-            const storedToken = localStorage.getItem('jwtToken');
-            if (storedToken) {
-              config.headers.Authorization = `Bearer ${storedToken}`;
-              return config;
-            }
-          });
-
-          // naviagtion
-          history.push("/tabs/tab1")
-
-
+        } else {
+          setErrorMessage("WordPress API login failed");
+          setIsSubmitting(false);
+          return;
         }
-        setIsSubmitting(false);
+    
+        // Chat API login
+        try {
+          const naluApiResponse = await axios.post('https://apidev.mynalu.com/v1/user/login', {
+            email: email,
+            password: password,
+          });
+    
+          if (naluApiResponse.status === 200 && naluApiResponse.data.success) {
+            const { access, refresh, user } = naluApiResponse.data.data.tokens;
+    
+            // Save additional data, including _id, in localStorage
+            localStorage.setItem('accessToken', access.token);
+            localStorage.setItem('refreshToken', refresh.token);
+            localStorage.setItem('chatApiUserId', user._id);
+          } else {
+            // Do not show an error message for Chat API login failure
+            console.log("Chat API login failed");
+          }
+        } catch (chatApiError) {
+          // Handle any errors with the Chat API login here
+          console.error('Chat API login error:', chatApiError);
+        }
+    
+        // Navigation
+        history.push("/tabs/tab1");
       } catch (error) {
-        console.log('Error', error.response.data.message);
+        console.log('Error', error.response?.data?.message || error.message);
         setErrorMessage("E-Mail-Adresse oder Kennwort ungültig");
-        setIsSubmitting(false);
       }
-    };
+    
+      setIsSubmitting(false);
+    };        
   
   return (
     <IonPage className="Login">
@@ -162,7 +179,6 @@ const Login: React.FC = () => {
             )}
           </IonButton>
         </div>
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
 
         <div className="or ion-text-center">
           <p>{t('login.or')}</p>

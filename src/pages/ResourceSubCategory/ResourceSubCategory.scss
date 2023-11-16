@@ -54,17 +54,17 @@
    }
    
     .img_div.selected{
-        --background: #EE5F64;
-        --border-color: #e0e0e0 !important;
-                        --border-style: solid;
-                        --border-width: 3px !important;
-                        --border-radius: 10px;
+        --background: #3684b3;
         ion-label{
-            color: rgb(0, 0, 0);
+            color: #ffffff;
         }
 
         p{
             color: black !important;
+        }
+
+        svg {
+            fill: #ffffff;
         }
 
 

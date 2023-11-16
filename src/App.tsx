@@ -67,7 +67,7 @@ import BrowseGroups from "./pages/Chat/BrowseGroups/BrowseGroups";
 import GroupChat from "./pages/Chat/GroupChat/GroupChat";
 import GroupDetails from "./pages/Chat/GroupDetails/GroupDetails";
 import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
-{/*import MyGroups from "./pages/Chat/mygroups/MyGroups";*/}
+import MyChatGroups from "./pages/Chat/mygroups/MyGroups";
 import JournalAdditionRemade from './pages/Journaladdition/JournalAdditionRemade';
 import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
 import UserAuthentication from "./auth/UserAuthentication";
@@ -258,6 +258,11 @@ const App: React.FC = () => {
               <Mygroups />
             </PrivateRoute>
           </Route>
+          <Route exact path="/mychatgroups">
+            <PrivateRoute>
+              <MyChatGroups />
+            </PrivateRoute>
+          </Route>
           <Route exact path="/onboarding">
           <Onboarding />
           </Route>
@@ -318,6 +323,9 @@ const App: React.FC = () => {
           </Route>
           <Route exact path="/mygroups">
             <Mygroups />
+          </Route>
+          <Route exact path="/mychatgroups">
+            <MyChatGroups />
           </Route>
           <Route exact path="/group-info/:groupId">
             <GroupInfo />

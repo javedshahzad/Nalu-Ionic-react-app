@@ -309,7 +309,7 @@ const ResourceSubCategory: React.FC = () => {
                               <img src={card.thumbnail_url} alt="" />
                             ) : (
                               // <img src={image_not_found} alt="Image not found" />
-                              <img style={{'width':'100%'}} src={''} alt="Image not found" />
+                              <span/>
 
                             )}
                           </div>
@@ -317,14 +317,14 @@ const ResourceSubCategory: React.FC = () => {
                           <IonLabel>
                             <div className="first flex al-center">
                               <h3>{card?.title}</h3>
-                              {card.category && card.category.length > 0 && card.category[0].svg_url ? (
+                              {/*{card.category && card.category.length > 0 && card.category[0].svg_url ? (
                                 <div
                                   className={`icon__ ${categoryID === card.category[0].id ? "blackIcon" : "blackIcon"}`}
                                   dangerouslySetInnerHTML={{
                                     __html: card.category[0].svg_url,
                                   }}
                                 />
-                              ) : null}
+                                ) : null}*/}
                             </div>
                             <div className="second flex al-center">
                               {card?.sponsored && (
@@ -342,7 +342,7 @@ const ResourceSubCategory: React.FC = () => {
                               
                             </div>
                             <h5 className="ion-text-wrap">{card?.description}</h5>
-                            <div className="btns-holder flex al-center jc-between">
+                            {/*<div className="btns-holder flex al-center jc-between">
                               <div
                                   onClick={(e) =>{
                                     e.stopPropagation();
@@ -394,7 +394,7 @@ const ResourceSubCategory: React.FC = () => {
                                   <IonIcon src="assets/imgs/heart-filled.svg" />
                                 )}
                               </div>
-                            </div>
+                                </div>*/}
                           </IonLabel>
                         </IonItem>
                       </div>

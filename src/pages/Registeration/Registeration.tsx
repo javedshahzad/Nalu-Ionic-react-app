@@ -45,36 +45,50 @@ const Registeration: React.FC = () => {
   const onSubmit = async () => {
     if (isFormValid) {
       setIsLoading(true);
+
       try {
+        // WordPress API login
         const response = await axios.post(`https://app.mynalu.com/wp-json/nalu-app/v1/add-freemium-user?email=${email}&first_name=${firstName}`);
 
         console.log("Response:", response);
+
         if (response.status === 200) {
-            const { token: receivedToken, roles } = response.data;
-            setToken(receivedToken); // Assuming you have a state called token
-            localStorage.setItem('jwtToken', receivedToken);
-            localStorage.setItem('roles', JSON.stringify(roles));
-            localStorage.setItem('userId', response.data.user_id);
+          const { token: receivedToken, roles, user_id } = response.data;
 
-            // Clear any previous API errors when request succeeds
-            setApiError('');
+          // Save WordPress API login data
+          setToken(receivedToken);
+          localStorage.setItem('jwtToken', receivedToken);
+          localStorage.setItem('roles', JSON.stringify(roles));
+          localStorage.setItem('userId', user_id);
 
-            // Check if there's a saved goal in local storage
-            const savedGoal = localStorage.getItem('selectedGoal');
-            if (savedGoal) {
-                // Make the API call for the saved goal
-                await axios.put(`https://app.mynalu.com/wp-json/nalu-app/v1/user-goal?goal=${savedGoal}`, {}, {
-                    headers: {
-                        "Authorization": `Bearer ${receivedToken}`,
-                        "Content-Type": "application/json"
-                    }
-                });
-                // Remove the saved goal from local storage
-                localStorage.removeItem('selectedGoal');
+          // Clear any previous API errors when request succeeds
+          setApiError('');
+
+          // Chat API login
+          try {
+            const naluApiResponse = await axios.post('https://apidev.mynalu.com/v1/user/login', {
+              email: email,
+              password: password, // You need to have a password field in your state
+            });
+
+            if (naluApiResponse.status === 200 && naluApiResponse.data.success) {
+              const { access, refresh, user } = naluApiResponse.data.data.tokens;
+
+              // Save additional data, including _id, in localStorage
+              localStorage.setItem('accessToken', access.token);
+              localStorage.setItem('refreshToken', refresh.token);
+              localStorage.setItem('chatApiUserId', user._id);
+            } else {
+              console.log("Chat API login failed");
             }
+          } catch (chatApiError) {
+            console.error('Chat API login error:', chatApiError);
+          }
 
-            history.push('/yourdata');
+          // Navigation
+          history.push('/yourdata');
         }
+
         setIsLoading(false);
       } catch (error) {
         console.error("There was a problem with the Axios operation:", error);

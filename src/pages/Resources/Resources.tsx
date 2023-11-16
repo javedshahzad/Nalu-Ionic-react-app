@@ -432,10 +432,10 @@ const Resources: React.FC = () => {
                                 {item?.thumbnail_url ? (
                                    <img src={item?.thumbnail_url} />
                                 ) : (
-                                  <img style={{'width':'100%'}} src={''} alt="Image not found" />
+                                  <span style={{'width':'100%'}} />
                                   )}
 
-                                <div className="btn ion-activatable ripple-parent flex al-center jc-center">
+                                {/*<div className="btn ion-activatable ripple-parent flex al-center jc-center">
                                   {item.parent_category.map((value, index) =>
                                     value.icon_url ? (
                                     
@@ -447,10 +447,10 @@ const Resources: React.FC = () => {
                                   }}
                                 />
                                     ) : (
-                                      <p key={index}>null</p>
+                                      <span/>
                                     )
                                   )}
-                                </div>
+                                    </div>*/}
                               </div>
 
                               <h4 style={{ fontFamily: 'GBold', fontSize: '16px', margin: '10px 0', width: '-webkit-fill-available', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.title}</h4>
