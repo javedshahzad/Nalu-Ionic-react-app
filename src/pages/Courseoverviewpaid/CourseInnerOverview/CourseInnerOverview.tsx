@@ -127,7 +127,7 @@ const CourseInnerOverview: React.FC = () => {
           console.log(response.data);
           if ((response.data.status = "success")) {
             getData(null, course?.next_chapter);
-            history.push("/tabs/tab2");
+            // history.push("/tabs/tab2");
           }
           setIsMarlLoading(false);
         })
