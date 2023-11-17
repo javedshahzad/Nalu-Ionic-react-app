@@ -21,6 +21,8 @@ const Registeration: React.FC = () => {
   const [emailError, setEmailError] = useState('');
   const [token, setToken] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [password, setPassword] = useState('');
+  const [userId, setUserId] = useState('');
 
 
   const handleFirstNameChange = (event) => {
@@ -45,21 +47,21 @@ const Registeration: React.FC = () => {
   const onSubmit = async () => {
     if (isFormValid) {
       setIsLoading(true);
-
+  
       try {
         // WordPress API login
         const response = await axios.post(`https://app.mynalu.com/wp-json/nalu-app/v1/add-freemium-user?email=${email}&first_name=${firstName}`);
-
+  
         console.log("Response:", response);
-
+  
         if (response.status === 200) {
-          const { token: receivedToken, roles, user_id } = response.data;
-
+          const { token: receivedToken, role, tempname: receivedPassword } = response.data;
+  
           // Save WordPress API login data
           setToken(receivedToken);
+          setPassword(receivedPassword); // Set the password here
           localStorage.setItem('jwtToken', receivedToken);
-          localStorage.setItem('roles', JSON.stringify(roles));
-          localStorage.setItem('userId', user_id);
+          localStorage.setItem('roles', JSON.stringify(role));
 
           // Clear any previous API errors when request succeeds
           setApiError('');
@@ -68,25 +70,32 @@ const Registeration: React.FC = () => {
           try {
             const naluApiResponse = await axios.post('https://apidev.mynalu.com/v1/user/login', {
               email: email,
-              password: password, // You need to have a password field in your state
+              password: receivedPassword,
             });
 
             if (naluApiResponse.status === 200 && naluApiResponse.data.success) {
-              const { access, refresh, user } = naluApiResponse.data.data.tokens;
+              const tokens = naluApiResponse.data.data.tokens;
 
-              // Save additional data, including _id, in localStorage
-              localStorage.setItem('accessToken', access.token);
-              localStorage.setItem('refreshToken', refresh.token);
-              localStorage.setItem('chatApiUserId', user._id);
+              // Make sure that the tokens property exists in the response
+              if (tokens && tokens.access && tokens.refresh) {
+                const { access, refresh } = tokens;
+
+                // Save additional data, including _id, in localStorage
+                localStorage.setItem('accessToken', access.token);
+                localStorage.setItem('refreshToken', refresh.token);
+                localStorage.setItem('chatApiUserId', naluApiResponse.data.data.user._id);
+
+                // Navigation
+                history.push('/yourdata');
+              } else {
+                console.log("Invalid tokens structure in Chat API response");
+              }
             } else {
               console.log("Chat API login failed");
             }
           } catch (chatApiError) {
             console.error('Chat API login error:', chatApiError);
           }
-
-          // Navigation
-          history.push('/yourdata');
         }
 
         setIsLoading(false);

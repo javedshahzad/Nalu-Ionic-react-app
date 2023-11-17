@@ -1,6 +1,6 @@
-const USER_TOKEN = localStorage.getItem("jwtToken") || "";
+const USER_TOKEN = localStorage.getItem("refreshToken") || "";
 const WP_TOKEN = localStorage.getItem("jwtToken") || "";
-const USER_ID = localStorage.getItem("userId") || "";
+const USER_ID = localStorage.getItem("chatApiUserId") || "";
 let user = USER_ID;
 let token = USER_TOKEN;
 let wp_token = WP_TOKEN;

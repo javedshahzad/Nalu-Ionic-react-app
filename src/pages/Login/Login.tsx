@@ -109,7 +109,7 @@ const Login: React.FC = () => {
             // Save additional data, including _id, in localStorage
             localStorage.setItem('accessToken', access.token);
             localStorage.setItem('refreshToken', refresh.token);
-            localStorage.setItem('chatApiUserId', user._id);
+            localStorage.setItem('chatApiUserId', naluApiResponse.data.data.user._id);
           } else {
             // Do not show an error message for Chat API login failure
             console.log("Chat API login failed");
