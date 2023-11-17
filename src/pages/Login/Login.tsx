@@ -88,6 +88,8 @@ const Login: React.FC = () => {
         if (response.status === 200) {
           setToken(response.data.token);
           localStorage.setItem('jwtToken', response.data.token);
+          sessionStorage.setItem('jwtToken', response.data.token);
+
           localStorage.setItem('roles', JSON.stringify(response.data.roles));
           localStorage.setItem('userId', response.data.user_id);
         } else {

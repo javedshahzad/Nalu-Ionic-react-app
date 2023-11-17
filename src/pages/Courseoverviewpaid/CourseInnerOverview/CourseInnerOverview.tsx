@@ -51,61 +51,54 @@ import { useTranslation } from "react-i18next";
 import { Suspense, startTransition } from "react";
 import "@vidstack/react/player/styles/default/theme.css";
 
-import {
-  MediaPlayer,
-  MediaProvider,
-} from "@vidstack/react";
+import { MediaPlayer, MediaProvider } from "@vidstack/react";
 import {
   DefaultAudioLayout,
   defaultLayoutIcons,
   DefaultVideoLayout,
 } from "@vidstack/react/player/layouts/default";
 import axios from "axios";
-import { useLocation } from 'react-router-dom';
-import { Player } from './../../../components/videoPlayer/Player';
-
+import { useLocation } from "react-router-dom";
+import { Player } from "./../../../components/videoPlayer/Player";
 
 const CourseInnerOverview: React.FC = () => {
   const history = useHistory();
   const location = useLocation();
-   const data : any = location?.state;
-   const [courseId, setCourseId] = useState(data?.course_id);
- 
+  const data: any = location?.state;
+  const [courseId, setCourseId] = useState(data?.course_id);
+
   const [togglePlay, setTogglePlay] = useState("video");
   const [courseData, setCourseData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [ismarkLoading, setIsMarlLoading] = useState(false);
 
-
   useEffect(() => {
-    getData(courseId,null);
+    getData(courseId, null);
   }, []);
-
 
   // const handleVideoClick = (value) => {
   //   setTogglePlay(value);
   // };
   const handleComplete = (id) => {
     // history.push(`/tabs/tab2/courseinneroverview/${id}`);
-    getData(id,null)
+    getData(id, null);
   };
 
-  const getData = (id,next_chapter) => {
+  const getData = (id, next_chapter) => {
     setIsLoading(true);
     let URL;
-    if(id){
-       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`
+    if (id) {
+      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`;
+    } else {
+      URL = next_chapter;
     }
-    else{
-     URL =   next_chapter
-    }
-    console.log(URL)
+    console.log(URL);
     try {
       axios
-        .get(URL,{
-          headers:{
-            Authorization:`Bearer ${localStorage.getItem('jwtToken')}`
-          }
+        .get(URL, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
         })
         .then((response) => {
           console.log(response.data);
@@ -125,16 +118,16 @@ const CourseInnerOverview: React.FC = () => {
     setIsMarlLoading(true);
     try {
       axios
-        .post(course?.completion_link,null,{
+        .post(course?.completion_link, null, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
-          }
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
         })
         .then((response) => {
           console.log(response.data);
-          if(response.data.status = "success"){
-            getData(null,course?.next_chapter)
-            // history.push('/tabs/tab2')
+          if ((response.data.status = "success")) {
+            getData(null, course?.next_chapter);
+            history.push("/tabs/tab2");
           }
           setIsMarlLoading(false);
         })
@@ -149,25 +142,21 @@ const CourseInnerOverview: React.FC = () => {
   };
   return (
     <>
-      
-          <IonPage className="CourseInnerOverview">
-            {
-              isLoading?(
-<div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <IonSpinner name="crescent"></IonSpinner>
-      </div>
-              ):
-              (
-                <>
-                
-                <IonHeader className="ion-no-border">
+      <IonPage className="CourseInnerOverview">
+        {isLoading ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+            }}
+          >
+            <IonSpinner name="crescent"></IonSpinner>
+          </div>
+        ) : (
+          <>
+            <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
                   <IonBackButton
@@ -187,19 +176,18 @@ const CourseInnerOverview: React.FC = () => {
             <IonContent fullscreen className="ion-no-padding">
               <div className="main_div">
                 {courseData?.video_url ? (
-                <div className="player-wrapper">
-                  <ReactPlayer 
-                    url={courseData?.video_url} 
-                    width="100%" 
-                    height="100%" 
-                    className="react-player" 
-                    controls={true}
-                    playsinline={true}
-                  />
-                </div>
+                  <div className="player-wrapper">
+                    <ReactPlayer
+                      url={courseData?.video_url}
+                      width="100%"
+                      height="100%"
+                      className="react-player"
+                      controls={true}
+                      playsinline={true}
+                    />
+                  </div>
                 ) : (
-                  <>
-                  </>
+                  <></>
                 )}
                 <div className="title">
                   <h3>{courseData?.title}</h3>
@@ -209,7 +197,13 @@ const CourseInnerOverview: React.FC = () => {
                     <IonCol size="3">
                       <div className="img_relative">
                         <div className="img_absolute">
-                          <img src={courseData?.authority?.image? courseData?.authority?.image : null} />
+                          <img
+                            src={
+                              courseData?.authority?.image
+                                ? courseData?.authority?.image
+                                : null
+                            }
+                          />
                         </div>
                       </div>
                     </IonCol>
@@ -261,35 +255,31 @@ const CourseInnerOverview: React.FC = () => {
                     </IonRow>
                   ))}
                 </IonGrid>
-                {
-                  !courseData?.completed && (
-                    <div
-                      
-                      className={`mark-done-button`}
-                      onClick={()=> markAsDone(courseData)}
-                      
-                    >
-                      {ismarkLoading ? (
-                        <IonSpinner
-                          class="mark_loading_spinner"
-                          name="crescent"
-                          style={{"color":"white","width":"30px","height":"30px"}}
-                        />
-                      ) : (
-                        <p style={{"color":"white"}}>Abschliessen</p>
-                      )}
-                    </div>
-                  )
-                }
-               
+                {!courseData?.completed && (
+                  <div
+                    className={`mark-done-button`}
+                    onClick={() => markAsDone(courseData)}
+                  >
+                    {ismarkLoading ? (
+                      <IonSpinner
+                        class="mark_loading_spinner"
+                        name="crescent"
+                        style={{
+                          color: "white",
+                          width: "30px",
+                          height: "30px",
+                        }}
+                      />
+                    ) : (
+                      <p style={{ color: "white" }}>Abschliessen</p>
+                    )}
+                  </div>
+                )}
               </div>
             </IonContent>
-                </>
-              )
-            }
-            
-          </IonPage>
-      
+          </>
+        )}
+      </IonPage>
     </>
   );
 };

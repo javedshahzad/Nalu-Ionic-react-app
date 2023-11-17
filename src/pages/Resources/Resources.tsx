@@ -172,7 +172,7 @@ const Resources: React.FC = () => {
       });
   };
   const getParentCategoryByID = (id) => {
-    console.log(id);
+    setIsLoading(true);
     setCategoryID(id);
 
     axios
@@ -298,15 +298,18 @@ const Resources: React.FC = () => {
     setModalOpen(false);
   };
   const getResourceDetailsByID = (id) => {
+    setIsLoading(true);
+
     try {
       axios
         .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`)
         .then((response) => {
           console.log(response.data);
+
           history.push("/tabs/tab4/resourcedetail", {
             data: response.data,
           });
-
+    setIsLoading(false);
         
           // router.push('/tabs/tab4/resourcedetail', 'root', 'replace');
           // const dataParam = encodeURIComponent(JSON.stringify(response.data));
@@ -317,9 +320,13 @@ const Resources: React.FC = () => {
         })
         .catch((error) => {
           console.log(error);
+    setIsLoading(false);
+
         });
     } catch (error) {
       console.log(error);
+    setIsLoading(false);
+
     }
   };
   return (
@@ -344,7 +351,7 @@ const Resources: React.FC = () => {
 <>
 <IonHeader className="ion-no-border">
               <IonToolbar>
-              <IonButtons slot="start">
+              <IonButtons slot="end">
                   <IonButton color="dark" onClick={() => history.push('/menu')}>
                       <IonIcon icon={menuOutline} />
                   </IonButton>

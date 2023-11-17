@@ -158,21 +158,7 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonRouterOutlet>
           <Route path="/tabs" render={() => <MainTabs />} />
-
-          {/* <Route path="/tabs/tab2" render={() => <PrivateRoute><Courseoverviewpaid /></PrivateRoute>} exact={true} />
-
-          <Route path="/tabs/tab4" render={() => <PrivateRoute><Resources /></PrivateRoute>} exact={true}/>
-        <Route path="/tabs/tab4/resourcesubcateggory" render={() => <PrivateRoute><ResourceSubCategory /></PrivateRoute>} />
-        <Route path="/tabs/tab4/resourcedetail" render={() => <PrivateRoute><Resourcedetail /></PrivateRoute>} /> */}
-
-
-
-
-
           <Route exact path="/chat">
-            {/* <PrivateRoute>
-              <Chat />
-            </PrivateRoute> */}
           </Route>
           {/* Temporary Rout to Menu */}
           <Route exact path="/menu">
@@ -182,66 +168,55 @@ const App: React.FC = () => {
             <Addcustomcategory />
           </Route>
           <Route exact path="/community">
-            <PrivateRoute>
+            <PrivateRoute page={'community'}>
               <Community />
             </PrivateRoute>
           </Route>
-          {/* <Route exact path="/resourcedetail">
-            <PrivateRoute>
-              <Resourcedetail />
-            </PrivateRoute>
-          </Route> */}
-          {/* <Route exact path="/resourcesubcateggory">
-            <PrivateRoute>
-              <ResourceSubCategory />
-            </PrivateRoute>
-          </Route> */}
-        {/* <Route path="/tabs/tab4" render={() => <PrivateRoute><Resources /></PrivateRoute>} exact={true}/> */}
 
           <Route exact path="/configcycle">
-            <PrivateRoute>
+            <PrivateRoute page={'configcycle'}>
               <Configcycle />
             </PrivateRoute>
           </Route>
 
           <Route exact path="/coursechapter">
-            <PrivateRoute>
+            <PrivateRoute page={'coursechapter'}>
               <Coursechapter />
             </PrivateRoute>
           </Route>
 
           <Route exact path="/courseoverviewfree">
-            <PrivateRoute>
+            <PrivateRoute page={'courseoverviewfree'}>
               <Courseoverviewfree />
             </PrivateRoute>
           </Route>
 
           <Route exact path="/courseoverviewpaid">
-            <PrivateRoute>
+            <PrivateRoute page={'courseoverviewpaid'}>
               <Courseoverviewpaid />
             </PrivateRoute>
           </Route>
 
           <Route exact path="/filter">
-            <PrivateRoute>
+            <PrivateRoute page={'filter'}>
               <Filtermodal />
             </PrivateRoute>
           </Route>
 
           <Route exact path="/journaladdition">
-            <PrivateRoute>
+            <PrivateRoute page={'journaladdition'}>
               <Journaladdition />
             </PrivateRoute>
           </Route>
 
           <Route exact path="/journalcalender">
-            <PrivateRoute>
+            <PrivateRoute page={'journalcalender'}>
               <Journalcalender />
             </PrivateRoute>
           </Route>
 
           <Route exact path="/learnmore">
-            <PrivateRoute>
+            <PrivateRoute page={'learnmore'}>
               <Learnmore />
             </PrivateRoute>
           </Route>
@@ -249,22 +224,24 @@ const App: React.FC = () => {
             <Login />
           </Route>
           <Route exact path="/membership">
-            <PrivateRoute>
+            <PrivateRoute page={'membership'}>
               <Membership />
             </PrivateRoute>
           </Route>
           <Route exact path="/mygroups">
-            <PrivateRoute>
+            <PrivateRoute page={'mygroups'}>
               <Mygroups />
             </PrivateRoute>
           </Route>
           <Route exact path="/mychatgroups">
-            <PrivateRoute>
+            <PrivateRoute page={'mygroups'}>
               <MyChatGroups />
             </PrivateRoute>
           </Route>
           <Route exact path="/onboarding">
+          <PrivateRoute page={'onboarding'}>
           <Onboarding />
+          </PrivateRoute>
           </Route>
           <Route exact path="/questioning">
             <Questioning />
@@ -275,26 +252,24 @@ const App: React.FC = () => {
          
 
           <Route exact path="/stayup">
-            <PrivateRoute>
+            <PrivateRoute page={'stayup'}>
               <Stayup />
             </PrivateRoute>
           </Route>
           <Route exact path="/resources">
-            <PrivateRoute>
+            <PrivateRoute page={'resources'}>
               <Resources />
             </PrivateRoute>
           </Route>
           <Route exact path="/journalcalendarremade">
-            <PrivateRoute>
+            <PrivateRoute page={'journalcalendarremade'}>
               <JournalCalendarRemade />
             </PrivateRoute>
           </Route>
           <Route exact path="/configcycleremade">
             <ConfigCycleRemade />
           </Route>
-          {/* <Route exact path="/journalentries">
-            <JournalEntries />
-          </Route> */}
+ 
           <Route exact path="/addcustomcategory/:dateParam">
             <Addcustomcategory />
           </Route>

@@ -38,10 +38,10 @@ const Eventdetail: React.FC = () => {
   const [dateError, setDateError] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoaderLoading, setIsLoaderLoading] = useState(false);
+
   const [isDateSelected, setIsDateSelected] = useState(false);
-  
-  
-  
+
   const location = useLocation();
   const data: any = location?.state;
   const [event_Id, setEventId] = useState(data?.event_id);
@@ -69,7 +69,6 @@ const Eventdetail: React.FC = () => {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           },
           cancelToken: source.token,
-
         }
       )
       .then((response) => {
@@ -89,95 +88,103 @@ const Eventdetail: React.FC = () => {
 
   const handleDateChange = (event, date_event, registration_link) => {
     console.log(date_event);
+    setIsLoaderLoading(true);
     const value = event.target.value;
-      axios
-        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/event/${date_event.event_id}`, {
+    axios
+      .get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/event/${date_event.event_id}`,
+        {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           },
-        })
-          .then((response) => {
-            console.log(response.data);
-            setEvent(response.data);
-            setIsDateSelected(true)
-  
-          })
-          .catch((error) => {
-            console.log(error);
-  
-          });     
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        setEvent(response.data);
+        setIsDateSelected(true);
+        setIsLoaderLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoaderLoading(false);
+      });
 
     setSelectedDate(value);
     setDateError(
       value.trim() === "" ? "Bitte wähle ein Datum, um fortzufahren." : ""
     );
   };
-  const handleDateChangeWebinar = (event, date_event, registration_link)=> {
+  const handleDateChangeWebinar = (event, date_event, registration_link) => {
+    setIsLoaderLoading(true);
+
     const value = event.target.value;
 
-    const updatedRegistrationLink = registration_link.replace('{webinar_id}', date_event.webinar_id);
-    axios.get(updatedRegistrationLink, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-      },
-    })
+    const updatedRegistrationLink = registration_link.replace(
+      "{webinar_id}",
+      date_event.webinar_id
+    );
+    axios
+      .get(updatedRegistrationLink, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
+      })
       .then((response) => {
         console.log(response.data);
 
-        if (response.data === 'Accepted') {
-          setIsDateSelected(true)
+        if (response.data === "Accepted") {
+          setIsDateSelected(true);
         }
-    
+        setIsLoaderLoading(false);
       })
       .catch((error) => {
         console.log(error);
-    
-      }); 
-      setSelectedDate(value);
+        setIsLoaderLoading(false);
+      });
+    setSelectedDate(value);
     setDateError(
       value.trim() === "" ? "Bitte wähle ein Datum, um fortzufahren." : ""
     );
-  }
+  };
 
   const handleIcons = (URL) => {
-    setIsLoading(true)
+    setIsLoading(true);
     axios
       .post(URL, null, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
-        }
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
       })
       .then((response) => {
         console.log(response.data);
-        if (response.data.message === 'Updated successfully') {getEventByID(event_Id)}
+        if (response.data.message === "Updated successfully") {
+          getEventByID(event_Id);
+        }
       })
       .catch((error) => {
         console.log(error);
-        setIsLoading(false)
-
+        setIsLoading(false);
       });
-  }
-  
+  };
 
   return (
     <>
-      
-          <IonPage className="Eventdetail">
-            {
-              isLoading?(
-                <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100vh",
-          }}
-        >
-          <IonSpinner name="crescent"></IonSpinner>
-        </div>
-              ):(
-<>
-<IonHeader className="ion-no-border">
+      <IonPage className="Eventdetail">
+        {isLoading ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+            }}
+          >
+            <IonSpinner name="crescent"></IonSpinner>
+          </div>
+        ) : (
+          <>
+            <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
                   <IonBackButton
@@ -229,60 +236,84 @@ const Eventdetail: React.FC = () => {
                       <IonLabel>
                         <p>Geleitet von</p>
                         <h6 className="ion-text-wrap">
-                          <span className="host-title">{event?.event_host.title}</span>
+                          <span className="host-title">
+                            {event?.event_host.title}
+                          </span>
                           {event?.event_host.description && <>,&nbsp;</>}
                           {event?.event_host.description}
                         </h6>
                       </IonLabel>
                     </IonItem>
 
-<div className="desc">
-  {event?.content?.trim() === "" ? (
-    <span />
-  ) : (
-    <p
-      className="ion-text-wrap"
-      dangerouslySetInnerHTML={{ __html: event?.content }}
-    ></p>
-  )}
-</div>
-
-
+                    <div className="desc">
+                      {event?.content?.trim() === "" ? (
+                        <span />
+                      ) : (
+                        <p
+                          className="ion-text-wrap"
+                          dangerouslySetInnerHTML={{ __html: event?.content }}
+                        ></p>
+                      )}
+                    </div>
                   </div>
                   <div className="signup-form">
                     <div className="date-selector">
                       <IonItem lines="none" className="ion-text-left">
-                        {
-                          event?.type === "single" ? (
-                            <p>{event?.schedule}</p>
-                          )
-                            : (
-                              <IonSelect
-                                className="ion-text-left "
-                                placeholder={"Datum wählen"}
-                                cancelText="Abbrechen"
-                                okText="Bestätigen"
-                                mode="md"
-                                value={selectedDate}
-                                onIonChange={(e) =>{
-                                  if(event?.type === 'series'){
-
-                                    handleDateChange(e, event?.dates?.find(date => date.date === e.target.value), event?.registration_link)
-                                  }else{
-                                    handleDateChangeWebinar(e, event?.dates?.find(date => date.date === e.target.value), event?.registration_link)
-                                  }
-                                  }
+                        {event?.type === "single" ? (
+                          <p>{event?.schedule}</p>
+                        ) : (
+                          <>
+                            <IonSelect
+                              className="ion-text-left "
+                              placeholder={"Datum wählen"}
+                              cancelText="Abbrechen"
+                              okText="Bestätigen"
+                              mode="md"
+                              value={selectedDate}
+                              onIonChange={(e) => {
+                                if (event?.type === "series") {
+                                  handleDateChange(
+                                    e,
+                                    event?.dates?.find(
+                                      (date) => date.date === e.target.value
+                                    ),
+                                    event?.registration_link
+                                  );
+                                } else {
+                                  handleDateChangeWebinar(
+                                    e,
+                                    event?.dates?.find(
+                                      (date) => date.date === e.target.value
+                                    ),
+                                    event?.registration_link
+                                  );
                                 }
+                              }}
+                            >
+                              {event?.dates?.map((date, date_index) => (
+                                <IonSelectOption
+                                  key={date_index}
+                                  value={date.date}
+                                >
+                                  {date.date}
+                                </IonSelectOption>
+                              ))}
+                            </IonSelect>
+                            {isLoaderLoading ? (
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  height: "10vh",
+                                  width: "30px",
+                                }}
                               >
-                                {event?.dates?.map((date, date_index) => (
-                                  <IonSelectOption
-                                    key={date_index} value={date.date}>
-                                    {date.date}
-                                  </IonSelectOption>
-                                ))}
-                              </IonSelect>
-                            )
-                        }
+                                <IonSpinner name="crescent"></IonSpinner>
+                              </div>
+                            ) : null}
+                          </>
+                        )}
                       </IonItem>
 
                       {dateError && (
@@ -291,100 +322,121 @@ const Eventdetail: React.FC = () => {
                     </div>
 
                     {isDateSelected === true || event?.type === "single" ? (
-  <div className="btns-holder">
-    <IonRow>
-      
-      {event?.type === "everwebinar" && isDateSelected && (
-        <IonCol size="12" id={"register"}>
-          <div style={{display:"flex",justifyContent:"center"}}>
-          <IonButton
-            fill="clear"
-          >
-            <p>
-              <IonIcon icon={checkmarkCircleOutline} /> <br />
-              Anmelden
-            </p>
-          </IonButton>
-
-          </div>
-        </IonCol>
-      )}
-      {event?.type === "series" || event?.type === "single" && (
-        <>
-        <IonCol
-        size="4"
-        id={event?.is_registered === true ? "register" : ""}
-      >
-        <IonButton
-          onClick={() => handleIcons(event?.registration_link)}
-          fill="clear"
-          color={
-            event?.is_registered === false || event?.is_registered === null
-              ? "dark"
-              : ""
-          }
-        >
-          <p>
-            <IonIcon icon={checkmarkCircleOutline} /> <br />
-            Register
-          </p>
-        </IonButton>
-      </IonCol>
-          <IonCol
-            size="4"
-            id={event?.is_bookmarked === true ? "register" : ""}
-          >
-            <IonButton
-              onClick={() => handleIcons(event?.bookmark_link)}
-              fill="clear"
-              color={
-                event?.is_bookmarked === false ||
-                event?.is_bookmarked === null
-                  ? "dark"
-                  : ""
-              }
-            >
-              <p>
-                <IonIcon icon={bookmarkOutline} /> <br />
-                Vormerken
-              </p>
-            </IonButton>
-          </IonCol>
-          <IonCol
-            size="4"
-            id={event?.is_cancelled === true ? "register" : ""}
-          >
-            <IonButton
-              onClick={() => handleIcons(event?.cancel_link)}
-              fill="clear"
-              color={
-                event?.is_cancelled === false ||
-                event?.is_cancelled === null
-                  ? "dark"
-                  : ""
-              }
-            >
-              <p>
-                <IonIcon icon={closeCircleOutline} /> <br />
-                Absagen
-              </p>
-            </IonButton>
-          </IonCol>
-        </>
-      )}
-    </IonRow>
-  </div>
-) : null}
+                      <div className="btns-holder">
+                        <IonRow>
+                          {event?.type === "everwebinar" && isDateSelected && (
+                            <IonCol size="12" id={"register"}>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <IonButton fill="clear">
+                                  <p>
+                                    <IonIcon icon={checkmarkCircleOutline} />{" "}
+                                    <br />
+                                    Anmelden
+                                  </p>
+                                </IonButton>
+                              </div>
+                            </IonCol>
+                          )}
+                          {event?.type === "series" ||
+                            (event?.type === "single" && (
+                              <>
+                                <IonCol
+                                  size="4"
+                                  id={
+                                    event?.is_registered === true
+                                      ? "register"
+                                      : ""
+                                  }
+                                >
+                                  <IonButton
+                                    onClick={() =>
+                                      handleIcons(event?.registration_link)
+                                    }
+                                    fill="clear"
+                                    color={
+                                      event?.is_registered === false ||
+                                      event?.is_registered === null
+                                        ? "dark"
+                                        : ""
+                                    }
+                                  >
+                                    <p>
+                                      <IonIcon icon={checkmarkCircleOutline} />{" "}
+                                      <br />
+                                      Register
+                                    </p>
+                                  </IonButton>
+                                </IonCol>
+                                <IonCol
+                                  size="4"
+                                  id={
+                                    event?.is_bookmarked === true
+                                      ? "register"
+                                      : ""
+                                  }
+                                >
+                                  <IonButton
+                                    onClick={() =>
+                                      handleIcons(event?.bookmark_link)
+                                    }
+                                    fill="clear"
+                                    color={
+                                      event?.is_bookmarked === false ||
+                                      event?.is_bookmarked === null
+                                        ? "dark"
+                                        : ""
+                                    }
+                                  >
+                                    <p>
+                                      <IonIcon icon={bookmarkOutline} /> <br />
+                                      Vormerken
+                                    </p>
+                                  </IonButton>
+                                </IonCol>
+                                <IonCol
+                                  size="4"
+                                  id={
+                                    event?.is_cancelled === true
+                                      ? "register"
+                                      : ""
+                                  }
+                                >
+                                  <IonButton
+                                    onClick={() =>
+                                      handleIcons(event?.cancel_link)
+                                    }
+                                    fill="clear"
+                                    color={
+                                      event?.is_cancelled === false ||
+                                      event?.is_cancelled === null
+                                        ? "dark"
+                                        : ""
+                                    }
+                                  >
+                                    <p>
+                                      <IonIcon icon={closeCircleOutline} />{" "}
+                                      <br />
+                                      Absagen
+                                    </p>
+                                  </IonButton>
+                                </IonCol>
+                              </>
+                            ))}
+                        </IonRow>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </div>
             </IonContent>
-</>
-              )
-            }
-            
-          </IonPage>
-       
+          </>
+        )}
+      </IonPage>
     </>
   );
 };

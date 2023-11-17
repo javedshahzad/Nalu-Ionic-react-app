@@ -460,11 +460,11 @@ const JournalCalendarRemade = () => {
     <IonPage className="JournalCalendarRemade">
       <IonContent>
         <IonToolbar>
-          <IonButtons slot="start">
-            <IonButton color="dark" onClick={() => history.push('/menu')}>
-              <IonIcon icon={menuOutline} />
-            </IonButton>
-          </IonButtons>
+        <IonButtons slot="end">
+                  <IonButton color="dark" onClick={() => history.push('/menu')}>
+                      <IonIcon icon={menuOutline} />
+                  </IonButton>
+              </IonButtons>
           {/*<IonButtons slot="end">
             <IonButton color="dark">
               <IonIcon icon={searchOutline} />

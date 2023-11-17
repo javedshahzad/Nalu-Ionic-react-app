@@ -62,8 +62,8 @@ const ResourceSubCategory: React.FC = () => {
   const [filtered, setFiltered] = useState(filteredData);
   const [subCategories, setSubCategories] = useState(subCategory);
   const [parentId, setParentId] = useState(parent_id);
+  const [isCategoryLoading, setIsCategoryLoading] = useState(false);
 
- 
 
   useEffect(()=>{
     setFiltered(filteredData)
@@ -74,7 +74,7 @@ const ResourceSubCategory: React.FC = () => {
 
  
   const getCategoryByID = (id) => {
-    console.log(id);
+    setIsCategoryLoading(true)
     setCategoryID(id);
  
     setIsFilterSelected(true);
@@ -94,11 +94,11 @@ const ResourceSubCategory: React.FC = () => {
 
         setFiltered(response.data.ressources);
         setSubCategories(response.data.sub_categories)
-        setIsLoading(false);
+        setIsCategoryLoading(false)
       })
       .catch((error) => {
         console.log(error);
-        setIsLoading(false);
+        setIsCategoryLoading(false)
       });
   };
   const handleUpvote = async (is_upvoted, id, is_downvoted) => {
@@ -201,6 +201,8 @@ const ResourceSubCategory: React.FC = () => {
   };
  
   const getResourceDetailsByID = (id) => {
+    setIsCategoryLoading(true)
+
     try {
       axios
         .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`)
@@ -210,12 +212,18 @@ const ResourceSubCategory: React.FC = () => {
             data: response.data,
             // resource_id: id
           });
+    setIsCategoryLoading(false)
+
         })
         .catch((error) => {
           console.log(error);
+    setIsCategoryLoading(false)
+
         });
     } catch (error) {
       console.log(error);
+    setIsCategoryLoading(false)
+
     }
   };
   return (
@@ -238,11 +246,9 @@ const ResourceSubCategory: React.FC = () => {
                 <>
                 <IonHeader className="ion-no-border">
               <IonToolbar>
-                <IonButtons slot="start">
-                  <IonButton color={"dark"} onClick={() => history.push('/menu')}>
-                    <IonIcon icon={menuOutline} />
-                  </IonButton>
-                </IonButtons>
+              <IonButtons slot="start">
+            <IonBackButton color="dark" text={""} defaultHref="/tabs/tab4" />
+          </IonButtons>
                 {/*<IonButtons slot="end">
                   <IonButton color="dark">
                     <IonIcon icon={searchOutline} />
@@ -298,108 +304,46 @@ const ResourceSubCategory: React.FC = () => {
                   </div>
 
                   <div className="the-list">
-                    {filtered?.map((card, index) => (
-                      <div className="resource-card" key={index}>
-                        <IonItem
-                          lines="none"
-                          onClick={() => getResourceDetailsByID(card.id)}
-                        >
-                          <div className="thumb" slot="start">
-                            {card?.thumbnail_url ? (
-                              <img src={card.thumbnail_url} alt="" />
-                            ) : (
-                              // <img src={image_not_found} alt="Image not found" />
-                              <span/>
+  {isCategoryLoading ? (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "50vh",
+      }}
+    >
+      <IonSpinner name="crescent"></IonSpinner>
+    </div>
+  ) : (
+    filtered?.map((card, index) => (
+      <div className="resource-card" key={index}>
+        <IonItem lines="none" onClick={() => getResourceDetailsByID(card.id)}>
+          <div className="thumb" slot="start">
+            {card?.thumbnail_url ? (
+              <img src={card.thumbnail_url} alt="" />
+            ) : (
+              <span />
+            )}
+          </div>
 
-                            )}
-                          </div>
+          <IonLabel>
+            <div className="first flex al-center">
+              <h3>{card?.title}</h3>
+              {/* ... Other content ... */}
+            </div>
+            <div className="second flex al-center">
+              {/* ... Other content ... */}
+            </div>
+            <h5 className="ion-text-wrap">{card?.description}</h5>
+            {/* ... Other content ... */}
+          </IonLabel>
+        </IonItem>
+      </div>
+    ))
+  )}
+</div>
 
-                          <IonLabel>
-                            <div className="first flex al-center">
-                              <h3>{card?.title}</h3>
-                              {/*{card.category && card.category.length > 0 && card.category[0].svg_url ? (
-                                <div
-                                  className={`icon__ ${categoryID === card.category[0].id ? "blackIcon" : "blackIcon"}`}
-                                  dangerouslySetInnerHTML={{
-                                    __html: card.category[0].svg_url,
-                                  }}
-                                />
-                                ) : null}*/}
-                            </div>
-                            <div className="second flex al-center">
-                              {card?.sponsored && (
-                                <>
-                                  <IonIcon icon={informationCircleOutline} /> <p className="ion-text-wrap">Gesponsert</p>
-                                </>
-                              )}
-                              {!card?.sponsored && card.authority && card.authority[0]?.title && (
-                                <>
-                                  <IonIcon icon={informationCircleOutline} /> <p className="ion-text-wrap">Empfohlen von {card.authority[0].title}</p>
-                                </>
-                              )}
-                              
-                                
-                              
-                            </div>
-                            <h5 className="ion-text-wrap">{card?.description}</h5>
-                            {/*<div className="btns-holder flex al-center jc-between">
-                              <div
-                                  onClick={(e) =>{
-                                    e.stopPropagation();
-                                    handleUpvote(
-                                      card.is_upvoted,
-                                      card.id,
-                                      card.is_downvoted
-                                    )
-                                  }
-                                  }
-                                  className="btn ion-activatable ripple-parent flex al-center">
-                                {card.is_upvoted ? (
-                                  <IonIcon src="assets/imgs/like-filled.svg" />
-                                ) : (
-                                  <IonIcon src="assets/imgs/like-unfilled.svg" />
-                                )}&ensp;
-                                {card?.upvotes_number > 0 && (
-                                  <h6>{card.upvotes_number}</h6>
-                                )}
-                              </div>
-                              <div
-                                  onClick={(e) =>{
-                                    e.stopPropagation();
-                                    handleDownvote(
-                                      card.is_upvoted,
-                                      card.id,
-                                      card.is_downvoted
-                                    )
-                                  }
-                                  }
-                                  className="btn ion-activatable ripple-parent flex al-center">
-                                {card.is_downvoted ? (
-                                  <IonIcon src="assets/imgs/dislike-filled.svg" />
-                                ) : (
-                                  <IonIcon src="assets/imgs/dislike-unfilled.svg"></IonIcon>
-                                )}
-                              </div>
-                              <div
-                                  onClick={(e) =>
-                                    {
-                                      e.stopPropagation()
-                                      handleSave(card.favourite, card.id)
-                                    }
-                                  }
-                                  className="btn ion-activatable ripple-parent flex al-center">
-                                {!card.favourite ? (
-                                  <IonIcon src="assets/imgs/heart-unfilled.svg"></IonIcon>
-                                ) : (
-                                  <IonIcon src="assets/imgs/heart-filled.svg" />
-                                )}
-                              </div>
-                                </div>*/}
-                          </IonLabel>
-                        </IonItem>
-                      </div>
-                    ))}
-                  </div>
               </div>
             </IonContent>
                 </>

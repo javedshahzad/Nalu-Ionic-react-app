@@ -28,21 +28,26 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
 import NotificationBell from "../../components/NotificationBell";
+import { useLocation } from 'react-router-dom';
 
 const Courseoverviewpaid: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [courseData, setCourseData] = useState(null);
+
   const history = useHistory();
+  const location = useLocation();
+
   let axiosCancelToken;
 
   useEffect(() => {
     getData();
+  
     return () => {
       if (axiosCancelToken) {
         axiosCancelToken.cancel("Component unmounted");
       }
     };
-  }, []);
+  }, [location.pathname]);
 
   const roles = JSON.parse(localStorage.getItem('roles')) || {};
   let isPremium = false; // Default to false
@@ -104,9 +109,11 @@ const Courseoverviewpaid: React.FC = () => {
                 <>
                 <IonHeader className="ion-no-border">
               <IonToolbar>
-                <IonButton color={"dark"} fill="clear" onClick={() => history.push('/menu')}>
-                  <IonIcon icon={menuOutline} />
-                </IonButton>
+              <IonButtons slot="end">
+                  <IonButton color="dark" onClick={() => history.push('/menu')}>
+                      <IonIcon icon={menuOutline} />
+                  </IonButton>
+              </IonButtons>
 
                 {/*<IonButtons slot="end">
                   <IonButton slot="end" fill="clear">

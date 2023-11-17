@@ -1,6 +1,6 @@
 function UserAuthentication() {
     const aut =
-      localStorage.getItem("jwtToken")
+      sessionStorage.getItem("jwtToken")
         ? true
         : false;
     return aut;

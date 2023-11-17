@@ -21,17 +21,9 @@ const Onboarding: React.FC = () => {
   const { t } = useTranslation();
   const history = useHistory();
    const auth = UserAuthentication(); 
-  useEffect(() => {
-    if (auth) {
-      history.push("/tabs/tab1");
-    }
-  }, [auth, history]);
+  
 
   const [date, setDate] = useState<string>(new Date().toISOString());
-
-  // useEffect(()=>{
-  //   i18next.changeLanguage(localStorage.getItem("language"));
-  // },[0])
 
   const handleDateChange = (event: CustomEvent<any>) => {
     setDate(event.detail.value);

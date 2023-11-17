@@ -175,7 +175,8 @@ ion-toolbar
 
         [slot="end"]
         {
-          min-width: 20%;
+          min-width: 0%;
+          margin-right: -15px;
         }
 
         ion-icon

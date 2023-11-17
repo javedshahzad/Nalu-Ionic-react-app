@@ -41,17 +41,17 @@ const MainTabs: React.FC<MainTabsProps> = () => {
       <IonRouterOutlet>
         <Redirect exact path="/tabs" to="/tabs/tab1" />
       
-        <Route path="/tabs/tab1" render={() => <PrivateRoute><JournalCalendarRemade /></PrivateRoute>} exact={true} />
-        <Route path="/tabs/tab2" render={() => <PrivateRoute><Courseoverviewpaid /></PrivateRoute>} exact={true} />
-        <Route path="/tabs/tab2/courseinneroverview" render={() => <PrivateRoute><CourseInnerOverview /></PrivateRoute>} />
-        <Route path="/tabs/tab2/courseinneroverview/:id" render={() => <PrivateRoute><CourseSubOverview /></PrivateRoute>} />
+        <Route path="/tabs/tab1" render={() => <PrivateRoute page={'JournalCalendarRemade'}><JournalCalendarRemade /></PrivateRoute>} exact={true} />
+        <Route path="/tabs/tab2" render={() => <PrivateRoute page={'Courseoverviewpaid'}><Courseoverviewpaid /></PrivateRoute>} exact={true} />
+        <Route path="/tabs/tab2/courseinneroverview" render={() => <PrivateRoute page={'CourseInnerOverview'}><CourseInnerOverview /></PrivateRoute>} />
+        <Route path="/tabs/tab2/courseinneroverview/:id" render={() => <PrivateRoute page={'CourseSubOverview'}><CourseSubOverview /></PrivateRoute>} />
 
-        <Route path="/tabs/tab3" render={() => <PrivateRoute><Mygroups /></PrivateRoute>} exact={true} />
-        <Route path="/tabs/tab3/eventdetail" render={() => <PrivateRoute><Eventdetail /></PrivateRoute>} exact={true} />
+        <Route path="/tabs/tab3" render={() => <PrivateRoute page={'Mygroups'}><Mygroups /></PrivateRoute>} exact={true} />
+        <Route path="/tabs/tab3/eventdetail" render={() => <PrivateRoute page={'Eventdetail'}><Eventdetail /></PrivateRoute>} exact={true} />
 
-        <Route path="/tabs/tab4" render={() => <PrivateRoute><Resources /></PrivateRoute>} exact={true}/>
-        <Route path="/tabs/tab4/resourcesubcateggory" render={() => <PrivateRoute><ResourceSubCategory /></PrivateRoute>} />
-        <Route path="/tabs/tab4/resourcedetail" render={() => <PrivateRoute><Resourcedetail /></PrivateRoute>} />
+        <Route path="/tabs/tab4" render={() => <PrivateRoute page={'Resources'}><Resources /></PrivateRoute>} exact={true}/>
+        <Route path="/tabs/tab4/resourcesubcateggory" render={() => <PrivateRoute page={'ResourceSubCategory'}><ResourceSubCategory /></PrivateRoute>} />
+        <Route path="/tabs/tab4/resourcedetail" render={() => <PrivateRoute page={'Resourcedetail'}><Resourcedetail /></PrivateRoute>} />
 
 
 
