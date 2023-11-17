@@ -109,9 +109,7 @@ const ResourceSubCategory: React.FC = () => {
       // <-
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
     } 
-    // else if (!is_upvoted && is_downvoted) {
-    //   URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
-    // }
+
 
     try {
       const response = await axios.post(
