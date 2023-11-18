@@ -49,6 +49,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import image_not_found from "../../Images/image-not-found.png";
 import { previousPaths } from "media-icons";
+import { useParams } from "react-router-dom";
 
 const ResourceSubCategory: React.FC = () => {
   const [activeSegment, setActiveSegment] = useState<string>("overview");
@@ -62,30 +63,68 @@ const ResourceSubCategory: React.FC = () => {
   const [categoryID, setCategoryID] = useState(null);
 
   const history = useHistory();
+  const {resource_sub_id} = useParams();
   const location = useLocation();
 
-  const { filteredData, subCategory, parent_id } = (location?.state || {}) as {
-    filteredData: any;
-    subCategory: any;
-    parent_id: any;
-  };
-  const [filtered, setFiltered] = useState(filteredData);
-  const [subCategories, setSubCategories] = useState(subCategory);
-  const [parentId, setParentId] = useState(parent_id);
+  // const { filteredData, subCategory, parent_id } = (location?.state || {}) as {
+  //   filteredData: any;
+  //   subCategory: any;
+  //   parent_id: any;
+  // };
+  const [filtered, setFiltered] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [parentId, setParentId] = useState(resource_sub_id);
   const [isCategoryLoading, setIsCategoryLoading] = useState(false);
   const [categoryIds, setCategoryIds] = useState([]);
 
   useEffect(() => {
-    setFiltered(filteredData);
-    setSubCategories(subCategory);
-    setParentId(parent_id);
-  }, [subCategory, filteredData, parent_id]);
+    // setFiltered(filteredData);
+    // setSubCategories(subCategory);
+    // setParentId(parent_id);
+    // console.log(id)
+    getParentCategoryByID(resource_sub_id)
+  }, [resource_sub_id]);
 
   useEffect(() => {
     getCategoryByID(categoryIds);
   }, [categoryIds]);
 
+
+  const getParentCategoryByID = (id) => {
+    setIsLoading(true);
+    // setCategoryID(id);
+
+    axios
+      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
+        params: {
+          category_id: id,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setFiltered(response.data.ressources,);
+        setSubCategories(response.data.sub_categories);
+        // setParentId(parent_id);
+
+        // history.push(`/tabs/tab4/resourcesubcateggory/${id}`, {
+        //   filteredData: response.data.ressources,
+        //   subCategory: response.data.sub_categories,
+        //   parent_id: id,
+        // });
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+        history.push(`/tabs/tab4`);
+      });
+  };
+
   const getCategoryByID = (ids) => {
+    if(ids.length > 0){
     setIsCategoryLoading(true);
     // setCategoryID(id);
     setIsFilterSelected(true);
@@ -108,6 +147,7 @@ const ResourceSubCategory: React.FC = () => {
         console.log(error);
         setIsCategoryLoading(false);
       });
+    }
   };
 
   const addToArr = (id) => {
@@ -117,6 +157,11 @@ const ResourceSubCategory: React.FC = () => {
       const data = categoryIds.filter((val) => {
         return val !== id;
       });
+      console.log(data)
+      if(data.length === 0){
+    getParentCategoryByID(resource_sub_id)
+
+      }
       setCategoryIds(data);
     } else {
       setCategoryIds((prev) => [...prev, id]);

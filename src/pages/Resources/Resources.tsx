@@ -55,8 +55,6 @@ const Resources: React.FC = () => {
 
   const history = useHistory();
   const router = useIonRouter();
-  // const navigate = useNavigate();
-
 
   let axiosCancelToken_1;
   let axiosCancelToken_2;
@@ -171,32 +169,36 @@ const Resources: React.FC = () => {
         setIsLoading(false);
       });
   };
-  const getParentCategoryByID = (id) => {
-    setIsLoading(true);
-    setCategoryID(id);
+  const getParentCategoryByID = (resource_sub_id) => {
 
-    axios
-      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-        },
-        params: {
-          category_id: id,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        history.push("/tabs/tab4/resourcesubcateggory", {
-          filteredData: response.data.ressources,
-          subCategory: response.data.sub_categories,
-          parent_id: id,
-        });
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
-      });
+         history.push(`/tabs/tab4/resourcesubcateggory/${resource_sub_id}`);
+
+    // setIsLoading(true);
+    // setCategoryID(id);
+
+    // axios
+    //   .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, {
+    //     headers: {
+    //       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    //     },
+    //     params: {
+    //       category_id: id,
+    //     },
+    //   })
+    //   .then((response) => {
+    //     console.log(response.data);
+
+    //     history.push(`/tabs/tab4/resourcesubcateggory/${id}`, {
+    //       filteredData: response.data.ressources,
+    //       subCategory: response.data.sub_categories,
+    //       parent_id: id,
+    //     });
+    //     setIsLoading(false);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     setIsLoading(false);
+    //   });
   };
   const handleUpvote = async (is_upvoted, id, is_downvoted) => {
     let URL;

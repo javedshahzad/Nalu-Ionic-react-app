@@ -50,7 +50,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         <Route path="/tabs/tab3/eventdetail" render={() => <PrivateRoute page={'Eventdetail'}><Eventdetail /></PrivateRoute>} exact={true} />
 
         <Route path="/tabs/tab4" render={() => <PrivateRoute page={'Resources'}><Resources /></PrivateRoute>} exact={true}/>
-        <Route path="/tabs/tab4/resourcesubcateggory" render={() => <PrivateRoute page={'ResourceSubCategory'}><ResourceSubCategory /></PrivateRoute>} />
+        <Route path="/tabs/tab4/resourcesubcateggory/:resource_sub_id" render={() => <PrivateRoute page={'ResourceSubCategory'}><ResourceSubCategory /></PrivateRoute>} />
         <Route path="/tabs/tab4/resourcedetail" render={() => <PrivateRoute page={'Resourcedetail'}><Resourcedetail /></PrivateRoute>} />
 
 
