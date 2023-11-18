@@ -24,6 +24,7 @@ import {
 } from "@ionic/react";
 import {
   add,
+  arrowBack,
   informationCircleOutline,
   menuOutline,
   notificationsOutline,
@@ -31,14 +32,23 @@ import {
 } from "ionicons/icons";
 
 import "./ResourceSubCategory.scss";
-import { useEffect, useState } from "react";
+import {
+  JSXElementConstructor,
+  Key,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
+  useEffect,
+  useState,
+} from "react";
 import { useHistory } from "react-router";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import filter from "../../Images/filter.png";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import image_not_found from '../../Images/image-not-found.png'
+import image_not_found from "../../Images/image-not-found.png";
+import { previousPaths } from "media-icons";
 
 const ResourceSubCategory: React.FC = () => {
   const [activeSegment, setActiveSegment] = useState<string>("overview");
@@ -48,35 +58,36 @@ const ResourceSubCategory: React.FC = () => {
   const [categoriesOverview, setCategoriesOverview] = useState([]);
   const [categoriesFavourites, setCategoriesFavourites] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
- 
+
   const [categoryID, setCategoryID] = useState(null);
 
   const history = useHistory();
   const location = useLocation();
 
-  const { filteredData, subCategory,parent_id } = (location?.state || {}) as {
+  const { filteredData, subCategory, parent_id } = (location?.state || {}) as {
     filteredData: any;
     subCategory: any;
-    parent_id: any
+    parent_id: any;
   };
   const [filtered, setFiltered] = useState(filteredData);
   const [subCategories, setSubCategories] = useState(subCategory);
   const [parentId, setParentId] = useState(parent_id);
   const [isCategoryLoading, setIsCategoryLoading] = useState(false);
+  const [categoryIds, setCategoryIds] = useState([]);
 
+  useEffect(() => {
+    setFiltered(filteredData);
+    setSubCategories(subCategory);
+    setParentId(parent_id);
+  }, [subCategory, filteredData, parent_id]);
 
-  useEffect(()=>{
-    setFiltered(filteredData)
-    setSubCategories(subCategory)
-    setParentId(parent_id)
+  useEffect(() => {
+    getCategoryByID(categoryIds);
+  }, [categoryIds]);
 
-  },[subCategory,filteredData,parent_id])
-
- 
-  const getCategoryByID = (id) => {
-    setIsCategoryLoading(true)
-    setCategoryID(id);
- 
+  const getCategoryByID = (ids) => {
+    setIsCategoryLoading(true);
+    // setCategoryID(id);
     setIsFilterSelected(true);
 
     axios
@@ -85,31 +96,41 @@ const ResourceSubCategory: React.FC = () => {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
         },
         params: {
-          category_id: id,
+          category_id: ids.toString(),
         },
       })
       .then((response) => {
-        console.log(response.data);
-        console.log(response.data.ressources);
-
         setFiltered(response.data.ressources);
-        setSubCategories(response.data.sub_categories)
-        setIsCategoryLoading(false)
+        // setSubCategories(response.data.sub_categories)
+        setIsCategoryLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        setIsCategoryLoading(false)
+        setIsCategoryLoading(false);
       });
   };
-  const handleUpvote = async (is_upvoted, id, is_downvoted) => {
-    let URL;
+
+  const addToArr = (id) => {
+    // setCategoryIds((prev)=> Array.from(new Set ([... prev,id])))
+
+    if (categoryIds.includes(id)) {
+      const data = categoryIds.filter((val) => {
+        return val !== id;
+      });
+      setCategoryIds(data);
+    } else {
+      setCategoryIds((prev) => [...prev, id]);
+    }
+  };
+
+  const handleUpvote = async (is_upvoted: any, id: any, is_downvoted: any) => {
+    let URL: string;
     if (is_upvoted) {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false}`;
     } else {
       // <-
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
-    } 
-
+    }
 
     try {
       const response = await axios.post(
@@ -122,11 +143,10 @@ const ResourceSubCategory: React.FC = () => {
         }
       );
       console.log(response.data);
-       if(
+      if (
         response.data.message === "Upvote handled successfully" ||
         response.data.message === "Downvote removed successfully" ||
         response.data.message === "Upvote removed successfully"
-
       ) {
         getCategoryByID(parentId);
       }
@@ -134,14 +154,18 @@ const ResourceSubCategory: React.FC = () => {
       console.error(error);
     }
   };
-  const handleDownvote = async (is_upvoted, id, is_downvoted) => {
-    let URL;
+  const handleDownvote = async (
+    is_upvoted: any,
+    id: any,
+    is_downvoted: any
+  ) => {
+    let URL: string;
     if (is_downvoted) {
       // <-
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
-    } else{
+    } else {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
-    } 
+    }
     // else if (is_downvoted) {
     //   URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
     // }
@@ -156,18 +180,19 @@ const ResourceSubCategory: React.FC = () => {
           },
         }
       );
-       if ((response.data.message === "Downvote removed successfully" || 
-       response.data.message === "Downvote added successfully" ||
-       response.data.message === "Upvote removed successfully"
-       )){
+      if (
+        response.data.message === "Downvote removed successfully" ||
+        response.data.message === "Downvote added successfully" ||
+        response.data.message === "Upvote removed successfully"
+      ) {
         getCategoryByID(parentId);
       }
     } catch (error) {
       console.error(error);
     }
   };
-  const handleSave = async (fav, id) => {
-    let URL;
+  const handleSave = async (fav: any, id: any) => {
+    let URL: string;
     if (fav) {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=false`;
     } else {
@@ -184,9 +209,9 @@ const ResourceSubCategory: React.FC = () => {
         }
       );
       console.log(response.data);
-      if(response.data.message = "Post added to favourites successfully"){
+      if ((response.data.message = "Post added to favourites successfully")) {
         console.log(parent_id);
-        getCategoryByID(parentId)
+        getCategoryByID(parentId);
       }
     } catch (error) {
       console.error(error);
@@ -194,12 +219,12 @@ const ResourceSubCategory: React.FC = () => {
   };
 
   const navigateFilter = () => {
-    setCategoryID(null)
+    setCategoryID(null);
     history.push("/filter");
   };
- 
-  const getResourceDetailsByID = (id) => {
-    setIsCategoryLoading(true)
+
+  const getResourceDetailsByID = (id: any) => {
+    setIsCategoryLoading(true);
 
     try {
       axios
@@ -210,27 +235,22 @@ const ResourceSubCategory: React.FC = () => {
             data: response.data,
             // resource_id: id
           });
-    setIsCategoryLoading(false)
-
+          setIsCategoryLoading(false);
         })
         .catch((error) => {
           console.log(error);
-    setIsCategoryLoading(false)
-
+          setIsCategoryLoading(false);
         });
     } catch (error) {
       console.log(error);
-    setIsCategoryLoading(false)
-
+      setIsCategoryLoading(false);
     }
   };
   return (
     <>
-     
-          <IonPage className="ResourceSubCategory">
-            {
-              isLoading? (
-                <div
+      <IonPage className="ResourceSubCategory">
+        {isLoading ? (
+          <div
             style={{
               display: "flex",
               justifyContent: "center",
@@ -240,13 +260,17 @@ const ResourceSubCategory: React.FC = () => {
           >
             <IonSpinner name="crescent"></IonSpinner>
           </div>
-              ):(
-                <>
-                <IonHeader className="ion-no-border">
+        ) : (
+          <>
+            <IonHeader className="ion-no-border">
               <IonToolbar>
-              <IonButtons slot="start">
-            <IonBackButton color="dark" text={""} defaultHref="/tabs/tab4" />
-          </IonButtons>
+                <IonButtons slot="start">
+                  <IonBackButton
+                    color="dark"
+                    text={""}
+                    defaultHref="/tabs/tab4"
+                  />
+                </IonButtons>
                 {/*<IonButtons slot="end">
                   <IonButton color="dark">
                     <IonIcon icon={searchOutline} />
@@ -262,9 +286,9 @@ const ResourceSubCategory: React.FC = () => {
 
             <IonContent className="ion-padding" fullscreen>
               <div className="Resources">
-                  <div className="selector mtype">
-                    <IonRadioGroup>
-                      {/*<IonItem
+                <div className="selector mtype">
+                  <IonRadioGroup>
+                    {/*<IonItem
                         lines="none"
                         onClick={navigateFilter}
                       >
@@ -278,78 +302,144 @@ const ResourceSubCategory: React.FC = () => {
                         <IonLabel>Filter</IonLabel>
                       </IonItem>*/}
 
-                      {subCategories?.map((item, index) => (
+                    {subCategories?.map(
+                      (
+                        item: {
+                          id: any;
+                          icon_url: any;
+                          svg_url: any;
+                          name:
+                            | string
+                            | number
+                            | boolean
+                            | ReactElement<
+                                any,
+                                string | JSXElementConstructor<any>
+                              >
+                            | Iterable<ReactNode>
+                            | ReactPortal
+                            | Record<string, unknown>
+                            | Iterable<ReactNode | Record<string, unknown>>;
+                        },
+                        index: Key
+                      ) => (
                         <IonItem
                           key={index}
                           lines="none"
-                          className={`img_div ${categoryID === item.id ? "selected" : "non_selected"}`}
-                          onClick={() => getCategoryByID(item.id)}
+                          className={`img_div ${
+                            categoryIds.includes(item.id)
+                              ? "selected"
+                              : "non_selected"
+                          }`}
+                          onClick={() => {
+                            addToArr(item.id);
+                          }}
                         >
                           <div className="icon_img">
                             {item?.icon_url ? (
-                                <div
-                                  className={`icon__ ${categoryID === item.id ? "blackIcon" : "blackIcon"}`}
-                                  dangerouslySetInnerHTML={{
-                                    __html: item.svg_url,
-                                  }}
-                                />
-                              ) : null}
+                              <div
+                                className={`icon__ ${
+                                  categoryID === item.id
+                                    ? "blackIcon"
+                                    : "blackIcon"
+                                }`}
+                                dangerouslySetInnerHTML={{
+                                  __html: item.svg_url,
+                                }}
+                              />
+                            ) : null}
                           </div>
-                          <IonLabel style={{marginLeft:"10px"}}>{item.name}</IonLabel>
+                          <IonLabel style={{ marginLeft: "10px" }}>
+                            {item.name}
+                          </IonLabel>
                         </IonItem>
-                      ))}
-                    </IonRadioGroup>
-                  </div>
+                      )
+                    )}
+                  </IonRadioGroup>
+                </div>
 
-                  <div className="the-list">
-  {isCategoryLoading ? (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "50vh",
-      }}
-    >
-      <IonSpinner name="crescent"></IonSpinner>
-    </div>
-  ) : (
-    filtered?.map((card, index) => (
-      <div className="resource-card" key={index}>
-        <IonItem lines="none" onClick={() => getResourceDetailsByID(card.id)}>
-          <div className="thumb" slot="start">
-            {card?.thumbnail_url ? (
-              <img src={card.thumbnail_url} alt="" />
-            ) : (
-              <span />
-            )}
-          </div>
+                <div className="the-list">
+                  {isCategoryLoading ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "50vh",
+                      }}
+                    >
+                      <IonSpinner name="crescent"></IonSpinner>
+                    </div>
+                  ) : (
+                    filtered?.map(
+                      (
+                        card: {
+                          id: any;
+                          thumbnail_url: string;
+                          title:
+                            | string
+                            | number
+                            | boolean
+                            | ReactElement<
+                                any,
+                                string | JSXElementConstructor<any>
+                              >
+                            | Iterable<ReactNode>
+                            | ReactPortal
+                            | Record<string, unknown>
+                            | Iterable<ReactNode | Record<string, unknown>>;
+                          description:
+                            | string
+                            | number
+                            | boolean
+                            | ReactElement<
+                                any,
+                                string | JSXElementConstructor<any>
+                              >
+                            | Iterable<ReactNode>
+                            | ReactPortal
+                            | Record<string, unknown>
+                            | Iterable<ReactNode | Record<string, unknown>>;
+                        },
+                        index: Key
+                      ) => (
+                        <div className="resource-card" key={index}>
+                          <IonItem
+                            lines="none"
+                            onClick={() => getResourceDetailsByID(card.id)}
+                          >
+                            <div className="thumb" slot="start">
+                              {card?.thumbnail_url ? (
+                                <img src={card.thumbnail_url} alt="" />
+                              ) : (
+                                <span />
+                              )}
+                            </div>
 
-          <IonLabel>
-            <div className="first flex al-center">
-              <h3>{card?.title}</h3>
-              {/* ... Other content ... */}
-            </div>
-            <div className="second flex al-center">
-              {/* ... Other content ... */}
-            </div>
-            <h5 className="ion-text-wrap">{card?.description}</h5>
-            {/* ... Other content ... */}
-          </IonLabel>
-        </IonItem>
-      </div>
-    ))
-  )}
-</div>
-
+                            <IonLabel>
+                              <div className="first flex al-center">
+                                <h3>{card?.title}</h3>
+                                {/* ... Other content ... */}
+                              </div>
+                              <div className="second flex al-center">
+                                {/* ... Other content ... */}
+                              </div>
+                              <h5 className="ion-text-wrap">
+                                {card?.description}
+                              </h5>
+                              {/* ... Other content ... */}
+                            </IonLabel>
+                          </IonItem>
+                        </div>
+                      )
+                    )
+                  )}
+                </div>
               </div>
             </IonContent>
-                </>
-              )
-            }
-            
-          </IonPage>
-       
+          </>
+        )}
+      </IonPage>
     </>
   );
 };
