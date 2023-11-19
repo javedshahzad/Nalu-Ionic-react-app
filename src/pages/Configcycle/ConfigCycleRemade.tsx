@@ -239,7 +239,7 @@ function ConfigCycleRemade() {
         >
           {moonPhase ? (
             <>
-              <div className="moonPhases">
+              <div>
                 {moonPhase.phase_name === "Full Moon" ? (
                   <img src={fullMoon} />
                 ) : moonPhase.phase_name === "New Moon" ? (
@@ -247,10 +247,18 @@ function ConfigCycleRemade() {
                 ) : null}
               </div>
               {/* Added "null" for the empty condition */}
-              <p>{i}</p>
+              <div className="dayToday">
+                {isToday ? (
+                  <span style={{ fontSize: "9px" }}>Today</span>
+                ) : null}
+                <p className={isToday ? "isToday" : ""}>{i}</p>
+              </div>
             </>
           ) : (
-            <>{i}</>
+            <div className="dayToday">
+              {isToday ? <span style={{ fontSize: "9px" }}>Today</span> : null}
+              <p className={isToday ? "isToday" : ""}>{i}</p>
+            </div>
           )}
         </li>
       );

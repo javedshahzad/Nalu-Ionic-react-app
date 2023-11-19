@@ -144,23 +144,44 @@ ion-toolbar {
 .full-moon {
   display: flex;
   gap: 8px;
+
+  .svgIconss {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+      fill: #3684b3 !important;
+    }
+  }
 }
 
 .currentDay {
   background-color: $config-black;
   border-radius: 10px;
   color: $config-white;
+  // display: flex !important;
+  // flex-direction: column !important;
+  // justify-content: center !important;
+  // gap: 0;
+  // &:hover {
+  //   background-color: $config-white !important;
+  //   border-radius: 10px;
+  // }
+}
+
+.todayMoonPhase {
+  left: 98px;
+  position: absolute;
+  bottom: 586px;
+}
+
+.dayToday {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0;
-  &:hover {
-    background-color: $config-white !important;
-    border-radius: 10px;
-  }
-  &::before {
-    content: "Today";
-    font-size: 8px;
+  align-items: center;
+  p {
+    margin: 0;
   }
 }
 .popoverHeading {

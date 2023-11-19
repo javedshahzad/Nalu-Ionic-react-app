@@ -8,6 +8,7 @@ import {
   useIonRouter,
   IonToolbar,
   IonLabel,
+  useIonViewWillEnter,
 } from "@ionic/react";
 import { menuOutline, notificationsOutline } from "ionicons/icons";
 import { useState, useRef, useEffect } from "react";
@@ -55,6 +56,7 @@ const JournalCalendarRemade = () => {
   const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
   const [todayPeriod, setTodayPeriod] = useState("false");
   const [icons2, setIcons2] = useState([]);
+  const [svg, setSvg] = useState("");
   const history = useHistory(); // Use useHistory for navigation
 
   // const navigation = useIonRouter();
@@ -139,11 +141,11 @@ const JournalCalendarRemade = () => {
     if (parseInt(month) < 10) {
       month = "0" + month;
     }
-    // console.log("month", month);
 
     let year = new Date().getFullYear();
 
     let yearMonth = `${year}-${month}`;
+
     try {
       const data = await MoonPhasesServce.get(
         `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=${lang}`
@@ -176,10 +178,10 @@ const JournalCalendarRemade = () => {
     const data = icons2;
 
     let style: any = {};
-    // console.log("data in function", data);
 
     let _day: any = new Date().getDate();
     let _month: any = new Date().getMonth() + 1;
+
     let _year = new Date().getFullYear();
 
     if (_month < 10) {
@@ -191,28 +193,29 @@ const JournalCalendarRemade = () => {
 
     let _x = `${_year}-${_month}-${_day}`;
 
-    Object.keys(moonColorData).map((obj) => {
-      if (obj === x && obj !== _x) {
-        moonColorData[obj].entries.map((phase) => {
-          if (phase.key === "period_bleeding" && parseInt(phase.value) > 0) {
-            style.backgroundColor = "#F0A6A9";
-            style.color = "white";
-          }
-          if (phase.key === "cervical_mucus" && parseInt(phase.value) > 0) {
-            style.backgroundColor = "#3684B3";
-            style.color = "white";
-          }
-        });
-      }
-    });
-
+    if (_month) {
+      Object.keys(moonColorData).map((obj) => {
+        if (obj === x && obj !== _x) {
+          moonColorData[obj].entries.map((phase) => {
+            if (phase.key === "period_bleeding" && parseInt(phase.value) > 0) {
+              style.backgroundColor = "#F0A6A9";
+              style.color = "white";
+            }
+            if (phase.key === "cervical_mucus" && parseInt(phase.value) > 0) {
+              style.backgroundColor = "#3684B3";
+              style.color = "white";
+            }
+          });
+        }
+      });
+    }
     return style;
   };
 
-  useEffect(() => {
+  useIonViewWillEnter(() => {
     getIcons();
     getIcons2();
-  }, []);
+  });
 
   const handleStartStop = () => {
     let body = {};
@@ -388,28 +391,30 @@ const JournalCalendarRemade = () => {
             activeIndex === i && activeMonthIndex === m ? "dayActive" : ""
           }`}
           onClick={() => handleOnClick(i, m)}
-          style={getColors(year, m, i)}
+          style={getColors(year, m + 1, i)}
         >
           {moonPhase ? (
             <>
-              <div className="moonPhases">
+              <div>
                 {moonPhase.phase_name === "Full Moon" ? (
                   <img src={fullMoon} />
                 ) : moonPhase.phase_name === "New Moon" ? (
                   <img src={newMoon} />
-                ) : // : moonPhase.phase_name === "First Quarter" ? (
-                //   <img src={cervicalMucus} />
-                // ) : moonPhase.phase_name === "Last Quarter" ? (
-                //   <img src={menstruation} />
-                // )
-
-                null}
+                ) : null}
               </div>
               {/* Added "null" for the empty condition */}
-              <p>{i}</p>
+              <div className="dayToday">
+                {isToday ? (
+                  <span style={{ fontSize: "9px" }}>Today</span>
+                ) : null}
+                <p className={isToday ? "isToday" : ""}>{i}</p>
+              </div>
             </>
           ) : (
-            <div>{i}</div>
+            <div className="dayToday">
+              {isToday ? <span style={{ fontSize: "9px" }}>Today</span> : null}
+              <p className={isToday ? "isToday" : ""}>{i}</p>
+            </div>
           )}
         </li>
       );
@@ -456,6 +461,20 @@ const JournalCalendarRemade = () => {
     );
   }
 
+  useEffect(() => {
+    const fetchSvg = async () => {
+      try {
+        const response = await fetch(cervicalMucus);
+        const svgText = await response.text();
+        setSvg(svgText);
+      } catch (error) {
+        console.error("Error loading SVG:", error);
+      }
+    };
+
+    fetchSvg();
+  }, [svg]);
+
   return (
     <IonPage>
       <IonContent>
@@ -497,7 +516,11 @@ const JournalCalendarRemade = () => {
               <p className="moon-text">Menstruation</p>
             </div>
             <div className="full-moon">
-              <img src={cervicalMucus} alt="" />
+              <div
+                className="svgIconss"
+                dangerouslySetInnerHTML={{ __html: svg }}
+                id="cervical"
+              />
               <p className="moon-text">Cervical Mucus</p>
             </div>
             <div className="new-moon">
@@ -509,6 +532,7 @@ const JournalCalendarRemade = () => {
               <p className="moon-text">Full Moon</p>
             </div>
           </div>
+
           <div className="gratitude-edit">
             <div className="journal-gratitude">
               <h3>
