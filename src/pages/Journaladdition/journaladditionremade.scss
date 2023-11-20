@@ -1,6 +1,6 @@
 .JournalAdditionRemade {
   $config-font-family: var(--ion-font-family);
-  $config-white: #F8F5F2;
+  $config-white: #f8f5f2;
   $config-pink: #ee5f64;
   $config-black: #2d2d2d;
 
@@ -31,7 +31,7 @@
       }
 
       .isToday {
-        background-color: $config-black;
+        background-color: $config-pink;
         border-radius: 10px;
         content: "Today";
         color: $config-white;
@@ -40,7 +40,6 @@
         justify-content: center;
         gap: 0;
         &:hover {
-          background-color: $config-pink !important;
           border-radius: 10px;
         }
         &::before {
@@ -124,7 +123,7 @@
   }
 
   ion-toolbar {
-    --background: #F8F5F2;
+    --background: #f8f5f2;
 
     ion-title {
       font-family: "GBold";

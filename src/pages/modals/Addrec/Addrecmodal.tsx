@@ -34,7 +34,6 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
   const isFormValid =
     !!selectedCategory && !!title && !categoryError && !titleError;
 
-
   const handleCategoryChange = (event) => {
     const value = event.target.value;
     setselectedCategory(value);
@@ -61,31 +60,37 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
 
     try {
       axios
-        .post("https://app.mynalu.com/wp-json/nalu-app/v1/recommendation", {
-          category: selectedCategory,
-          name: title,
-          description: note,
-        }, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        .post(
+          "https://app.mynalu.com/wp-json/nalu-app/v1/recommendation",
+          {
+            category: selectedCategory,
+            name: title,
+            description: note,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            },
           }
-        })
+        )
         .then((response) => {
           console.log(response.data);
-          if (response.data.message === 'Email sent successfully') {
-            onClose('Your recommendation was successfully shared. A representative from the NALU team will carefully check your recommendation before publishing it within the app');
+          if (response.data.message === "Email sent successfully") {
+            onClose(
+              "Your recommendation was successfully shared. A representative from the NALU team will carefully check your recommendation before publishing it within the app"
+            );
           }
         })
         .catch((error) => {
           console.error(error);
         });
-    }catch (error) {
+    } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <IonPage className="Addrecmodal">
+    <IonPage className="Addrecmodal modalX">
       <div className="model_content">
         <div
           className="back"
@@ -115,10 +120,16 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
                         value={selectedCategory}
                         onIonChange={handleCategoryChange}
                       >
-                        <IonSelectOption value="apple">Anlaufstellen</IonSelectOption>
+                        <IonSelectOption value="apple">
+                          Anlaufstellen
+                        </IonSelectOption>
                         <IonSelectOption value="banana">Medien</IonSelectOption>
-                        <IonSelectOption value="orange">Rezepte</IonSelectOption>
-                        <IonSelectOption value="orange">Gesundheitskosten</IonSelectOption>
+                        <IonSelectOption value="orange">
+                          Rezepte
+                        </IonSelectOption>
+                        <IonSelectOption value="orange">
+                          Gesundheitskosten
+                        </IonSelectOption>
                       </IonSelect>
                     </IonItem>
                     {categoryError && (
@@ -154,8 +165,11 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
                   </div>
 
                   <div className="btn-holder ion-text-center ion-padding-vertical">
-                    <IonButton expand="block" disabled={!isFormValid} 
-                    onClick={()=> handleSubmit()}>
+                    <IonButton
+                      expand="block"
+                      disabled={!isFormValid}
+                      onClick={() => handleSubmit()}
+                    >
                       Empfehlung mit NALU teilen
                     </IonButton>
                   </div>
