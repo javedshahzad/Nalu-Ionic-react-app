@@ -533,7 +533,7 @@ const JournalCalendarRemade = () => {
           <div className="gratitude-edit">
             <div className="journal-gratitude">
               <h3>
-                Intention: <span>{icons2.today.weekly_intention}</span>
+                Intention: <span>{icons2?.today?.weekly_intention}</span>
               </h3>
             </div>
             <div className="edit-btn">
@@ -544,9 +544,9 @@ const JournalCalendarRemade = () => {
           </div>
           <div className="journal-cycle-wrapper">
             <div className="journal-cycle">
-              <h3>{icons2.today.label}</h3>
+              <h3>{icons2?.today?.label}</h3>
               <div className="day-time">
-                <span>{icons2.today.date}</span>
+                <span>{icons2?.today?.date}</span>
               </div>
             </div>
             <IonButton fill="clear">
