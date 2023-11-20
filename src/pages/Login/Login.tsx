@@ -12,10 +12,10 @@ import {
 
 import "./Login.scss";
 import { useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import { navigate } from "ionicons/icons";
 import { useHistory } from "react-router";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const Login: React.FC = () => {
   const [password, setPassword] = useState('');
@@ -32,12 +32,9 @@ const Login: React.FC = () => {
 
 
   const history = useHistory();
-  const { t} = useTranslation();  
+  const { t } = useTranslation();
 
-
-
-  const apiHost = 'https://app.mynalu.com/wp-json';
-
+  const apiHost = "https://app.mynalu.com/wp-json";
 
   const handlePasswordChange = (event) => {
     const value = event.target.value;
@@ -46,7 +43,6 @@ const Login: React.FC = () => {
     setErrorMessage(value.trim() === '' ? '': '')
 
   };
-
 
   const handleEmailChange = (event) => {
     const value = event.target.value;
@@ -135,10 +131,9 @@ const Login: React.FC = () => {
     <IonPage className="Login">
       <IonContent className="ion-padding" fullscreen>
         <div className="title-holder ion-text-center">
-          <h3> {t('login.login')}</h3>
+          <h3> {t("login.login")}</h3>
         </div>
         <div className="the-form">
-    
           <div className="input-item">
           <IonItem lines="none">
               <IonIcon src="assets/imgs/icn-email.svg" slot="start"/>
@@ -158,7 +153,7 @@ const Login: React.FC = () => {
             <IonItem lines="none">
               <IonIcon src="assets/imgs/icn-lock.svg" slot="start" />
               <IonInput
-                placeholder={t('login.password')}
+                placeholder={t("login.password")}
                 type="password"
                 value={password}
                 onIonBlur={handlePasswprdInputBlur}
@@ -169,8 +164,6 @@ const Login: React.FC = () => {
             {errorMessage && <p className="error-message">{errorMessage}</p>}
 
           </div>
-
-         
         </div>
         <div className="btn-holder ion-text-center ion-padding-vertical">
           <IonButton expand="block" disabled={!isFormValid || isSubmitting} onClick={handleLogin}>
@@ -183,9 +176,8 @@ const Login: React.FC = () => {
         </div>
 
         <div className="or ion-text-center">
-          <p>{t('login.or')}</p>
+          <p>{t("login.or")}</p>
         </div>
-      
 
         {/*<div className="social-holder ion-text-center">
         <IonButton expand="block" routerLink="/questioning">

@@ -118,23 +118,23 @@
     }
   }
 
-  .currentDay {
-    background-color: $config-black;
-    border-radius: 10px;
-    color: $config-white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 0;
-    &:hover {
-      background-color: $config-white !important;
-      border-radius: 10px;
-    }
-    &::before {
-      content: "Heute";
-      font-size: 8px;
-    }
-  }
+.currentDay {
+  background-color: $config-black;
+  border-radius: 10px;
+  color: $config-white;
+  //   display: flex;
+  //   flex-direction: column;
+  //   justify-content: center;
+  //   gap: 0;
+  //   &:hover {
+  //     background-color: $config-white !important;
+  //     border-radius: 10px;
+  //   }
+  //   &::before {
+  //     content: "Today";
+  //     font-size: 8px;
+  //   }
+}
 
   .continue-btn {
     color: $config-white !important;
@@ -223,21 +223,20 @@
     gap: 6px;
   }
 
-  .cur-month-year-text {
-    font-size: 18px;
-    font-weight: 700;
-    text-align: left;
-  }
-  #cur-month-year-icon {
-    ion-button {
-      ion-icon {
-        width: 15px;
-      }
+.cur-month-year-text {
+  font-size: 18px;
+  font-weight: 700;
+  text-align: left;
+}
+#cur-month-year-icon {
+  ion-button {
+    ion-icon {
+      width: 15px;
     }
   }
-  .moonPhases {
-    position: relative;
-    top: 7px;
-    right: 3px;
-  }
 }
+// .moonPhases {
+//   position: relative;
+//   top: 7px;
+//   right: 3px;
+// }
