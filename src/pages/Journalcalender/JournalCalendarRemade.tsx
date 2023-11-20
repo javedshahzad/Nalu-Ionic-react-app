@@ -69,13 +69,13 @@ const JournalCalendarRemade = () => {
   const curDate: string = date.toLocaleDateString();
 
   const curDay: string = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
+    "Sonntag",
+    "Montag",
+    "Dienstag",
+    "Mittwoch",
+    "Donnerstag",
+    "Freitag",
+    "Samstag",
   ][date.getDay()];
 
   const handleOnClick = (dateIndex, monthIndex) => {
@@ -537,7 +537,7 @@ const JournalCalendarRemade = () => {
             </div>
           </div>
 
-          <div className="gratitude-edit">
+          {/*<div className="gratitude-edit">
             <div className="journal-gratitude">
               <h3>
                 Intention: <span>Gratitude</span>
@@ -548,7 +548,7 @@ const JournalCalendarRemade = () => {
                 <IonIcon src={pen} />
               </IonButton>
             </div>
-                </div>
+          </div>
           <div className="journal-cycle-wrapper">
             <div className="journal-cycle">
               <h3>Cycle Day 5</h3>
@@ -560,10 +560,14 @@ const JournalCalendarRemade = () => {
             <IonButton fill="clear">
               <img src={setting} alt="" />
             </IonButton>
-          </div>
-          <IonButton className="period-btn" onClick={goToJournalAddition}>
-            End of Period
-          </IonButton>*/}
+          </div>*/}
+          <IonButton className="period-btn" onClick={handleStartStop}>
+            {todayPeriod == "false" ? (
+              <IonLabel>Beginn der Periode</IonLabel>
+            ) : (
+              <IonLabel>Ende der Periode</IonLabel>
+            )}
+          </IonButton>
         </div>
       </IonContent>
     </IonPage>
