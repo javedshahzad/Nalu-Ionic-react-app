@@ -51,6 +51,9 @@ import image_not_found from "../../Images/image-not-found.png";
 import { previousPaths } from "media-icons";
 import { useParams } from "react-router-dom";
 
+export interface r_id {
+  resource_sub_id: string
+}
 const ResourceSubCategory: React.FC = () => {
   const [activeSegment, setActiveSegment] = useState<string>("overview");
   const [modalOpen, setModalOpen] = useState(false);
@@ -63,7 +66,7 @@ const ResourceSubCategory: React.FC = () => {
   const [categoryID, setCategoryID] = useState(null);
 
   const history = useHistory();
-  const {resource_sub_id} = useParams();
+  const {resource_sub_id} : any = useParams();
   const location = useLocation();
 
   // const { filteredData, subCategory, parent_id } = (location?.state || {}) as {
@@ -168,105 +171,104 @@ const ResourceSubCategory: React.FC = () => {
     }
   };
 
-  const handleUpvote = async (is_upvoted: any, id: any, is_downvoted: any) => {
-    let URL: string;
-    if (is_upvoted) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false}`;
-    } else {
-      // <-
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
-    }
+  // const handleUpvote = async (is_upvoted: any, id: any, is_downvoted: any) => {
+  //   let URL: string;
+  //   if (is_upvoted) {
+  //     URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false}`;
+  //   } else {
+  //     // <-
+  //     URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
+  //   }
 
-    try {
-      const response = await axios.post(
-        URL,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        }
-      );
-      console.log(response.data);
-      if (
-        response.data.message === "Upvote handled successfully" ||
-        response.data.message === "Downvote removed successfully" ||
-        response.data.message === "Upvote removed successfully"
-      ) {
-        getCategoryByID(parentId);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const handleDownvote = async (
-    is_upvoted: any,
-    id: any,
-    is_downvoted: any
-  ) => {
-    let URL: string;
-    if (is_downvoted) {
-      // <-
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
-    } else {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
-    }
-    // else if (is_downvoted) {
-    //   URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
-    // }
+  //   try {
+  //     const response = await axios.post(
+  //       URL,
+  //       {},
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+  //         },
+  //       }
+  //     );
+  //     console.log(response.data);
+  //     if (
+  //       response.data.message === "Upvote handled successfully" ||
+  //       response.data.message === "Downvote removed successfully" ||
+  //       response.data.message === "Upvote removed successfully"
+  //     ) {
+  //       getCategoryByID(parentId);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+  // const handleDownvote = async (
+  //   is_upvoted: any,
+  //   id: any,
+  //   is_downvoted: any
+  // ) => {
+  //   let URL: string;
+  //   if (is_downvoted) {
+  //     // <-
+  //     URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
+  //   } else {
+  //     URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
+  //   }
+  //   // else if (is_downvoted) {
+  //   //   URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
+  //   // }
 
-    try {
-      const response = await axios.post(
-        URL,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        }
-      );
-      if (
-        response.data.message === "Downvote removed successfully" ||
-        response.data.message === "Downvote added successfully" ||
-        response.data.message === "Upvote removed successfully"
-      ) {
-        getCategoryByID(parentId);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const handleSave = async (fav: any, id: any) => {
-    let URL: string;
-    if (fav) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=false`;
-    } else {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=true`;
-    }
-    try {
-      const response = await axios.post(
-        URL,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        }
-      );
-      console.log(response.data);
-      if ((response.data.message = "Post added to favourites successfully")) {
-        console.log(parent_id);
-        getCategoryByID(parentId);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //   try {
+  //     const response = await axios.post(
+  //       URL,
+  //       {},
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+  //         },
+  //       }
+  //     );
+  //     if (
+  //       response.data.message === "Downvote removed successfully" ||
+  //       response.data.message === "Downvote added successfully" ||
+  //       response.data.message === "Upvote removed successfully"
+  //     ) {
+  //       getCategoryByID(parentId);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+  // const handleSave = async (fav: any, id: any) => {
+  //   let URL: string;
+  //   if (fav) {
+  //     URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=false`;
+  //   } else {
+  //     URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=true`;
+  //   }
+  //   try {
+  //     const response = await axios.post(
+  //       URL,
+  //       {},
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+  //         },
+  //       }
+  //     );
+  //     console.log(response.data);
+  //     if ((response.data.message = "Post added to favourites successfully")) {
+  //       getCategoryByID(parentId);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  const navigateFilter = () => {
-    setCategoryID(null);
-    history.push("/filter");
-  };
+  // const navigateFilter = () => {
+  //   setCategoryID(null);
+  //   history.push("/filter");
+  // };
 
   const getResourceDetailsByID = (id: any) => {
     setIsCategoryLoading(true);
@@ -347,27 +349,7 @@ const ResourceSubCategory: React.FC = () => {
                         <IonLabel>Filter</IonLabel>
                       </IonItem>*/}
 
-                    {subCategories?.map(
-                      (
-                        item: {
-                          id: any;
-                          icon_url: any;
-                          svg_url: any;
-                          name:
-                            | string
-                            | number
-                            | boolean
-                            | ReactElement<
-                                any,
-                                string | JSXElementConstructor<any>
-                              >
-                            | Iterable<ReactNode>
-                            | ReactPortal
-                            | Record<string, unknown>
-                            | Iterable<ReactNode | Record<string, unknown>>;
-                        },
-                        index: Key
-                      ) => (
+                    {subCategories?.map((item, index) => (
                         <IonItem
                           key={index}
                           lines="none"
@@ -416,38 +398,7 @@ const ResourceSubCategory: React.FC = () => {
                       <IonSpinner name="crescent"></IonSpinner>
                     </div>
                   ) : (
-                    filtered?.map(
-                      (
-                        card: {
-                          id: any;
-                          thumbnail_url: string;
-                          title:
-                            | string
-                            | number
-                            | boolean
-                            | ReactElement<
-                                any,
-                                string | JSXElementConstructor<any>
-                              >
-                            | Iterable<ReactNode>
-                            | ReactPortal
-                            | Record<string, unknown>
-                            | Iterable<ReactNode | Record<string, unknown>>;
-                          description:
-                            | string
-                            | number
-                            | boolean
-                            | ReactElement<
-                                any,
-                                string | JSXElementConstructor<any>
-                              >
-                            | Iterable<ReactNode>
-                            | ReactPortal
-                            | Record<string, unknown>
-                            | Iterable<ReactNode | Record<string, unknown>>;
-                        },
-                        index: Key
-                      ) => (
+                    filtered?.map((card, index) => (
                         <div className="resource-card" key={index}>
                           <IonItem
                             lines="none"
@@ -464,15 +415,12 @@ const ResourceSubCategory: React.FC = () => {
                             <IonLabel>
                               <div className="first flex al-center">
                                 <h3>{card?.title}</h3>
-                                {/* ... Other content ... */}
                               </div>
                               <div className="second flex al-center">
-                                {/* ... Other content ... */}
                               </div>
                               <h5 className="ion-text-wrap">
                                 {card?.description}
                               </h5>
-                              {/* ... Other content ... */}
                             </IonLabel>
                           </IonItem>
                         </div>
