@@ -405,14 +405,14 @@ const JournalCalendarRemade = () => {
               {/* Added "null" for the empty condition */}
               <div className="dayToday">
                 {isToday ? (
-                  <span style={{ fontSize: "9px" }}>Today</span>
+                  <span style={{ fontSize: "9px" }}>Heute</span>
                 ) : null}
                 <p className={isToday ? "isToday" : ""}>{i}</p>
               </div>
             </>
           ) : (
             <div className="dayToday">
-              {isToday ? <span style={{ fontSize: "9px" }}>Today</span> : null}
+              {isToday ? <span style={{ fontSize: "9px" }}>Heute</span> : null}
               <p className={isToday ? "isToday" : ""}>{i}</p>
             </div>
           )}
