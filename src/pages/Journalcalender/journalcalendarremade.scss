@@ -1,6 +1,6 @@
 .JournalCalendarRemade {
   $config-font-family: var(--ion-font-family);
-  $config-white: #F8F5F2;
+  $config-white: #f8f5f2;
   $config-pink: #ee5f64;
   $config-black: #2d2d2d;
 
@@ -10,7 +10,7 @@
   }
 
   ion-toolbar {
-    --background: #F8F5F2;
+    --background: #f8f5f2;
   }
 
   .calendar-day {
@@ -144,54 +144,54 @@
     }
   }
 
-.full-moon {
-  display: flex;
-  gap: 8px;
-
-  .svgIconss {
+  .full-moon {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    svg {
-      fill: #3684b3 !important;
+    gap: 8px;
+
+    .svgIconss {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      svg {
+        fill: #3684b3 !important;
+      }
     }
   }
-}
 
-.currentDay {
-  background-color: $config-black;
-  border-radius: 10px;
-  color: $config-white;
-  // display: flex !important;
-  // flex-direction: column !important;
-  // justify-content: center !important;
-  // gap: 0;
-  // &:hover {
-  //   background-color: $config-white !important;
-  //   border-radius: 10px;
-  // }
-}
+  .currentDay {
+    background-color: $config-black;
+    border-radius: 10px;
+    color: $config-white;
+    // display: flex !important;
+    // flex-direction: column !important;
+    // justify-content: center !important;
+    // gap: 0;
+    // &:hover {
+    //   background-color: $config-white !important;
+    //   border-radius: 10px;
+    // }
+  }
 
-.todayMoonPhase {
-  left: 98px;
-  position: absolute;
-  bottom: 586px;
-}
+  .todayMoonPhase {
+    left: 98px;
+    position: absolute;
+    bottom: 586px;
+  }
 
-.dayToday {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  p {
+  .dayToday {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    p {
+      margin: 0;
+    }
+  }
+  .popoverHeading {
+    font-size: 15px;
+    font-weight: bold;
     margin: 0;
   }
-}
-.popoverHeading {
-  font-size: 15px;
-  font-weight: bold;
-  margin: 0;
-}
 
   .daysIcon {
     position: relative;
@@ -274,7 +274,7 @@
     color: $config-white;
     font-size: 18px;
     font-weight: 400;
-    margin-top: 0;
+    margin-top: 20px;
   }
 
   .moonPhases {

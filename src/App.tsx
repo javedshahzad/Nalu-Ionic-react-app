@@ -68,7 +68,7 @@ import GroupChat from "./pages/Chat/GroupChat/GroupChat";
 import GroupDetails from "./pages/Chat/GroupDetails/GroupDetails";
 import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
 import MyChatGroups from "./pages/Chat/mygroups/MyGroups";
-import JournalAdditionRemade from './pages/Journaladdition/JournalAdditionRemade';
+import JournalAdditionRemade from "./pages/Journaladdition/JournalAdditionRemade";
 import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade";
 import UserAuthentication from "./auth/UserAuthentication";
 import Menu from "./pages/Menu/Menu";
@@ -140,7 +140,7 @@ const App: React.FC = () => {
   useEffect(() => {
     if (token) {
       socket.on("my-group-list", (data: any) => {
-        if (data.results.length > 0) {
+        if (data.results && data.results.length > 0) {
           dispatchFunction(data.results);
         }
       });
@@ -158,8 +158,7 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonRouterOutlet>
           <Route path="/tabs" render={() => <MainTabs />} />
-          <Route exact path="/chat">
-          </Route>
+          <Route exact path="/chat"></Route>
           {/* Temporary Rout to Menu */}
           <Route exact path="/menu">
             <Menu />
@@ -168,55 +167,55 @@ const App: React.FC = () => {
             <Addcustomcategory />
           </Route>
           <Route exact path="/community">
-            <PrivateRoute page={'community'}>
+            <PrivateRoute page={"community"}>
               <Community />
             </PrivateRoute>
           </Route>
 
           <Route exact path="/configcycle">
-            <PrivateRoute page={'configcycle'}>
+            <PrivateRoute page={"configcycle"}>
               <Configcycle />
             </PrivateRoute>
           </Route>
 
           <Route exact path="/coursechapter">
-            <PrivateRoute page={'coursechapter'}>
+            <PrivateRoute page={"coursechapter"}>
               <Coursechapter />
             </PrivateRoute>
           </Route>
 
           <Route exact path="/courseoverviewfree">
-            <PrivateRoute page={'courseoverviewfree'}>
+            <PrivateRoute page={"courseoverviewfree"}>
               <Courseoverviewfree />
             </PrivateRoute>
           </Route>
 
           <Route exact path="/courseoverviewpaid">
-            <PrivateRoute page={'courseoverviewpaid'}>
+            <PrivateRoute page={"courseoverviewpaid"}>
               <Courseoverviewpaid />
             </PrivateRoute>
           </Route>
 
           <Route exact path="/filter">
-            <PrivateRoute page={'filter'}>
+            <PrivateRoute page={"filter"}>
               <Filtermodal />
             </PrivateRoute>
           </Route>
 
           <Route exact path="/journaladdition">
-            <PrivateRoute page={'journaladdition'}>
+            <PrivateRoute page={"journaladdition"}>
               <Journaladdition />
             </PrivateRoute>
           </Route>
 
           <Route exact path="/journalcalender">
-            <PrivateRoute page={'journalcalender'}>
+            <PrivateRoute page={"journalcalender"}>
               <Journalcalender />
             </PrivateRoute>
           </Route>
 
           <Route exact path="/learnmore">
-            <PrivateRoute page={'learnmore'}>
+            <PrivateRoute page={"learnmore"}>
               <Learnmore />
             </PrivateRoute>
           </Route>
@@ -224,24 +223,24 @@ const App: React.FC = () => {
             <Login />
           </Route>
           <Route exact path="/membership">
-            <PrivateRoute page={'membership'}>
+            <PrivateRoute page={"membership"}>
               <Membership />
             </PrivateRoute>
           </Route>
           <Route exact path="/mygroups">
-            <PrivateRoute page={'mygroups'}>
+            <PrivateRoute page={"mygroups"}>
               <Mygroups />
             </PrivateRoute>
           </Route>
           <Route exact path="/mychatgroups">
-            <PrivateRoute page={'mygroups'}>
+            <PrivateRoute page={"mygroups"}>
               <MyChatGroups />
             </PrivateRoute>
           </Route>
           <Route exact path="/onboarding">
-          <PrivateRoute page={'onboarding'}>
-          <Onboarding />
-          </PrivateRoute>
+            <PrivateRoute page={"onboarding"}>
+              <Onboarding />
+            </PrivateRoute>
           </Route>
           <Route exact path="/questioning">
             <Questioning />
@@ -249,27 +248,26 @@ const App: React.FC = () => {
           <Route exact path="/registeration">
             <Registeration />
           </Route>
-         
 
           <Route exact path="/stayup">
-            <PrivateRoute page={'stayup'}>
+            <PrivateRoute page={"stayup"}>
               <Stayup />
             </PrivateRoute>
           </Route>
           <Route exact path="/resources">
-            <PrivateRoute page={'resources'}>
+            <PrivateRoute page={"resources"}>
               <Resources />
             </PrivateRoute>
           </Route>
           <Route exact path="/journalcalendarremade">
-            <PrivateRoute page={'journalcalendarremade'}>
+            <PrivateRoute page={"journalcalendarremade"}>
               <JournalCalendarRemade />
             </PrivateRoute>
           </Route>
           <Route exact path="/configcycleremade">
             <ConfigCycleRemade />
           </Route>
- 
+
           <Route exact path="/addcustomcategory/:dateParam">
             <Addcustomcategory />
           </Route>

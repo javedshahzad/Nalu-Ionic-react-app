@@ -55,7 +55,7 @@ const JournalCalendarRemade = () => {
   const [activeMonthIndex, setActiveMonthIndex] = useState(null);
   const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
   const [todayPeriod, setTodayPeriod] = useState("false");
-  const [icons2, setIcons2] = useState([]);
+  const [icons2, setIcons2] = useState<any>([]);
   const [svg, setSvg] = useState("");
   const history = useHistory(); // Use useHistory for navigation
 
@@ -147,9 +147,10 @@ const JournalCalendarRemade = () => {
 
     try {
       const data = await MoonPhasesServce.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=en`
       );
 
+      console.log("dataa", data);
       const todayData = data["today"];
 
       if (todayData) {
@@ -225,7 +226,7 @@ const JournalCalendarRemade = () => {
       date = "0" + date;
     }
 
-    let month: any = new Date().getMonth();
+    let month: any = new Date().getMonth() + 1;
 
     if (parseInt(month) < 10) {
       month = "0" + month;
@@ -234,6 +235,8 @@ const JournalCalendarRemade = () => {
     let year = new Date().getFullYear();
 
     let curDate = `${year}-${month}-${date}`;
+
+    console.log("curr date", curDate);
 
     if (todayPeriod == "false") {
       body = {
@@ -278,8 +281,6 @@ const JournalCalendarRemade = () => {
         }
       );
     }
-
-    // history.push(url);
   };
 
   const handleClick = () => {
@@ -479,19 +480,11 @@ const JournalCalendarRemade = () => {
     <IonPage className="JournalCalendarRemade">
       <IonContent>
         <IonToolbar>
-        <IonButtons slot="end">
-                  <IonButton color="dark" onClick={() => history.push('/menu')}>
-                      <IonIcon icon={menuOutline} />
-                  </IonButton>
-              </IonButtons>
-          {/*<IonButtons slot="end">
-            <IonButton color="dark">
-              <IonIcon icon={searchOutline} />
+          <IonButtons slot="end">
+            <IonButton color="dark" onClick={() => history.push("/menu")}>
+              <IonIcon icon={menuOutline} />
             </IonButton>
-            <IonButton color="dark">
-              <NotificationBell />
-            </IonButton>
-          </IonButtons>*/}
+          </IonButtons>
         </IonToolbar>
         <div className="journalcalendar-main">
           <div className="calendar-container" onScroll={() => handleScroll()}>
@@ -511,36 +504,36 @@ const JournalCalendarRemade = () => {
           </div>
 
           <div className="moon-phases">
-          <div className="period-group">
-            <div className="full-moon">
-              <img src={menstruation} alt="" />
-              <p className="moon-text">Menstruation</p>
+            <div className="period-group">
+              <div className="full-moon">
+                <img src={menstruation} alt="" />
+                <p className="moon-text">Menstruation</p>
+              </div>
+              <div className="new-moon bottom">
+                <img src={newMoon} alt="" />
+                <p className="moon-text">Neumond</p>
+              </div>
             </div>
-            <div className="new-moon bottom">
-              <img src={newMoon} alt="" />
-              <p className="moon-text">Neumond</p>
-            </div>
-            </div>
-          <div className="moon-group">
-            <div className="full-moon">
-              <div
-                className="svgIconss"
-                dangerouslySetInnerHTML={{ __html: svg }}
-                id="cervical"
-              />
-              <p className="moon-text">Zervixschleim</p>
-            </div>
-            <div className="full-moon bottom">
-              <img src={fullMoon} alt="" />
-              <p className="moon-text">Vollmond</p>
-            </div>
+            <div className="moon-group">
+              <div className="full-moon">
+                <div
+                  className="svgIconss"
+                  dangerouslySetInnerHTML={{ __html: svg }}
+                  id="cervical"
+                />
+                <p className="moon-text">Zervixschleim</p>
+              </div>
+              <div className="full-moon bottom">
+                <img src={fullMoon} alt="" />
+                <p className="moon-text">Vollmond</p>
+              </div>
             </div>
           </div>
 
-          {/*<div className="gratitude-edit">
+          <div className="gratitude-edit">
             <div className="journal-gratitude">
               <h3>
-                Intention: <span>Gratitude</span>
+                Intention: <span>{icons2?.today?.weekly_intention}</span>
               </h3>
             </div>
             <div className="edit-btn">
@@ -551,16 +544,16 @@ const JournalCalendarRemade = () => {
           </div>
           <div className="journal-cycle-wrapper">
             <div className="journal-cycle">
-              <h3>Cycle Day 5</h3>
+              <h3>{icons2?.today?.label}</h3>
               <div className="day-time">
-                <span>{curDay},</span>
-                <span>{curDate}</span>
+                <span>{icons2?.today?.date}</span>
               </div>
             </div>
             <IonButton fill="clear">
               <img src={setting} alt="" />
             </IonButton>
-          </div>*/}
+          </div>
+
           <IonButton className="period-btn" onClick={handleStartStop}>
             {todayPeriod == "false" ? (
               <IonLabel>Beginn der Periode</IonLabel>

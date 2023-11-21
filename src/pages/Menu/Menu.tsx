@@ -17,6 +17,7 @@ import {
   IonRippleEffect,
   IonTitle,
   IonToolbar,
+  useIonRouter,
 } from "@ionic/react";
 
 import { useLocation } from "react-router-dom";
@@ -24,6 +25,7 @@ import {
   archiveOutline,
   archiveSharp,
   arrowBack,
+  arrowBackOutline,
   bookmarkOutline,
   camera,
   cameraOutline,
@@ -41,9 +43,10 @@ import {
   warningSharp,
 } from "ionicons/icons";
 import "./Menu.scss";
-import { Browser } from '@capacitor/browser';
-import { useHistory } from 'react-router-dom';
+import { Browser } from "@capacitor/browser";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
+import { ArrowLeftIcon } from "@vidstack/react/icons";
 
 async function openExternalLink(url: string) {
   await Browser.open({ url: url });
@@ -64,22 +67,8 @@ const Menu: React.FC = () => {
   const location = useLocation();
   const history = useHistory();
 
-  const getResourceDetailsByID = (id) => {
-    try {
-      axios
-        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`)
-        .then((response) => {
-          console.log(response.data);
-          history.push("/tabs/tab4/resourcedetail", {
-            data: response.data,
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+  const backHandler = () => {
+    window.history.back();
   };
 
   const appPages: AppPage[] = [
@@ -108,50 +97,47 @@ const Menu: React.FC = () => {
     },*/
     {
       title: "Notfallplan",
-      url: "",
-      Icon: 'assets/imgs/menu5.svg',
-      onClick: () => getResourceDetailsByID(6999),
+      url: "/tabs/tab4/resourcedetail/6999",
+      Icon: "assets/imgs/menu5.svg",
+      // onClick: () => getResourceDetailsByID(6999),
+      onClick: () => history.push("/tabs/tab4/resourcedetail/6999"),
     },
     {
       title: "Quellen",
       url: "https://app.mynalu.com/quellen/",
-      Icon: 'assets/imgs/menu6.svg',
+      Icon: "assets/imgs/menu6.svg",
     },
-  
+
     {
       title: "Datenschutzerklärung",
       url: "https://app.mynalu.com/datenschutzerklaerung/",
-      Icon: 'assets/imgs/menu7.svg',
-      
+      Icon: "assets/imgs/menu7.svg",
     },
     {
       title: "Impressum",
       url: "https://app.mynalu.com/impressum/",
-      Icon: 'assets/imgs/menu8.svg',
-     
+      Icon: "assets/imgs/menu8.svg",
     },
     {
       title: "support@mynalu.com",
       url: "mailto:support@mynalu.com",
-      Icon: 'assets/imgs/menu9.svg',
-     
+      Icon: "assets/imgs/menu9.svg",
     },
     {
       title: "lisafilipe.nalu",
       url: "https://www.instagram.com/lisafilipe.nalu/",
-      Icon: 'assets/imgs/menu10.svg',
+      Icon: "assets/imgs/menu10.svg",
     },
     {
       title: "lisafilipe.nalu",
       url: "https://www.facebook.com/lisafilipe.nalu",
-      Icon: 'assets/imgs/menu11.svg',
+      Icon: "assets/imgs/menu11.svg",
     },
-    
   ];
 
   // Function to close the menu
   const closeMenu = () => {
-    const menu = document.querySelector('ion-menu');
+    const menu = document.querySelector("ion-menu");
     menu?.close();
     console.log("fdfdfdfd");
   };
@@ -161,7 +147,9 @@ const Menu: React.FC = () => {
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton color="dark" text={""} defaultHref="/tabs/tab1" />
+            <IonButton color="dark" onClick={backHandler}>
+              <IonIcon icon={arrowBackOutline}></IonIcon>
+            </IonButton>
           </IonButtons>
           <IonTitle>Menü</IonTitle>
         </IonToolbar>
@@ -184,36 +172,39 @@ const Menu: React.FC = () => {
           <h6>example@gmail.com</h6>
         </div>*/}
         <IonList id="inbox-list">
-         
-        {appPages.map((appPage, index) => {
-          return (
+          {appPages.map((appPage, index) => {
+            return (
               <IonMenuToggle key={index} autoHide={false}>
-                  <IonItem 
-                      className={
-                          location.pathname === appPage.url ? "selected" : ""
-                      }
-                      onClick={() => {
-                        if (appPage.onClick) {
-                          appPage.onClick();
-                        } else if (appPage.url.startsWith("https://") || appPage.url.startsWith("mailto:") || appPage.url.startsWith("tel:")) {
-                          openLink(appPage.url);
-                        }
-                      }}
-                      routerLink={!appPage.url.startsWith("https://") ? appPage.url : undefined}
-                      routerDirection="none"
-                      lines="none"
-                      detail={true}
-                  >
-                      <IonIcon
-                          aria-hidden="true"
-                          slot="start"
-                          src={appPage.Icon}
-                      />
-                      <IonLabel>{appPage.title}</IonLabel>
-                  </IonItem>
+                <IonItem
+                  className={
+                    location.pathname === appPage.url ? "selected" : ""
+                  }
+                  onClick={() => {
+                    if (appPage.onClick) {
+                      appPage.onClick();
+                    } else if (
+                      appPage.url.startsWith("https://") ||
+                      appPage.url.startsWith("mailto:") ||
+                      appPage.url.startsWith("tel:")
+                    ) {
+                      openLink(appPage.url);
+                    }
+                  }}
+                  routerLink={
+                    !appPage.url.startsWith("https://")
+                      ? appPage.url
+                      : undefined
+                  }
+                  routerDirection="none"
+                  lines="none"
+                  detail={true}
+                >
+                  <IonIcon aria-hidden="true" slot="start" src={appPage.Icon} />
+                  <IonLabel>{appPage.title}</IonLabel>
+                </IonItem>
               </IonMenuToggle>
-          );
-      })}
+            );
+          })}
         </IonList>
 
         {/*<div className="btnnn-holder ion-text-center ion-padding-top">
@@ -222,8 +213,6 @@ const Menu: React.FC = () => {
             Sign out
           </IonButton>
         </div>*/}
-
-    
       </IonContent>
     </IonPage>
   );
