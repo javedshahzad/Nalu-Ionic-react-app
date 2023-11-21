@@ -5,6 +5,7 @@ import {
   IonPopover,
   useIonRouter,
   IonIcon,
+  IonDatetime,
 } from "@ionic/react";
 import "./configcycleremade.scss";
 import { useState, useRef, useEffect } from "react";
@@ -14,6 +15,8 @@ import { chevronDownOutline } from "ionicons/icons";
 import CustomCategoryApiService from "../../CustomCategoryService";
 import tokenService from "../../token";
 import MoonPhasesServce from "../../MoonPhasesService";
+import { ca } from "@vidstack/react/dist/types/vidstack-react";
+import moment from "moment";
 
 const months = [
   "January",
@@ -43,6 +46,7 @@ function ConfigCycleRemade() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
   const [activeMonthIndex, setActiveMonthIndex] = useState(null);
+  const [calendarDate, setCalendarDate] = useState(null);
 
   const navigation = useIonRouter();
   const toLogin = () => {
@@ -67,6 +71,13 @@ function ConfigCycleRemade() {
     } else {
       return "";
     }
+  };
+
+  const handleDateSelect = (event: CustomEvent) => {
+    const selectedDate = event.detail.value;
+    const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
+    setCalendarDate(formattedDate);
+    // console.log("selected", calendarDate);
   };
 
   const handleOnClick = (dateIndex, monthIndex) => {
@@ -143,26 +154,26 @@ function ConfigCycleRemade() {
     let lastDateOfMonth = new Date(year, m + 1, 0).getDate();
     const lastDateOfPrevMonth = new Date(year, m, 0).getDate();
 
-    if (m === 1 && isLeapYear(year)) {
-      lastDateOfMonth = 29;
-    }
+    // if (m === 1 && isLeapYear(year)) {
+    //   lastDateOfMonth = 29;
+    // }
 
-    for (const day of days) {
-      monthData.push(
-        <li key={`day-${day}`} className="calendar-day day-of-week">
-          {day}
-        </li>
-      );
-    }
+    // for (const day of days) {
+    //   monthData.push(
+    //     <li key={`day-${day}`} className="calendar-day day-of-week">
+    //       {day}
+    //     </li>
+    //   );
+    // }
 
-    for (let i = 0; i < firstDayOfMonth; i++) {
-      const prevMonthDate = lastDateOfPrevMonth - firstDayOfMonth + i + 1;
-      monthData.push(
-        <li key={`inactive-${i}`} className="inactive calendar-day">
-          {prevMonthDate}
-        </li>
-      );
-    }
+    // for (let i = 0; i < firstDayOfMonth; i++) {
+    //   const prevMonthDate = lastDateOfPrevMonth - firstDayOfMonth + i + 1;
+    //   monthData.push(
+    //     <li key={`inactive-${i}`} className="inactive calendar-day">
+    //       {prevMonthDate}
+    //     </li>
+    //   );
+    // }
 
     const getIcons = async () => {
       try {
@@ -210,112 +221,122 @@ function ConfigCycleRemade() {
       }
     }, []);
 
-    for (let i = 1; i <= lastDateOfMonth; i++) {
-      const isToday =
-        i === new Date().getDate() &&
-        m === new Date().getMonth() &&
-        year === new Date().getFullYear()
-          ? "currentDay"
-          : "";
-      const moonPhase = moonPhaseIcon.find((item) => {
-        return (
-          item.date ===
-          year +
-            "-" +
-            (m + 1).toString().padStart(2, "0") +
-            "-" +
-            i.toString().padStart(2, "0")
-        );
-      });
+    // for (let i = 1; i <= lastDateOfMonth; i++) {
+    //   const isToday =
+    //     i === new Date().getDate() &&
+    //     m === new Date().getMonth() &&
+    //     year === new Date().getFullYear()
+    //       ? "currentDay"
+    //       : "";
+    //   const moonPhase = moonPhaseIcon.find((item) => {
+    //     return (
+    //       item.date ===
+    //       year +
+    //         "-" +
+    //         (m + 1).toString().padStart(2, "0") +
+    //         "-" +
+    //         i.toString().padStart(2, "0")
+    //     );
+    //   });
 
-      monthData.push(
-        <li
-          key={`currentDay-${i}`}
-          className={`calendar-day ${isToday} ${
-            activeIndex === i && activeMonthIndex === m ? "dayActive" : ""
-          }`}
-          onClick={() => handleOnClick(i, m)}
-          id={`${i}/${m + 1}/${year}`}
-        >
-          {moonPhase ? (
-            <>
-              <div>
-                {moonPhase.phase_name === "Full Moon" ? (
-                  <img src={fullMoon} />
-                ) : moonPhase.phase_name === "New Moon" ? (
-                  <img src={newMoon} />
-                ) : null}
-              </div>
-              {/* Added "null" for the empty condition */}
-              <div className="dayToday">
-                {isToday ? (
-                  <span style={{ fontSize: "9px" }}>Today</span>
-                ) : null}
-                <p className={isToday ? "isToday" : ""}>{i}</p>
-              </div>
-            </>
-          ) : (
-            <div className="dayToday">
-              {isToday ? <span style={{ fontSize: "9px" }}>Today</span> : null}
-              <p className={isToday ? "isToday" : ""}>{i}</p>
-            </div>
-          )}
-        </li>
-      );
-    }
-    calendarMonths.push(
-      <div className="calendar-month" key={`month-${m}`}>
-        <div className="cur-month-year">
-          <span className="cur-month-year-text">{months[m]}</span>
-          <span className="cur-month-year-text">{year}</span>
-          <span id="cur-month-year-icon">
-            <IonButton fill="clear" onClick={handleClick}>
-              <IonIcon icon={chevronDownOutline}></IonIcon>
-            </IonButton>
-          </span>
-          <IonPopover
-            isOpen={isOpen}
-            onDidDismiss={() => setIsOpen(false)}
-            ref={popoverRef}
-          >
-            <div className="popover-content">
-              <h5 className="popoverHeading"> Select Month:</h5>
-              <label>
-                <select
-                  value={currentMonth}
-                  onChange={handleMonthChange}
-                  className="month-select"
-                >
-                  {months.map((monthName, optionIndex) => (
-                    <option value={monthName} key={optionIndex}>
-                      {monthName}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <button onClick={handleGo} className="go-button">
-                Go
-              </button>
-            </div>
-          </IonPopover>
-        </div>
-        <ul className="calendar-data">{monthData}</ul>
-      </div>
-    );
+    //   monthData.push(
+    //     <li
+    //       key={`currentDay-${i}`}
+    //       className={`calendar-day ${isToday} ${
+    //         activeIndex === i && activeMonthIndex === m ? "dayActive" : ""
+    //       }`}
+    //       onClick={() => handleOnClick(i, m)}
+    //       id={`${i}/${m + 1}/${year}`}
+    //     >
+    //       {moonPhase ? (
+    //         <>
+    //           <div>
+    //             {moonPhase.phase_name === "Full Moon" ? (
+    //               <img src={fullMoon} />
+    //             ) : moonPhase.phase_name === "New Moon" ? (
+    //               <img src={newMoon} />
+    //             ) : null}
+    //           </div>
+    //           {/* Added "null" for the empty condition */}
+    //           <div className="dayToday">
+    //             {isToday ? (
+    //               <span style={{ fontSize: "9px" }}>Today</span>
+    //             ) : null}
+    //             <p className={isToday ? "isToday" : ""}>{i}</p>
+    //           </div>
+    //         </>
+    //       ) : (
+    //         <div className="dayToday">
+    //           {isToday ? <span style={{ fontSize: "9px" }}>Today</span> : null}
+    //           <p className={isToday ? "isToday" : ""}>{i}</p>
+    //         </div>
+    //       )}
+    //     </li>
+    //   );
+    // }
+    // calendarMonths
+    //   .push
+    // <div className="calendar-month" key={`month-${m}`}>
+    //   <div className="cur-month-year">
+    //     <span className="cur-month-year-text">{months[m]}</span>
+    //     <span className="cur-month-year-text">{year}</span>
+    //     <span id="cur-month-year-icon">
+    //       <IonButton fill="clear" onClick={handleClick}>
+    //         <IonIcon icon={chevronDownOutline}></IonIcon>
+    //       </IonButton>
+    //     </span>
+    //     <IonPopover
+    //       isOpen={isOpen}
+    //       onDidDismiss={() => setIsOpen(false)}
+    //       ref={popoverRef}
+    //     >
+    //       <div className="popover-content">
+    //         <h5 className="popoverHeading"> Select Month:</h5>
+    //         <label>
+    //           <select
+    //             value={currentMonth}
+    //             onChange={handleMonthChange}
+    //             className="month-select"
+    //           >
+    //             {months.map((monthName, optionIndex) => (
+    //               <option value={monthName} key={optionIndex}>
+    //                 {monthName}
+    //               </option>
+    //             ))}
+    //           </select>
+    //         </label>
+    //         <button onClick={handleGo} className="go-button">
+    //           Go
+    //         </button>
+    //       </div>
+    //     </IonPopover>
+    //   </div>
+    //   <ul className="calendar-data">{monthData}</ul>
+    // </div>
+    // ();
   }
 
   const goToLearnMore = () => {
     const tempMonthIndex = activeMonthIndex + 1 + "";
     const tempDateIndex = activeIndex + "";
 
+    const data = {
+      entries: [
+        {
+          key: "period_bleeding",
+          value: "3",
+        },
+      ],
+    };
+
     const dateParam = `${year}-${
       +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
     }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
-    CustomCategoryApiService.postCall_3(
-      `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}`,
-
-      tokenService.getToken()
+    console.log("dateParar", dateParam);
+    CustomCategoryApiService.post(
+      `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${calendarDate}`,
+      data
     ).then(
       (data) => {
         console.log("data from custom category api", data);
@@ -340,7 +361,7 @@ function ConfigCycleRemade() {
             last period?
           </h3>
 
-          <div className="calendar-container" onScroll={() => handleScroll()}>
+          {/* <div className="calendar-container" onScroll={() => handleScroll()}>
             <div className="calendar-scrollable">
               {calendarMonths.map((monthData, mIndex) => (
                 <div
@@ -354,8 +375,14 @@ function ConfigCycleRemade() {
                 </div>
               ))}
             </div>
-          </div>
-
+          </div> */}
+          <form>
+            <IonDatetime
+              presentation="date"
+              firstDayOfWeek={1}
+              onIonChange={handleDateSelect}
+            ></IonDatetime>
+          </form>
           <div className="moon-phases">
             <div className="new-moon">
               <img src={newMoon} alt="" />
@@ -383,7 +410,7 @@ function ConfigCycleRemade() {
           </div>
           <IonButton
             className="continue-btn"
-            disabled={!activeIndex}
+            disabled={!calendarDate}
             onClick={goToLearnMore}
           >
             Continue
