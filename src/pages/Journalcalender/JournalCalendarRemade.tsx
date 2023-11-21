@@ -530,18 +530,6 @@ const JournalCalendarRemade = () => {
             </div>
           </div>
 
-          <div className="gratitude-edit">
-            <div className="journal-gratitude">
-              <h3>
-                Intention: <span>{icons2?.today?.weekly_intention}</span>
-              </h3>
-            </div>
-            <div className="edit-btn">
-              <IonButton fill="clear">
-                <IonIcon src={pen} />
-              </IonButton>
-            </div>
-          </div>
           <div className="journal-cycle-wrapper">
             <div className="journal-cycle">
               <h3>{icons2?.today?.label}</h3>
@@ -549,9 +537,6 @@ const JournalCalendarRemade = () => {
                 <span>{icons2?.today?.date}</span>
               </div>
             </div>
-            <IonButton fill="clear">
-              <img src={setting} alt="" />
-            </IonButton>
           </div>
 
           <IonButton className="period-btn" onClick={handleStartStop}>
