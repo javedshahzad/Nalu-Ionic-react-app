@@ -193,7 +193,7 @@ const Eventdetail: React.FC = () => {
                     defaultHref="/tabs/tab3"
                   />
                 </IonButtons>
-                <IonTitle>{event?.title}</IonTitle>
+                <IonTitle dangerouslySetInnerHTML={event?.title} />
                 {/*<IonButtons slot="end">
                   <IonButton color="dark">
                     <IonIcon icon={heartOutline} />
@@ -220,7 +220,7 @@ const Eventdetail: React.FC = () => {
 
                 <div className="rec">
                   <div className="details">
-                    <h2>{event?.title}</h2>
+                    <h2 dangerouslySetInnerHTML={{__html: event?.title}}></h2>
 
                     <IonItem lines="none">
                       <div className="start-slot flex al-start " slot="start">
