@@ -59,6 +59,7 @@ function JournalAdditionRemade() {
 
   const typeObj: any = useSelector((state: RootState) => state.journalReducer);
 
+  console.log('typeObj', typeObj)
   const dispatch = useDispatch();
 
   const roles = JSON.parse(localStorage.getItem("roles")) || {};
@@ -86,19 +87,26 @@ function JournalAdditionRemade() {
       setIsLoading(true);
 
       const data = await JournalAdditionApiService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=en`
       );
+
 
       if (data.entries.length > 0) {
         const types = [...new Set(data.entries.map((item: any) => item.type))];
 
-        const dynamicStates = {};
+        console.log('types', types);
+        let dynamicStates: any = [];
 
-        types.forEach((type: any) => {
-          dynamicStates[type] = data.entries.filter(
-            (item: any) => item.type === type
-          );
-        });
+        dynamicStates = data.entries;
+
+        // types.forEach((type: any) => {
+        //   dynamicStates[type] = data.entries.filter(
+        //     (item: any) => item.type === type
+        //   );
+        // });
+
+        console.log('dynamic States', dynamicStates)
+
 
         dispatch(journalAction(dynamicStates));
 
@@ -310,7 +318,7 @@ function JournalAdditionRemade() {
         ],
       }
     ).then(
-      (data) => {},
+      (data) => { },
       (err) => {
         console.log("err sending data", err);
       }
@@ -467,12 +475,11 @@ function JournalAdditionRemade() {
                     className={
                       "date " +
                       `${day.isToday === true ? " isToday" : ""}` +
-                      `${
-                        activeYear === day.year &&
+                      `${activeYear === day.year &&
                         activeDate === day.dayNo &&
                         activeMonth === day.month
-                          ? "active"
-                          : ""
+                        ? "active"
+                        : ""
                       }`
                     }
                     style={getColors(day.year, day.month, day.dayNo)}
@@ -527,708 +534,708 @@ function JournalAdditionRemade() {
         ) : (
           <>
             {typeObj && typeObj.length > 0 ? (
-              Object.keys(typeObj[0]).map((type: any, typeIndex: any) => (
+              typeObj[0].map((entry: any, typeIndex: any) => (
                 <div key={typeIndex}>
-                  {typeObj[0][type].map((entry: any, entryIndex: any) => (
-                    <div key={entryIndex}>
-                      <div className="section">
-                        {entry.type === "group" && (
-                          <div>
-                            {entry.key === "symptoms" && (
-                              <>
-                                <div className="title flex al-center jc-between">
-                                  <h3>{entry.label}</h3>
-                                  {/*<IonButton fill="clear">
+
+
+                  <div className="section">
+                    {entry.type === "group" && (
+                      <div>
+                        {entry.key === "symptoms" && (
+                          <>
+                            <div className="title flex al-center jc-between">
+                              <h3>{entry.label}</h3>
+                              {/*<IonButton fill="clear">
                                     <IonIcon src="assets/imgs/Pen.svg" />
                                   </IonButton>*/}
-                                </div>
-                                <div className="tags-holder">
-                                  <IonRow>
-                                    {entry.fields.map((fields: any) => (
-                                      <IonCol size="4" key={fields.key}>
-                                        <IonItem
-                                          lines="none"
-                                          onClick={() => (fields.value = true)}
-                                        >
-                                          <div
-                                            className="svgIconss"
-                                            dangerouslySetInnerHTML={{
-                                              __html: fields.svg,
-                                            }}
-                                            id={fields.key}
-                                          />
+                            </div>
+                            <div className="tags-holder">
+                              <IonRow>
+                                {entry.fields.map((fields: any) => (
+                                  <IonCol size="4" key={fields.key}>
+                                    <IonItem
+                                      lines="none"
+                                      onClick={() => (fields.value = true)}
+                                    >
+                                      <div
+                                        className="svgIconss"
+                                        dangerouslySetInnerHTML={{
+                                          __html: fields.svg,
+                                        }}
+                                        id={fields.key}
+                                      />
 
-                                          <IonLabel>{fields.label}</IonLabel>
-                                          <IonCheckbox
-                                            checked={fields.value}
-                                            onIonChange={(event) =>
-                                              updateField(
-                                                event.target.value,
-                                                fields
-                                              )
-                                            }
-                                          />
-                                        </IonItem>
-                                      </IonCol>
-                                    ))}
-                                  </IonRow>
-                                </div>
-                              </>
-                            )}
-                          </div>
+                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonCheckbox
+                                        checked={fields.value}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.target.value,
+                                            fields
+                                          )
+                                        }
+                                      />
+                                    </IonItem>
+                                  </IonCol>
+                                ))}
+                              </IonRow>
+                            </div>
+                          </>
                         )}
                       </div>
-                      <div className="section">
-                        {entry.type === "group" && (
-                          <div>
-                            {entry.key === "pain" && (
-                              <>
-                                <div className="title flex al-center jc-between">
-                                  <h3>{entry.label}</h3>
-                                  {/*<IonButton fill="clear">
+                    )}
+                  </div>
+                  <div className="section">
+                    {entry.type === "group" && (
+                      <div>
+                        {entry.key === "pain" && (
+                          <>
+                            <div className="title flex al-center jc-between">
+                              <h3>{entry.label}</h3>
+                              {/*<IonButton fill="clear">
                                     <IonIcon src="assets/imgs/Pen.svg" />
                                   </IonButton>*/}
+                            </div>
+                            <div className="range-holder">
+                              <IonRow>
+                                {entry.fields.map((field: any) => (
+                                  <>
+                                    <IonCol
+                                      size="2"
+                                      className="flex al-center"
+                                    >
+                                      <img
+                                        src={field.icon}
+                                        height={20}
+                                        alt=""
+                                        style={{}}
+                                      />
+                                    </IonCol>
+                                    <IonCol size="9">
+                                      <h3>{field.label}</h3>
+                                      <div>
+                                        <IonRange
+                                          className="custom-tick"
+                                          aria-label="Dual Knobs Range"
+                                          dualKnobs={false}
+                                          ticks={true}
+                                          snaps={true}
+                                          min={1}
+                                          max={10}
+                                          value={
+                                            field.value ? field.value : 1
+                                          }
+                                          pin={true}
+                                          pinFormatter={(value: number) => {
+                                            switch (value) {
+                                              case 1:
+                                                return "Kein Schmerz";
+                                              case 2:
+                                              case 3:
+                                                return "Leichter Schmerz";
+                                              case 4:
+                                              case 5:
+                                                return "Mittlerer Schmerz";
+                                              case 6:
+                                              case 7:
+                                                return "Starker Schmerz";
+                                              case 8:
+                                              case 9:
+                                                return "Sehr starker Schmerz";
+                                              case 10:
+                                                return "Stärkster vorstellbarer Schmerz";
+                                              default:
+                                                return "Kein Schmerz";
+                                            }
+                                          }}
+                                          onIonChange={(event) =>
+                                            updateField(
+                                              event.target.value,
+                                              field
+                                            )
+                                          }
+                                        ></IonRange>
+                                        <div className="tick-labels">
+                                          {rangeValues10.map((values) => (
+                                            <div
+                                              key={values}
+                                              className="tick-label2"
+                                            >
+                                              {values}
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    </IonCol>
+                                  </>
+                                ))}
+                              </IonRow>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <div className="section">
+                    {entry.type === "group" && (
+                      <div>
+                        {entry.key === "mood" && (
+                          <>
+                            <div className="title flex al-center jc-between">
+                              <h3>{entry.label}</h3>
+                              {/*<IonButton fill="clear">
+                                    <IonIcon src="assets/imgs/Pen.svg" />
+                                  </IonButton>*/}
+                            </div>
+                            <div className="tags-holder">
+                              <IonRow>
+                                {entry.fields.map((fields: any) => (
+                                  <IonCol size="4" key={fields.key}>
+                                    <IonItem lines="none">
+                                      <div
+                                        className="svgIconss"
+                                        dangerouslySetInnerHTML={{
+                                          __html: fields.svg,
+                                        }}
+                                        id={fields.key}
+                                      />
+                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonCheckbox
+                                        checked={fields.true_false}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.target.value,
+                                            fields
+                                          )
+                                        }
+                                      />
+                                    </IonItem>
+                                  </IonCol>
+                                ))}
+                              </IonRow>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <div className="section">
+                    {entry.type === "group" && (
+                      <div>
+                        {entry.key === "sexual_activity" && (
+                          <>
+                            <div className="title flex al-center jc-between">
+                              <h3>{entry.label}</h3>
+                              {/*<IonButton fill="clear">
+                                    <IonIcon src="assets/imgs/Pen.svg" />
+                                  </IonButton>*/}
+                            </div>
+                            <div className="tags-holder">
+                              <IonRow>
+                                {entry.fields.map((fields: any) => (
+                                  <IonCol size="4" key={fields.key}>
+                                    <IonItem lines="none">
+                                      <div
+                                        className="svgIconss"
+                                        dangerouslySetInnerHTML={{
+                                          __html: fields.svg,
+                                        }}
+                                        id={fields.key}
+                                      />
+                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonCheckbox
+                                        checked={fields.true_false}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.target.value,
+                                            fields
+                                          )
+                                        }
+                                      />
+                                    </IonItem>
+                                  </IonCol>
+                                ))}
+                              </IonRow>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <div className="section">
+                    {entry.type === "group" && (
+                      <div>
+                        {entry.key === "outflows" && (
+                          <>
+                            <div className="title flex al-center jc-between">
+                              <h3>{entry.label}</h3>
+                              {/*<IonButton fill="clear">
+                                    <IonIcon src="assets/imgs/Pen.svg" />
+                                  </IonButton>*/}
+                            </div>
+                            <div className="tags-holder">
+                              <IonRow>
+                                {entry.fields.map((fields: any) => (
+                                  <IonCol size="4" key={fields.key}>
+                                    <IonItem lines="none">
+                                      <div
+                                        className="svgIconss"
+                                        dangerouslySetInnerHTML={{
+                                          __html: fields.svg,
+                                        }}
+                                        id={fields.key}
+                                      />
+                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonCheckbox
+                                        checked={fields.true_false}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.target.value,
+                                            fields
+                                          )
+                                        }
+                                      />
+                                    </IonItem>
+                                  </IonCol>
+                                ))}
+                              </IonRow>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <div className="section">
+                    {entry.type === "group" && (
+                      <div>
+                        {entry.key === "medication" && (
+                          <>
+                            <div className="title flex al-center jc-between">
+                              <h3>{entry.label}</h3>
+                              {/*<IonButton fill="clear">
+                                    <IonIcon src="assets/imgs/Pen.svg" />
+                                  </IonButton>*/}
+                            </div>
+                            <div className="tags-holder">
+                              <IonRow>
+                                {entry.fields.map((fields: any) => (
+                                  <IonCol size="4" key={fields.key}>
+                                    <IonItem lines="none">
+                                      <div
+                                        className="svgIconss"
+                                        dangerouslySetInnerHTML={{
+                                          __html: fields.svg,
+                                        }}
+                                        id={fields.key}
+                                      />
+                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonCheckbox
+                                        checked={fields.true_false}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.target.value,
+                                            fields
+                                          )
+                                        }
+                                      />
+                                    </IonItem>
+                                  </IonCol>
+                                ))}
+                              </IonRow>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <div className="section">
+                    {entry.type === "group" && (
+                      <div>
+                        {entry.key === "activities" && (
+                          <>
+                            <div className="title flex al-center jc-between">
+                              <h3>{entry.label}</h3>
+                              {/*<IonButton fill="clear">
+                                    <IonIcon src="assets/imgs/Pen.svg" />
+                                  </IonButton>*/}
+                            </div>
+                            <div className="tags-holder">
+                              <IonRow>
+                                {entry.fields.map((fields: any) => (
+                                  <IonCol size="4" key={fields.key}>
+                                    <IonItem lines="none">
+                                      <div
+                                        className="svgIconss"
+                                        dangerouslySetInnerHTML={{
+                                          __html: fields.svg,
+                                        }}
+                                        id={fields.key}
+                                      />
+                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonCheckbox
+                                        checked={fields.true_false}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.target.value,
+                                            fields
+                                          )
+                                        }
+                                      />
+                                    </IonItem>
+                                  </IonCol>
+                                ))}
+                              </IonRow>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="section">
+                    {entry.type === "textarea" && (
+                      <div>
+                        <div className="title flex al-center jc-between">
+                          <h3>{entry.label}</h3>
+                          {/*<IonButton fill="clear">
+                                <IonIcon src="assets/imgs/Pen.svg" />
+                              </IonButton>*/}
+                        </div>
+                        <div className="tags-holder">
+                          <div>
+                            {
+                              <div className="section last">
+                                <div className="the-form">
+                                  <div className="input-item">
+                                    <IonItem lines="none">
+                                      <IonInput
+                                        id={entry.key}
+                                        placeholder="Text eingeben"
+                                        value={entry.value || ""}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.target.value,
+                                            entry
+                                          )
+                                        }
+                                      />
+                                    </IonItem>
+                                  </div>
                                 </div>
-                                <div className="range-holder">
-                                  <IonRow>
-                                    {entry.fields.map((field: any) => (
-                                      <>
-                                        <IonCol
-                                          size="2"
-                                          className="flex al-center"
-                                        >
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="section">
+                    {entry.type === "text" && (
+                      <div>
+                        <div className="title flex al-center jc-between">
+                          <h3>{entry.label}</h3>
+                          {/*<IonButton fill="clear">
+                                <IonIcon src="assets/imgs/Pen.svg" />
+                              </IonButton>*/}
+                        </div>
+                        <div className="tags-holder">
+                          <div>
+                            {
+                              <div className="section last">
+                                <div className="the-form">
+                                  <div className="input-item">
+                                    <IonItem lines="none">
+                                      <IonInput
+                                        id={entry.key}
+                                        placeholder="Text eingeben"
+                                        value={entry.value || ""}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.target.value,
+                                            entry
+                                          )
+                                        }
+                                      />
+                                    </IonItem>
+                                  </div>
+                                </div>
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="section">
+                    {entry.type === "range-5" && (
+                      <div id={entry.key}>
+                        <div className="title flex al-center jc-between">
+                          <h3>{entry.label}</h3>
+                          {/*<IonButton fill="clear">
+                                <IonIcon src="assets/imgs/Pen.svg" />
+                              </IonButton>*/}
+                        </div>
+                        <div className="range-holder">
+                          <IonRow>
+                            <IonCol size="2" class="flex al-center">
+                              <div className="start-slot flex al-center">
+                                <img
+                                  src={entry.icon}
+                                  height={20}
+                                  alt=""
+                                  style={{}}
+                                />
+                              </div>
+                            </IonCol>
+                            <IonCol size="9">
+                              <IonRange
+                                className="custom-tick"
+                                aria-label="Dual Knobs Range"
+                                dualKnobs={false}
+                                ticks={true}
+                                snaps={true}
+                                min={1}
+                                max={5}
+                                value={entry.value ? entry.value : 1}
+                                pin={true}
+                                pinFormatter={(value: number) => `${value}`}
+                                onIonChange={(event) =>
+                                  updateField(event.target.value, entry)
+                                }
+                              ></IonRange>
+                              <div className="tick-labels">
+                                {rangeValues.map((values) => (
+                                  <div key={values} className="tick-label">
+                                    {values}
+                                  </div>
+                                ))}
+                              </div>
+                            </IonCol>
+                          </IonRow>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="section">
+                    {entry.type === "range-16" && (
+                      <div>
+                        <div className="title flex al-center jc-between">
+                          <h3>{entry.label}</h3>
+                          {/*<IonButton fill="clear">
+                                <IonIcon src="assets/imgs/Pen.svg" />
+                              </IonButton>*/}
+                        </div>
+                        <div className="range-holder">
+                          <IonRow>
+                            <IonCol size="2" class="flex al-center">
+                              <img
+                                src={entry.icon}
+                                height={20}
+                                alt=""
+                                style={{}}
+                              />
+                              {/* <h3>{entry.label}</h3> */}
+                            </IonCol>
+                            <IonCol size="9">
+                              <IonRange
+                                className="custom-tick"
+                                aria-label="Dual Knobs Range"
+                                dualKnobs={false}
+                                ticks={true}
+                                snaps={true}
+                                min={1}
+                                max={16}
+                                value={entry.value ? entry.value : 1}
+                                pin={true}
+                                pinFormatter={(value: number) => `${value}`}
+                                onIonChange={(event) =>
+                                  updateField(event.target.value, entry)
+                                }
+                              ></IonRange>
+                              <div className="tick-labels">
+                                {rangeValues16.map((values) => (
+                                  <div key={values} className="tick-label3">
+                                    {values}
+                                  </div>
+                                ))}
+                              </div>
+                            </IonCol>
+                          </IonRow>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  {isPremiumUser ? (
+                    <div className="section">
+                      {entry.key === "custom_user_fields" && (
+                        <>
+                          <div className="title flex al-center jc-between custom-user-fields">
+                            <h3>{entry.label}</h3>
+                            {/*<IonButton fill="clear">
+            <IonIcon src="assets/imgs/Pen.svg" />
+          </IonButton>*/}
+                          </div>
+
+                          {entry.fields.map((field: any) => (
+                            <React.Fragment key={field.key}>
+                              {field.type === "range-5" && (
+                                <React.Fragment>
+                                  <div className="title flex al-center jc-between">
+                                    <h3>{entry.label}</h3>
+                                    {/*<IonButton fill="clear">
+                                    <IonIcon src="assets/imgs/Pen.svg" />
+                                  </IonButton>*/}
+                                  </div>
+                                  <div className="range-holder">
+                                    <IonRow>
+                                      <IonCol size="2" className="flex">
+                                        <div className="start-slot flex al-center">
                                           <img
                                             src={field.icon}
                                             height={20}
                                             alt=""
-                                            style={{}}
                                           />
-                                        </IonCol>
-                                        <IonCol size="9">
-                                          <h3>{field.label}</h3>
-                                          <div>
-                                            <IonRange
-                                              className="custom-tick"
-                                              aria-label="Dual Knobs Range"
-                                              dualKnobs={false}
-                                              ticks={true}
-                                              snaps={true}
-                                              min={1}
-                                              max={10}
-                                              value={
-                                                field.value ? field.value : 1
-                                              }
-                                              pin={true}
-                                              pinFormatter={(value: number) => {
-                                                switch (value) {
-                                                  case 1:
-                                                    return "Kein Schmerz";
-                                                  case 2:
-                                                  case 3:
-                                                    return "Leichter Schmerz";
-                                                  case 4:
-                                                  case 5:
-                                                    return "Mittlerer Schmerz";
-                                                  case 6:
-                                                  case 7:
-                                                    return "Starker Schmerz";
-                                                  case 8:
-                                                  case 9:
-                                                    return "Sehr starker Schmerz";
-                                                  case 10:
-                                                    return "Stärkster vorstellbarer Schmerz";
-                                                  default:
-                                                    return "Kein Schmerz";
-                                                }
-                                              }}
-                                              onIonChange={(event) =>
-                                                updateField(
-                                                  event.target.value,
-                                                  field
-                                                )
-                                              }
-                                            ></IonRange>
-                                            <div className="tick-labels">
-                                              {rangeValues10.map((values) => (
-                                                <div
-                                                  key={values}
-                                                  className="tick-label2"
-                                                >
-                                                  {values}
-                                                </div>
-                                              ))}
-                                            </div>
-                                          </div>
-                                        </IonCol>
-                                      </>
-                                    ))}
-                                  </IonRow>
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      <div className="section">
-                        {entry.type === "group" && (
-                          <div>
-                            {entry.key === "mood" && (
-                              <>
-                                <div className="title flex al-center jc-between">
-                                  <h3>{entry.label}</h3>
-                                  {/*<IonButton fill="clear">
-                                    <IonIcon src="assets/imgs/Pen.svg" />
-                                  </IonButton>*/}
-                                </div>
-                                <div className="tags-holder">
-                                  <IonRow>
-                                    {entry.fields.map((fields: any) => (
-                                      <IonCol size="4" key={fields.key}>
-                                        <IonItem lines="none">
-                                          <div
-                                            className="svgIconss"
-                                            dangerouslySetInnerHTML={{
-                                              __html: fields.svg,
-                                            }}
-                                            id={fields.key}
-                                          />
-                                          <IonLabel>{fields.label}</IonLabel>
-                                          <IonCheckbox
-                                            checked={fields.true_false}
-                                            onIonChange={(event) =>
-                                              updateField(
-                                                event.target.value,
-                                                fields
-                                              )
-                                            }
-                                          />
-                                        </IonItem>
+                                          {/* <h3>{field.label}</h3> */}
+                                        </div>
                                       </IonCol>
-                                    ))}
-                                  </IonRow>
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      <div className="section">
-                        {entry.type === "group" && (
-                          <div>
-                            {entry.key === "sexual_activity" && (
-                              <>
-                                <div className="title flex al-center jc-between">
-                                  <h3>{entry.label}</h3>
-                                  {/*<IonButton fill="clear">
-                                    <IonIcon src="assets/imgs/Pen.svg" />
-                                  </IonButton>*/}
-                                </div>
-                                <div className="tags-holder">
-                                  <IonRow>
-                                    {entry.fields.map((fields: any) => (
-                                      <IonCol size="4" key={fields.key}>
-                                        <IonItem lines="none">
-                                          <div
-                                            className="svgIconss"
-                                            dangerouslySetInnerHTML={{
-                                              __html: fields.svg,
-                                            }}
-                                            id={fields.key}
-                                          />
-                                          <IonLabel>{fields.label}</IonLabel>
-                                          <IonCheckbox
-                                            checked={fields.true_false}
-                                            onIonChange={(event) =>
-                                              updateField(
-                                                event.target.value,
-                                                fields
-                                              )
-                                            }
-                                          />
-                                        </IonItem>
-                                      </IonCol>
-                                    ))}
-                                  </IonRow>
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      <div className="section">
-                        {entry.type === "group" && (
-                          <div>
-                            {entry.key === "outflows" && (
-                              <>
-                                <div className="title flex al-center jc-between">
-                                  <h3>{entry.label}</h3>
-                                  {/*<IonButton fill="clear">
-                                    <IonIcon src="assets/imgs/Pen.svg" />
-                                  </IonButton>*/}
-                                </div>
-                                <div className="tags-holder">
-                                  <IonRow>
-                                    {entry.fields.map((fields: any) => (
-                                      <IonCol size="4" key={fields.key}>
-                                        <IonItem lines="none">
-                                          <div
-                                            className="svgIconss"
-                                            dangerouslySetInnerHTML={{
-                                              __html: fields.svg,
-                                            }}
-                                            id={fields.key}
-                                          />
-                                          <IonLabel>{fields.label}</IonLabel>
-                                          <IonCheckbox
-                                            checked={fields.true_false}
-                                            onIonChange={(event) =>
-                                              updateField(
-                                                event.target.value,
-                                                fields
-                                              )
-                                            }
-                                          />
-                                        </IonItem>
-                                      </IonCol>
-                                    ))}
-                                  </IonRow>
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      <div className="section">
-                        {entry.type === "group" && (
-                          <div>
-                            {entry.key === "medication" && (
-                              <>
-                                <div className="title flex al-center jc-between">
-                                  <h3>{entry.label}</h3>
-                                  {/*<IonButton fill="clear">
-                                    <IonIcon src="assets/imgs/Pen.svg" />
-                                  </IonButton>*/}
-                                </div>
-                                <div className="tags-holder">
-                                  <IonRow>
-                                    {entry.fields.map((fields: any) => (
-                                      <IonCol size="4" key={fields.key}>
-                                        <IonItem lines="none">
-                                          <div
-                                            className="svgIconss"
-                                            dangerouslySetInnerHTML={{
-                                              __html: fields.svg,
-                                            }}
-                                            id={fields.key}
-                                          />
-                                          <IonLabel>{fields.label}</IonLabel>
-                                          <IonCheckbox
-                                            checked={fields.true_false}
-                                            onIonChange={(event) =>
-                                              updateField(
-                                                event.target.value,
-                                                fields
-                                              )
-                                            }
-                                          />
-                                        </IonItem>
-                                      </IonCol>
-                                    ))}
-                                  </IonRow>
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      <div className="section">
-                        {entry.type === "group" && (
-                          <div>
-                            {entry.key === "activities" && (
-                              <>
-                                <div className="title flex al-center jc-between">
-                                  <h3>{entry.label}</h3>
-                                  {/*<IonButton fill="clear">
-                                    <IonIcon src="assets/imgs/Pen.svg" />
-                                  </IonButton>*/}
-                                </div>
-                                <div className="tags-holder">
-                                  <IonRow>
-                                    {entry.fields.map((fields: any) => (
-                                      <IonCol size="4" key={fields.key}>
-                                        <IonItem lines="none">
-                                          <div
-                                            className="svgIconss"
-                                            dangerouslySetInnerHTML={{
-                                              __html: fields.svg,
-                                            }}
-                                            id={fields.key}
-                                          />
-                                          <IonLabel>{fields.label}</IonLabel>
-                                          <IonCheckbox
-                                            checked={fields.true_false}
-                                            onIonChange={(event) =>
-                                              updateField(
-                                                event.target.value,
-                                                fields
-                                              )
-                                            }
-                                          />
-                                        </IonItem>
-                                      </IonCol>
-                                    ))}
-                                  </IonRow>
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="section">
-                        {entry.type === "textarea" && (
-                          <div>
-                            <div className="title flex al-center jc-between">
-                              <h3>{entry.label}</h3>
-                              {/*<IonButton fill="clear">
-                                <IonIcon src="assets/imgs/Pen.svg" />
-                              </IonButton>*/}
-                            </div>
-                            <div className="tags-holder">
-                              <div>
-                                {
-                                  <div className="section last">
-                                    <div className="the-form">
-                                      <div className="input-item">
-                                        <IonItem lines="none">
-                                          <IonInput
-                                            id={entry.key}
-                                            placeholder="Text eingeben"
-                                            value={entry.value || ""}
-                                            onIonChange={(event) =>
-                                              updateField(
-                                                event.target.value,
-                                                entry
-                                              )
-                                            }
-                                          />
-                                        </IonItem>
-                                      </div>
-                                    </div>
-                                  </div>
-                                }
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      <div className="section">
-                        {entry.type === "text" && (
-                          <div>
-                            <div className="title flex al-center jc-between">
-                              <h3>{entry.label}</h3>
-                              {/*<IonButton fill="clear">
-                                <IonIcon src="assets/imgs/Pen.svg" />
-                              </IonButton>*/}
-                            </div>
-                            <div className="tags-holder">
-                              <div>
-                                {
-                                  <div className="section last">
-                                    <div className="the-form">
-                                      <div className="input-item">
-                                        <IonItem lines="none">
-                                          <IonInput
-                                            id={entry.key}
-                                            placeholder="Text eingeben"
-                                            value={entry.value || ""}
-                                            onIonChange={(event) =>
-                                              updateField(
-                                                event.target.value,
-                                                entry
-                                              )
-                                            }
-                                          />
-                                        </IonItem>
-                                      </div>
-                                    </div>
-                                  </div>
-                                }
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="section">
-                        {entry.type === "range-5" && (
-                          <div className={entry.key}>
-                            <div className="title flex al-center jc-between">
-                              <h3>{entry.label}</h3>
-                              {/*<IonButton fill="clear">
-                                <IonIcon src="assets/imgs/Pen.svg" />
-                              </IonButton>*/}
-                            </div>
-                            <div className="range-holder">
-                              <IonRow>
-                                <IonCol size="2" class="flex al-center">
-                                  <div className="start-slot flex al-center">
-                                    <img
-                                      src={entry.icon}
-                                      height={20}
-                                      alt=""
-                                      style={{}}
-                                    />
-                                  </div>
-                                </IonCol>
-                                <IonCol size="9">
-                                  <IonRange
-                                    className="custom-tick"
-                                    aria-label="Dual Knobs Range"
-                                    dualKnobs={false}
-                                    ticks={true}
-                                    snaps={true}
-                                    min={1}
-                                    max={5}
-                                    value={entry.value ? entry.value : 1}
-                                    pin={true}
-                                    pinFormatter={(value: number) => `${value}`}
-                                    onIonChange={(event) =>
-                                      updateField(event.target.value, entry)
-                                    }
-                                  ></IonRange>
-                                  <div className="tick-labels">
-                                    {rangeValues.map((values) => (
-                                      <div key={values} className="tick-label">
-                                        {values}
-                                      </div>
-                                    ))}
-                                  </div>
-                                </IonCol>
-                              </IonRow>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      <div className="section">
-                        {entry.type === "range-16" && (
-                          <div>
-                            <div className="title flex al-center jc-between">
-                              <h3>{entry.label}</h3>
-                              {/*<IonButton fill="clear">
-                                <IonIcon src="assets/imgs/Pen.svg" />
-                              </IonButton>*/}
-                            </div>
-                            <div className="range-holder">
-                              <IonRow>
-                                <IonCol size="2" class="flex al-center">
-                                  <img
-                                    src={entry.icon}
-                                    height={20}
-                                    alt=""
-                                    style={{}}
-                                  />
-                                  {/* <h3>{entry.label}</h3> */}
-                                </IonCol>
-                                <IonCol size="9">
-                                  <IonRange
-                                    className="custom-tick"
-                                    aria-label="Dual Knobs Range"
-                                    dualKnobs={false}
-                                    ticks={true}
-                                    snaps={true}
-                                    min={1}
-                                    max={16}
-                                    value={entry.value ? entry.value : 1}
-                                    pin={true}
-                                    pinFormatter={(value: number) => `${value}`}
-                                    onIonChange={(event) =>
-                                      updateField(event.target.value, entry)
-                                    }
-                                  ></IonRange>
-                                  <div className="tick-labels">
-                                    {rangeValues16.map((values) => (
-                                      <div key={values} className="tick-label3">
-                                        {values}
-                                      </div>
-                                    ))}
-                                  </div>
-                                </IonCol>
-                              </IonRow>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      {isPremiumUser ? (
-                        <div className="section">
-                          {entry.key === "custom_user_fields" && (
-                            <>
-                              <div className="title flex al-center jc-between custom-user-fields">
-                                <h3>{entry.label}</h3>
-                                {/*<IonButton fill="clear">
-            <IonIcon src="assets/imgs/Pen.svg" />
-          </IonButton>*/}
-                              </div>
-
-                              {entry.fields.map((field: any) => (
-                                <React.Fragment key={field.key}>
-                                  {field.type === "range-5" && (
-                                    <React.Fragment>
-                                      <div className="title flex al-center jc-between">
-                                        <h3>{entry.label}</h3>
-                                        {/*<IonButton fill="clear">
-                                    <IonIcon src="assets/imgs/Pen.svg" />
-                                  </IonButton>*/}
-                                      </div>
-                                      <div className="range-holder">
-                                        <IonRow>
-                                          <IonCol size="2" className="flex">
-                                            <div className="start-slot flex al-center">
-                                              <img
-                                                src={field.icon}
-                                                height={20}
-                                                alt=""
-                                              />
-                                              {/* <h3>{field.label}</h3> */}
+                                      <IonCol size="9">
+                                        <IonRange
+                                          className="custom-tick"
+                                          aria-label="Dual Knobs Range"
+                                          dualKnobs={false}
+                                          ticks={true}
+                                          snaps={true}
+                                          min={1}
+                                          max={5}
+                                          value={
+                                            field.value ? field.value : 1
+                                          }
+                                          pin={true}
+                                          pinFormatter={(value: number) =>
+                                            `${value}`
+                                          }
+                                          onIonChange={(event) =>
+                                            updateField(
+                                              event.target.value,
+                                              field
+                                            )
+                                          }
+                                        ></IonRange>
+                                        <div className="tick-labels">
+                                          {rangeValues.map((values) => (
+                                            <div
+                                              key={values}
+                                              className="tick-label"
+                                            >
+                                              {values}
                                             </div>
-                                          </IonCol>
-                                          <IonCol size="9">
-                                            <IonRange
-                                              className="custom-tick"
-                                              aria-label="Dual Knobs Range"
-                                              dualKnobs={false}
-                                              ticks={true}
-                                              snaps={true}
-                                              min={1}
-                                              max={5}
-                                              value={
-                                                field.value ? field.value : 1
-                                              }
-                                              pin={true}
-                                              pinFormatter={(value: number) =>
-                                                `${value}`
-                                              }
-                                              onIonChange={(event) =>
-                                                updateField(
-                                                  event.target.value,
-                                                  field
-                                                )
-                                              }
-                                            ></IonRange>
-                                            <div className="tick-labels">
-                                              {rangeValues.map((values) => (
-                                                <div
-                                                  key={values}
-                                                  className="tick-label"
-                                                >
-                                                  {values}
-                                                </div>
-                                              ))}
-                                            </div>
-                                          </IonCol>
-                                        </IonRow>
-                                      </div>
-                                    </React.Fragment>
-                                  )}
-                                  {field.type === "range-10" && (
-                                    <React.Fragment>
-                                      <div className="title flex al-center jc-between">
-                                        <h3>{entry.label}</h3>
-                                        {/*<IonButton fill="clear">
-                                    <IonIcon src="assets/imgs/Pen.svg" />
-                                  </IonButton>*/}
-                                      </div>
-                                      <div className="range-holder">
-                                        <IonRow>
-                                          <IonCol size="2" className="flex">
-                                            <div className="start-slot flex al-center">
-                                              <img
-                                                src={field.icon}
-                                                height={20}
-                                                alt=""
-                                              />
-                                            </div>
-                                          </IonCol>
-                                          <IonCol size="9">
-                                            <IonRange
-                                              className="custom-tick"
-                                              aria-label="Dual Knobs Range"
-                                              dualKnobs={false}
-                                              ticks={true}
-                                              snaps={true}
-                                              min={1}
-                                              max={10}
-                                              value={
-                                                field.value ? field.value : 1
-                                              }
-                                              pin={true}
-                                              pinFormatter={(value: number) =>
-                                                `${value}`
-                                              }
-                                              onIonChange={(event) =>
-                                                updateField(
-                                                  event.target.value,
-                                                  field
-                                                )
-                                              }
-                                            ></IonRange>
-                                            <div className="tick-labels">
-                                              {rangeValues10.map((values) => (
-                                                <div
-                                                  key={values}
-                                                  className="tick-label2"
-                                                >
-                                                  {values}
-                                                </div>
-                                              ))}
-                                            </div>
-                                          </IonCol>
-                                        </IonRow>
-                                      </div>
-                                    </React.Fragment>
-                                  )}
-                                  {field.type === "true_false" && (
-                                    <div className="tags-holder">
-                                      <IonRow>
-                                        <IonCol size="4">
-                                          <IonItem
-                                            key={field.key}
-                                            lines="none"
-                                            className="customIcon"
-                                          >
-                                            {field.svg && (
-                                              <div
-                                                className="svgIconss"
-                                                dangerouslySetInnerHTML={{
-                                                  __html: field.svg,
-                                                }}
-                                                id={field.key}
-                                              />
-                                            )}
-                                            <IonLabel>{field.label}</IonLabel>
-                                            <IonCheckbox
-                                              checked={field.value}
-                                              onIonChange={(event) =>
-                                                updateField(
-                                                  event.target.value,
-                                                  field
-                                                )
-                                              }
-                                            />
-                                          </IonItem>
-                                        </IonCol>
-                                      </IonRow>
-                                    </div>
-                                  )}
+                                          ))}
+                                        </div>
+                                      </IonCol>
+                                    </IonRow>
+                                  </div>
                                 </React.Fragment>
-                              ))}
-                            </>
-                          )}
-                        </div>
-                      ) : null}
+                              )}
+                              {field.type === "range-10" && (
+                                <React.Fragment>
+                                  <div className="title flex al-center jc-between">
+                                    <h3>{entry.label}</h3>
+                                    {/*<IonButton fill="clear">
+                                    <IonIcon src="assets/imgs/Pen.svg" />
+                                  </IonButton>*/}
+                                  </div>
+                                  <div className="range-holder">
+                                    <IonRow>
+                                      <IonCol size="2" className="flex">
+                                        <div className="start-slot flex al-center">
+                                          <img
+                                            src={field.icon}
+                                            height={20}
+                                            alt=""
+                                          />
+                                        </div>
+                                      </IonCol>
+                                      <IonCol size="9">
+                                        <IonRange
+                                          className="custom-tick"
+                                          aria-label="Dual Knobs Range"
+                                          dualKnobs={false}
+                                          ticks={true}
+                                          snaps={true}
+                                          min={1}
+                                          max={10}
+                                          value={
+                                            field.value ? field.value : 1
+                                          }
+                                          pin={true}
+                                          pinFormatter={(value: number) =>
+                                            `${value}`
+                                          }
+                                          onIonChange={(event) =>
+                                            updateField(
+                                              event.target.value,
+                                              field
+                                            )
+                                          }
+                                        ></IonRange>
+                                        <div className="tick-labels">
+                                          {rangeValues10.map((values) => (
+                                            <div
+                                              key={values}
+                                              className="tick-label2"
+                                            >
+                                              {values}
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </IonCol>
+                                    </IonRow>
+                                  </div>
+                                </React.Fragment>
+                              )}
+                              {field.type === "true_false" && (
+                                <div className="tags-holder">
+                                  <IonRow>
+                                    <IonCol size="4">
+                                      <IonItem
+                                        key={field.key}
+                                        lines="none"
+                                        className="customIcon"
+                                      >
+                                        {field.svg && (
+                                          <div
+                                            className="svgIconss"
+                                            dangerouslySetInnerHTML={{
+                                              __html: field.svg,
+                                            }}
+                                            id={field.key}
+                                          />
+                                        )}
+                                        <IonLabel>{field.label}</IonLabel>
+                                        <IonCheckbox
+                                          checked={field.value}
+                                          onIonChange={(event) =>
+                                            updateField(
+                                              event.target.value,
+                                              field
+                                            )
+                                          }
+                                        />
+                                      </IonItem>
+                                    </IonCol>
+                                  </IonRow>
+                                </div>
+                              )}
+                            </React.Fragment>
+                          ))}
+                        </>
+                      )}
                     </div>
-                  ))}
+                  ) : null}
                 </div>
+
+
               ))
             ) : (
               <></>

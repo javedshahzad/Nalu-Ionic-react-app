@@ -129,17 +129,19 @@ const App: React.FC = () => {
   });
 
   useEffect(() => {
+
     socket.emit("my-group-list", {
       search: "",
       page: 1,
       limit: 10,
-      user: "65194710d160530510955d7d",
+      user: tokenService.getUserId(),
     });
   }, []);
 
   useEffect(() => {
     if (token) {
       socket.on("my-group-list", (data: any) => {
+        console.log('data', data)
         if (data.results && data.results.length > 0) {
           dispatchFunction(data.results);
         }

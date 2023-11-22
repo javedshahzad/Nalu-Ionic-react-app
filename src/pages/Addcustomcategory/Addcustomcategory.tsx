@@ -40,7 +40,7 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../../store/store";
 import { useDispatch } from "react-redux";
 import { journalAction } from "../../actions/journalAction";
-import axios from 'axios'; 
+import axios from 'axios';
 
 const Addcustomcategory: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -101,7 +101,7 @@ const Addcustomcategory: React.FC = () => {
     modal.current?.dismiss();
   }
 
-  useEffect(() => {}, [customCategoryData]);
+  useEffect(() => { }, [customCategoryData]);
 
   const handleLabelClick = (data) => {
     setSelectedCategory(data);
@@ -217,10 +217,10 @@ const Addcustomcategory: React.FC = () => {
           }
         }
       );
-  
+
       // Handle the response here
       console.log(response.data);
-  
+
       // If the API call is successful, handle the rest of the logic, such as updating the Redux store
       const newCategory = {
         label: customName,
@@ -230,18 +230,18 @@ const Addcustomcategory: React.FC = () => {
         value: null,
         key: Date.now().toString(32) + Math.random().toString(16),
       };
-  
-      typeObj[0].group.map((obj) => {
+
+      typeObj[0].map((obj) => {
         if (obj.key === "custom_user_fields") {
           obj.fields.push(newCategory);
         }
       });
-  
+
       dispatch(journalAction(typeObj[0]));
       setCustomName("");
       setSelectedLogoValue("");
       setSelectedType("");
-  
+
       setIsSubmitting(false);
       history.back();
     } catch (error) {
@@ -339,7 +339,7 @@ const Addcustomcategory: React.FC = () => {
               </IonCol>
               <IonCol id="imgg" size="6">
                 <IonItem lines="none" className="customType">
-                  <img src="https://app.mynalu.com/wp-content/uploads/2023/10/sample-journal-icon.svg"/>
+                  <img src="https://app.mynalu.com/wp-content/uploads/2023/10/sample-journal-icon.svg" />
                   <IonLabel className="ion-text-center">
                     Deine Kategorie
                   </IonLabel>
@@ -353,57 +353,57 @@ const Addcustomcategory: React.FC = () => {
           <div className="title flex al-center jc-between ion-padding-bottom">
             <h3 style={{ fontSize: "15px" }}>Icon</h3>
           </div>
-            <IonRadioGroup
-              value={selectedLogoValue}
-              onIonChange={handleLogoChange}
-            >
-              <div className="tags-holders">
-                <IonRow>
-                    <IonCol id="imgg" size="6">
-                      <IonItem lines="none">
-                        <IonLabel className="ion-text-center">
-                        <img src="https://app.mynalu.com/wp-content/uploads/2023/10/sample-journal-icon.svg"/>
-                        </IonLabel>
-                        <IonRadio value="https://app.mynalu.com/wp-content/uploads/2023/10/sample-journal-icon.svg" mode="md"></IonRadio>
-                      </IonItem>
-                    </IonCol>
-                    
-                    <IonCol id="imgg" size="6">
-                      <IonItem lines="none">
-                        <IonLabel className="ion-text-center">
-                        <img src="https://app.mynalu.com/wp-content/uploads/2023/10/sad.svg"/>
-                        </IonLabel>
-                        <IonRadio value="https://app.mynalu.com/wp-content/uploads/2023/10/sad.svg" mode="md"></IonRadio>
-                      </IonItem>
-                    </IonCol>
-                    
-                    <IonCol id="imgg" size="6">
-                      <IonItem lines="none">
-                        <IonLabel className="ion-text-center">
-                        <img src="https://app.mynalu.com/wp-content/uploads/oral_contraceptives.svg"/>
-                        </IonLabel>
-                        <IonRadio value="https://app.mynalu.com/wp-content/uploads/oral_contraceptives.svg" mode="md"></IonRadio>
-                      </IonItem>
-                    </IonCol>
-                    
-                    <IonCol id="imgg" size="6">
-                      <IonItem lines="none">
-                        <IonLabel className="ion-text-center">
-                        <img src="https://app.mynalu.com/wp-content/uploads/perdiod_bleeding.svg"/>
-                        </IonLabel>
-                        <IonRadio value="https://app.mynalu.com/wp-content/uploads/perdiod_bleeding.svg" mode="md"></IonRadio>
-                      </IonItem>
-                    </IonCol>
-                </IonRow>
-              </div>
-            </IonRadioGroup>
+          <IonRadioGroup
+            value={selectedLogoValue}
+            onIonChange={handleLogoChange}
+          >
+            <div className="tags-holders">
+              <IonRow>
+                <IonCol id="imgg" size="6">
+                  <IonItem lines="none">
+                    <IonLabel className="ion-text-center">
+                      <img src="https://app.mynalu.com/wp-content/uploads/2023/10/sample-journal-icon.svg" />
+                    </IonLabel>
+                    <IonRadio value="https://app.mynalu.com/wp-content/uploads/2023/10/sample-journal-icon.svg" mode="md"></IonRadio>
+                  </IonItem>
+                </IonCol>
+
+                <IonCol id="imgg" size="6">
+                  <IonItem lines="none">
+                    <IonLabel className="ion-text-center">
+                      <img src="https://app.mynalu.com/wp-content/uploads/2023/10/sad.svg" />
+                    </IonLabel>
+                    <IonRadio value="https://app.mynalu.com/wp-content/uploads/2023/10/sad.svg" mode="md"></IonRadio>
+                  </IonItem>
+                </IonCol>
+
+                <IonCol id="imgg" size="6">
+                  <IonItem lines="none">
+                    <IonLabel className="ion-text-center">
+                      <img src="https://app.mynalu.com/wp-content/uploads/oral_contraceptives.svg" />
+                    </IonLabel>
+                    <IonRadio value="https://app.mynalu.com/wp-content/uploads/oral_contraceptives.svg" mode="md"></IonRadio>
+                  </IonItem>
+                </IonCol>
+
+                <IonCol id="imgg" size="6">
+                  <IonItem lines="none">
+                    <IonLabel className="ion-text-center">
+                      <img src="https://app.mynalu.com/wp-content/uploads/perdiod_bleeding.svg" />
+                    </IonLabel>
+                    <IonRadio value="https://app.mynalu.com/wp-content/uploads/perdiod_bleeding.svg" mode="md"></IonRadio>
+                  </IonItem>
+                </IonCol>
+              </IonRow>
+            </div>
+          </IonRadioGroup>
           {selectedLogoError && (
             <p className="error-message">{selectedLogoError}</p>
           )}
         </div>
 
         {apiErrorMessage && (
-        <p className="error-message">{apiErrorMessage}</p>
+          <p className="error-message">{apiErrorMessage}</p>
         )}
 
         <div className="btn-holder ion-text-center ion-padding-vertical">
