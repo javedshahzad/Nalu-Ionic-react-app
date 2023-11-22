@@ -147,7 +147,7 @@ const JournalCalendarRemade = () => {
 
     try {
       const data = await MoonPhasesServce.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=en`
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
       );
 
       console.log("dataa", data);

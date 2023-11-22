@@ -34,24 +34,24 @@ const Membership: React.FC = () => {
       </IonHeader>
       <IonContent className="ion-padding-horizontal" fullscreen>
         <div className="title ion-text-center">
-          <h2>Get Full Access with a NALU Membership</h2>
+          <h2>Mit NALU Zyklusbeschwerden in den Griff kriegen</h2>
         </div>
         <div className="section sec1">
           <IonGrid>
             <IonRow className="header-row">
-              <IonCol size="5">
-                <h4>Key Features</h4>
+              <IonCol size="4">
+                <h4></h4>
               </IonCol>
-              <IonCol size="2">
-                <h4>Free</h4>
+              <IonCol size="4">
+                <h4>Kostenlos</h4>
               </IonCol>
-              <IonCol size="5" className="ion-text-center">
-                <h4>NALU Membership</h4>
+              <IonCol size="4" className="ion-text-center">
+                <h4>Premium</h4>
               </IonCol>
             </IonRow>
             <IonRow className="value-row">
               <IonCol size="5">
-                <h5>Esse ipsum</h5>
+                <h5>Kursbestandteil Verstehe deinen weiblichen Zyklusn</h5>
               </IonCol>
               <IonCol size="2" className="ion-text-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
@@ -62,7 +62,29 @@ const Membership: React.FC = () => {
             </IonRow>
             <IonRow className="value-row">
               <IonCol size="5">
-                <h5>Esse ipsum</h5>
+                <h5>Zyklus Journal</h5>
+              </IonCol>
+              <IonCol size="2" className="ion-text-center">
+                <IonIcon src="assets/imgs/icn-badge.svg" />
+              </IonCol>
+              <IonCol size="5" className="ion-text-center">
+                <IonIcon src="assets/imgs/icn-badge.svg" />
+              </IonCol>
+            </IonRow>
+            <IonRow className="value-row">
+              <IonCol size="5">
+                <h5>Ressourcen-Datenbank mit hilfreichen Tools und Adressen</h5>
+              </IonCol>
+              <IonCol size="2" className="ion-text-center">
+                <IonIcon src="assets/imgs/icn-badge.svg" />
+              </IonCol>
+              <IonCol size="5" className="ion-text-center">
+                <IonIcon src="assets/imgs/icn-badge.svg" />
+              </IonCol>
+            </IonRow>
+            <IonRow className="value-row">
+              <IonCol size="5">
+                <h5>Kompletter NALU Zyklus Flow Online Kurs mit Übungen und Protokoll</h5>
               </IonCol>
               <IonCol size="2" className="ion-text-center">
                 <IonIcon src="assets/imgs/icn-lock.svg" />
@@ -73,7 +95,7 @@ const Membership: React.FC = () => {
             </IonRow>
             <IonRow className="value-row">
               <IonCol size="5">
-                <h5>Esse ipsum</h5>
+                <h5>Monatliche Live Q&A Sessions während 1 Jahr</h5>
               </IonCol>
               <IonCol size="2" className="ion-text-center">
                 <IonIcon src="assets/imgs/icn-lock.svg" />
@@ -84,7 +106,7 @@ const Membership: React.FC = () => {
             </IonRow>
             <IonRow className="value-row">
               <IonCol size="5">
-                <h5>Esse ipsum</h5>
+                <h5>Monatliche Live Frauenkreis während 1 Jahr</h5>
               </IonCol>
               <IonCol size="2" className="ion-text-center">
                 <IonIcon src="assets/imgs/icn-lock.svg" />
@@ -95,7 +117,73 @@ const Membership: React.FC = () => {
             </IonRow>
             <IonRow className="value-row">
               <IonCol size="5">
-                <h5>Esse ipsum</h5>
+                <h5>Chat Gruppe für Teilnehmerinnen</h5>
+              </IonCol>
+              <IonCol size="2" className="ion-text-center">
+                <IonIcon src="assets/imgs/icn-lock.svg" />
+              </IonCol>
+              <IonCol size="5" className="ion-text-center">
+                <IonIcon src="assets/imgs/icn-badge.svg" />
+              </IonCol>
+            </IonRow>
+            <IonRow className="value-row">
+              <IonCol size="5">
+                <h5>Arbeitsblätter mit Zusammenfassungen und Übungen</h5>
+              </IonCol>
+              <IonCol size="2" className="ion-text-center">
+                <IonIcon src="assets/imgs/icn-lock.svg" />
+              </IonCol>
+              <IonCol size="5" className="ion-text-center">
+                <IonIcon src="assets/imgs/icn-badge.svg" />
+              </IonCol>
+            </IonRow>
+            <IonRow className="value-row">
+              <IonCol size="5">
+                <h5>30+ leckere Rezepte für die Zyklusphasen</h5>
+              </IonCol>
+              <IonCol size="2" className="ion-text-center">
+                <IonIcon src="assets/imgs/icn-lock.svg" />
+              </IonCol>
+              <IonCol size="5" className="ion-text-center">
+                <IonIcon src="assets/imgs/icn-badge.svg" />
+              </IonCol>
+            </IonRow>
+            <IonRow className="value-row">
+              <IonCol size="5">
+                <h5>Kurs "Zyklische Ernährung nach Ayurveda"</h5>
+              </IonCol>
+              <IonCol size="2" className="ion-text-center">
+                <IonIcon src="assets/imgs/icn-lock.svg" />
+              </IonCol>
+              <IonCol size="5" className="ion-text-center">
+                <IonIcon src="assets/imgs/icn-badge.svg" />
+              </IonCol>
+            </IonRow>
+            <IonRow className="value-row">
+              <IonCol size="5">
+                <h5>Kurs "Gesunde Schwangerschaft"</h5>
+              </IonCol>
+              <IonCol size="2" className="ion-text-center">
+                <IonIcon src="assets/imgs/icn-lock.svg" />
+              </IonCol>
+              <IonCol size="5" className="ion-text-center">
+                <IonIcon src="assets/imgs/icn-badge.svg" />
+              </IonCol>
+            </IonRow>
+            <IonRow className="value-row">
+              <IonCol size="5">
+                <h5>Einkaufsliste für deine Zyklusgesundheit</h5>
+              </IonCol>
+              <IonCol size="2" className="ion-text-center">
+                <IonIcon src="assets/imgs/icn-lock.svg" />
+              </IonCol>
+              <IonCol size="5" className="ion-text-center">
+                <IonIcon src="assets/imgs/icn-badge.svg" />
+              </IonCol>
+            </IonRow>
+            <IonRow className="value-row">
+              <IonCol size="5">
+                <h5>PMS-Guide</h5>
               </IonCol>
               <IonCol size="2" className="ion-text-center">
                 <IonIcon src="assets/imgs/icn-lock.svg" />
@@ -105,115 +193,31 @@ const Membership: React.FC = () => {
               </IonCol>
             </IonRow>
           </IonGrid>
-        </div>
-        <div className="section sec2">
-          <IonGrid>
-            <IonRow className="header-row">
-              <IonCol size="6">
-                <h4>Advanced Support</h4>
-              </IonCol>
-              <IonCol size="2"></IonCol>
-              <IonCol size="5" className="ion-text-center"></IonCol>
-            </IonRow>
-            <IonRow className="value-row">
-              <IonCol size="5">
-                <h5>Esse ipsum</h5>
-              </IonCol>
-              <IonCol size="2" className="ion-text-center">
-                <IonIcon src="assets/imgs/icn-badge.svg" />
-              </IonCol>
-              <IonCol size="5" className="ion-text-center">
-                <IonIcon src="assets/imgs/icn-badge.svg" />
-              </IonCol>
-            </IonRow>
-            <IonRow className="value-row">
-              <IonCol size="5">
-                <h5>Esse ipsum</h5>
-              </IonCol>
-              <IonCol size="2" className="ion-text-center">
-                <IonIcon src="assets/imgs/icn-lock.svg" />
-              </IonCol>
-              <IonCol size="5" className="ion-text-center">
-                <IonIcon src="assets/imgs/icn-badge.svg" />
-              </IonCol>
-            </IonRow>
-            <IonRow className="value-row">
-              <IonCol size="5">
-                <h5>Esse ipsum</h5>
-              </IonCol>
-              <IonCol size="2" className="ion-text-center">
-                <IonIcon src="assets/imgs/icn-lock.svg" />
-              </IonCol>
-              <IonCol size="5" className="ion-text-center">
-                <IonIcon src="assets/imgs/icn-badge.svg" />
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-        </div>
-
-        <div className="options">
-          <div className="title">
-            <h3>Choose Your Option</h3>
-          </div>
-
-          <div className="the-list">
-            <IonRadioGroup>
-            <IonItem lines="none">
-              <div className="thumb" slot="start">
-                <img src="assets/imgs/opt1.png" alt="" />
-              </div>
-              <IonLabel>
-                <h4>Endo Flow</h4>
-                <p className="ion-text-wrap">
-                  Ipsum deserunt incididunt deserunt
-                </p>
-              </IonLabel>
-              <IonRadio value="Endo"></IonRadio>
-            </IonItem>
-            <IonItem lines="none">
-              <div className="thumb" slot="start">
-                <img src="assets/imgs/opt2.png" alt="" />
-              </div>
-              <IonLabel>
-                <h4>Cycle Flow</h4>
-                <p className="ion-text-wrap">
-                  Ipsum deserunt incididunt deserunt
-                </p>
-              </IonLabel>
-              <IonRadio value="Cycle"></IonRadio>
-            </IonItem>
-            <IonItem lines="none">
-              <div className="thumb" slot="start">
-                <img src="assets/imgs/opt3.png" alt="" />
-              </div>
-              <IonLabel>
-                <h4>Harmonise Flow</h4>
-                <p className="ion-text-wrap">
-                  Ipsum deserunt incididunt deserunt
-                </p>
-              </IonLabel>
-              <IonRadio value="Harmonise"></IonRadio>
-            </IonItem>
-            </IonRadioGroup>
-          
-          </div>
         </div>
 
         <div className="nalu">
-          <div className="title">
-            <h3>NALU Endo Flow is for you if....</h3>
+          <div className="title ion-text-center">
+            <h3>NALU Zyklus Flow ist geeignet <br/>für dich, wenn...</h3>
           </div>
           <div className="sec flex al-center">
             <IonIcon src="assets/imgs/icn-badge.svg" />
-            <h4>....... You are this</h4>
+            <h4>...du deinen&nbsp;<strong>Zyklus auf nat&uuml;rliche Weise regulieren</strong>&nbsp;m&ouml;chtest</h4>
           </div>
           <div className="sec flex al-center">
             <IonIcon src="assets/imgs/icn-badge.svg" />
-            <h4>....... You are this</h4>
+            <h4>...du&nbsp;<strong>Amenorrhoe, unregelm&auml;ssige Periode, PCOS oder starkes PMS&nbsp;</strong>in den Griff kriegen m&ouml;chtest</h4>
           </div>
           <div className="sec flex al-center">
             <IonIcon src="assets/imgs/icn-badge.svg" />
-            <h4>....... You are this</h4>
+            <h4>...du deine&nbsp;<strong>Fruchtbarkeit st&auml;rken</strong>&nbsp;und dich auf eine&nbsp;<strong>gesunde Schwangerschaft vorbereiten</strong>&nbsp;m&ouml;chtest</h4>
+          </div>
+          <div className="sec flex al-center">
+            <IonIcon src="assets/imgs/icn-badge.svg" />
+            <h4>...du in&nbsp;<strong>Balance&nbsp;</strong>sein und mehr&nbsp;<strong>Energie&nbsp;</strong>haben m&ouml;chtest</h4>
+          </div>
+          <div className="sec flex al-center">
+            <IonIcon src="assets/imgs/icn-badge.svg" />
+            <h4>...dich mit deiner&nbsp;<strong>weiblichen Energie verbinden&nbsp;</strong>m&ouml;chtest</h4>
           </div>
         </div>
 
@@ -232,9 +236,7 @@ const Membership: React.FC = () => {
                 <div className="flex al-center ion-padding-horizontal">
                   <img className="quote2" src="assets/imgs/quote2.svg" alt="" />
                   <h6 className="ion-text-wrap">
-                    I have worked on myself a lot with your program so that
-                    after 3.5 years I finally ovulated again and got my cycle
-                    back.
+                  Nach wenigen Wochen bemerkte ich grosse körperliche Veränderungen und nach sechs Monaten ist mein Hormonhaushalt bereits so ausgeglichen, wie noch nie in meinem Leben als erwachsene Frau zuvor.
                   </h6>
                 </div>
               </div>
@@ -245,38 +247,47 @@ const Membership: React.FC = () => {
                 <div className="flex al-center ion-padding-horizontal">
                   <img className="quote2" src="assets/imgs/quote2.svg" alt="" />
                   <h6 className="ion-text-wrap">
-                    I have worked on myself a lot with your program so that
-                    after 3.5 years I finally ovulated again and got my cycle
-                    back.
+                  Fundierte Informationen multimedial verpackt. Kurzweilige Videos, Texte, Übungen und Online Sessions (Frauenkreise und Q&As). Das ganze Programm ist sehr kraftspendend, motivierend und inspirierend - wirklich jeder Frau zu empfehlen!
                   </h6>
                 </div>
               </div>
             </SwiperSlide>
-            <SwiperSlide>Slide 3</SwiperSlide>
+            <SwiperSlide>
+              <div className="quote-holder">
+                <img src="assets/imgs/quote1.svg" alt="" />
+                <div className="flex al-center ion-padding-horizontal">
+                  <img className="quote2" src="assets/imgs/quote2.svg" alt="" />
+                  <h6 className="ion-text-wrap">
+                  Der Kurs beinhaltet weit mehr als nur Theorie und gibt einem auch praktische Anleitungen und Übungen, um die Frau deiner Träume zu werden. Ich würde sagen, dass ich nun dank NALU auf dem besten Wege dazu bin. Danke vielmals.
+                  </h6>
+                </div>
+              </div>
+            </SwiperSlide>
           </Swiper>
         </div>
 
         <div className="title title2 ion-text-center">
           <h2 className="ion-text-wrap">
-            Develop with the University <br /> Hospital of Bern Switzerland{" "}
-            <br /> as a medical product
+            In Partnerschaft mit der Frauenklinik des Universitätsspitals Bern als medizinische App entwickelt
           </h2>
         </div>
 
         <div className="logo-holder ion-text-center">
           <img src="assets/imgs/companylogo.png" alt="" />
         </div>
-
+        <div className="ion-text-wrap ion-text-center ion-padding-vertical discount-description">
+          <h3>Nur für kurze Zeit:<br/><strong>20% Einführungsrabatt</strong></h3>
+        </div>
         <div className="packages">
           <IonRadioGroup>
             <IonItem lines="none">
               <IonLabel>
                 <div className="first flex al-center jc-between">
-                  <h3>CHF 500</h3>
-                  <IonBadge className="ion-text-center">Save CHF 40.</IonBadge>
+                  <h3><s>500.-</s> 400.-</h3>
+                  {/*<IonBadge className="ion-text-center">Spare 40.-</IonBadge>*/}
                 </div>
                 <p className="ion-text-wrap">
-                  One time payment with 1 year of live sessions
+                Einmalige Zahlung​ mit Zugriff für 1 Jahr
                 </p>
               </IonLabel>
               <IonRadio value={"first"} />
@@ -284,9 +295,9 @@ const Membership: React.FC = () => {
             <IonItem lines="none">
               <IonLabel>
                 <div className="first">
-                  <h3>CHF 45 / Month</h3>
+                  <h3><s>45.-</s> 36.- / Monat</h3>
                 </div>
-                <p>12 monthly installments</p>
+                <p>12 monatliche Raten für Zugriff für 1 Jahr</p>
               </IonLabel>
               <IonRadio value={"second"} />
             </IonItem>
@@ -294,8 +305,8 @@ const Membership: React.FC = () => {
         </div>
 
         <div className="btn-holder ion-text-center ion-padding-vertical">
-                <IonButton expand="block">Mark as Done</IonButton>
-              </div>
+                <IonButton expand="block">Jetzt anmelden</IonButton>
+        </div>
       </IonContent>
     </IonPage>
   );

@@ -137,6 +137,14 @@
     margin-top: 8px; /* Adjust as needed */
   }
 
+  ion-range {
+    padding-top: 0;
+  }
+
+  ion-range.range-pressed {
+    padding-top: 35px;;
+  }
+
   .tick-label {
     width: calc(
       20% - 5px
@@ -189,6 +197,10 @@
         font-family: "GBold";
         font-size: 24px;
       }
+    }
+    h3 {
+      font-family: "GRegular";
+      font-size: 16px;
     }
 
     .custom-user-fields {

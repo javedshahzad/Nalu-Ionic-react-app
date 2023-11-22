@@ -50,6 +50,13 @@
 
                .value-row
                {
+                    ion-icon {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                    }
+
                     h5
                     {
                         font-size: 18px;
@@ -131,6 +138,13 @@
             }
         }
 
+        .quote-holder {
+            h6 {
+                padding-left: 16px;
+                margin-top: 0;
+            }
+        }
+
         .nalu
         {
             padding-left: 5%;
@@ -142,7 +156,14 @@
                     font-size: 16px;
                     margin: 0 0 0 20px;
                 }
+                ion-icon {
+                    min-width: 12px;
+                }
             }
+        }
+
+        .discount-description {
+            padding-bottom: 0;
         }
 
         .packages
@@ -168,7 +189,11 @@
                                 color: #A9A8AA;
                                 font-family: 'GBold';
                                 font-size: 20px;
-                            }
+
+                                s {
+                                    font-family: 'GRegular';
+                                }
+                            }                            
 
                             ion-badge
                             {

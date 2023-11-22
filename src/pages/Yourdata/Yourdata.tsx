@@ -94,7 +94,7 @@ const Yourdata: React.FC = () => {
         </div>
 
         <div className="btn-holder ion-text-center ion-padding-vertical">
-          <IonButton expand="block" routerLink="/configcycle" disabled={!isFormValid} onClick={handleSubmit}>Registrieren</IonButton>
+          <IonButton expand="block" routerLink="/configcycleremade" disabled={!isFormValid} onClick={handleSubmit}>Registrieren</IonButton>
         </div>
       </IonContent>
     </IonPage>

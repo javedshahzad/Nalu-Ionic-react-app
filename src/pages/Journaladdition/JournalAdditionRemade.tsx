@@ -29,6 +29,7 @@ import {
   filterOutline,
   happyOutline,
   optionsOutline,
+  arrowBackOutline
 } from "ionicons/icons";
 import Additionfilter from "../modals/Additionfilter/Additionfilter";
 import JournalAdditionApiService from "../../JournalService";
@@ -430,7 +431,9 @@ function JournalAdditionRemade() {
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/" text="" color="dark" />
+            <IonButton routerLink="/tabs/tab1">
+              <IonIcon icon={arrowBackOutline}></IonIcon>
+            </IonButton>
           </IonButtons>
 
           {/*<IonButtons slot="end">

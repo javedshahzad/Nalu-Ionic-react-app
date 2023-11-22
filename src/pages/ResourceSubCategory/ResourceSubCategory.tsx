@@ -402,7 +402,7 @@ const ResourceSubCategory: React.FC = () => {
                         <div className="resource-card" key={index}>
                           <IonItem
                             lines="none"
-                            onClick={() => getResourceDetailsByID(card.id)}
+                            onClick={() => history.push(`/tabs/tab4/resourcedetail/${card.id}`)}
                           >
                             <div className="thumb" slot="start">
                               {card?.thumbnail_url ? (

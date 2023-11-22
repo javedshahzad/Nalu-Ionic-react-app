@@ -13,6 +13,7 @@ import {
   IonRadioGroup,
   IonTitle,
   IonToolbar,
+  IonSpinner,
 } from "@ionic/react";
 import {
   arrowBackOutline,
@@ -32,6 +33,7 @@ import { Browser } from "@capacitor/browser";
 import { useParams } from "react-router-dom";
 
 const Resourcedetail: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const history = useHistory();
   const params: any = useParams();
@@ -48,6 +50,7 @@ const Resourcedetail: React.FC = () => {
   const [resourseData, setResourceData] = useState(null);
 
   const getResourceDetailsByID = () => {
+    setIsLoading(true);
     try {
       axios
         .get(
@@ -67,6 +70,7 @@ const Resourcedetail: React.FC = () => {
           //   data: response.data,
           // });
           setResourceData(response);
+          setIsLoading(false);
         })
         .catch((error) => {
           console.log(error);
@@ -236,18 +240,37 @@ const Resourcedetail: React.FC = () => {
   }, []);
 
   const backHandler = () => {
-    window.history.back();
     if (num === 0) {
       num = 1;
-      backHandler();
+
+      const currentURL = window.location.pathname;
+  
+      if (currentURL === "/tabs/tab4/resourcedetail/6999") {
+        window.history.go(-2);
+      } else {
+        window.history.back();
+      }
     }
   };
 
   return (
     <IonPage className="Resourcedetail">
+      {isLoading ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+            }}
+          >
+            <IonSpinner name="crescent"></IonSpinner>
+          </div>
+        ) : (
+          <>
       <IonHeader className="ion-no-border">
         <IonToolbar>
-          <IonButton fill="clear" color="dark" onClick={backHandler}>
+          <IonButton slot="start" fill="clear" color="dark" onClick={backHandler}>
             <IonIcon icon={arrowBackOutline}></IonIcon>
           </IonButton>
           <IonTitle>{resourseData?.data.title}</IonTitle>
@@ -399,6 +422,8 @@ const Resourcedetail: React.FC = () => {
           </div>
         </div>
       </IonContent>
+          </>
+        )}
     </IonPage>
   );
 };

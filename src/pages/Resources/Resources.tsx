@@ -434,7 +434,7 @@ const Resources: React.FC = () => {
                           <IonCol size="6" key={index}>
                             <div
                               className="rc-card ion-activatable ripple-parent"
-                              onClick={() => getResourceDetailsByID(item.id)}
+                              onClick={() => history.push(`/tabs/tab4/resourcedetail/${item.id}`)}
                             >
                               <IonRippleEffect />
                               <div className="img-holder">
