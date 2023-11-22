@@ -90,7 +90,7 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
   };
 
   return (
-    <IonPage className="Addrecmodal modalX">
+    <IonPage className="Addrecmodal">
       <div className="model_content">
         <div
           className="back"

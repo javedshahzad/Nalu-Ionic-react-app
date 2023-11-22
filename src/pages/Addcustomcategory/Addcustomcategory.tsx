@@ -40,7 +40,7 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../../store/store";
 import { useDispatch } from "react-redux";
 import { journalAction } from "../../actions/journalAction";
-import axios from 'axios';
+import axios from "axios";
 
 const Addcustomcategory: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -101,7 +101,7 @@ const Addcustomcategory: React.FC = () => {
     modal.current?.dismiss();
   }
 
-  useEffect(() => { }, [customCategoryData]);
+  useEffect(() => {}, [customCategoryData]);
 
   const handleLabelClick = (data) => {
     setSelectedCategory(data);
@@ -143,7 +143,11 @@ const Addcustomcategory: React.FC = () => {
   const handleCustomNameChange = (event) => {
     const value = event.target.value;
     setCustomName(value);
-    setcustomNameError(value.trim() === "" ? "Bitte definiere einen Namen für deine Kategorie." : "");
+    setcustomNameError(
+      value.trim() === ""
+        ? "Bitte definiere einen Namen für deine Kategorie."
+        : ""
+    );
   };
 
   const handleDeleteField = (id: any) => {
@@ -201,7 +205,7 @@ const Addcustomcategory: React.FC = () => {
 
   const saveCustomCategoryData = async () => {
     setIsSubmitting(true); // Start loading
-    setApiErrorMessage(''); // Reset error message
+    setApiErrorMessage(""); // Reset error message
     try {
       // Perform the POST request with Axios
       const response = await axios.post(
@@ -209,12 +213,12 @@ const Addcustomcategory: React.FC = () => {
         {
           category_name: customName,
           category_icon: selectedLogoValue,
-          type: selectedType
+          type: selectedType,
         },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          }
+          },
         }
       );
 
@@ -244,21 +248,26 @@ const Addcustomcategory: React.FC = () => {
 
       setIsSubmitting(false);
       history.back();
+      localStorage.setItem("reloadPage", "true");
     } catch (error) {
       setIsSubmitting(false);
       if (error.response?.status === 400) {
         // Specific error message for 400 status
-        setApiErrorMessage('Du kannst nur bis zu 5 benutzerdefinierte Kategorien erstellen. Bitte kontaktieren den Support, um Kategorien, die du nicht mehr benötigst, zu löschen.');
+        setApiErrorMessage(
+          "Du kannst nur bis zu 5 benutzerdefinierte Kategorien erstellen. Bitte kontaktieren den Support, um Kategorien, die du nicht mehr benötigst, zu löschen."
+        );
       } else {
         // Generic error message for other errors
-        const errorMessage = error.response?.data?.message || 'Es ist ein Fehler aufgetreten. Bitte versuche es in einigen Minuten erneut oder kontaktiere den Support.';
+        const errorMessage =
+          error.response?.data?.message ||
+          "Es ist ein Fehler aufgetreten. Bitte versuche es in einigen Minuten erneut oder kontaktiere den Support.";
         setApiErrorMessage(errorMessage);
       }
     }
   };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [apiErrorMessage, setApiErrorMessage] = useState('');
+  const [apiErrorMessage, setApiErrorMessage] = useState("");
 
   return (
     <IonPage className="Addcustomcategory">
@@ -364,7 +373,10 @@ const Addcustomcategory: React.FC = () => {
                     <IonLabel className="ion-text-center">
                       <img src="https://app.mynalu.com/wp-content/uploads/2023/10/sample-journal-icon.svg" />
                     </IonLabel>
-                    <IonRadio value="https://app.mynalu.com/wp-content/uploads/2023/10/sample-journal-icon.svg" mode="md"></IonRadio>
+                    <IonRadio
+                      value="https://app.mynalu.com/wp-content/uploads/2023/10/sample-journal-icon.svg"
+                      mode="md"
+                    ></IonRadio>
                   </IonItem>
                 </IonCol>
 
@@ -373,7 +385,10 @@ const Addcustomcategory: React.FC = () => {
                     <IonLabel className="ion-text-center">
                       <img src="https://app.mynalu.com/wp-content/uploads/2023/10/sad.svg" />
                     </IonLabel>
-                    <IonRadio value="https://app.mynalu.com/wp-content/uploads/2023/10/sad.svg" mode="md"></IonRadio>
+                    <IonRadio
+                      value="https://app.mynalu.com/wp-content/uploads/2023/10/sad.svg"
+                      mode="md"
+                    ></IonRadio>
                   </IonItem>
                 </IonCol>
 
@@ -382,7 +397,10 @@ const Addcustomcategory: React.FC = () => {
                     <IonLabel className="ion-text-center">
                       <img src="https://app.mynalu.com/wp-content/uploads/oral_contraceptives.svg" />
                     </IonLabel>
-                    <IonRadio value="https://app.mynalu.com/wp-content/uploads/oral_contraceptives.svg" mode="md"></IonRadio>
+                    <IonRadio
+                      value="https://app.mynalu.com/wp-content/uploads/oral_contraceptives.svg"
+                      mode="md"
+                    ></IonRadio>
                   </IonItem>
                 </IonCol>
 
@@ -391,7 +409,10 @@ const Addcustomcategory: React.FC = () => {
                     <IonLabel className="ion-text-center">
                       <img src="https://app.mynalu.com/wp-content/uploads/perdiod_bleeding.svg" />
                     </IonLabel>
-                    <IonRadio value="https://app.mynalu.com/wp-content/uploads/perdiod_bleeding.svg" mode="md"></IonRadio>
+                    <IonRadio
+                      value="https://app.mynalu.com/wp-content/uploads/perdiod_bleeding.svg"
+                      mode="md"
+                    ></IonRadio>
                   </IonItem>
                 </IonCol>
               </IonRow>
@@ -402,9 +423,7 @@ const Addcustomcategory: React.FC = () => {
           )}
         </div>
 
-        {apiErrorMessage && (
-          <p className="error-message">{apiErrorMessage}</p>
-        )}
+        {apiErrorMessage && <p className="error-message">{apiErrorMessage}</p>}
 
         <div className="btn-holder ion-text-center ion-padding-vertical">
           <IonButton
@@ -412,11 +431,7 @@ const Addcustomcategory: React.FC = () => {
             disabled={!isFormValid && customCategoryData.length === 0}
             onClick={saveCustomCategoryData}
           >
-            {isSubmitting ? (
-              <IonSpinner name="crescent" />
-            ) : (
-              "Hinzufügen"
-            )}
+            {isSubmitting ? <IonSpinner name="crescent" /> : "Hinzufügen"}
           </IonButton>
         </div>
       </IonContent>

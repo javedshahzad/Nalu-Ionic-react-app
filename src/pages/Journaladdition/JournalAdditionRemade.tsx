@@ -29,7 +29,7 @@ import {
   filterOutline,
   happyOutline,
   optionsOutline,
-  arrowBackOutline
+  arrowBackOutline,
 } from "ionicons/icons";
 import Additionfilter from "../modals/Additionfilter/Additionfilter";
 import JournalAdditionApiService from "../../JournalService";
@@ -59,7 +59,6 @@ function JournalAdditionRemade() {
 
   const typeObj: any = useSelector((state: RootState) => state.journalReducer);
 
-  console.log('typeObj', typeObj)
   const dispatch = useDispatch();
 
   const roles = JSON.parse(localStorage.getItem("roles")) || {};
@@ -90,23 +89,14 @@ function JournalAdditionRemade() {
         `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=en`
       );
 
-
       if (data.entries.length > 0) {
         const types = [...new Set(data.entries.map((item: any) => item.type))];
 
-        console.log('types', types);
         let dynamicStates: any = [];
 
         dynamicStates = data.entries;
 
-        // types.forEach((type: any) => {
-        //   dynamicStates[type] = data.entries.filter(
-        //     (item: any) => item.type === type
-        //   );
-        // });
-
-        console.log('dynamic States', dynamicStates)
-
+        // console.log("dynamic", dynamicStates);
 
         dispatch(journalAction(dynamicStates));
 
@@ -318,7 +308,7 @@ function JournalAdditionRemade() {
         ],
       }
     ).then(
-      (data) => { },
+      (data) => {},
       (err) => {
         console.log("err sending data", err);
       }
@@ -380,6 +370,19 @@ function JournalAdditionRemade() {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    console.log("Checking for reload flag...");
+    const reloadFlag = localStorage.getItem("reloadPage");
+
+    if (reloadFlag === "true") {
+      console.log("Reload flag found. Reloading page...");
+      window.location.reload();
+      localStorage.removeItem("reloadPage");
+    } else {
+      console.log("Reload flag not found. No reload needed.");
+    }
+  }, []);
 
   const getColors: any = (year, month, date) => {
     month = parseInt(month + 1);
@@ -443,12 +446,6 @@ function JournalAdditionRemade() {
               <IonIcon icon={arrowBackOutline}></IonIcon>
             </IonButton>
           </IonButtons>
-
-          {/*<IonButtons slot="end">
-            <IonButton color="dark" onClick={() => setModalOpen(true)}>
-              <IonIcon icon={optionsOutline} />
-            </IonButton>
-           </IonButtons>*/}
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -475,11 +472,12 @@ function JournalAdditionRemade() {
                     className={
                       "date " +
                       `${day.isToday === true ? " isToday" : ""}` +
-                      `${activeYear === day.year &&
+                      `${
+                        activeYear === day.year &&
                         activeDate === day.dayNo &&
                         activeMonth === day.month
-                        ? "active"
-                        : ""
+                          ? "active"
+                          : ""
                       }`
                     }
                     style={getColors(day.year, day.month, day.dayNo)}
@@ -511,15 +509,7 @@ function JournalAdditionRemade() {
             <Additionfilter onClose={() => setModalOpen(false)} />
           </IonModal>
         </div>
-        {/*<div className="search-holder">
-          <IonItem lines="none">
-            <IonSearchbar></IonSearchbar>
-            <IonButton slot="end" fill="clear" color="dark">
-              <IonIcon icon={filterOutline} />
-            </IonButton>
-          </IonItem>
-        </div>*/}
-        {/* Journal Entries */}
+
         {isLoading ? (
           <div
             style={{
@@ -536,8 +526,6 @@ function JournalAdditionRemade() {
             {typeObj && typeObj.length > 0 ? (
               typeObj[0].map((entry: any, typeIndex: any) => (
                 <div key={typeIndex}>
-
-
                   <div className="section">
                     {entry.type === "group" && (
                       <div>
@@ -600,10 +588,7 @@ function JournalAdditionRemade() {
                               <IonRow>
                                 {entry.fields.map((field: any) => (
                                   <>
-                                    <IonCol
-                                      size="2"
-                                      className="flex al-center"
-                                    >
+                                    <IonCol size="2" className="flex al-center">
                                       <img
                                         src={field.icon}
                                         height={20}
@@ -622,9 +607,7 @@ function JournalAdditionRemade() {
                                           snaps={true}
                                           min={1}
                                           max={10}
-                                          value={
-                                            field.value ? field.value : 1
-                                          }
+                                          value={field.value ? field.value : 1}
                                           pin={true}
                                           pinFormatter={(value: number) => {
                                             switch (value) {
@@ -897,9 +880,6 @@ function JournalAdditionRemade() {
                       <div>
                         <div className="title flex al-center jc-between">
                           <h3>{entry.label}</h3>
-                          {/*<IonButton fill="clear">
-                                <IonIcon src="assets/imgs/Pen.svg" />
-                              </IonButton>*/}
                         </div>
                         <div className="tags-holder">
                           <div>
@@ -913,10 +893,7 @@ function JournalAdditionRemade() {
                                         placeholder="Text eingeben"
                                         value={entry.value || ""}
                                         onIonChange={(event) =>
-                                          updateField(
-                                            event.target.value,
-                                            entry
-                                          )
+                                          updateField(event.target.value, entry)
                                         }
                                       />
                                     </IonItem>
@@ -934,9 +911,6 @@ function JournalAdditionRemade() {
                       <div>
                         <div className="title flex al-center jc-between">
                           <h3>{entry.label}</h3>
-                          {/*<IonButton fill="clear">
-                                <IonIcon src="assets/imgs/Pen.svg" />
-                              </IonButton>*/}
                         </div>
                         <div className="tags-holder">
                           <div>
@@ -950,10 +924,7 @@ function JournalAdditionRemade() {
                                         placeholder="Text eingeben"
                                         value={entry.value || ""}
                                         onIonChange={(event) =>
-                                          updateField(
-                                            event.target.value,
-                                            entry
-                                          )
+                                          updateField(event.target.value, entry)
                                         }
                                       />
                                     </IonItem>
@@ -970,11 +941,11 @@ function JournalAdditionRemade() {
                   <div className="section">
                     {entry.type === "range-5" && (
                       <div id={entry.key}>
-                        <div className="title flex al-center jc-between">
+                        <div
+                          className="title flex al-center jc-between "
+                          style={{ marginBottom: "20px" }}
+                        >
                           <h3>{entry.label}</h3>
-                          {/*<IonButton fill="clear">
-                                <IonIcon src="assets/imgs/Pen.svg" />
-                              </IonButton>*/}
                         </div>
                         <div className="range-holder">
                           <IonRow>
@@ -1020,11 +991,11 @@ function JournalAdditionRemade() {
                   <div className="section">
                     {entry.type === "range-16" && (
                       <div>
-                        <div className="title flex al-center jc-between">
+                        <div
+                          className="title flex al-center jc-between"
+                          style={{ marginBottom: "20px" }}
+                        >
                           <h3>{entry.label}</h3>
-                          {/*<IonButton fill="clear">
-                                <IonIcon src="assets/imgs/Pen.svg" />
-                              </IonButton>*/}
                         </div>
                         <div className="range-holder">
                           <IonRow>
@@ -1035,7 +1006,6 @@ function JournalAdditionRemade() {
                                 alt=""
                                 style={{}}
                               />
-                              {/* <h3>{entry.label}</h3> */}
                             </IonCol>
                             <IonCol size="9">
                               <IonRange
@@ -1072,21 +1042,12 @@ function JournalAdditionRemade() {
                         <>
                           <div className="title flex al-center jc-between custom-user-fields">
                             <h3>{entry.label}</h3>
-                            {/*<IonButton fill="clear">
-            <IonIcon src="assets/imgs/Pen.svg" />
-          </IonButton>*/}
                           </div>
 
                           {entry.fields.map((field: any) => (
                             <React.Fragment key={field.key}>
                               {field.type === "range-5" && (
                                 <React.Fragment>
-                                  <div className="title flex al-center jc-between">
-                                    <h3>{entry.label}</h3>
-                                    {/*<IonButton fill="clear">
-                                    <IonIcon src="assets/imgs/Pen.svg" />
-                                  </IonButton>*/}
-                                  </div>
                                   <div className="range-holder">
                                     <IonRow>
                                       <IonCol size="2" className="flex">
@@ -1100,6 +1061,9 @@ function JournalAdditionRemade() {
                                         </div>
                                       </IonCol>
                                       <IonCol size="9">
+                                        <h3 className="custom-title">
+                                          {field.label}
+                                        </h3>
                                         <IonRange
                                           className="custom-tick"
                                           aria-label="Dual Knobs Range"
@@ -1108,9 +1072,7 @@ function JournalAdditionRemade() {
                                           snaps={true}
                                           min={1}
                                           max={5}
-                                          value={
-                                            field.value ? field.value : 1
-                                          }
+                                          value={field.value ? field.value : 1}
                                           pin={true}
                                           pinFormatter={(value: number) =>
                                             `${value}`
@@ -1139,12 +1101,6 @@ function JournalAdditionRemade() {
                               )}
                               {field.type === "range-10" && (
                                 <React.Fragment>
-                                  <div className="title flex al-center jc-between">
-                                    <h3>{entry.label}</h3>
-                                    {/*<IonButton fill="clear">
-                                    <IonIcon src="assets/imgs/Pen.svg" />
-                                  </IonButton>*/}
-                                  </div>
                                   <div className="range-holder">
                                     <IonRow>
                                       <IonCol size="2" className="flex">
@@ -1157,6 +1113,10 @@ function JournalAdditionRemade() {
                                         </div>
                                       </IonCol>
                                       <IonCol size="9">
+                                        <h3 className="custom-title">
+                                          {field.label}
+                                        </h3>
+
                                         <IonRange
                                           className="custom-tick"
                                           aria-label="Dual Knobs Range"
@@ -1165,9 +1125,7 @@ function JournalAdditionRemade() {
                                           snaps={true}
                                           min={1}
                                           max={10}
-                                          value={
-                                            field.value ? field.value : 1
-                                          }
+                                          value={field.value ? field.value : 1}
                                           pin={true}
                                           pinFormatter={(value: number) =>
                                             `${value}`
@@ -1197,21 +1155,27 @@ function JournalAdditionRemade() {
                               {field.type === "true_false" && (
                                 <div className="tags-holder">
                                   <IonRow>
-                                    <IonCol size="4">
+                                    <IonCol size="2" className="flex">
+                                      <div className="start-slot flex al-center">
+                                        <img
+                                          src={field.icon}
+                                          height={20}
+                                          alt=""
+                                        />
+                                      </div>
+                                    </IonCol>
+                                    <IonCol
+                                      size="4"
+                                      style={{
+                                        marginBottom: "10px",
+                                        marginTop: "10px",
+                                      }}
+                                    >
                                       <IonItem
                                         key={field.key}
                                         lines="none"
                                         className="customIcon"
                                       >
-                                        {field.svg && (
-                                          <div
-                                            className="svgIconss"
-                                            dangerouslySetInnerHTML={{
-                                              __html: field.svg,
-                                            }}
-                                            id={field.key}
-                                          />
-                                        )}
                                         <IonLabel>{field.label}</IonLabel>
                                         <IonCheckbox
                                           checked={field.value}
@@ -1234,8 +1198,6 @@ function JournalAdditionRemade() {
                     </div>
                   ) : null}
                 </div>
-
-
               ))
             ) : (
               <></>
