@@ -140,7 +140,7 @@ const GroupChat: React.FC = () => {
           user: user,
           conversation: groupId,
           message: `<p>${newMessage}</p>`,
-          type: "message-",
+          type: "message",
         });
 
         setSendLoading(true);
@@ -204,20 +204,21 @@ const GroupChat: React.FC = () => {
 
   useEffect(() => {
     socket.emit("join", {
-      user: "65194710d160530510955d7d",
+      user: user,
       conversation: groupId,
     });
 
-    socket.on("join", (data) => {});
+    socket.on("join", (data) => { });
 
     socket.emit("message-list", {
       page: 1,
       limit: limit,
-      user: "65194710d160530510955d7d",
+      user: user,
       conversation: groupId,
     });
 
     socket.on("message-list", (data) => {
+      console.log('data', data)
       if (data.results.length > 0) {
         // setgrpMessage(data.results);
         const invertedArray = data.results.reverse();
@@ -321,7 +322,7 @@ const GroupChat: React.FC = () => {
     socket.emit("message-list", {
       page: 1,
       limit: limit,
-      user: "65194710d160530510955d7d",
+      user: user,
       conversation: groupId,
     });
 

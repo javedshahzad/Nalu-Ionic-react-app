@@ -40,93 +40,92 @@ const Login: React.FC = () => {
     const value = event.target.value;
     setPassword(value);
     setPasswordError(value.trim() === '' ? '' : value.length < 6 ? '' : '');
-    setErrorMessage(value.trim() === '' ? '': '')
+    setErrorMessage(value.trim() === '' ? '' : '')
 
   };
 
   const handleEmailChange = (event) => {
     const value = event.target.value;
     setEmail(value);
-     setEmailError(value.trim() === '' ? '' : !emailRegexx.test(value) ? '' : '');
-     setErrorMessage(value.trim() === '' ? '': '')
+    setEmailError(value.trim() === '' ? '' : !emailRegexx.test(value) ? '' : '');
+    setErrorMessage(value.trim() === '' ? '' : '')
   };
 
-    const handleEmailInputBlur = (e) => {
+  const handleEmailInputBlur = (e) => {
     setEmailTouched(true);
-    if(emailTouched) {
+    if (emailTouched) {
       setEmailError(e.target.focusedValue.trim() === '' ? 'Bitte gebe deine E-Mail-Adresse ein.' : !emailRegexx.test(e.target.focusedValue) ? 'Bitte gebe eine gültige E-Mail-Adresse ein.' : '');
-      setErrorMessage(e.target.focusedValue.trim() === '' ? '': '')
+      setErrorMessage(e.target.focusedValue.trim() === '' ? '' : '')
     }
 
   };
   const handlePasswprdInputBlur = (e) => {
     setPasswordTouched(true);
-    if(passwordTouched) {
+    if (passwordTouched) {
       setPasswordError(e.target.focusedValue.trim() === '' ? 'Bitte gebe dein Passwort ein.' : e.target.focusedValue.length < 6 ? 'Das Passwort muss mindestens 6 Zeichen lang sein.' : '');
-      setErrorMessage(e.target.focusedValue.trim() === '' ? '': '')
+      setErrorMessage(e.target.focusedValue.trim() === '' ? '' : '')
     }
 
   };
- 
 
-    const isFormValid = password && email && emailRegexx.test(email) && password.length >= 6 && !passwordError && !emailError;
 
-    const handleLogin = async () => {
-      setIsSubmitting(true);
-    
+  const isFormValid = password && email && emailRegexx.test(email) && password.length >= 6 && !passwordError && !emailError;
+
+  const handleLogin = async () => {
+    setIsSubmitting(true);
+
+    try {
+      // WordPress API login
+      const response = await axios.post(`https://app.mynalu.com/wp-json/jwt-auth/v1/token`, {
+        username: email,
+        password: password,
+      });
+
+      if (response.status === 200) {
+        setToken(response.data.token);
+        localStorage.setItem('jwtToken', response.data.token);
+        sessionStorage.setItem('jwtToken', response.data.token);
+
+        localStorage.setItem('roles', JSON.stringify(response.data.roles));
+        localStorage.setItem('userId', response.data.user_id);
+      } else {
+        setErrorMessage("WordPress API login failed");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Chat API login
       try {
-        // WordPress API login
-        const response = await axios.post(`https://app.mynalu.com/wp-json/jwt-auth/v1/token`, {
-          username: email,
+        const naluApiResponse = await axios.post('https://apidev.mynalu.com/v1/user/login', {
+          email: email,
           password: password,
         });
-    
-        if (response.status === 200) {
-          setToken(response.data.token);
-          localStorage.setItem('jwtToken', response.data.token);
-          sessionStorage.setItem('jwtToken', response.data.token);
 
-          localStorage.setItem('roles', JSON.stringify(response.data.roles));
-          localStorage.setItem('userId', response.data.user_id);
+        if (naluApiResponse.status === 200 && naluApiResponse.data.success) {
+          const { access, refresh, user } = naluApiResponse.data.data.tokens;
+          // Save additional data, including _id, in localStorage
+          localStorage.setItem('accessToken', access.token);
+          localStorage.setItem('refreshToken', refresh.token);
+          localStorage.setItem('chatApiUserId', naluApiResponse.data.data.user._id);
         } else {
-          setErrorMessage("WordPress API login failed");
-          setIsSubmitting(false);
-          return;
+          // Do not show an error message for Chat API login failure
+          console.log("Chat API login failed");
         }
-    
-        // Chat API login
-        try {
-          const naluApiResponse = await axios.post('https://apidev.mynalu.com/v1/user/login', {
-            email: email,
-            password: password,
-          });
-    
-          if (naluApiResponse.status === 200 && naluApiResponse.data.success) {
-            const { access, refresh, user } = naluApiResponse.data.data.tokens;
-    
-            // Save additional data, including _id, in localStorage
-            localStorage.setItem('accessToken', access.token);
-            localStorage.setItem('refreshToken', refresh.token);
-            localStorage.setItem('chatApiUserId', naluApiResponse.data.data.user._id);
-          } else {
-            // Do not show an error message for Chat API login failure
-            console.log("Chat API login failed");
-          }
-        } catch (chatApiError) {
-          // Handle any errors with the Chat API login here
-          console.error('Chat API login error:', chatApiError);
-        }
-    
-        // Navigation
-        history.push("/tabs/tab1");
-      } catch (error) {
-        console.log('Error', error.response?.data?.message || error.message);
-        setErrorMessage("E-Mail-Adresse oder Kennwort ungültig");
+      } catch (chatApiError) {
+        // Handle any errors with the Chat API login here
+        console.error('Chat API login error:', chatApiError);
       }
-    
-      setIsSubmitting(false);
-    };        
-  
+
+      // Navigation
+      history.push("/tabs/tab1");
+    } catch (error) {
+      console.log('Error', error.response?.data?.message || error.message);
+      setErrorMessage("E-Mail-Adresse oder Kennwort ungültig");
+    }
+
+    setIsSubmitting(false);
+  };
+
   return (
     <IonPage className="Login">
       <IonContent className="ion-padding" fullscreen>
@@ -135,10 +134,10 @@ const Login: React.FC = () => {
         </div>
         <div className="the-form">
           <div className="input-item">
-          <IonItem lines="none">
-              <IonIcon src="assets/imgs/icn-email.svg" slot="start"/>
+            <IonItem lines="none">
+              <IonIcon src="assets/imgs/icn-email.svg" slot="start" />
               <IonInput placeholder={t('login.email')} autocomplete="email" type="email"
-                value={email} 
+                value={email}
                 onIonChange={() => setEmailTouched(false)} // Reset emailTouched when input changes
                 onIonBlur={handleEmailInputBlur}
 
@@ -191,15 +190,15 @@ const Login: React.FC = () => {
         </IonButton>
         </div>*/}
 
-      <IonRouterLink routerLink="/questioning">
-        <div className="bottom-holder flex al-center jc-center">
-        <h6>{t('login.no_account')} &nbsp;&nbsp;</h6>
-        <div className="btn ion-activatable ripple-parent rectangle">
-        <IonRippleEffect></IonRippleEffect>
-        <h5>{t('login.sign_up')}</h5>
-      </div>
-      </div>
-      </IonRouterLink>
+        <IonRouterLink routerLink="/questioning">
+          <div className="bottom-holder flex al-center jc-center">
+            <h6>{t('login.no_account')} &nbsp;&nbsp;</h6>
+            <div className="btn ion-activatable ripple-parent rectangle">
+              <IonRippleEffect></IonRippleEffect>
+              <h5>{t('login.sign_up')}</h5>
+            </div>
+          </div>
+        </IonRouterLink>
 
       </IonContent>
     </IonPage>
