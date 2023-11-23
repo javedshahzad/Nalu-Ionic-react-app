@@ -84,9 +84,6 @@ const Registeration: React.FC = () => {
                 localStorage.setItem('accessToken', access.token);
                 localStorage.setItem('refreshToken', refresh.token);
                 localStorage.setItem('chatApiUserId', naluApiResponse.data.data.user._id);
-
-                // Navigation
-                history.push('/yourdata');
               } else {
                 console.log("Invalid tokens structure in Chat API response");
               }
@@ -96,6 +93,9 @@ const Registeration: React.FC = () => {
           } catch (chatApiError) {
             console.error('Chat API login error:', chatApiError);
           }
+
+          // Navigation
+          history.push('/yourdata');
         }
 
         setIsLoading(false);

@@ -18,7 +18,7 @@ const CustomCategoryApiService = {
   postCall_3: async (url: string, token: string) => {
     const customHeaders = {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     };
 
@@ -36,7 +36,7 @@ const CustomCategoryApiService = {
   put_2: async (url: string, token: any) => {
     const customHeaders = {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     };
 

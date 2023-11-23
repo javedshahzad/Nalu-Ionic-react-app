@@ -86,7 +86,7 @@ function JournalAdditionRemade() {
       setIsLoading(true);
 
       const data = await JournalAdditionApiService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=en`
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`
       );
 
       if (data.entries.length > 0) {

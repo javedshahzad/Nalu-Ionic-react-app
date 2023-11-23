@@ -212,6 +212,39 @@ const JournalCalendarRemade = () => {
     return style;
   };
 
+  const formatTodaysDate = () => {
+    const daysOfWeek = [
+      "Sonntag",
+      "Montag",
+      "Dienstag",
+      "Mittwoch",
+      "Donnerstag",
+      "Freitag",
+      "Samstag",
+    ];
+    const months = [
+      "Januar",
+      "Februar",
+      "März",
+      "April",
+      "Mai",
+      "Juni",
+      "Juli",
+      "August",
+      "September",
+      "Oktober",
+      "November",
+      "Dezember",
+    ];
+  
+    const today = new Date();
+    const dayOfWeek = daysOfWeek[today.getDay()];
+    const dayOfMonth = today.getDate();
+    const month = months[today.getMonth()];
+  
+    return `${dayOfWeek}, ${dayOfMonth}. ${month}`;
+  };  
+
   useIonViewWillEnter(() => {
     getIcons();
     getIcons2();
@@ -534,7 +567,7 @@ const JournalCalendarRemade = () => {
             <div className="journal-cycle">
               <h3>{icons2?.today?.label}</h3>
               <div className="day-time">
-                <span>{icons2?.today?.date}</span>
+                <span>{formatTodaysDate()}</span>
               </div>
             </div>
           </div>

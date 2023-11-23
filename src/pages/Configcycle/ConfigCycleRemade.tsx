@@ -55,7 +55,7 @@ function ConfigCycleRemade() {
       tokenService.getWPToken()
     ).then(
       (data) => {
-        navigation.push("/onboarding");
+        navigation.push("/learnmore");
       },
       (err) => {
         console.log("err sending data", err);
