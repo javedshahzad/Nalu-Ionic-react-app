@@ -236,6 +236,7 @@ function JournalAdditionRemade() {
 
   function weekdays(loopDate: any, loopEndDate: any, moonPhaseIcon: any) {
     const today = formatDates(new Date());
+
     let newWeekDays = [];
 
     while (loopDate <= loopEndDate) {
@@ -414,7 +415,7 @@ function JournalAdditionRemade() {
     let _x = `${_year}-${_month}-${_day}`;
 
     Object.keys(moonColorData).map((obj) => {
-      if (obj === x && obj !== "2023-10-02") {
+      if (obj === x && obj !== _x) {
         moonColorData[obj].entries.map((phase) => {
           if (phase.key === "period_bleeding" && parseInt(phase.value) > 0) {
             style.backgroundColor = "#F0A6A9";
@@ -471,7 +472,7 @@ function JournalAdditionRemade() {
                   <div
                     className={
                       "date " +
-                      `${day.isToday === true ? " isToday" : ""}` +
+                      `${day.isToday === true ? "isToday" : ""}` +
                       `${
                         activeYear === day.year &&
                         activeDate === day.dayNo &&
@@ -495,7 +496,14 @@ function JournalAdditionRemade() {
                         </div>
                       )}
                     </div>
-                    <p> {day.dayNo}</p>
+                    <div className="dayToday">
+                      {day.isToday === true ? (
+                        <span style={{ fontSize: "9px" }}>Heute</span>
+                      ) : null}
+                      <p className={day.isToday === true ? "isToday" : ""}>
+                        {day.dayNo}
+                      </p>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -585,74 +593,69 @@ function JournalAdditionRemade() {
                                   </IonButton>*/}
                             </div>
                             <div className="range-holder">
-                              <IonRow>
-                                {entry.fields.map((field: any) => (
-                                  <>
-                                    <IonCol size="2" className="flex al-center">
-                                      <img
-                                        src={field.icon}
-                                        height={20}
-                                        alt=""
-                                        style={{}}
-                                      />
-                                    </IonCol>
-                                    <IonCol size="9">
-                                      <h3>{field.label}</h3>
-                                      <div>
-                                        <IonRange
-                                          className="custom-tick"
-                                          aria-label="Dual Knobs Range"
-                                          dualKnobs={false}
-                                          ticks={true}
-                                          snaps={true}
-                                          min={1}
-                                          max={10}
-                                          value={field.value ? field.value : 1}
-                                          pin={true}
-                                          pinFormatter={(value: number) => {
-                                            switch (value) {
-                                              case 1:
-                                                return "Kein Schmerz";
-                                              case 2:
-                                              case 3:
-                                                return "Leichter Schmerz";
-                                              case 4:
-                                              case 5:
-                                                return "Mittlerer Schmerz";
-                                              case 6:
-                                              case 7:
-                                                return "Starker Schmerz";
-                                              case 8:
-                                              case 9:
-                                                return "Sehr starker Schmerz";
-                                              case 10:
-                                                return "Stärkster vorstellbarer Schmerz";
-                                              default:
-                                                return "Kein Schmerz";
-                                            }
-                                          }}
-                                          onIonChange={(event) =>
-                                            updateField(
-                                              event.target.value,
-                                              field
-                                            )
+                              {entry.fields.map((field: any) => (
+                                <IonRow key={field.key}>
+                                  <IonCol size="2" className="flex al-center">
+                                    <img
+                                      src={field.icon}
+                                      height={20}
+                                      alt=""
+                                      style={{}}
+                                    />
+                                  </IonCol>
+                                  <IonCol size="9">
+                                    <h3>{field.label}</h3>
+                                    <div>
+                                      <IonRange
+                                        className="custom-tick"
+                                        aria-label="Dual Knobs Range"
+                                        dualKnobs={false}
+                                        ticks={true}
+                                        snaps={true}
+                                        min={1}
+                                        max={10}
+                                        value={field.value ? field.value : 1}
+                                        pin={true}
+                                        pinFormatter={(value: number) => {
+                                          switch (value) {
+                                            case 1:
+                                              return "Kein Schmerz";
+                                            case 2:
+                                            case 3:
+                                              return "Leichter Schmerz";
+                                            case 4:
+                                            case 5:
+                                              return "Mittlerer Schmerz";
+                                            case 6:
+                                            case 7:
+                                              return "Starker Schmerz";
+                                            case 8:
+                                            case 9:
+                                              return "Sehr starker Schmerz";
+                                            case 10:
+                                              return "Stärkster vorstellbarer Schmerz";
+                                            default:
+                                              return "Kein Schmerz";
                                           }
-                                        ></IonRange>
-                                        <div className="tick-labels">
-                                          {rangeValues10.map((values) => (
-                                            <div
-                                              key={values}
-                                              className="tick-label2"
-                                            >
-                                              {values}
-                                            </div>
-                                          ))}
-                                        </div>
+                                        }}
+                                        onIonChange={(event) =>
+                                          updateField(event.target.value, field)
+                                        }
+                                      ></IonRange>
+                                      <div className="tick-labels">
+                                        {rangeValues10.map((values) => (
+                                          <div
+                                            key={values}
+                                            className="tick-label2"
+                                          >
+                                            {values}
+                                          </div>
+                                        ))}
                                       </div>
-                                    </IonCol>
-                                  </>
-                                ))}
-                              </IonRow>
+                                    </div>
+                                  </IonCol>
+                                </IonRow>
+                              ))}
                             </div>
                           </>
                         )}

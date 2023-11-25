@@ -33,21 +33,19 @@
       .isToday {
         background-color: $config-pink;
         border-radius: 10px;
-        content: "Today";
         color: $config-white;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+        margin: 0;
         gap: 0;
+        font-size: 13px;
         &:hover {
           border-radius: 10px;
         }
-        &::before {
-          position: relative;
-          top: 16px;
-          content: "Heute";
-          font-size: 8px;
-          color: $config-white !important;
+
+        .dayToday {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
         }
 
         .active {

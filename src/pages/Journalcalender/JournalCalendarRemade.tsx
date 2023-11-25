@@ -150,7 +150,6 @@ const JournalCalendarRemade = () => {
         `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
       );
 
-      console.log("dataa", data);
       const todayData = data["today"];
 
       if (todayData) {
@@ -236,14 +235,14 @@ const JournalCalendarRemade = () => {
       "November",
       "Dezember",
     ];
-  
+
     const today = new Date();
     const dayOfWeek = daysOfWeek[today.getDay()];
     const dayOfMonth = today.getDate();
     const month = months[today.getMonth()];
-  
+
     return `${dayOfWeek}, ${dayOfMonth}. ${month}`;
-  };  
+  };
 
   useIonViewWillEnter(() => {
     getIcons();
@@ -268,8 +267,6 @@ const JournalCalendarRemade = () => {
     let year = new Date().getFullYear();
 
     let curDate = `${year}-${month}-${date}`;
-
-    console.log("curr date", curDate);
 
     if (todayPeriod == "false") {
       body = {
