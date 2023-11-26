@@ -9,7 +9,7 @@ import {
   IonRouterLink,
   IonSpinner,
 } from "@ionic/react";
-import axios from 'axios'; // Import Axios
+import axios from 'axios';
 import "./Registeration.scss";
 import { useState } from "react";
 import { useHistory } from 'react-router-dom';
@@ -40,6 +40,8 @@ const Registeration: React.FC = () => {
 
   const isFormValid = firstName && email && !firstNameError && !emailError;
 
+  const userGoal = localStorage.getItem('selectedGoal') || 'harmony';
+
   const [apiError, setApiError] = useState('');
 
   const history = useHistory();
@@ -49,8 +51,8 @@ const Registeration: React.FC = () => {
       setIsLoading(true);
   
       try {
-        // WordPress API login
-        const response = await axios.post(`https://app.mynalu.com/wp-json/nalu-app/v1/add-freemium-user?email=${email}&first_name=${firstName}`);
+        // WordPress API Registration
+        const response = await axios.post(`https://app.mynalu.com/wp-json/nalu-app/v1/add-freemium-user?email=${email}&first_name=${firstName}&goal=${userGoal}`);
   
         console.log("Response:", response);
   
@@ -115,6 +117,9 @@ const Registeration: React.FC = () => {
               break;
             case "invalid_email":
               setApiError("Es scheint ein Tippfehler vorzuliegen. Bitte überprüfe deine E-Mail-Adresse und versuche es noch einmal.");
+              break;
+            case "server_error":
+              setApiError(" Deine Registrierung hat leiderwegen eines internen Fehlers nicht geklappt . Bitte versuch es später erneut und kontaktiere uns unter support@mynalu.com, falls das Problem bestehen bleibt.");
               break;
             case "catch_all_email":
               setApiError("Allgemeine E-Mail-Adressen wie info@ oder support@ sind nicht zulässig. Bitte verwende stattdessen deine persönliche E-Mail-Adresse.");

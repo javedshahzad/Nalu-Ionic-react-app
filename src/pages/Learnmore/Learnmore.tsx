@@ -35,10 +35,23 @@ const Learnmore: React.FC = () => {
   const [dateError, setDateError] = useState('');
   const [event, setEvent] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [selectedScheduleId, setSelectedScheduleId] = useState(null);
 
   useEffect(() => {
-    setLoading(true); // Enable loading when the component mounts or when the effect is triggered again
-    axios.get("https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/2133", {
+    setLoading(true);
+    const selectedGoal = localStorage.getItem("selectedGoal");
+  
+    // Determine the URL based on the selected goal
+    let url = "https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/2095";
+    if (selectedGoal === "endometriosis") {
+      url = "https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/7967";
+    } else if (selectedGoal === "amenorrhea") {
+      url = "https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/7966";
+    } else if (selectedGoal === "harmony") {
+      url = "https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/2095";
+    }
+  
+    axios.get(url, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
       },
@@ -51,32 +64,45 @@ const Learnmore: React.FC = () => {
       console.error("Error fetching event data:", error);
       setLoading(false); // Disable loading if there is an error
     });
-  }, []);
+  }, []);  
 
   const isFormValid = !!selectedDate && !dateError;
   
-  const handleDateChangeWebinar = (event, date_event) => {
-    const value = event.target.value;
-    setSelectedDate(value);
-    setDateError(value.trim() === "" ? "Bitte wähle ein Datum aus, um fortzufahren." : "");
-}
+  const handleDateChangeWebinar = (e) => {
+    const selectedDateString = e.target.value;
+    setSelectedDate(selectedDateString);
+  
+    // Find the corresponding date object in event.dates and set the schedule ID
+    const selectedDateObj = event?.dates?.find(dateObj => dateObj.date === selectedDateString);
+    if (selectedDateObj) {
+      setSelectedScheduleId(selectedDateObj.schedule_id);
+    } else {
+      setSelectedScheduleId(null); // Reset schedule ID if no match is found
+    }
+  
+    setDateError(selectedDateString.trim() === "" ? "Bitte wähle ein Datum aus, um fortzufahren." : "");
+  };   
 
   const handleRegistration = () => {
-    if (isFormValid) {
-        const updatedRegistrationLink = event?.registration_link.replace('{webinar_id}', selectedDate);
-        axios.post(updatedRegistrationLink, {}, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-            },
-        })
-        .then((response) => {
-            console.log(response.data);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+    if (isFormValid && selectedScheduleId) {
+      const updatedRegistrationLink = event?.registration_link.replace('{schedule_id}', selectedScheduleId);
+      axios.post(updatedRegistrationLink, {}, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        // Handle successful registration (e.g., navigate to a success page or show a message)
+      })
+      .catch((error) => {
+        console.error("Error during registration:", error);
+        // Handle errors (e.g., show an error message)
+      });
+    } else {
+      // Handle form invalid or no schedule_id selected (e.g., show a message to the user)
     }
-  }
+  };  
 
   if (loading) {
     return (
@@ -181,13 +207,10 @@ const Learnmore: React.FC = () => {
                 okText="Bestätigen"
                 mode="md"
                 value={selectedDate}
-                onIonChange={(e) => {
-                  handleDateChangeWebinar(e, event?.dates?.find(date => date.date === e.target.value))
-                }}
+                onIonChange={handleDateChangeWebinar}
               >
                 {event?.dates?.map((date, date_index) => (
-                  <IonSelectOption
-                    key={date_index} value={date.date}>
+                  <IonSelectOption key={date_index} value={date.date}>
                     {date.date}
                   </IonSelectOption>
                 ))}

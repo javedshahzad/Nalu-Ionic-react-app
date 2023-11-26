@@ -121,8 +121,8 @@ const Eventdetail: React.FC = () => {
     const value = event.target.value;
 
     const updatedRegistrationLink = registration_link.replace(
-      "{webinar_id}",
-      date_event.webinar_id
+      "{schedule_id}",
+      date_event.schedule_id
     );
     axios
       .get(updatedRegistrationLink, {

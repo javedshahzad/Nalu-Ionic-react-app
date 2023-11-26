@@ -5,8 +5,10 @@ import {
   IonPopover,
   useIonRouter,
   IonIcon,
+  IonSpinner,
   IonDatetime,
 } from "@ionic/react";
+import axios from 'axios';
 import "./configcycleremade.scss";
 import { useState, useRef, useEffect } from "react";
 import newMoon from "../../assets/images/new moon.svg";
@@ -19,18 +21,18 @@ import { ca } from "@vidstack/react/dist/types/vidstack-react";
 import moment from "moment";
 
 const months = [
-  "January",
-  "February",
-  "March",
+  "Januar",
+  "Februar",
+  "März",
   "April",
-  "May",
-  "June",
-  "July",
+  "Mai",
+  "Juni",
+  "Juli",
   "August",
   "September",
-  "October",
+  "Oktober",
   "November",
-  "December",
+  "Dezember",
 ];
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -47,21 +49,32 @@ function ConfigCycleRemade() {
   const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
   const [activeMonthIndex, setActiveMonthIndex] = useState(null);
   const [calendarDate, setCalendarDate] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingToLogin, setIsSubmittingToLogin] = useState(false);
 
   const navigation = useIonRouter();
-  const toLogin = () => {
-    CustomCategoryApiService.put_2(
-      `https://app.mynalu.com/wp-json/nalu-app/v1/no-period`,
-      tokenService.getWPToken()
-    ).then(
-      (data) => {
-        navigation.push("/learnmore");
-      },
-      (err) => {
-        console.log("err sending data", err);
-      }
-    );
-  };
+  const toLogin = async () => {
+    setIsSubmittingToLogin(true); // Start submission
+  
+    try {
+      const response = await axios.put(
+        'https://app.mynalu.com/wp-json/nalu-app/v1/no-period',
+        {}, // Send an empty object or the data you need to send
+        {
+          headers: {
+            'Authorization': `Bearer ${tokenService.getWPToken()}`,
+            // Add any other headers you need here
+          },
+        }
+      );
+  
+      navigation.push("/learnmore");
+    } catch (err) {
+      console.log("err sending data", err);
+    } finally {
+      setIsSubmittingToLogin(false);
+    }
+  };  
 
   const daysIcon = (dateIndex: any, mIndex: any): string => {
     if (dateIndex === 12 && mIndex === 7) {
@@ -316,10 +329,10 @@ function ConfigCycleRemade() {
     // ();
   }
 
-  const goToLearnMore = () => {
+  const goToLearnMore = async () => {
     const tempMonthIndex = activeMonthIndex + 1 + "";
     const tempDateIndex = activeIndex + "";
-
+  
     const data = {
       entries: [
         {
@@ -328,37 +341,38 @@ function ConfigCycleRemade() {
         },
       ],
     };
-
+  
     const dateParam = `${year}-${
       +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
     }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
-
-    console.log("dateParar", dateParam);
-    CustomCategoryApiService.post(
-      `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${calendarDate}`,
-      data
-    ).then(
-      (data) => {
-        console.log("data from custom category api", data);
-        navigation.push("/learnmore");
-      },
-      (err) => {
-        console.log("err sending data", err);
-      }
-    );
-  };
+  
+    console.log("dateParam", dateParam);
+    setIsSubmitting(true);
+  
+    try {
+      const response = await CustomCategoryApiService.post(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${calendarDate}`,
+        data
+      );
+  
+      console.log("data from custom category api", response);
+      navigation.push("/learnmore");
+    } catch (err) {
+      console.log("err sending data", err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };  
 
   return (
     <IonPage className="ConfigCycleRemade">
       <IonContent>
         <div className="configcycleMain">
           <h1 className="configTextMain">
-            Configure your Cycle <br />
-            Journal
+          Konfiguriere dein Zyklusjournal
           </h1>
           <h3 className="configTextSub">
-            When was the last of your <br />
-            last period?
+          Wann war deine letzte Periode?
           </h3>
 
           {/* <div className="calendar-container" onScroll={() => handleScroll()}>
@@ -383,37 +397,37 @@ function ConfigCycleRemade() {
               onIonChange={handleDateSelect}
             ></IonDatetime>
           </form>
-          <div className="moon-phases">
+          {/*<div className="moon-phases">
             <div className="new-moon">
               <img src={newMoon} alt="" />
-              <p className="moon-text">New Moon</p>
+              <p className="moon-text">Neumond</p>
             </div>
             <div className="full-moon">
               <img src={fullMoon} alt="" />
-              <p className="moon-text">Full Moon</p>
+              <p className="moon-text">Vollmond</p>
             </div>
-          </div>
+          </div>*/}
           <div className="bottom-text">
-            <IonButton
-              className="configTextBottom"
-              onClick={() => toLogin()}
-              style={{ cursor: "pointer" }}
-              fill="clear"
-            >
-              I don’t Know/ I never had one
-            </IonButton>
+          <IonButton
+            className="configTextBottom"
+            onClick={toLogin}
+            style={{ cursor: "pointer" }}
+            fill="clear"
+            disabled={isSubmittingToLogin}
+          >
+            {isSubmittingToLogin ? <IonSpinner name="crescent" /> : "Ich weiss es nicht / Ich hatte nie eine"}
+          </IonButton>
 
             <h3 className="configTextSubBottom">
-              If you don’t know or never had a period your cycle will be set to
-              the moon phases to introduce you to the cyclical lifestyle.
+            Wenn du das Datum deiner letzten Periode nicht kennst oder nie eine hattest, wird dein Zyklus auf die Mondphasen abgestimmt, um dich mit dem zyklischen Lebensstil vertraut zu machen.
             </h3>
           </div>
           <IonButton
             className="continue-btn"
-            disabled={!calendarDate}
+            disabled={!calendarDate || isSubmitting}
             onClick={goToLearnMore}
           >
-            Continue
+            {isSubmitting ? <IonSpinner name="crescent" /> : "Weiter"}
           </IonButton>
         </div>
       </IonContent>

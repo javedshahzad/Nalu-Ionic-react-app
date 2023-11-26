@@ -136,11 +136,22 @@
   //   }
 }
 
+  .configTextBottom ion-spinner {
+    height: 50px;
+    width: 50px;
+  }
+
   .continue-btn {
     color: $config-white !important;
     width: 100%;
     font-weight: 400 !important;
     font-size: 18px !important;
+
+    ion-spinner {
+      color: white;
+      width: 40px;
+      height: 40px;
+    }
   }
 
   .popoverHeading {
