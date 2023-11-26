@@ -417,9 +417,9 @@ const GroupChat: React.FC = () => {
             <h1 className="group-title">{groupName}</h1> */}
           </div>
 
-          <IonButton slot="end" fill="clear">
+          {/*<IonButton slot="end" fill="clear">
             <IonIcon icon={notificationsOutline} className="bell-icon" />
-          </IonButton>
+          </IonButton>*/}
         </IonToolbar>
       </IonHeader>
       {loading ? (
@@ -580,7 +580,7 @@ const GroupChat: React.FC = () => {
               />
             )}
           </div>
-          <label htmlFor="upload-image" className="attach-btn">
+          {/*<label htmlFor="upload-image" className="attach-btn">
             <IonIcon icon={attachOutline}></IonIcon>
             <input
               hidden
@@ -624,7 +624,7 @@ const GroupChat: React.FC = () => {
                 e.target.value = null;
               }}
             />
-          </label>
+          </label>*/}
         </div>
       </IonFooter>
     </IonPage>
