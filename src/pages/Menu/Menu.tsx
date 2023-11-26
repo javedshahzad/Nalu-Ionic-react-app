@@ -53,8 +53,13 @@ async function openExternalLink(url: string) {
 }
 
 const openLink = async (url: string) => {
-  await Browser.open({ url: url });
+  if (url.startsWith('https://app.mynalu.com') || url.startsWith('http://app.mynalu.com')) {
+    await Browser.open({ url: url });
+  } else {
+    window.open(url, '_system');
+  }
 };
+
 
 interface AppPage {
   url: string;
@@ -182,11 +187,7 @@ const Menu: React.FC = () => {
                   onClick={() => {
                     if (appPage.onClick) {
                       appPage.onClick();
-                    } else if (
-                      appPage.url.startsWith("https://") ||
-                      appPage.url.startsWith("mailto:") ||
-                      appPage.url.startsWith("tel:")
-                    ) {
+                    } else {
                       openLink(appPage.url);
                     }
                   }}

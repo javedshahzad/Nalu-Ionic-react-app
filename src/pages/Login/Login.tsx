@@ -200,6 +200,10 @@ const Login: React.FC = () => {
           </div>
         </IonRouterLink>
 
+            <div className="btn forgot-password rectangle al-center jc-center">
+              <a href="https://app.mynalu.com/login/?action=forgot_password" target="_system"><h5>Passwort vergessen</h5></a>
+            </div>
+
       </IonContent>
     </IonPage>
   );
