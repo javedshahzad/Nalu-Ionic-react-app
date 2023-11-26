@@ -1,6 +1,6 @@
 .GroupChat {
   $config-gray: #636363;
-  $config-white: #F8F5F2;
+  $config-white: #f8f5f2;
   $config-black: #2d2d2d;
   $config-font-family: var(--ion-font-family);
 
@@ -136,6 +136,12 @@
 
   .backBtn {
     color: $config-black !important;
+    font-size: 25px !important;
+    padding-left: 10px;
+    // max-width: % !important;
+    &:hover {
+      opacity: 0.6;
+    }
   }
 
   .bg-white {
@@ -231,13 +237,13 @@
   }
 
   ion-content {
-    --ion-background-color: #F8F5F2;
+    --ion-background-color: #fefcfa;
     --padding-start: 10px;
     --padding-end: 10px;
   }
 
   ion-page {
-    --ion-background-color: #F8F5F2;
+    --ion-background-color: #fefcfa;
   }
 
   .msg {
@@ -250,7 +256,6 @@
     max-width: 450px !important;
     padding: 15px !important;
     border-radius: 15px !important;
-    background: var(--left-msg-bg) !important;
   }
 
   .msg-info-name {
@@ -262,6 +267,7 @@
 
   .left-msg .msg-bubble {
     border-bottom-left-radius: 0 !important;
+    background: #e4e4e4 !important;
   }
 
   .right-msg {
@@ -270,7 +276,7 @@
   }
 
   .right-msg .msg-bubble {
-    background: var(--right-msg-bg) !important;
+    background: #ffe2cb !important;
     color: #fff !important;
     border-bottom-right-radius: 0 !important;
   }

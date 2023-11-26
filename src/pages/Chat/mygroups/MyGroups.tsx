@@ -105,10 +105,7 @@ const MyGroups: React.FC = () => {
     formDataToSend.append("participants[]", JSON.stringify(usersArr));
 
     apiService
-      .post(
-        "https://apidev.mynalu.com/v1/conversation/create",
-        formDataToSend
-      )
+      .post("https://apidev.mynalu.com/v1/conversation/create", formDataToSend)
       .then(
         (data) => {
           dispatch(createGroupAction(data.data));
@@ -218,7 +215,12 @@ const MyGroups: React.FC = () => {
                     src={user.avatar_urls["96"]}
                     alt=""
                     className="profile-image my-auto"
-                    style={{ marginRight: "10px" }}
+                    style={{
+                      marginRight: "10px",
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: 100,
+                    }}
                   />
                   <IonCheckbox
                     mode="ios"
@@ -251,7 +253,12 @@ const MyGroups: React.FC = () => {
                 src={group.groupImage}
                 alt=""
                 className="profile-image my-auto"
-                style={{ marginRight: "10px" }}
+                style={{
+                  marginRight: "10px",
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: 100,
+                }}
               />
 
               <IonLabel>{group.groupName}</IonLabel>
