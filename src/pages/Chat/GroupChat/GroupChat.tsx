@@ -40,6 +40,8 @@ import NotificationBell from "../../../components/NotificationBell";
 const GroupChat: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
 
+  // console.log("group Id", groupId);
+
   const [grpMessage, setgrpMessage] = useState([]);
   const [sendMsgObject, setSendMsgObject] = useState(null);
   const [groupName, setGroupName] = useState("");
@@ -63,7 +65,7 @@ const GroupChat: React.FC = () => {
   const [filesArray, setFilesArray] = useState([]);
   const inputRef = useRef(null);
   const refFiles: any = useRef();
-  const chatContentRef = useRef(null);
+  const chatContentRef = useRef<HTMLDivElement | null>(null);
   const [presentToast] = useIonToast();
 
   useEffect(() => {
@@ -71,33 +73,33 @@ const GroupChat: React.FC = () => {
   }, []);
 
   const customI18n = {
-    "search": "Suchen",
-    "search_no_results_1": "Oh nein!",
-    "search_no_results_2": "Das Emoji konnte nicht gefunden werden",
-    "pick": "Wähle ein Emoji…",
-    "add_custom": "Füge ein benutzerdefiniertes Emoji hinzu",
-    "categories": {
-      "activity": "Aktivität",
-      "custom": "Benutzerdefiniert",
-      "flags": "Flaggen",
-      "foods": "Essen & Trinken",
-      "frequent": "Oft genutzt",
-      "nature": "Tiere & Natur",
-      "objects": "Objekte",
-      "people": "Smileys & Personen",
-      "places": "Reisen & Orte",
-      "search": "Suchergebnisse",
-      "symbols": "Symbole"
+    search: "Suchen",
+    search_no_results_1: "Oh nein!",
+    search_no_results_2: "Das Emoji konnte nicht gefunden werden",
+    pick: "Wähle ein Emoji…",
+    add_custom: "Füge ein benutzerdefiniertes Emoji hinzu",
+    categories: {
+      activity: "Aktivität",
+      custom: "Benutzerdefiniert",
+      flags: "Flaggen",
+      foods: "Essen & Trinken",
+      frequent: "Oft genutzt",
+      nature: "Tiere & Natur",
+      objects: "Objekte",
+      people: "Smileys & Personen",
+      places: "Reisen & Orte",
+      search: "Suchergebnisse",
+      symbols: "Symbole",
     },
-    "skins": {
-      "choose": "Wähle eine Standard-Hautfarbe",
+    skins: {
+      choose: "Wähle eine Standard-Hautfarbe",
       "1": "Standard",
       "2": "Hell",
       "3": "Mittelhell",
       "4": "Mittel",
       "5": "Mitteldunkel",
-      "6": "Dunkel"
-    }
+      "6": "Dunkel",
+    },
   };
 
   const getGroupInfo = () => {
@@ -105,6 +107,7 @@ const GroupChat: React.FC = () => {
       .get(`https://apidev.mynalu.com/v1/conversation/get/${groupId}`)
       .then((data) => {
         setGroupName(data.data.groupName);
+        // console.log("groupName", data);
         setGroupImage(data.data.groupImage);
       })
       .catch((error) => console.error("Error fetching data:", error));
@@ -183,7 +186,7 @@ const GroupChat: React.FC = () => {
   };
 
   const openGroupInfo = () => {
-    history.push("/group-info/" + groupId);
+    // history.push("/group-info/" + groupId);
   };
 
   const back = () => {
@@ -208,7 +211,7 @@ const GroupChat: React.FC = () => {
       conversation: groupId,
     });
 
-    socket.on("join", (data) => { });
+    socket.on("join", (data) => {});
 
     socket.emit("message-list", {
       page: 1,
@@ -218,7 +221,7 @@ const GroupChat: React.FC = () => {
     });
 
     socket.on("message-list", (data) => {
-      console.log('data', data)
+      // console.log("data", data);
       if (data.results.length > 0) {
         // setgrpMessage(data.results);
         const invertedArray = data.results.reverse();
@@ -277,8 +280,10 @@ const GroupChat: React.FC = () => {
       setSendMsgObject(data);
       if (chatContentRef && chatContentRef.current) {
         setTimeout(() => {
-          chatContentRef.current.scrollToBottom();
-        }, 1000);
+          document
+            .getElementById("chatEnd")
+            .scrollIntoView({ block: "end", inline: "center" });
+        }, 500);
       }
     });
 
@@ -293,8 +298,11 @@ const GroupChat: React.FC = () => {
 
   useEffect(() => {
     if (sendMsgObject) {
+      // console.log("sendmsg>>", sendMsgObject);
       const aa = [...grpMessage];
       aa.push(sendMsgObject);
+
+      // console.log("aa>>", aa);
       setgrpMessage(aa);
       setSendMsgObject(null);
     }
@@ -402,12 +410,11 @@ const GroupChat: React.FC = () => {
     <IonPage className="GroupChat">
       <IonHeader className="ion-no-border">
         <IonToolbar className="ion-no-border">
-          <IonButton slot="start" fill="clear" onClick={back}>
-            <IonIcon icon={arrowBackOutline} className="backBtn" />
-          </IonButton>
+          <IonIcon icon={arrowBackOutline} className="backBtn" onClick={back} />
+
           <div className="top-row" onClick={openGroupInfo}>
-            <img src={GroupImage} className="group-icon" />
-            <h1 className="group-title">{groupName}</h1>
+            {/* <img src={GroupImage} className="group-icon" />
+            <h1 className="group-title">{groupName}</h1> */}
           </div>
 
           <IonButton slot="end" fill="clear">
@@ -433,7 +440,7 @@ const GroupChat: React.FC = () => {
           <div key={index}>
             {message.sender._id === user ? (
               <>
-                <div className="msg right-msg">
+                <div className="msg right-msg" id={index}>
                   <div className="msg-bubble">
                     {message.files.length > 0 && (
                       <img
@@ -494,6 +501,7 @@ const GroupChat: React.FC = () => {
             )}
           </div>
         ))}
+        <div id="chatEnd"></div>
       </div>
 
       <IonFooter className="footer relative">
@@ -607,7 +615,9 @@ const GroupChat: React.FC = () => {
                     "Du kannst nur png, jpg, jpeg, webp und heic Dateien hochladen"
                   );
                 } else if (!isFileSize) {
-                  presentToast("Die maximale Dateigröße ist auf 5 MB begrenzt.");
+                  presentToast(
+                    "Die maximale Dateigröße ist auf 5 MB begrenzt."
+                  );
                 }
 
                 e.target.files = null;

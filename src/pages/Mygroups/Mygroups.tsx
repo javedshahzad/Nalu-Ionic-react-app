@@ -58,13 +58,12 @@ const Mygroups: React.FC = () => {
         axiosCancelToken.cancel("Component unmounted");
       }
     };
-  },[]);
+  }, []);
 
   useIonViewDidLeave(() => {
     axiosCancelToken.cancel("Component unmounted");
   });
- 
-  
+
   const navigateToNextPage = (id) => {
     console.log(id);
     history.push("/tabs/tab3/eventdetail", {
@@ -83,7 +82,6 @@ const Mygroups: React.FC = () => {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
         },
         cancelToken: source.token,
-
       })
       .then((response) => {
         console.log(response.data);
@@ -168,10 +166,7 @@ const Mygroups: React.FC = () => {
     formDataToSend.append("participants[]", JSON.stringify(usersArr));
 
     apiService
-      .post(
-        "https://apidev.mynalu.com/v1/conversation/create",
-        formDataToSend
-      )
+      .post("https://apidev.mynalu.com/v1/conversation/create", formDataToSend)
       .then(
         (data) => {
           dispatch(createGroupAction(data.data));
@@ -226,33 +221,33 @@ const Mygroups: React.FC = () => {
   return (
     <IonPage ref={page} className="Mygroups">
       {isLoading ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100vh",
-            }}
-          >
-            <IonSpinner name="crescent"></IonSpinner>
-          </div>
-        ) : (
-          <>
-      <IonHeader className="ion-no-border">
-        <IonToolbar className="ion-no-border">
-          <IonButton slot="start" fill="clear" onClick={back}>
-            <IonIcon icon={arrowBackOutline} className="backBtn" />
-          </IonButton>
-          <div className="top-row">
-            <h1 className="group-title">Community</h1>
-          </div>
-          <IonButton slot="end" fill="clear">
-            {/*<IonIcon icon={notificationsOutline} className="bell-icon" />*/}
-            </IonButton>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        {/*<IonButtons style={{ display: "flex", justifyContent: "end" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
+          <IonSpinner name="crescent"></IonSpinner>
+        </div>
+      ) : (
+        <>
+          <IonHeader className="ion-no-border">
+            <IonToolbar className="ion-no-border">
+              <IonButton slot="start" fill="clear" onClick={back}>
+                <IonIcon icon={arrowBackOutline} className="backBtn" />
+              </IonButton>
+              <div className="top-row">
+                <h1 className="group-title">Community</h1>
+              </div>
+              <IonButton slot="end" fill="clear">
+                {/*<IonIcon icon={notificationsOutline} className="bell-icon" />*/}
+              </IonButton>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent fullscreen>
+            {/*<IonButtons style={{ display: "flex", justifyContent: "end" }}>
           <IonButton fill="clear" id="open-modal" expand="block">
             <p className="addGrpLabel" style={{ marginRight: "5px" }}>
               Add Group
@@ -317,25 +312,31 @@ const Mygroups: React.FC = () => {
           </IonButton>
         </IonModal>*/}
 
-        {recentGroups.map((group: any, index: any) => (
-          <ul key={index} className="browsed-grps">
-            <li
-              onClick={() => handleGroupClick(group._id)}
-              className="browse-grp-items"
-            >
-              <img
-                src={group.groupImage}
-                alt=""
-                className="profile-image my-auto"
-                style={{ marginRight: "10px" }}
-              />
+            <ul className="browsed-grps">
+              {recentGroups.map((group: any, index: any) => (
+                <li
+                  onClick={() => handleGroupClick(group._id)}
+                  className="browse-grp-items"
+                  key={index}
+                >
+                  <img
+                    src={group.groupImage}
+                    alt=""
+                    className="profile-image my-auto"
+                    style={{
+                      marginRight: "10px",
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: 100,
+                    }}
+                  />
 
-              <IonLabel>{group.groupName}</IonLabel>
-            </li>
-          </ul>
-        ))}
+                  <IonLabel>{group.groupName}</IonLabel>
+                </li>
+              ))}
+            </ul>
 
-        {/*<IonButton
+            {/*<IonButton
           fill="clear"
           onClick={handleBrowseGroupsClick}
           className="browse-grps-btn"
@@ -365,8 +366,9 @@ const Mygroups: React.FC = () => {
                     <div className="dates flex al-center jc-between">
                       <div>
                         <p>{event?.schedule}</p>
-                        <h4 dangerouslySetInnerHTML={{ __html: event?.title }}></h4>
-
+                        <h4
+                          dangerouslySetInnerHTML={{ __html: event?.title }}
+                        ></h4>
                       </div>
                       <IonIcon
                         slot="start"
@@ -390,7 +392,9 @@ const Mygroups: React.FC = () => {
                       <IonLabel>
                         <p>Geleitet von</p>
                         <h6 className="ion-text-wrap">
-                          <span className="host-title">{event?.event_host.title}</span>
+                          <span className="host-title">
+                            {event?.event_host.title}
+                          </span>
                           {event?.event_host.description && <>,&nbsp;</>}
                           {event?.event_host.description}
                         </h6>
@@ -432,8 +436,8 @@ const Mygroups: React.FC = () => {
               </div>
             </div>
           </IonContent>
-          </>
-        )}
+        </>
+      )}
     </IonPage>
   );
 };

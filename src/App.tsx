@@ -129,7 +129,6 @@ const App: React.FC = () => {
   });
 
   useEffect(() => {
-
     socket.emit("my-group-list", {
       search: "",
       page: 1,
@@ -141,7 +140,7 @@ const App: React.FC = () => {
   useEffect(() => {
     if (token) {
       socket.on("my-group-list", (data: any) => {
-        console.log('data', data)
+        console.log("data", data);
         if (data.results && data.results.length > 0) {
           dispatchFunction(data.results);
         }
@@ -234,11 +233,11 @@ const App: React.FC = () => {
               <Mygroups />
             </PrivateRoute>
           </Route>
-          <Route exact path="/mychatgroups">
+          {/* <Route exact path="/mychatgroups">
             <PrivateRoute page={"mygroups"}>
               <MyChatGroups />
             </PrivateRoute>
-          </Route>
+          </Route> */}
           <Route exact path="/onboarding">
             <PrivateRoute page={"onboarding"}>
               <Onboarding />
@@ -299,19 +298,19 @@ const App: React.FC = () => {
           <Route exact path="/mygroups">
             <Mygroups />
           </Route>
-          <Route exact path="/mychatgroups">
+          {/* <Route exact path="/mychatgroups">
             <MyChatGroups />
-          </Route>
-          <Route exact path="/group-info/:groupId">
+          </Route> */}
+          {/* <Route exact path="/group-info/:groupId">
             <GroupInfo />
-          </Route>
+          </Route> */}
 
-          <Route exact path="/browsegroups">
+          {/* <Route exact path="/browsegroups">
             <BrowseGroups />
-          </Route>
-          <Route exact path="/groupdetails/:groupId">
+          </Route> */}
+          {/* <Route exact path="/groupdetails/:groupId">
             <GroupDetails />
-          </Route>
+          </Route> */}
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>

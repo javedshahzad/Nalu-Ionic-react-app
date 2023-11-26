@@ -85,7 +85,12 @@ const BrowseGroups: React.FC = () => {
                   src={group.groupImage}
                   alt=""
                   className="profile-image my-auto"
-                  style={{ marginRight: "10px" }}
+                  style={{
+                    marginRight: "10px",
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: 100,
+                  }}
                 />
                 <IonLabel>
                   {groupName.toLowerCase().includes(searchQuery.toLowerCase())
