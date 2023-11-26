@@ -114,7 +114,7 @@ const GroupChat: React.FC = () => {
   };
 
   const handleSendMessage = () => {
-    if (filesArray.length > 0) {
+    if (filesArray.length > 0 && socket.connected) {
       const nameArray = [];
       for (var i = 0; i < filesArray.length; i++) {
         const fileName = filesArray[i]?.name;

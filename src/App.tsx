@@ -129,24 +129,29 @@ const App: React.FC = () => {
   });
 
   useEffect(() => {
-    socket.emit("my-group-list", {
-      search: "",
-      page: 1,
-      limit: 10,
-      user: tokenService.getUserId(),
-    });
+    setTimeout(() => {
+      if (localStorage.getItem("refreshToken")) {
+        socket.emit("my-group-list", {
+          search: "",
+          page: 1,
+          limit: 10,
+          user: localStorage.getItem("chatApiUserId"),
+        });
+      }
+    }, 10000);
   }, []);
 
   useEffect(() => {
-    if (token) {
-      socket.on("my-group-list", (data: any) => {
-        console.log("data", data);
-        if (data.results && data.results.length > 0) {
-          dispatchFunction(data.results);
-        }
-      });
-    }
-  }, [token]);
+    setTimeout(() => {
+      if (localStorage.getItem("refreshToken")) {
+        socket.on("my-group-list", (data: any) => {
+          if (data.results && data.results.length > 0) {
+            dispatchFunction(data.results);
+          }
+        });
+      }
+    }, 10000);
+  }, []);
 
   const dispatchFunction = (param: any) => {
     dispatch(groupsListAction(param));

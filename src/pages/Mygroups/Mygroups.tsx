@@ -65,7 +65,6 @@ const Mygroups: React.FC = () => {
   });
 
   const navigateToNextPage = (id) => {
-    console.log(id);
     history.push("/tabs/tab3/eventdetail", {
       event_id: id,
     });
@@ -84,7 +83,6 @@ const Mygroups: React.FC = () => {
         cancelToken: source.token,
       })
       .then((response) => {
-        console.log(response.data);
         setEvents(response.data);
         setIsLoading(false);
       })
@@ -114,17 +112,13 @@ const Mygroups: React.FC = () => {
 
   const groups = useSelector((state: RootState) => state.groups);
 
-  const sortedGroups = [...groups].sort((a, b) => b.timestamp - a.timestamp);
-
-  const recentGroups = sortedGroups.slice(0, 2);
-
   const wp_token = tokenService.getWPToken();
 
   useEffect(() => {
     setTimeout(() => {
       setGroupsList(groups);
-    }, 5000);
-  });
+    }, 2000);
+  }, [groups]);
 
   const back = () => {
     history.goBack();
@@ -313,7 +307,7 @@ const Mygroups: React.FC = () => {
         </IonModal>*/}
 
             <ul className="browsed-grps">
-              {recentGroups.map((group: any, index: any) => (
+              {groups.map((group: any, index: any) => (
                 <li
                   onClick={() => handleGroupClick(group._id)}
                   className="browse-grp-items"
