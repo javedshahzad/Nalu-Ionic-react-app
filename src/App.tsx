@@ -120,43 +120,6 @@ const App: React.FC = () => {
 
   // ***socket io*** //
 
-  const token = tokenService.getToken();
-
-  const socket = io("https://apidev.mynalu.com/", {
-    query: {
-      token,
-    },
-  });
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (localStorage.getItem("refreshToken")) {
-        socket.emit("my-group-list", {
-          search: "",
-          page: 1,
-          limit: 10,
-          user: localStorage.getItem("chatApiUserId"),
-        });
-      }
-    }, 10000);
-  }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (localStorage.getItem("refreshToken")) {
-        socket.on("my-group-list", (data: any) => {
-          if (data.results && data.results.length > 0) {
-            dispatchFunction(data.results);
-          }
-        });
-      }
-    }, 10000);
-  }, []);
-
-  const dispatchFunction = (param: any) => {
-    dispatch(groupsListAction(param));
-  };
-
   // ***socket io*** //
 
   return (

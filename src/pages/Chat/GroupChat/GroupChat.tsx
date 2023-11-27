@@ -68,6 +68,80 @@ const GroupChat: React.FC = () => {
   const chatContentRef = useRef<HTMLDivElement | null>(null);
   const [presentToast] = useIonToast();
 
+  useIonViewWillEnter(() => {
+    setTimeout(() => {
+      socket.emit("join", {
+        user: user,
+        conversation: groupId,
+      });
+
+      socket.on("join", (data) => {});
+
+      socket.emit("message-list", {
+        page: 1,
+        limit: limit,
+        user: user,
+        conversation: groupId,
+      });
+
+      socket.on("message-list", (data) => {
+        // console.log("data", data);
+        if (data.results.length > 0) {
+          // setgrpMessage(data.results);
+          const invertedArray = data.results.reverse();
+
+          setgrpMessage(
+            invertedArray.map((msg: any) => {
+              const timestamp = moment(msg.createdAt);
+              const now = moment();
+              const diffInSeconds = now.diff(timestamp, "seconds");
+
+              if (diffInSeconds < 60) {
+                return {
+                  ...msg,
+                  relativeTimestamp: "Just Now",
+                };
+              } else if (diffInSeconds < 60 * 60) {
+                const diffInMinutes = Math.floor(diffInSeconds / 60);
+                return {
+                  ...msg,
+                  relativeTimestamp: `${diffInMinutes} min ago`,
+                };
+              } else if (diffInSeconds < 2 * 60 * 60) {
+                return {
+                  ...msg,
+                  relativeTimestamp: "1 hour ago",
+                };
+              } else if (diffInSeconds < 24 * 60 * 60) {
+                const diffInHours = Math.floor(diffInSeconds / (60 * 60));
+                return {
+                  ...msg,
+                  relativeTimestamp: `${diffInHours} hours ago`,
+                };
+              } else if (diffInSeconds < 2 * 24 * 60 * 60) {
+                return {
+                  ...msg,
+                  relativeTimestamp: "yesterday",
+                };
+              } else if (diffInSeconds < 7 * 24 * 60 * 60) {
+                const diffInDays = Math.floor(diffInSeconds / (24 * 60 * 60));
+                return {
+                  ...msg,
+                  relativeTimestamp: `${diffInDays} days ago`,
+                };
+              } else {
+                return {
+                  ...msg,
+                  relativeTimestamp: timestamp.format("YYYY-MM-DD"),
+                };
+              }
+            })
+          );
+        }
+      });
+    }, 5000);
+  });
+
   useEffect(() => {
     getGroupInfo();
   }, []);
@@ -206,76 +280,6 @@ const GroupChat: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    socket.emit("join", {
-      user: user,
-      conversation: groupId,
-    });
-
-    socket.on("join", (data) => {});
-
-    socket.emit("message-list", {
-      page: 1,
-      limit: limit,
-      user: user,
-      conversation: groupId,
-    });
-
-    socket.on("message-list", (data) => {
-      // console.log("data", data);
-      if (data.results.length > 0) {
-        // setgrpMessage(data.results);
-        const invertedArray = data.results.reverse();
-
-        setgrpMessage(
-          invertedArray.map((msg: any) => {
-            const timestamp = moment(msg.createdAt);
-            const now = moment();
-            const diffInSeconds = now.diff(timestamp, "seconds");
-
-            if (diffInSeconds < 60) {
-              return {
-                ...msg,
-                relativeTimestamp: "Just Now",
-              };
-            } else if (diffInSeconds < 60 * 60) {
-              const diffInMinutes = Math.floor(diffInSeconds / 60);
-              return {
-                ...msg,
-                relativeTimestamp: `${diffInMinutes} min ago`,
-              };
-            } else if (diffInSeconds < 2 * 60 * 60) {
-              return {
-                ...msg,
-                relativeTimestamp: "1 hour ago",
-              };
-            } else if (diffInSeconds < 24 * 60 * 60) {
-              const diffInHours = Math.floor(diffInSeconds / (60 * 60));
-              return {
-                ...msg,
-                relativeTimestamp: `${diffInHours} hours ago`,
-              };
-            } else if (diffInSeconds < 2 * 24 * 60 * 60) {
-              return {
-                ...msg,
-                relativeTimestamp: "yesterday",
-              };
-            } else if (diffInSeconds < 7 * 24 * 60 * 60) {
-              const diffInDays = Math.floor(diffInSeconds / (24 * 60 * 60));
-              return {
-                ...msg,
-                relativeTimestamp: `${diffInDays} days ago`,
-              };
-            } else {
-              return {
-                ...msg,
-                relativeTimestamp: timestamp.format("YYYY-MM-DD"),
-              };
-            }
-          })
-        );
-      }
-    });
-
     socket.on("send-message", (data) => {
       setSendMsgObject(data);
       if (chatContentRef && chatContentRef.current) {

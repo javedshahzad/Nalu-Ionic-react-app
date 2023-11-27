@@ -21,6 +21,7 @@ import {
   IonPopover,
   IonText,
   useIonActionSheet,
+  useIonViewWillEnter,
 } from "@ionic/react";
 import {
   checkmarkCircle,
@@ -43,6 +44,8 @@ import { RootState } from "../../store/store";
 import { createGroupAction } from "../../actions/groupsActions";
 import apiService from "../../Services";
 import tokenService from "../../token";
+import { io } from "socket.io-client";
+import { groupsListAction } from "../../actions/groupsListAction";
 
 const Mygroups: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -63,6 +66,35 @@ const Mygroups: React.FC = () => {
   useIonViewDidLeave(() => {
     axiosCancelToken.cancel("Component unmounted");
   });
+
+  const token = tokenService.getToken();
+  const socket = io("https://apidev.mynalu.com/", {
+    query: {
+      token,
+    },
+  });
+
+  useIonViewWillEnter(() => {
+    if (localStorage.getItem("refreshToken")) {
+      socket.emit("my-group-list", {
+        search: "",
+        page: 1,
+        limit: 10,
+        user: localStorage.getItem("chatApiUserId"),
+      });
+    }
+    if (localStorage.getItem("refreshToken")) {
+      socket.on("my-group-list", (data: any) => {
+        if (data.results && data.results.length > 0) {
+          dispatchFunction(data.results);
+        }
+      });
+    }
+  });
+
+  const dispatchFunction = (param: any) => {
+    dispatch(groupsListAction(param));
+  };
 
   const navigateToNextPage = (id) => {
     history.push("/tabs/tab3/eventdetail", {
@@ -195,6 +227,7 @@ const Mygroups: React.FC = () => {
 
   const handleGroupClick = (groupId: any) => {
     history.push(`/groupchat/${groupId}`);
+    window.location.reload();
   };
 
   const handleBrowseGroupsClick = () => {

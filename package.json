@@ -12,7 +12,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@awesome-cordova-plugins/core": "^6.4.0",
     "@awesome-cordova-plugins/http": "^6.4.0",
     "@capacitor/android": "5.5.1",
     "@capacitor/app": "5.0.6",
