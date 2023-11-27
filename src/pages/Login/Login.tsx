@@ -8,6 +8,7 @@ import {
   IonRippleEffect,
   IonRouterLink,
   IonSpinner,
+  isPlatform
 } from "@ionic/react";
 
 import "./Login.scss";
@@ -16,6 +17,7 @@ import axios from "axios";
 import { navigate } from "ionicons/icons";
 import { useHistory } from "react-router";
 import { useTranslation } from "react-i18next";
+import { HTTP } from '@awesome-cordova-plugins/http';
 
 const Login: React.FC = () => {
   const [password, setPassword] = useState('');
@@ -75,7 +77,52 @@ const Login: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      // WordPress API login
+      if(isPlatform("ios")){
+        const response = await HTTP.post(`https://app.mynalu.com/wp-json/jwt-auth/v1/token`, {
+          username: email,
+          password: password,
+        },{});
+  
+        if (response.status === 200) {
+          var responseData = JSON.parse(response.data);
+          setToken(responseData.token);
+          localStorage.setItem('jwtToken', responseData.token);
+          sessionStorage.setItem('jwtToken', responseData.token);
+  
+          localStorage.setItem('roles', JSON.stringify(responseData.roles));
+          localStorage.setItem('userId', responseData.user_id);
+        } else {
+          setErrorMessage("WordPress API login failed");
+          setIsSubmitting(false);
+          return;
+        }
+  
+        // Chat API login
+        try {
+          const naluApiResponse = await HTTP.post('https://apidev.mynalu.com/v1/user/login', {
+            email: email,
+            password: password,
+          },{});
+          const naluApiResponseData = JSON.parse(naluApiResponse.data)
+          if (naluApiResponse.status === 200 && naluApiResponseData.success) {
+            const { access, refresh, user } = naluApiResponseData.data.tokens;
+            // Save additional data, including _id, in localStorage
+            localStorage.setItem('accessToken', access.token);
+            localStorage.setItem('refreshToken', refresh.token);
+            localStorage.setItem('chatApiUserId', naluApiResponseData.data.user._id);
+          } else {
+            // Do not show an error message for Chat API login failure
+            console.log("Chat API login failed");
+          }
+        } catch (chatApiError) {
+          // Handle any errors with the Chat API login here
+          console.error('Chat API login error:', chatApiError);
+        }
+  
+        // Navigation
+        history.push("/tabs/tab1");
+      }else{
+        // WordPress API login
       const response = await axios.post(`https://app.mynalu.com/wp-json/jwt-auth/v1/token`, {
         username: email,
         password: password,
@@ -118,6 +165,8 @@ const Login: React.FC = () => {
 
       // Navigation
       history.push("/tabs/tab1");
+      }
+      
     } catch (error) {
       console.log('Error', error.response?.data?.message || error.message);
       setErrorMessage("E-Mail-Adresse oder Kennwort ungültig");

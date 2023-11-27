@@ -8,12 +8,13 @@ import {
   IonRippleEffect,
   IonRouterLink,
   IonSpinner,
+  isPlatform
 } from "@ionic/react";
 import axios from 'axios';
 import "./Registeration.scss";
 import { useState } from "react";
 import { useHistory } from 'react-router-dom';
-
+import { HTTP } from '@awesome-cordova-plugins/http';
 const Registeration: React.FC = () => {
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
@@ -51,7 +52,58 @@ const Registeration: React.FC = () => {
       setIsLoading(true);
   
       try {
-        // WordPress API Registration
+        if(isPlatform("ios")){
+         const response =  await HTTP.post(`https://app.mynalu.com/wp-json/nalu-app/v1/add-freemium-user?email=${email}&first_name=${firstName}&goal=${userGoal}`,{},{})
+            const responseData = JSON.parse(response.data) 
+           console.log("Response:", response);
+           console.log(responseData)
+              if (response.status === 200) {
+              const { token: receivedToken, role, tempname: receivedPassword } = responseData;
+      
+              // Save WordPress API login data
+              setToken(receivedToken);
+              setPassword(receivedPassword); // Set the password here
+              localStorage.setItem('jwtToken', receivedToken);
+              localStorage.setItem('roles', JSON.stringify(role));
+    
+              // Clear any previous API errors when request succeeds
+              setApiError('');
+    
+              // Chat API login
+              try {
+                const naluApiResponse = await HTTP.post('https://apidev.mynalu.com/v1/user/login', {
+                  email: email,
+                  password: receivedPassword,
+                },{});
+                console.log(naluApiResponse)
+                var naluApiResponseData = JSON.parse(naluApiResponse.data)
+                if (naluApiResponse.status === 200 && naluApiResponseData.success) {
+                  const tokens = naluApiResponseData.data.tokens;
+    
+                  // Make sure that the tokens property exists in the response
+                  if (tokens && tokens.access && tokens.refresh) {
+                    const { access, refresh } = tokens;
+    
+                    // Save additional data, including _id, in localStorage
+                    localStorage.setItem('accessToken', access.token);
+                    localStorage.setItem('refreshToken', refresh.token);
+                    localStorage.setItem('chatApiUserId', naluApiResponseData.data.user._id);
+                  } else {
+                    console.log("Invalid tokens structure in Chat API response");
+                  }
+                } else {
+                  console.log("Chat API login failed");
+                }
+              } catch (chatApiError) {
+                console.error('Chat API login error:', chatApiError);
+              }
+    
+              // Navigation
+              history.push('/yourdata');
+            }
+            setIsLoading(false);
+        }else{
+           // WordPress API Registration
         const response = await axios.post(`https://app.mynalu.com/wp-json/nalu-app/v1/add-freemium-user?email=${email}&first_name=${firstName}&goal=${userGoal}`);
   
         console.log("Response:", response);
@@ -101,6 +153,8 @@ const Registeration: React.FC = () => {
         }
 
         setIsLoading(false);
+        }
+       
       } catch (error) {
         console.error("There was a problem with the Axios operation:", error);
 

@@ -58,7 +58,7 @@ import ConfigCycleRemade from "./pages/Configcycle/ConfigCycleRemade";
 import Pusher from "pusher-js";
 import { addNotification } from "./actions/notificationAction";
 import { useDispatch } from "react-redux";
-import OneSignal from "onesignal-cordova-plugin";
+// import OneSignal from "onesignal-cordova-plugin";
 import { useEffect } from "react";
 import { groupsListAction } from "./actions/groupsListAction";
 import tokenService from "./token";
@@ -81,7 +81,7 @@ setupIonicReact({
 // ***onesignal*** //
 
 function OneSignalInit() {
-  OneSignal.initialize("0f10d9d5-8078-4eda-b52f-c616a5398d0b");
+  //OneSignal.initialize("0f10d9d5-8078-4eda-b52f-c616a5398d0b");
 }
 
 // ***onesignal*** //
