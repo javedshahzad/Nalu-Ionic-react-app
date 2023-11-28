@@ -163,14 +163,16 @@
       }
     }
 
-    ion-list
+    ion-list, .delete-account
     {
       padding-top: 20px;
       ion-item
       {
+        --inner-border-width: 0;
+
         ion-label
         {
-          font-size: 20px !important;
+          font-size: 20px;
         }
       }
     }
@@ -179,16 +181,8 @@
     {
       ion-button
       {
-        --border-radius: 10px;
         --color: white;
         font-size: 20px;
-        height: 54px;
-        width: 150px;
-
-        ion-icon
-        {
-          font-size: 15px;
-        }
       }
     }
   }

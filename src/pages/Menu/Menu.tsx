@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   IonAvatar,
   IonBackButton,
@@ -18,29 +19,15 @@ import {
   IonTitle,
   IonToolbar,
   useIonRouter,
+  isPlatform,
+  IonAlert,
 } from "@ionic/react";
 
 import { useLocation } from "react-router-dom";
 import {
-  archiveOutline,
-  archiveSharp,
-  arrowBack,
   arrowBackOutline,
-  bookmarkOutline,
-  camera,
-  cameraOutline,
-  close,
-  heartOutline,
-  heartSharp,
-  mailOutline,
-  mailSharp,
-  notificationsOutline,
-  paperPlaneOutline,
-  paperPlaneSharp,
-  trashOutline,
-  trashSharp,
-  warningOutline,
-  warningSharp,
+  trashBinOutline,
+  logOutOutline,
 } from "ionicons/icons";
 import "./Menu.scss";
 import { Browser } from "@capacitor/browser";
@@ -70,8 +57,39 @@ interface AppPage {
 }
 
 const Menu: React.FC = () => {
-  const location = useLocation();
   const history = useHistory();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showDeleteSuccess, setShowDeleteSuccess] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    history.push('/onboarding');
+  };
+
+  const handleAccountDeletion = async () => {
+    setShowDeleteConfirm(false);
+
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      try {
+        if (isPlatform("ios")) {
+          await HTTP.post('https://app.mynalu.com/wp-json/nalu-app/v1/account-deletion', {}, headers);
+        } else {
+          await axios.post('https://app.mynalu.com/wp-json/nalu-app/v1/account-deletion', {}, { headers });
+        }
+        setShowDeleteSuccess(true);
+        handleLogout();
+      } catch (error) {
+        console.error('Error deleting account:', error);
+        handleLogout();
+      }
+    }
+  };
+  const location = useLocation();
 
   const backHandler = () => {
     window.history.back();
@@ -145,7 +163,6 @@ const Menu: React.FC = () => {
   const closeMenu = () => {
     const menu = document.querySelector("ion-menu");
     menu?.close();
-    console.log("fdfdfdfd");
   };
 
   return (
@@ -208,13 +225,45 @@ const Menu: React.FC = () => {
             );
           })}
         </IonList>
+      {isPlatform('ios') && (
+        <IonMenuToggle autoHide={false} className="delete-account">
+          <IonItem button onClick={() => setShowDeleteConfirm(true)}>
+            <IonIcon aria-hidden="true" slot="start" src={trashBinOutline} />
+            <IonLabel>NALU Konto löschen</IonLabel>
+          </IonItem>
+        </IonMenuToggle>
+      )}
 
-        {/*<div className="btnnn-holder ion-text-center ion-padding-top">
-          <IonButton>
-            <IonIcon src="assets/imgs/logout.svg" slot="start" />
-            Sign out
-          </IonButton>
-        </div>*/}
+      <div className="btnnn-holder ion-text-center ion-padding-top">
+        <IonButton onClick={handleLogout}>
+          <IonIcon src={logOutOutline} slot="start" />
+          Abmelden
+        </IonButton>
+      </div>
+      <IonAlert
+        isOpen={showDeleteConfirm}
+        onDidDismiss={() => setShowDeleteConfirm(false)}
+        header={'Konto löschen'}
+        message={'Bist du dir sicher, dass du dein Konto löschen willst? Alle deine Daten werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'}
+        buttons={[
+          {
+            text: 'Nein',
+            role: 'cancel',
+            cssClass: 'secondary',
+          },
+          {
+            text: 'Ja, löschen',
+            handler: handleAccountDeletion,
+          },
+        ]}
+      />
+      <IonAlert
+        isOpen={showDeleteSuccess}
+        onDidDismiss={() => history.push('/onboarding')}
+        header={'Kontolöschung eingeleitet'}
+        message={'Der Kontolöschungsprozess wurde erfolgreich eingeleitet und wird in den nächsten 2 Wochen abgeschlossen.'}
+        buttons={['OK']}
+      />
       </IonContent>
     </IonPage>
   );
