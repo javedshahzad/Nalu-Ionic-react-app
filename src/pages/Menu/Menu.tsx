@@ -46,6 +46,7 @@ import "./Menu.scss";
 import { Browser } from "@capacitor/browser";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import { HTTP } from "@awesome-cordova-plugins/http";
 import { ArrowLeftIcon } from "@vidstack/react/icons";
 
 async function openExternalLink(url: string) {

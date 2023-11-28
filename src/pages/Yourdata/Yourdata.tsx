@@ -9,11 +9,13 @@ import {
   IonPage,
   IonToggle,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 
 import "./Yourdata.scss";
 import { useState } from "react";
 import axios from 'axios';
+import { HTTP } from "@awesome-cordova-plugins/http";
 
 const Yourdata: React.FC = () => {
   const [acceptPrivacyPolicy, setAcceptPrivacyPolicy] = useState(false);
@@ -36,28 +38,35 @@ const Yourdata: React.FC = () => {
   const handleSubmit = async () => {
     if (!acceptPrivacyPolicy) {
       setPrivacyPolicyError('Please accept our Privacy Policy to continue.');
-      return;  // Exit the function early if validation fails
+      return;
     }
     
     if (!acceptTermsConditions) {
       setTermsConditionsError('Please accept our Terms & Conditions to continue.');
-      return;  // Exit the function early if validation fails
+      return;
     }
   
+    const token = localStorage.getItem('jwtToken');
+    const headers = {
+      'Authorization': `Bearer ${token}`
+    };
+    const url = 'https://app.mynalu.com/wp-json/nalu-app/v1/consent?type=privacy_policy,terms_conditions&set=true';
+  
     try {
-      const token = localStorage.getItem('jwtToken');
+      let response;
+      if (isPlatform("ios")) {
+        const cordovaResponse = await HTTP.put(url, {}, headers);
+        response = JSON.parse(cordovaResponse.data);
+      } else {
+        const axiosResponse = await axios.put(url, {}, { headers });
+        response = axiosResponse.data;
+      }
       
-      const response = await axios.put('https://app.mynalu.com/wp-json/nalu-app/v1/consent?type=privacy_policy,terms_conditions&set=true', {}, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-    
-      console.log('Consent updated successfully!', response.data);
+      console.log('Consent updated successfully!', response);
     } catch (error) {
       console.error('Error updating consent:', error);
     }
-  };
+  };  
   
 
   

@@ -17,6 +17,7 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 import {
   bookmarkOutline,
@@ -31,6 +32,7 @@ import { useState, useEffect } from "react";
 import NotificationBell from "../../components/NotificationBell";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { HTTP } from "@awesome-cordova-plugins/http";
 
 const Eventdetail: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState("");
@@ -58,25 +60,47 @@ const Eventdetail: React.FC = () => {
 
   const getEventByID = (event_id) => {
     setIsLoading(true);
-    const source = axios.CancelToken.source();
-    axiosCancelToken = source;
-
-    axios
-      .get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
+    
+    const jwtToken = localStorage.getItem("jwtToken");
+    const headers = {
+      Authorization: `Bearer ${jwtToken}`,
+    };
+  
+    if (isPlatform("ios")) {
+      // Use Cordova HTTP plugin for iOS
+      HTTP.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`, 
+        {}, 
+        headers
+      )
+        .then(response => {
+          const data = JSON.parse(response.data);
+          console.log(data);
+          setEvent(data);
+          setIsLoading(false);
+        })
+        .catch(error => {
+          console.error("Error fetching data", error);
+          setIsLoading(false);
+        });
+    } else {
+      // Use Axios for other platforms
+      const source = axios.CancelToken.source();
+      axiosCancelToken = source;
+  
+      axios.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`, 
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
+          headers: headers,
           cancelToken: source.token,
         }
       )
-      .then((response) => {
+      .then(response => {
         console.log(response.data);
         setEvent(response.data);
         setIsLoading(false);
       })
-      .catch((error) => {
+      .catch(error => {
         setIsLoading(false);
         if (axios.isCancel(error)) {
           console.log("Request was canceled:", error.message);
@@ -84,7 +108,8 @@ const Eventdetail: React.FC = () => {
           console.log(error);
         }
       });
-  };
+    }
+  };  
 
   const handleDateChange = (event, date_event, registration_link) => {
     console.log(date_event);

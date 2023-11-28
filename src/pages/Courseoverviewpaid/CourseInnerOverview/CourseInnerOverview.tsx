@@ -58,6 +58,7 @@ import {
   DefaultVideoLayout,
 } from "@vidstack/react/player/layouts/default";
 import axios from "axios";
+import { HTTP } from "@awesome-cordova-plugins/http";
 import { useLocation } from "react-router-dom";
 import { Player } from "./../../../components/videoPlayer/Player";
 

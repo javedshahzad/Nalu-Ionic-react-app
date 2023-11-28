@@ -19,6 +19,7 @@ import { addCircle, checkmarkCircle } from "ionicons/icons";
 
 import "./Addrecmodal.scss";
 import axios from "axios";
+import { HTTP } from "@awesome-cordova-plugins/http";
 
 import { useState } from "react";
 

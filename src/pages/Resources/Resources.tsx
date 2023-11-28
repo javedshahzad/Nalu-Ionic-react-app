@@ -23,6 +23,7 @@ import {
   useIonViewDidEnter,
   useIonViewDidLeave,
   useIonViewWillLeave,
+  isPlatform,
 } from "@ionic/react";
 import {
   add,
@@ -38,6 +39,7 @@ import Addrecmodal from "../modals/Addrec/Addrecmodal";
 import { useHistory } from "react-router";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { HTTP } from "@awesome-cordova-plugins/http";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import image_not_found from '../../Images/image-not-found.png'
@@ -97,78 +99,99 @@ const Resources: React.FC = () => {
   const handleModalClose = () => {
     setModalOpen(false);
   };
-  const getCategoriesOverview = () => {
+  const getCategoriesOverview = async () => {
     setIsLoading(true);
-    const source = axios.CancelToken.source();
-    axiosCancelToken_1 = source;
-
-    axios
-      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-        },
-        cancelToken: source.token,
-      })
-      .then((response) => {
-        console.log(response.data);
-        setCategoriesOverview(response.data);
-        // setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
-      });
-  };
-  const getCategoriesFavourites = () => {
-    // setIsLoading(true);
-    const source = axios.CancelToken.source();
-    axiosCancelToken_3 = source;
-
-    axios
-      .get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-          cancelToken: source.token,
-        }
-      )
-      .then((response) => {
-        console.log(response.data);
-        setCategoriesFavourites(response.data.ressources);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
-      });
-  };
-  const getRecommendations = () => {
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+  
+    try {
+      let response;
+      if (isPlatform("ios")) {
+        response = await HTTP.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`, 
+          {}, 
+          headers
+        );
+        response = JSON.parse(response.data);
+      } else {
+        const source = axios.CancelToken.source();
+        axiosCancelToken_1 = source;
+        response = await axios.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`, 
+          { headers, cancelToken: source.token }
+        );
+        response = response.data;
+      }
+      setCategoriesOverview(response);
+    } catch (error) {
+      console.error("Error fetching categories overview:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };  
+  const getCategoriesFavourites = async () => {
     setIsLoading(true);
-    const source = axios.CancelToken.source();
-    axiosCancelToken_2 = source;
-
-    axios
-      .get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-          cancelToken: source.token,
-        }
-      )
-      .then((response) => {
-        console.log(response.data);
-        setRecommendations(response.data.ressources);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
-      });
-  };
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+  
+    try {
+      let response;
+      if (isPlatform("ios")) {
+        response = await HTTP.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`, 
+          {}, 
+          headers
+        );
+        response = JSON.parse(response.data);
+      } else {
+        const source = axios.CancelToken.source();
+        axiosCancelToken_3 = source;
+        response = await axios.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`, 
+          { headers, cancelToken: source.token }
+        );
+        response = response.data;
+      }
+      setCategoriesFavourites(response.ressources);
+    } catch (error) {
+      console.error("Error fetching favourites:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };  
+  const getRecommendations = async () => {
+    setIsLoading(true);
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+  
+    try {
+      let response;
+      if (isPlatform("ios")) {
+        response = await HTTP.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`, 
+          {}, 
+          headers
+        );
+        response = JSON.parse(response.data);
+      } else {
+        const source = axios.CancelToken.source();
+        axiosCancelToken_2 = source;
+        response = await axios.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`, 
+          { headers, cancelToken: source.token }
+        );
+        response = response.data;
+      }
+      setRecommendations(response.ressources);
+    } catch (error) {
+      console.error("Error fetching recommendations:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };  
   const getParentCategoryByID = (resource_sub_id) => {
 
          history.push(`/tabs/tab4/resourcesubcateggory/${resource_sub_id}`);
@@ -201,99 +224,80 @@ const Resources: React.FC = () => {
     //   });
   };
   const handleUpvote = async (is_upvoted, id, is_downvoted) => {
-    let URL;
-    if (is_upvoted) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false`;
-    } else {
-      // <-
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
-    } 
-    // else if (!is_upvoted && is_downvoted) {
-    //   URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
-    // }
-
+    let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=${!is_upvoted}`;
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+  
     try {
-      const response = await axios.post(
-        URL,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        }
-      );
-      console.log(response.data);
-      if  (
-        response.data.message === "Upvote handled successfully" ||
-        response.data.message === "Downvote removed successfully" ||
-        response.data.message === "Upvote removed successfully"
-      ) {
+      let response;
+      if (isPlatform("ios")) {
+        response = await HTTP.post(URL, {}, headers);
+        response = JSON.parse(response.data);
+      } else {
+        response = await axios.post(URL, {}, { headers });
+        response = response.data;
+      }
+      console.log(response);
+      if (response.message === "Upvote handled successfully" ||
+          response.message === "Downvote removed successfully" ||
+          response.message === "Upvote removed successfully") {
         getCategoriesFavourites();
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error handling upvote:", error);
     }
-  };
+  };  
   const handleDownvote = async (is_upvoted, id, is_downvoted) => {
-    let URL;
-    if (is_downvoted) {
-      // <-
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
-    } else {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
-    }
-    //  else if (is_downvoted) {
-    //   URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
-    // }
-
+    let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=${!is_downvoted}`;
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+  
     try {
-      const response = await axios.post(
-        URL,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        }
-      );
-      if ((response.data.message === "Downvote removed successfully" || 
-      response.data.message === "Downvote added successfully" ||
-      response.data.message === "Upvote removed successfully" ||
-      response.data.message === "Upvote handled successfully"
-      )) {
+      let response;
+      if (isPlatform("ios")) {
+        response = await HTTP.post(URL, {}, headers);
+        response = JSON.parse(response.data);
+      } else {
+        response = await axios.post(URL, {}, { headers });
+        response = response.data;
+      }
+      console.log(response);
+      if (response.message === "Downvote removed successfully" ||
+          response.message === "Downvote added successfully" ||
+          response.message === "Upvote removed successfully" ||
+          response.message === "Upvote handled successfully") {
         getCategoriesFavourites();
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error handling downvote:", error);
     }
-  };
-  const handleSave = async (fav, id) => {
-    let URL;
-    if (fav) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=false`;
-    } else {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=true`;
-    }
+  };  
+  const handleSave = async (favourite, id) => {
+    let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=${!favourite}`;
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+  
     try {
-      const response = await axios.post(
-        URL,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        }
-      );
-      console.log(response.data);
-      if ((response.data.message === "Post removed from favourites successfully" ||
-      response.data.message === "Post added to favourites successfully"
-      )) {
-        getCategoriesFavourites()
+      let response;
+      if (isPlatform("ios")) {
+        response = await HTTP.post(URL, {}, headers);
+        response = JSON.parse(response.data);
+      } else {
+        response = await axios.post(URL, {}, { headers });
+        response = response.data;
+      }
+      console.log(response);
+      if (response.message === "Post removed from favourites successfully" ||
+          response.message === "Post added to favourites successfully") {
+        getCategoriesFavourites();
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error handling save:", error);
     }
-  };
+  };  
 
   const setToastAndClose = (val) => {
     toast.success(val);

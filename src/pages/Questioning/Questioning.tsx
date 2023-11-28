@@ -15,6 +15,7 @@ import {
 import "./Questioning.scss";
 import { useTranslation } from 'react-i18next';
 import axios from "axios";
+import { HTTP } from "@awesome-cordova-plugins/http";
 
 const Questioning: React.FC = () => {
 

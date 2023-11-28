@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { HTTP } from "@awesome-cordova-plugins/http";
 import { useEffect, useState } from 'react';
 import {
   IonAvatar,
@@ -19,6 +20,7 @@ import {
   IonSelectOption,
   IonToolbar,
   IonSpinner,
+  isPlatform,
 } from "@ionic/react";
 
 import "./Learnmore.scss";
@@ -41,7 +43,6 @@ const Learnmore: React.FC = () => {
     setLoading(true);
     const selectedGoal = localStorage.getItem("selectedGoal");
   
-    // Determine the URL based on the selected goal
     let url = "https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/2095";
     if (selectedGoal === "endometriosis") {
       url = "https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/7967";
@@ -51,19 +52,29 @@ const Learnmore: React.FC = () => {
       url = "https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/2095";
     }
   
-    axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-      },
-    })
-    .then((response) => {
-      setEvent(response.data);
-      setLoading(false); // Disable loading after the data is fetched
-    })
-    .catch((error) => {
-      console.error("Error fetching event data:", error);
-      setLoading(false); // Disable loading if there is an error
-    });
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+  
+    const fetchData = async () => {
+      try {
+        let response;
+        if (isPlatform("ios")) {
+          const cordovaResponse = await HTTP.get(url, {}, headers);
+          response = JSON.parse(cordovaResponse.data);
+        } else {
+          const axiosResponse = await axios.get(url, { headers });
+          response = axiosResponse.data;
+        }
+        setEvent(response);
+      } catch (error) {
+        console.error("Error fetching event data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchData();
   }, []);  
 
   const isFormValid = !!selectedDate && !dateError;
@@ -83,22 +94,29 @@ const Learnmore: React.FC = () => {
     setDateError(selectedDateString.trim() === "" ? "Bitte wähle ein Datum aus, um fortzufahren." : "");
   };   
 
-  const handleRegistration = () => {
+  const handleRegistration = async () => {
     if (isFormValid && selectedScheduleId) {
       const updatedRegistrationLink = event?.registration_link.replace('{schedule_id}', selectedScheduleId);
-      axios.post(updatedRegistrationLink, {}, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
+  
+      const headers = {
+        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+      };
+  
+      try {
+        let response;
+        if (isPlatform("ios")) {
+          const cordovaResponse = await HTTP.post(updatedRegistrationLink, {}, headers);
+          response = JSON.parse(cordovaResponse.data);
+        } else {
+          const axiosResponse = await axios.post(updatedRegistrationLink, {}, { headers });
+          response = axiosResponse.data;
+        }
+        console.log(response);
         // Handle successful registration (e.g., navigate to a success page or show a message)
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error during registration:", error);
         // Handle errors (e.g., show an error message)
-      });
+      }
     } else {
       // Handle form invalid or no schedule_id selected (e.g., show a message to the user)
     }

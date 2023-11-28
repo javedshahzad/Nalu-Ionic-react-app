@@ -7,8 +7,10 @@ import {
   IonIcon,
   IonSpinner,
   IonDatetime,
+  isPlatform,
 } from "@ionic/react";
 import axios from 'axios';
+import { HTTP } from "@awesome-cordova-plugins/http";
 import "./configcycleremade.scss";
 import { useState, useRef, useEffect } from "react";
 import newMoon from "../../assets/images/new moon.svg";
@@ -53,18 +55,31 @@ function ConfigCycleRemade() {
 
   const navigation = useIonRouter();
   const toLogin = async () => {
-    setIsSubmittingToLogin(true); // Start submission
+    setIsSubmittingToLogin(true);
+  
+    const jwtToken = localStorage.getItem("jwtToken");
+    const headers = {
+      Authorization: `Bearer ${jwtToken}`,
+    };
   
     try {
-      const response = await axios.put(
-        'https://app.mynalu.com/wp-json/nalu-app/v1/no-period',
-        {},
-        {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        }
-      );
+      if (isPlatform("ios")) {
+        // Use Cordova HTTP plugin for iOS
+        await HTTP.put(
+          'https://app.mynalu.com/wp-json/nalu-app/v1/no-period',
+          {},
+          headers
+        );
+      } else {
+        // Use Axios for other platforms
+        await axios.put(
+          'https://app.mynalu.com/wp-json/nalu-app/v1/no-period',
+          {},
+          {
+            headers: headers,
+          }
+        );
+      }
   
       navigation.push("/learnmore");
     } catch (err) {
@@ -72,7 +87,7 @@ function ConfigCycleRemade() {
     } finally {
       setIsSubmittingToLogin(false);
     }
-  };  
+  };
 
   const daysIcon = (dateIndex: any, mIndex: any): string => {
     if (dateIndex === 12 && mIndex === 7) {
@@ -233,16 +248,31 @@ function ConfigCycleRemade() {
     setIsSubmitting(true);
   
     try {
-      const response = await axios.post(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${calendarDate}`,
-        data,
-        {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        }
-      );
-  
+      const jwtToken = localStorage.getItem("jwtToken");
+      const headers = {
+        'Authorization': `Bearer ${jwtToken}`,
+      };
+    
+      let response;
+      if (isPlatform("ios")) {
+        // Use Cordova HTTP plugin for iOS
+        response = await HTTP.post(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${calendarDate}`,
+          data,
+          headers
+        );
+        response.data = JSON.parse(response.data); // Parsing the response data
+      } else {
+        // Use Axios for other platforms
+        response = await axios.post(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${calendarDate}`,
+          data,
+          {
+            headers: headers,
+          }
+        );
+      }
+    
         console.log("data from custom category api", response);
         navigation.push("/learnmore");
       } catch (err) {

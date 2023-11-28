@@ -6,26 +6,32 @@ import {
   IonHeader,
   IonPage,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 
 import "./Stayup.scss";
 import axios from 'axios';
+import { HTTP } from "@awesome-cordova-plugins/http";
 
 const handleSubscribe = async () => {
-  // Get the token from localStorage
   const token = localStorage.getItem('jwtToken');
+  const headers = {
+    'Authorization': `Bearer ${token}`
+  };
+  const url = 'https://app.mynalu.com/wp-json/nalu-app/v1/mailster-subscribe?status=1&lists=34,27';
 
   try {
-    const response = await axios.post('https://app.mynalu.com/wp-json/nalu-app/v1/mailster-subscribe?status=1&lists=34,27', {}, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
+    let response;
+    if (isPlatform("ios")) {
+      const cordovaResponse = await HTTP.post(url, {}, headers);
+      response = JSON.parse(cordovaResponse.data);
+    } else {
+      const axiosResponse = await axios.post(url, {}, { headers });
+      response = axiosResponse.data;
+    }
 
-    // Handle the response here. For instance:
-    console.log('Subscription successful:', response.data);
+    console.log('Subscription successful:', response);
   } catch (error) {
-    // Handle the error here
     console.error('Error during subscription:', error);
   }
 };

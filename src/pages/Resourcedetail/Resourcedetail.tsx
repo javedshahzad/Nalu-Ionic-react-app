@@ -14,6 +14,7 @@ import {
   IonTitle,
   IonToolbar,
   IonSpinner,
+  isPlatform,
 } from "@ionic/react";
 import {
   arrowBackOutline,
@@ -24,6 +25,7 @@ import {
 import "./Resourcedetail.scss";
 import { useHistory, useLocation } from "react-router-dom";
 import axios from "axios";
+import { HTTP } from "@awesome-cordova-plugins/http";
 import { useState } from "react";
 import NotificationBell from "../../components/NotificationBell";
 import ReactPlayer from "react-player";
@@ -49,138 +51,109 @@ const Resourcedetail: React.FC = () => {
   // console.log(data);
   const [resourseData, setResourceData] = useState(null);
 
-  const getResourceDetailsByID = () => {
+  const getResourceDetailsByID = async () => {
     setIsLoading(true);
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+  
     try {
-      axios
-        .get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${[
-            params.id,
-          ]}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-            },
-          }
-        )
-
-        .then((response) => {
-          console.log(response.data);
-          // history.push("/tabs/tab4/resourcedetail", {
-          //   data: response.data,
-          // });
-          setResourceData(response);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      let response;
+      if (isPlatform("ios")) {
+        const cordovaResponse = await HTTP.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${params.id}`,
+          {},
+          headers
+        );
+        response = JSON.parse(cordovaResponse.data);
+      } else {
+        const axiosResponse = await axios.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${params.id}`,
+          { headers }
+        );
+        response = axiosResponse;
+      }
+      console.log(response);
+      setResourceData(response); // Set the entire response object to resourseData
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching resource details:", error);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  };   
 
   useEffect(() => {
     getResourceDetailsByID();
   }, []);
 
   const handleUpvote = async (is_upvoted, id, is_downvoted) => {
-    let URL;
-    if (is_upvoted) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false`;
-    } else {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
-    }
-    // else if (!is_upvoted && is_downvoted) {
-    //   URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
-    // }
-
+    let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=${!is_upvoted}`;
+  
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+  
     try {
-      const response = await axios.post(
-        URL,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        }
-      );
-      console.log(response.data);
-      if (
-        response.data.message === "Upvote handled successfully" ||
-        response.data.message === "Downvote removed successfully" ||
-        response.data.message === "Upvote removed successfully"
-      ) {
-        // getResourceDetailsByID(resourseData.data.id);
+      let response;
+      if (isPlatform("ios")) {
+        response = await HTTP.post(URL, {}, headers);
+        response = JSON.parse(response.data);
+      } else {
+        response = await axios.post(URL, {}, { headers });
+        response = response.data;
       }
+      console.log(response);
+      getResourceDetailsByID();
     } catch (error) {
-      console.error(error);
+      console.error("Error handling upvote:", error);
     }
-  };
+  };  
 
   const handleDownvote = async (is_upvoted, id, is_downvoted) => {
-    let URL;
-    if (is_downvoted) {
-      // <-
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=true`;
-    } else {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false`;
-    }
-    // else if (is_downvoted) {
-    //   URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
-    // }
-
+    let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=${!is_downvoted}`;
+  
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+  
     try {
-      const response = await axios.post(
-        URL,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        }
-      );
-      if (
-        response.data.message === "Downvote removed successfully" ||
-        response.data.message === "Downvote added successfully" ||
-        response.data.message === "Upvote removed successfully"
-      ) {
-        // getResourceDetailsByID(resourseData.data.id);
+      let response;
+      if (isPlatform("ios")) {
+        response = await HTTP.post(URL, {}, headers);
+        response = JSON.parse(response.data);
+      } else {
+        response = await axios.post(URL, {}, { headers });
+        response = response.data;
       }
+      console.log(response);
+      getResourceDetailsByID();
     } catch (error) {
-      console.error(error);
+      console.error("Error handling downvote:", error);
     }
-  };
+  };  
 
   const handleSave = async (favourite, id) => {
-    console.log(favourite);
-    console.log(id);
-
-    let URL;
-    if (favourite) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=false`;
-    } else {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=true`;
-    }
-
+    let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=${!favourite}`;
+  
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+  
     try {
-      const response = await axios.post(
-        URL,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        }
-      );
-      console.log(response);
-      if ((response.data.message = "Post added to favourites successfully")) {
-        // getResourceDetailsByID(resourseData.data.id);
+      let response;
+      if (isPlatform("ios")) {
+        response = await HTTP.post(URL, {}, headers);
+        response = JSON.parse(response.data);
+      } else {
+        response = await axios.post(URL, {}, { headers });
+        response = response.data;
       }
+      console.log(response);
+      getResourceDetailsByID();
     } catch (error) {
-      console.error(error);
+      console.error("Error handling save:", error);
     }
-  };
+  };  
   // const getResourceDetailsByID = (id) => {
   //   try {
   //     axios
@@ -255,18 +228,18 @@ const Resourcedetail: React.FC = () => {
 
   return (
     <IonPage className="Resourcedetail">
-      {isLoading ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100vh",
-            }}
-          >
-            <IonSpinner name="crescent"></IonSpinner>
-          </div>
-        ) : (
+      {isLoading || !resourseData ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
+          <IonSpinner name="crescent" />
+        </div>
+      ) : (
           <>
       <IonHeader className="ion-no-border">
         <IonToolbar>

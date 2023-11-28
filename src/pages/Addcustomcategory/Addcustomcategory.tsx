@@ -18,6 +18,7 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
+  isPlatform ,
 } from "@ionic/react";
 import {
   add,
@@ -41,6 +42,7 @@ import { RootState } from "../../store/store";
 import { useDispatch } from "react-redux";
 import { journalAction } from "../../actions/journalAction";
 import axios from "axios";
+import { HTTP } from "@awesome-cordova-plugins/http";
 
 const Addcustomcategory: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -204,25 +206,39 @@ const Addcustomcategory: React.FC = () => {
   };
 
   const saveCustomCategoryData = async () => {
-    setIsSubmitting(true); // Start loading
-    setApiErrorMessage(""); // Reset error message
+    setIsSubmitting(true);
+    setApiErrorMessage("");
+  
+    const jwtToken = localStorage.getItem("jwtToken");
+    const data = {
+      category_name: customName,
+      category_icon: selectedLogoValue,
+      type: selectedType,
+    };
+  
     try {
-      // Perform the POST request with Axios
-      const response = await axios.post(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/add-custom-field`,
-        {
-          category_name: customName,
-          category_icon: selectedLogoValue,
-          type: selectedType,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        }
-      );
-
-      // Handle the response here
+      let response;
+      if (isPlatform("ios")) {
+        // Use Cordova HTTP plugin for iOS
+        response = await HTTP.post(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/add-custom-field`,
+          data,
+          { Authorization: `Bearer ${jwtToken}` }
+        );
+        response.data = JSON.parse(response.data);
+      } else {
+        // Use Axios for other platforms
+        response = await axios.post(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/add-custom-field`,
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
+          }
+        );
+      }
+  
       console.log(response.data);
 
       // If the API call is successful, handle the rest of the logic, such as updating the Redux store

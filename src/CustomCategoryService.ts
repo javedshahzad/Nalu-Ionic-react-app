@@ -1,51 +1,69 @@
 import axios from "axios";
+import { HTTP } from "@awesome-cordova-plugins/http";
+import { isPlatform } from "@ionic/react";
 
 const jwtToken = localStorage.getItem("jwtToken");
+
 const customHeaders = {
-  headers: {
-    Authorization: `Bearer ${jwtToken}`,
-  },
+  Authorization: `Bearer ${jwtToken}`,
+};
+
+const customCordovaHeaders = {
+  "Authorization": `Bearer ${jwtToken}`,
 };
 
 const CustomCategoryApiService = {
-  get: async (url: string) => (await axios.get(url)).data,
-
-  post: async (url: string, data: any) =>
-    (await axios.post(url, data, customHeaders)).data,
-
-  postCall2: async (url: string) => (await axios.post(url, customHeaders)).data,
-
-  postCall_3: async (url: string, token: string) => {
-    const customHeaders = {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
-    };
-
-    try {
-      const response = await axios.post(url, null, customHeaders);
-      return response.data;
-    } catch (error) {
-      console.error("Error:", error);
-      throw error;
+  get: async (url: string) => {
+    if (isPlatform("ios")) {
+      const response = await HTTP.get(url, {}, customCordovaHeaders);
+      return JSON.parse(response.data);
+    } else {
+      return (await axios.get(url, { headers: customHeaders })).data;
     }
   },
 
-  put: async (url: string) => (await axios.put(url, customHeaders)).data,
+  post: async (url: string, data: any) => {
+    if (isPlatform("ios")) {
+      const response = await HTTP.post(url, data, customCordovaHeaders);
+      return JSON.parse(response.data);
+    } else {
+      return (await axios.post(url, data, { headers: customHeaders })).data;
+    }
+  },
 
-  put_2: async (url: string, token: any) => {
-    const customHeaders = {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
-    };
+  postCall2: async (url: string) => {
+    if (isPlatform("ios")) {
+      const response = await HTTP.post(url, {}, customCordovaHeaders);
+      return JSON.parse(response.data);
+    } else {
+      return (await axios.post(url, {}, { headers: customHeaders })).data;
+    }
+  },
 
-    try {
-      const response = await axios.put(url, null, customHeaders);
-      return response.data;
-    } catch (error) {
-      console.error("Error:", error);
-      throw error;
+  postCall_3: async (url: string) => {
+    if (isPlatform("ios")) {
+      const response = await HTTP.post(url, {}, customCordovaHeaders);
+      return JSON.parse(response.data);
+    } else {
+      return (await axios.post(url, null, { headers: customHeaders })).data;
+    }
+  },
+
+  put: async (url: string) => {
+    if (isPlatform("ios")) {
+      const response = await HTTP.put(url, {}, customCordovaHeaders);
+      return JSON.parse(response.data);
+    } else {
+      return (await axios.put(url, {}, { headers: customHeaders })).data;
+    }
+  },
+
+  put_2: async (url: string) => {
+    if (isPlatform("ios")) {
+      const response = await HTTP.put(url, {}, customCordovaHeaders);
+      return JSON.parse(response.data);
+    } else {
+      return (await axios.put(url, null, { headers: customHeaders })).data;
     }
   },
 };

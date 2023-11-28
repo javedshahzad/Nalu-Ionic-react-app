@@ -21,6 +21,7 @@ import {
   IonToolbar,
   useIonViewDidEnter,
   useIonViewWillLeave,
+  isPlatform,
 } from "@ionic/react";
 import {
   add,
@@ -44,6 +45,7 @@ import {
 import { useHistory } from "react-router";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { HTTP } from "@awesome-cordova-plugins/http";
 import filter from "../../Images/filter.png";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -93,65 +95,70 @@ const ResourceSubCategory: React.FC = () => {
   }, [categoryIds]);
 
 
-  const getParentCategoryByID = (id) => {
+  const getParentCategoryByID = async (id) => {
     setIsLoading(true);
-    // setCategoryID(id);
-
-    axios
-      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-        },
-        params: {
-          category_id: id,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        setFiltered(response.data.ressources,);
-        setSubCategories(response.data.sub_categories);
-        // setParentId(parent_id);
-
-        // history.push(`/tabs/tab4/resourcesubcateggory/${id}`, {
-        //   filteredData: response.data.ressources,
-        //   subCategory: response.data.sub_categories,
-        //   parent_id: id,
-        // });
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
-        history.push(`/tabs/tab4`);
-      });
-  };
-
-  const getCategoryByID = (ids) => {
-    if(ids.length > 0){
-    setIsCategoryLoading(true);
-    // setCategoryID(id);
-    setIsFilterSelected(true);
-
-    axios
-      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-        },
-        params: {
-          category_id: ids.toString(),
-        },
-      })
-      .then((response) => {
-        setFiltered(response.data.ressources);
-        // setSubCategories(response.data.sub_categories)
-        setIsCategoryLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsCategoryLoading(false);
-      });
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+  
+    try {
+      let response;
+      if (isPlatform("ios")) {
+        const cordovaResponse = await HTTP.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, 
+          { category_id: id }, 
+          headers
+        );
+        response = JSON.parse(cordovaResponse.data);
+      } else {
+        const source = axios.CancelToken.source();
+        response = await axios.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, 
+          { params: { category_id: id }, headers, cancelToken: source.token }
+        );
+        response = response.data;
+      }
+      setFiltered(response.ressources);
+      setSubCategories(response.sub_categories);
+    } catch (error) {
+      console.error("Error fetching parent category by ID:", error);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  };  
+
+  const getCategoryByID = async (ids) => {
+    if (ids.length > 0) {
+      setIsCategoryLoading(true);
+      const headers = {
+        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+      };
+  
+      try {
+        let response;
+        if (isPlatform("ios")) {
+          response = await HTTP.get(
+            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, 
+            { category_id: ids.toString() }, 
+            headers
+          );
+          response = JSON.parse(response.data);
+        } else {
+          const source = axios.CancelToken.source();
+          response = await axios.get(
+            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, 
+            { params: { category_id: ids.toString() }, headers, cancelToken: source.token }
+          );
+          response = response.data;
+        }
+        setFiltered(response.ressources);
+      } catch (error) {
+        console.error("Error fetching category by IDs:", error);
+      } finally {
+        setIsCategoryLoading(false);
+      }
+    }
+  };  
 
   const addToArr = (id) => {
     // setCategoryIds((prev)=> Array.from(new Set ([... prev,id])))
@@ -270,29 +277,36 @@ const ResourceSubCategory: React.FC = () => {
   //   history.push("/filter");
   // };
 
-  const getResourceDetailsByID = (id: any) => {
+  const getResourceDetailsByID = async (id) => {
     setIsCategoryLoading(true);
-
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+  
     try {
-      axios
-        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`)
-        .then((response) => {
-          console.log(response.data);
-          history.push("/tabs/tab4/resourcedetail", {
-            data: response.data,
-            // resource_id: id
-          });
-          setIsCategoryLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          setIsCategoryLoading(false);
-        });
+      let response;
+      if (isPlatform("ios")) {
+        response = await HTTP.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`, 
+          {}, 
+          headers
+        );
+        response = JSON.parse(response.data);
+      } else {
+        response = await axios.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`, 
+          { headers }
+        );
+        response = response.data;
+      }
+      console.log(response);
+      history.push("/tabs/tab4/resourcedetail", { data: response });
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching resource details by ID:", error);
+    } finally {
       setIsCategoryLoading(false);
     }
-  };
+  };  
   return (
     <>
       <IonPage className="ResourceSubCategory">

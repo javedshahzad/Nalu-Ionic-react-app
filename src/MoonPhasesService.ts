@@ -1,15 +1,25 @@
 import axios from "axios";
+import { HTTP } from "@awesome-cordova-plugins/http";
+import { isPlatform } from "@ionic/react";
 
-const MoonPhasesServce = {
+const MoonPhasesService = {
   get: async (url: string) => {
-    const response = await axios.get(url,{
-      headers: {
+    if (isPlatform("ios")) {
+      // Use Cordova HTTP plugin for iOS
+      const response = await HTTP.get(url, {}, {
         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-      },
-    });
-
-    return response.data;
+      });
+      return JSON.parse(response.data); // Parse the response data
+    } else {
+      // Use Axios for other platforms
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
+      });
+      return response.data; // Return the response data directly
+    }
   },
 };
 
-export default MoonPhasesServce;
+export default MoonPhasesService;

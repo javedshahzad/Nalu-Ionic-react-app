@@ -15,6 +15,7 @@ import {
   IonTitle,
   IonToolbar,
   useIonViewDidLeave,
+  isPlatform,
 } from "@ionic/react";
 import {
   chevronForwardOutline,
@@ -24,6 +25,7 @@ import {
 
 import "./Courseoverviewpaid.scss";
 import axios from "axios";
+import { HTTP } from "@awesome-cordova-plugins/http";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
@@ -60,28 +62,46 @@ const Courseoverviewpaid: React.FC = () => {
 
   const getData = () => {
     setIsLoading(true);
-    const source = axios.CancelToken.source();
-    axiosCancelToken = source;
-    try {
-      axios
-        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-          cancelToken: source.token,
-        })
-        .then((response) => {
-          console.log(response.data);
-          setCourseData(response.data);
+    
+    const jwtToken = localStorage.getItem("jwtToken");
+    const headers = {
+      Authorization: `Bearer ${jwtToken}`,
+    };
+  
+    if (isPlatform("ios")) {
+      // Use Cordova HTTP plugin for iOS
+      HTTP.get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`, {}, headers)
+        .then(response => {
+          const data = JSON.parse(response.data);
+          console.log(data);
+          setCourseData(data);
           setIsLoading(false);
         })
-        .catch((error) => {
+        .catch(error => {
+          console.error("Error fetching data", error);
           setIsLoading(false);
         });
-    } catch (error) {
-      setIsLoading(false);
+    } else {
+      // Use Axios for other platforms
+      const source = axios.CancelToken.source();
+      axiosCancelToken = source;
+  
+      axios.get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`, {
+        headers: headers,
+        cancelToken: source.token,
+      })
+      .then(response => {
+        console.log(response.data);
+        setCourseData(response.data);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error("Error fetching data", error);
+        setIsLoading(false);
+      });
     }
   };
+  
 
   const navigateToCourseInner = (id) => {
     console.log(id);

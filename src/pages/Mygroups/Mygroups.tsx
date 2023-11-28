@@ -22,6 +22,7 @@ import {
   IonText,
   useIonActionSheet,
   useIonViewWillEnter,
+  isPlatform,
 } from "@ionic/react";
 import {
   checkmarkCircle,
@@ -39,6 +40,7 @@ import { useHistory } from "react-router";
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import { HTTP } from "@awesome-cordova-plugins/http";
 import NotificationBell from "../../components/NotificationBell";
 import { RootState } from "../../store/store";
 import { createGroupAction } from "../../actions/groupsActions";
@@ -64,8 +66,10 @@ const Mygroups: React.FC = () => {
   }, []);
 
   useIonViewDidLeave(() => {
-    axiosCancelToken.cancel("Component unmounted");
-  });
+    if (!isPlatform("ios") && axiosCancelToken) {
+      axiosCancelToken.cancel("Component unmounted");
+    }
+  });  
 
   const token = tokenService.getToken();
   const socket = io("https://apidev.mynalu.com/", {
@@ -102,32 +106,42 @@ const Mygroups: React.FC = () => {
     });
   };
 
-  const getEvents = () => {
+  const getEvents = async () => {
     setIsLoading(true);
-    const source = axios.CancelToken.source();
-    axiosCancelToken = source;
-
-    axios
-      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-        },
-        cancelToken: source.token,
-      })
-      .then((response) => {
-        setEvents(response.data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
-        if (axios.isCancel(error)) {
-          console.log("Request was canceled:", error.message);
-        } else {
-          console.log(error);
-        }
-      });
-  };
+  
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+  
+    try {
+      let response;
+      if (isPlatform("ios")) {
+        const cordovaResponse = await HTTP.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`, 
+          {}, 
+          headers
+        );
+        response = JSON.parse(cordovaResponse.data);
+      } else {
+        const source = axios.CancelToken.source();
+        axiosCancelToken = source;
+  
+        const axiosResponse = await axios.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`, 
+          { 
+            headers, 
+            cancelToken: source.token 
+          }
+        );
+        response = axiosResponse.data;
+      }
+      setEvents(response);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };  
   const [showPopover, setShowPopover] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
