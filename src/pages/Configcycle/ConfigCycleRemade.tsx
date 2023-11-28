@@ -15,7 +15,6 @@ import newMoon from "../../assets/images/new moon.svg";
 import fullMoon from "../../assets/images/full moon.svg";
 import { chevronDownOutline } from "ionicons/icons";
 import CustomCategoryApiService from "../../CustomCategoryService";
-import tokenService from "../../token";
 import MoonPhasesServce from "../../MoonPhasesService";
 import { ca } from "@vidstack/react/dist/types/vidstack-react";
 import moment from "moment";
@@ -59,11 +58,10 @@ function ConfigCycleRemade() {
     try {
       const response = await axios.put(
         'https://app.mynalu.com/wp-json/nalu-app/v1/no-period',
-        {}, // Send an empty object or the data you need to send
+        {},
         {
           headers: {
-            'Authorization': `Bearer ${tokenService.getWPToken()}`,
-            // Add any other headers you need here
+            'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`,
           },
         }
       );
@@ -132,7 +130,7 @@ function ConfigCycleRemade() {
     }
   };
 
-  function isSectionVisible(sectionRef) {
+  {/*function isSectionVisible(sectionRef) {
     const section = document.getElementById(sectionRef);
 
     if (section) {
@@ -153,7 +151,7 @@ function ConfigCycleRemade() {
     for (const month of months) {
       isSectionVisible(month);
     }
-  };
+  };*/}
 
   function isLeapYear(year) {
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
@@ -166,27 +164,6 @@ function ConfigCycleRemade() {
     const firstDayOfMonth = new Date(year, m, 1).getDay();
     let lastDateOfMonth = new Date(year, m + 1, 0).getDate();
     const lastDateOfPrevMonth = new Date(year, m, 0).getDate();
-
-    // if (m === 1 && isLeapYear(year)) {
-    //   lastDateOfMonth = 29;
-    // }
-
-    // for (const day of days) {
-    //   monthData.push(
-    //     <li key={`day-${day}`} className="calendar-day day-of-week">
-    //       {day}
-    //     </li>
-    //   );
-    // }
-
-    // for (let i = 0; i < firstDayOfMonth; i++) {
-    //   const prevMonthDate = lastDateOfPrevMonth - firstDayOfMonth + i + 1;
-    //   monthData.push(
-    //     <li key={`inactive-${i}`} className="inactive calendar-day">
-    //       {prevMonthDate}
-    //     </li>
-    //   );
-    // }
 
     const getIcons = async () => {
       try {
@@ -233,100 +210,6 @@ function ConfigCycleRemade() {
         }, 1000);
       }
     }, []);
-
-    // for (let i = 1; i <= lastDateOfMonth; i++) {
-    //   const isToday =
-    //     i === new Date().getDate() &&
-    //     m === new Date().getMonth() &&
-    //     year === new Date().getFullYear()
-    //       ? "currentDay"
-    //       : "";
-    //   const moonPhase = moonPhaseIcon.find((item) => {
-    //     return (
-    //       item.date ===
-    //       year +
-    //         "-" +
-    //         (m + 1).toString().padStart(2, "0") +
-    //         "-" +
-    //         i.toString().padStart(2, "0")
-    //     );
-    //   });
-
-    //   monthData.push(
-    //     <li
-    //       key={`currentDay-${i}`}
-    //       className={`calendar-day ${isToday} ${
-    //         activeIndex === i && activeMonthIndex === m ? "dayActive" : ""
-    //       }`}
-    //       onClick={() => handleOnClick(i, m)}
-    //       id={`${i}/${m + 1}/${year}`}
-    //     >
-    //       {moonPhase ? (
-    //         <>
-    //           <div>
-    //             {moonPhase.phase_name === "Full Moon" ? (
-    //               <img src={fullMoon} />
-    //             ) : moonPhase.phase_name === "New Moon" ? (
-    //               <img src={newMoon} />
-    //             ) : null}
-    //           </div>
-    //           {/* Added "null" for the empty condition */}
-    //           <div className="dayToday">
-    //             {isToday ? (
-    //               <span style={{ fontSize: "9px" }}>Today</span>
-    //             ) : null}
-    //             <p className={isToday ? "isToday" : ""}>{i}</p>
-    //           </div>
-    //         </>
-    //       ) : (
-    //         <div className="dayToday">
-    //           {isToday ? <span style={{ fontSize: "9px" }}>Today</span> : null}
-    //           <p className={isToday ? "isToday" : ""}>{i}</p>
-    //         </div>
-    //       )}
-    //     </li>
-    //   );
-    // }
-    // calendarMonths
-    //   .push
-    // <div className="calendar-month" key={`month-${m}`}>
-    //   <div className="cur-month-year">
-    //     <span className="cur-month-year-text">{months[m]}</span>
-    //     <span className="cur-month-year-text">{year}</span>
-    //     <span id="cur-month-year-icon">
-    //       <IonButton fill="clear" onClick={handleClick}>
-    //         <IonIcon icon={chevronDownOutline}></IonIcon>
-    //       </IonButton>
-    //     </span>
-    //     <IonPopover
-    //       isOpen={isOpen}
-    //       onDidDismiss={() => setIsOpen(false)}
-    //       ref={popoverRef}
-    //     >
-    //       <div className="popover-content">
-    //         <h5 className="popoverHeading"> Select Month:</h5>
-    //         <label>
-    //           <select
-    //             value={currentMonth}
-    //             onChange={handleMonthChange}
-    //             className="month-select"
-    //           >
-    //             {months.map((monthName, optionIndex) => (
-    //               <option value={monthName} key={optionIndex}>
-    //                 {monthName}
-    //               </option>
-    //             ))}
-    //           </select>
-    //         </label>
-    //         <button onClick={handleGo} className="go-button">
-    //           Go
-    //         </button>
-    //       </div>
-    //     </IonPopover>
-    //   </div>
-    //   <ul className="calendar-data">{monthData}</ul>
-    // </div>
-    // ();
   }
 
   const goToLearnMore = async () => {
@@ -350,19 +233,24 @@ function ConfigCycleRemade() {
     setIsSubmitting(true);
   
     try {
-      const response = await CustomCategoryApiService.post(
+      const response = await axios.post(
         `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${calendarDate}`,
-        data
+        data,
+        {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
+        }
       );
   
-      console.log("data from custom category api", response);
-      navigation.push("/learnmore");
-    } catch (err) {
-      console.log("err sending data", err);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };  
+        console.log("data from custom category api", response);
+        navigation.push("/learnmore");
+      } catch (err) {
+        console.log("err sending data", err);
+      } finally {
+        setIsSubmitting(false);
+      }
+    };  
 
   return (
     <IonPage className="ConfigCycleRemade">
