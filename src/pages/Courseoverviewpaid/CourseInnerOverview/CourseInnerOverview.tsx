@@ -22,6 +22,7 @@ import {
   useIonViewDidLeave,
   useIonViewWillEnter,
   useIonViewWillLeave,
+  isPlatform,
 } from "@ionic/react";
 import {
   add,
@@ -85,62 +86,56 @@ const CourseInnerOverview: React.FC = () => {
     getData(id, null);
   };
 
-  const getData = (id, next_chapter) => {
+  const getData = async (id, next_chapter) => {
     setIsLoading(true);
-    let URL;
-    if (id) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`;
-    } else {
-      URL = next_chapter;
-    }
-    console.log(URL);
+    let URL = id ? `https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}` : next_chapter;
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+  
     try {
-      axios
-        .get(URL, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          setCourseData(response.data);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          setIsLoading(false);
-          console.log(error);
-        });
+      let response;
+      if (isPlatform("ios")) {
+        const cordovaResponse = await HTTP.get(URL, {}, headers);
+        response = JSON.parse(cordovaResponse.data);
+      } else {
+        const axiosResponse = await axios.get(URL, { headers });
+        response = axiosResponse.data;
+      }
+      console.log(response);
+      setCourseData(response);
     } catch (error) {
+      console.error("Error fetching course data:", error);
+    } finally {
       setIsLoading(false);
-      console.log(error);
     }
-  };
-  const markAsDone = (course) => {
+  };  
+  const markAsDone = async (course) => {
     setIsMarlLoading(true);
+    const URL = course?.completion_link;
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+  
     try {
-      axios
-        .post(course?.completion_link, null, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          if ((response.data.status = "success")) {
-            getData(null, course?.next_chapter);
-            // history.push("/tabs/tab2");
-          }
-          setIsMarlLoading(false);
-        })
-        .catch((error) => {
-          setIsMarlLoading(false);
-          console.log(error);
-        });
+      let response;
+      if (isPlatform("ios")) {
+        const cordovaResponse = await HTTP.post(URL, {}, headers);
+        response = JSON.parse(cordovaResponse.data);
+      } else {
+        const axiosResponse = await axios.post(URL, null, { headers });
+        response = axiosResponse.data;
+      }
+      console.log(response);
+      if (response.status === "success") {
+        getData(null, course?.next_chapter);
+      }
     } catch (error) {
+      console.error("Error marking course as done:", error);
+    } finally {
       setIsMarlLoading(false);
-      console.log(error);
     }
-  };
+  };  
   return (
     <>
       <IonPage className="CourseInnerOverview">

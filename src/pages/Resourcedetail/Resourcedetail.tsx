@@ -58,29 +58,29 @@ const Resourcedetail: React.FC = () => {
     };
   
     try {
-      let response;
+      let responseData;
       if (isPlatform("ios")) {
         const cordovaResponse = await HTTP.get(
           `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${params.id}`,
           {},
           headers
         );
-        response = JSON.parse(cordovaResponse.data);
+        responseData = JSON.parse(cordovaResponse.data); // Assuming the Cordova plugin returns the response directly
       } else {
         const axiosResponse = await axios.get(
           `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${params.id}`,
           { headers }
         );
-        response = axiosResponse;
+        responseData = axiosResponse.data; // Axios encapsulates response in a .data property
       }
-      console.log(response);
-      setResourceData(response); // Set the entire response object to resourseData
+      console.log(responseData);
+      setResourceData({ data: responseData }); // Normalize the structure
     } catch (error) {
       console.error("Error fetching resource details:", error);
     } finally {
       setIsLoading(false);
     }
-  };   
+  };  
 
   useEffect(() => {
     getResourceDetailsByID();
