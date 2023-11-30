@@ -121,6 +121,7 @@ const Courseoverviewpaid: React.FC = () => {
                   justifyContent: "center",
                   alignItems: "center",
                   height: "100vh",
+                  backgroundColor: "#F8F5F2",
                 }}
               >
                 <IonSpinner name="crescent"></IonSpinner>
@@ -149,6 +150,13 @@ const Courseoverviewpaid: React.FC = () => {
                     <div className="the-title">
                       <h3>{course.title}</h3>
                     </div>
+                    {course.id !== 866 && !isPremium && (
+                      <div className="btn-holder ion-text-center ion-padding-vertical join-btn">
+                        <IonButton expand="block" onClick={() => history.push('/membership')}>
+                          {course.title} beitreten
+                        </IonButton>
+                      </div>
+                    )}
                     {course?.progress && (
                       <div className="progress-holder">
                         <p>Fortschritt</p>
@@ -177,126 +185,66 @@ const Courseoverviewpaid: React.FC = () => {
                     )}
                     <IonAccordionGroup multiple={false} className="course-content">
                       {course.items.map((module, moduleIndex) => (
-                        <IonAccordion
-                          className="first_accord"
-                          value={moduleIndex}
-                          key={moduleIndex}
-                        >
+                        <IonAccordion className="first_accord" value={moduleIndex} key={moduleIndex}>
                           <IonItem slot="header" lines="none">
-                            <IonLabel style={{ fontWeight: "600" }}>
-                              {module.title}
-                            </IonLabel>
+                            <IonLabel style={{ fontWeight: "600" }}>{module.title}</IonLabel>
                           </IonItem>
                           <div slot="content">
                             {module?.items?.map((chapter, chapterIndex) => (
-                              <IonAccordionGroup
-                                key={chapterIndex}
-                                multiple={false}
-                              >
-                                <IonAccordion
-                                  value={chapterIndex}
-                                >
+                              <IonAccordionGroup key={chapterIndex} multiple={false}>
+                                <IonAccordion value={chapterIndex}>
                                   <IonItem
                                     slot="header"
                                     lines="inset"
                                     onClick={() => {
-                                      if (!chapter.items && (!chapter.protected || chapter.preview || isPremium)) {
+                                      if (!chapter.items && chapter.protected && !isPremium && !chapter.preview) {
+                                        history.push('/membership');
+                                      } else if (!chapter.items && (!chapter.protected || chapter.preview || isPremium)) {
                                         navigateToCourseInner(chapter.id);
                                       }
-                                    }}                                    
+                                    }}
                                   >
-                                    <IonLabel
-                                      style={{
-                                        marginLeft: "10px",
-                                        color: "#636363",
-                                      }}
-                                    >
-                                      <div
-                                        className="paragraph"
-                                        dangerouslySetInnerHTML={{
-                                          __html: `${chapter.title}`,
-                                        }}
-                                      ></div>
+                                    <IonLabel style={{ marginLeft: "10px", color: "#636363" }}>
+                                      <div className="paragraph" dangerouslySetInnerHTML={{ __html: `${chapter.title}` }}></div>
                                     </IonLabel>
-
-                                    {!chapter?.items ? (
+                                    {!chapter.items && (
                                       <IonIcon
-                                      src={
-                                        chapter.protected && !isPremium && !chapter.preview
-                                          ? "assets/imgs/icn-lock.svg"
-                                          : "assets/imgs/right-arrow.svg"
-                                      }
+                                        src={chapter.protected && !isPremium && !chapter.preview ? "assets/imgs/icn-lock.svg" : "assets/imgs/right-arrow.svg"}
                                         slot="end"
                                         size="small"
                                         className="ion-accordion-toggle-icon no-rotation"
-                                      ></IonIcon>
-                                    ) : chapter?.items &&
-                                      chapter.protected && !isPremium && !chapter.preview ? (
-                                      <>
-                                        <IonIcon
-                                          src={
-                                            chapter.protected && !isPremium && !chapter.preview
-                                              ? "assets/imgs/icn-lock.svg"
-                                              : "assets/imgs/right-arrow.svg"
-                                          }
-                                          slot="end"
-                                          size="small"
-                                          className="ion-accordion-toggle-icon no-rotation"
-                                        ></IonIcon>
-                                      </>
-                                    ) : (
-                                      <>
-                                        {/* <IonIcon
-                                          src={"assets/imgs/right-arrow.svg"}
-                                          slot="end"
-                                          size="small"
-                                          className="ion-accordion-toggle-icon"
-                                        ></IonIcon> */}
-                                      </>
+                                      />
                                     )}
                                   </IonItem>
-                                  {chapter?.items ? (
+                                  {chapter?.items && (
                                     <div className="ion-padding" slot="content">
-                                      {chapter?.items?.map(
-                                        (sub_chapter, sub_chapter_index) => (
-                                          <IonAccordionGroup
-                                            key={sub_chapter_index}
-                                            multiple={false}
-                                          >
-                                            <IonAccordion
-                                              value={sub_chapter_index}
-                                            >
-                                              <IonItem
-                                                slot="header"
-                                                lines="inset"
-                                                onClick={() => {
-                                                  if (!sub_chapter.items && (!sub_chapter.protected || sub_chapter.preview || isPremium)) {
-                                                    navigateToCourseInner(sub_chapter.id);
-                                                  }
-                                                }}                                                
-                                              >
-                                                <IonLabel
-                                                  style={{ color: "#636363" }}
-                                                >
-                                                  {sub_chapter.title}
-                                                </IonLabel>
-                                                <IonIcon
-                                                  src={
-                                                    sub_chapter.protected && !isPremium && !sub_chapter.preview
-                                                      ? "assets/imgs/icn-lock.svg"
-                                                      : "assets/imgs/right-arrow.svg"
-                                                  }
-                                                  className="ion-accordion-toggle-icon custom-icon custom_icon no-rotation"
-                                                  slot="end"
-                                                ></IonIcon>
-                                              </IonItem>
-                                            </IonAccordion>
-                                          </IonAccordionGroup>
-                                        )
-                                      )}
+                                      {chapter?.items?.map((sub_chapter, sub_chapter_index) => (
+                                        <IonItem
+                                          key={sub_chapter_index}
+                                          lines="inset"
+                                          onClick={() => {
+                                            if (sub_chapter.protected && !isPremium && !sub_chapter.preview) {
+                                              history.push('/membership');
+                                            } else if (!sub_chapter.items && (!sub_chapter.protected || sub_chapter.preview || isPremium)) {
+                                              navigateToCourseInner(sub_chapter.id);
+                                            }
+                                          }}
+                                        >
+                                          <IonLabel style={{ color: "#636363" }}>{sub_chapter.title}</IonLabel>
+                                          <IonIcon
+                                            src={
+                                              sub_chapter.items
+                                                ? "assets/imgs/right-arrow.svg"
+                                                : (sub_chapter.protected && !isPremium && !sub_chapter.preview)
+                                                  ? "assets/imgs/icn-lock.svg"
+                                                  : "assets/imgs/right-arrow.svg"
+                                            }
+                                            className="ion-accordion-toggle-icon custom-icon custom_icon"
+                                            slot="end"
+                                          ></IonIcon>
+                                        </IonItem>
+                                      ))}
                                     </div>
-                                  ) : (
-                                    ""
                                   )}
                                 </IonAccordion>
                               </IonAccordionGroup>

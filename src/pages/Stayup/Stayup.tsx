@@ -55,10 +55,10 @@ const Stayup: React.FC = () => {
         </div>
 
         <div className="btn-holder ion-text-center ion-padding-vertical">
-          <IonButton expand="block" routerLink="/tabs/tab1" onClick={handleSubscribe}>Ja, gerne!</IonButton>
+          <IonButton expand="block" routerLink="/membershiponboarding" onClick={handleSubscribe}>Ja, gerne!</IonButton>
         </div>
         <div className="bottom-btn">
-          <IonButton expand="block" routerLink="/tabs/tab1" fill="clear" color="dark">Nein, danke.</IonButton>
+          <IonButton expand="block" routerLink="/membershiponboarding" fill="clear" color="dark">Nein, danke.</IonButton>
         </div>
       </IonContent>
     </IonPage>

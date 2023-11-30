@@ -348,6 +348,7 @@ const Resources: React.FC = () => {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
+          backgroundColor: "#F8F5F2",
         }}
       >
         <IonSpinner name="crescent"></IonSpinner>

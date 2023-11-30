@@ -130,6 +130,7 @@ const Learnmore: React.FC = () => {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh", // Takes full height of the viewport
+          backgroundColor: "#F8F5F2",
         }}
       >
         <IonSpinner name="crescent"></IonSpinner>

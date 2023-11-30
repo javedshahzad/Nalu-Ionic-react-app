@@ -27,6 +27,10 @@
             }
         }
 
+        .join-btn {
+            margin-top: -20px;
+        }
+
         .progress-holder
         {
             margin-bottom: 10px;
@@ -105,14 +109,18 @@
 
                 .ion-padding {
                     padding: 0;
+                    ion-item {
+                        ion-label {
+                            padding-left: 20px;
+                        }
+                    }
                 }
 
                 ion-accordion {
 
                     ion-accordion {
                         ion-label {
-                            padding-left
-                            : 20px;
+                            padding-left: 20px;
                         }
                     }
                 }

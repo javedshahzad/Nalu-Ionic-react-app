@@ -61,6 +61,14 @@ const Menu: React.FC = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showDeleteSuccess, setShowDeleteSuccess] = useState(false);
 
+  let isPremium = false; // Default to false
+  try {
+    const roles = JSON.parse(localStorage.getItem('roles') || '{}'); // Parse the roles or default to an empty object
+    isPremium = Object.values(roles).includes('premium'); // Check if 'premium' is one of the roles
+  } catch (e) {
+    console.error('Error parsing roles from localStorage:', e);
+  }
+
   const handleLogout = () => {
     localStorage.clear();
     history.push('/onboarding');
@@ -115,9 +123,10 @@ const Menu: React.FC = () => {
      
     },
     {
-      title: "Get Full Access",
-      url: "/page/Archived",
+      title: "NALU beitreten",
+      url: "",
       Icon: 'assets/imgs/menu4.svg',
+      onClick: () => history.push("/membership"),
     },*/
     {
       title: "Notfallplan",
@@ -194,6 +203,14 @@ const Menu: React.FC = () => {
           <h1>Angelina</h1>
           <h6>example@gmail.com</h6>
         </div>*/}
+        {!isPremium && (
+          <IonMenuToggle autoHide={false} className="join-nalu">
+            <IonItem button onClick={() => history.push("/membership")}>
+              <IonIcon aria-hidden="true" slot="start" src="assets/imgs/menu4.svg" />
+              <IonLabel>NALU beitreten</IonLabel>
+            </IonItem>
+          </IonMenuToggle>
+        )}
         <IonList id="inbox-list">
           {appPages.map((appPage, index) => {
             return (

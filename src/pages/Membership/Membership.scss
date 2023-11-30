@@ -130,6 +130,7 @@
 
         .title
         {
+            margin-top: 40px;
             margin-bottom: 20px;
             h3
             {
@@ -182,7 +183,7 @@
                     ion-label
                     {
                         padding: 10px 0;
-                        .first
+                        .first, .second
                         {
                             h3
                             {
@@ -198,8 +199,8 @@
                             ion-badge
                             {
                                 background: transparent;
-                                border: 1px solid var(--ion-color-primary);
-                                color: var(--ion-color-primary);
+                                border: 1px solid #A9A8AA;
+                                color: #A9A8AA;
                                 padding: 10px;
                             }
                         }
@@ -230,11 +231,19 @@
                     --border-color: #3684B3;
                     ion-label
                     {
-                        .first
+                        .first, .second
                         {
                             h3
                             {
                                 color: #2D2D2D !important;
+                            }                     
+
+                            ion-badge
+                            {
+                                background: transparent;
+                                border: 1px solid var(--ion-color-secondary);
+                                color: var(--ion-color-secondary);
+                                padding: 10px;
                             }
                         }
                         p
@@ -255,6 +264,24 @@
             --color: white;
             font-size: 18px;
             height: 54px;
+        }
+    }
+
+    .bottom-btn {
+        margin-bottom: 30px;
+
+        ion-button {
+            white-space: unset;
+        }
+
+        h3 {
+            margin: 0;
+        }
+
+        span
+        {
+            color: #3684B3;
+            font-family: 'GBold';
         }
     }
 

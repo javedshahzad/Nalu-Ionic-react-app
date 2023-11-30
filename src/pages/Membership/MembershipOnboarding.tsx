@@ -104,13 +104,6 @@ const Membership: React.FC = () => {
 
   return (
     <IonPage className="Membership">
-      <IonHeader className="ion-no-border">
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonBackButton defaultHref="/" text="" color={"dark"} />
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
       <IonContent className="ion-padding-horizontal" fullscreen>
         <div className="title ion-text-center">
           <h2>
@@ -556,7 +549,10 @@ const Membership: React.FC = () => {
         </div>
 
         <div className="btn-holder ion-text-center ion-padding-vertical">
-          <IonButton expand="block" onClick={handleButtonClick}>Jetzt anmelden</IonButton>
+          <IonButton expand="block" onClick={handleButtonClick}>Jetzt NALU Mitglied werden</IonButton>
+        </div>
+        <div className="bottom-btn">
+          <IonButton expand="block" routerLink="/tabs/tab1" fill="clear" color="dark"><h3>Ich bin noch nicht bereit und möchte mich später entscheiden.<br/><br/><span>Weiter zur App</span></h3></IonButton>
         </div>
       </IonContent>
     </IonPage>

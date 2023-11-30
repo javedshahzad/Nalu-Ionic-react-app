@@ -46,6 +46,7 @@ import Journaladdition from "./pages/Journaladdition/Journaladdition";
 import Resourcedetail from "./pages/Resourcedetail/Resourcedetail";
 import Eventdetail from "./pages/Eventdetail/Eventdetail";
 import Membership from "./pages/Membership/Membership";
+import Membershiponboarding from "./pages/Membership/MembershipOnboarding";
 import Journalcalender from "./pages/Journalcalender/Journalcalender";
 import Community from "./pages/Community/Community";
 import Login from "./pages/Login/Login";
@@ -194,6 +195,11 @@ const App: React.FC = () => {
           <Route exact path="/membership">
             <PrivateRoute page={"membership"}>
               <Membership />
+            </PrivateRoute>
+          </Route>
+          <Route exact path="/membershiponboarding">
+            <PrivateRoute page={"membershiponboarding"}>
+              <Membershiponboarding />
             </PrivateRoute>
           </Route>
           <Route exact path="/mygroups">
