@@ -1,10 +1,21 @@
 .onborading
 {
+    .logo-holder {
+        height: 20vw;
+        padding-bottom: 20px;
+
+        img {
+            height: 100%;
+        }
+    }
+    
     .img-holder
     {
+        height: 70vw;
+        
         img
         {
-            height: 90vw;
+            height: 100%;
         }
     }
     .content-holder

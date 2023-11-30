@@ -295,26 +295,25 @@ function JournalAdditionRemade() {
     }
   };
 
-  const updateField = (val: any, fields: any) => {
-    fields.value = val;
+  const updateField = (val: any, fields: any, isCheckbox = false) => {
+    const updatedValue = isCheckbox ? (val ? 1 : 0) : val;
+    fields.value = updatedValue;
 
-    CustomCategoryApiService.post(
-      `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`,
-      {
+    CustomCategoryApiService.post(`https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`, {
         entries: [
-          {
-            key: fields.key,
-            value: val,
-          },
+            {
+                key: fields.key,
+                value: updatedValue,
+            },
         ],
-      }
-    ).then(
-      (data) => {},
-      (err) => {
-        console.log("err sending data", err);
-      }
+    }).then(
+        (data) => {},
+        (err) => {
+            console.log("err sending data", err);
+        }
     );
-  };
+};
+
 
   const getIcons = async () => {
     try {
@@ -563,13 +562,8 @@ function JournalAdditionRemade() {
 
                                       <IonLabel>{fields.label}</IonLabel>
                                       <IonCheckbox
-                                        checked={fields.value}
-                                        onIonChange={(event) =>
-                                          updateField(
-                                            event.target.value,
-                                            fields
-                                          )
-                                        }
+                                        checked={!!fields.value}
+                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -687,13 +681,8 @@ function JournalAdditionRemade() {
                                       />
                                       <IonLabel>{fields.label}</IonLabel>
                                       <IonCheckbox
-                                        checked={fields.true_false}
-                                        onIonChange={(event) =>
-                                          updateField(
-                                            event.target.value,
-                                            fields
-                                          )
-                                        }
+                                        checked={!!fields.value}
+                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -730,13 +719,8 @@ function JournalAdditionRemade() {
                                       />
                                       <IonLabel>{fields.label}</IonLabel>
                                       <IonCheckbox
-                                        checked={fields.true_false}
-                                        onIonChange={(event) =>
-                                          updateField(
-                                            event.target.value,
-                                            fields
-                                          )
-                                        }
+                                        checked={!!fields.value}
+                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -773,13 +757,8 @@ function JournalAdditionRemade() {
                                       />
                                       <IonLabel>{fields.label}</IonLabel>
                                       <IonCheckbox
-                                        checked={fields.true_false}
-                                        onIonChange={(event) =>
-                                          updateField(
-                                            event.target.value,
-                                            fields
-                                          )
-                                        }
+                                        checked={!!fields.value}
+                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -816,13 +795,8 @@ function JournalAdditionRemade() {
                                       />
                                       <IonLabel>{fields.label}</IonLabel>
                                       <IonCheckbox
-                                        checked={fields.true_false}
-                                        onIonChange={(event) =>
-                                          updateField(
-                                            event.target.value,
-                                            fields
-                                          )
-                                        }
+                                        checked={!!fields.value}
+                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -859,13 +833,8 @@ function JournalAdditionRemade() {
                                       />
                                       <IonLabel>{fields.label}</IonLabel>
                                       <IonCheckbox
-                                        checked={fields.true_false}
-                                        onIonChange={(event) =>
-                                          updateField(
-                                            event.target.value,
-                                            fields
-                                          )
-                                        }
+                                        checked={!!fields.value}
+                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -1181,13 +1150,8 @@ function JournalAdditionRemade() {
                                       >
                                         <IonLabel>{field.label}</IonLabel>
                                         <IonCheckbox
-                                          checked={field.value}
-                                          onIonChange={(event) =>
-                                            updateField(
-                                              event.target.value,
-                                              field
-                                            )
-                                          }
+                                          checked={!!field.value}
+                                          onIonChange={(event) => updateField(event.detail.checked, field, true)}
                                         />
                                       </IonItem>
                                     </IonCol>
