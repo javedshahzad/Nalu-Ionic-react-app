@@ -54,6 +54,14 @@ function ConfigCycleRemade() {
   const [isSubmittingToLogin, setIsSubmittingToLogin] = useState(false);
 
   const navigation = useIonRouter();
+
+  if (isPlatform("ios")) {
+    useEffect(() => {
+      HTTP.setDataSerializer('json');
+      HTTP.setHeader('*', 'Content-Type', 'application/json');
+    }, []);
+  }
+
   const toLogin = async () => {
     setIsSubmittingToLogin(true);
   
