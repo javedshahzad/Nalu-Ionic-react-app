@@ -144,23 +144,17 @@
   }
 
   .tick-label {
-    width: calc(
-      20% - 5px
-    ); /* Adjust as needed based on the number of tick values */
     text-align: center;
     font-size: 12px; /* Adjust as needed */
-    margin-right: calc(23% - 5px);
+    margin-right: 0;
     color: #a9a8aa;
     font-size: 16px;
   }
 
   .tick-label2 {
-    width: calc(
-      10% - 5px
-    ); /* Adjust as needed based on the number of tick values */
     text-align: center;
     font-size: 12px; /* Adjust as needed */
-    margin-right: calc(10% - 5px); /* Adjust as needed based on your layout */
+    margin-right: 0; /* Adjust as needed based on your layout */
     color: #a9a8aa;
     font-size: 16px;
   }

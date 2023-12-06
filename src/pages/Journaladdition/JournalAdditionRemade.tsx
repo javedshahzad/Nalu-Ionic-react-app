@@ -124,10 +124,10 @@ function JournalAdditionRemade() {
     history.push(`/addcustomcategory/${dateParam}`);
   };
 
-  const rangeValues10 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const rangeValues16 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+  const rangeValues10 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const rangeValues16 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-  const rangeValues = [1, 2, 3, 4, 5];
+  const rangeValues = [0, 1, 2, 3, 4, 5];
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -607,9 +607,9 @@ function JournalAdditionRemade() {
                                         dualKnobs={false}
                                         ticks={true}
                                         snaps={true}
-                                        min={1}
+                                        min={0}
                                         max={10}
-                                        value={field.value ? field.value : 1}
+                                        value={field.value ? field.value : 0}
                                         pin={true}
                                         pinFormatter={(value: number) => {
                                           switch (value) {
@@ -939,9 +939,9 @@ function JournalAdditionRemade() {
                                 dualKnobs={false}
                                 ticks={true}
                                 snaps={true}
-                                min={1}
+                                min={0}
                                 max={5}
-                                value={entry.value ? entry.value : 1}
+                                value={entry.value ? entry.value : 0}
                                 pin={true}
                                 pinFormatter={(value: number) => `${value}`}
                                 onIonChange={(event) =>
@@ -987,9 +987,9 @@ function JournalAdditionRemade() {
                                 dualKnobs={false}
                                 ticks={true}
                                 snaps={true}
-                                min={1}
-                                max={16}
-                                value={entry.value ? entry.value : 1}
+                                min={0}
+                                max={12}
+                                value={entry.value ? entry.value : 0}
                                 pin={true}
                                 pinFormatter={(value: number) => `${value}`}
                                 onIonChange={(event) =>
@@ -1043,9 +1043,9 @@ function JournalAdditionRemade() {
                                           dualKnobs={false}
                                           ticks={true}
                                           snaps={true}
-                                          min={1}
+                                          min={0}
                                           max={5}
-                                          value={field.value ? field.value : 1}
+                                          value={field.value ? field.value : 0}
                                           pin={true}
                                           pinFormatter={(value: number) =>
                                             `${value}`
@@ -1096,9 +1096,9 @@ function JournalAdditionRemade() {
                                           dualKnobs={false}
                                           ticks={true}
                                           snaps={true}
-                                          min={1}
+                                          min={0}
                                           max={10}
-                                          value={field.value ? field.value : 1}
+                                          value={field.value ? field.value : 0}
                                           pin={true}
                                           pinFormatter={(value: number) =>
                                             `${value}`

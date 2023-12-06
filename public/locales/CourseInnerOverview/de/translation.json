@@ -27,7 +27,7 @@
             "browse_groups": "Gruppen durchsuchen"
           },
         "config_cycle": {
-              "config_title": "Wann war deine letzte Periode?",
+              "config_title": "Wann war der letzte Tag deiner letzten Periode?",
               "description_1": "Konfiguriere dein Zyklusjournal",
               "description_2": "Ich weiss es nicht / Ich hatte nie eine",
               "description_3": "Wenn du das Datum deiner letzten Periode nicht kennst oder nie eine hattest, wird dein Zyklus auf die Mondphasen abgestimmt, um dich mit dem zyklischen Lebensstil vertraut zu machen.",

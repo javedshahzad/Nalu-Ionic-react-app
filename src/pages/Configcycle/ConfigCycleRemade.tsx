@@ -290,7 +290,7 @@ function ConfigCycleRemade() {
           Konfiguriere dein Zyklusjournal
           </h1>
           <h3 className="configTextSub">
-          Wann war deine letzte Periode?
+          Wann war der letzte Tag deiner letzten Periode?
           </h3>
 
           {/* <div className="calendar-container" onScroll={() => handleScroll()}>
