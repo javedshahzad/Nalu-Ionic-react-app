@@ -110,7 +110,7 @@ const Membership: React.FC = () => {
             {userGoals.includes('endometriosis') ? (
               "Mit NALU zu mehr Wohlbefinden bei Endometriose"
             ) : userGoals.includes('amenorrhea') ? (
-              "Mit NALU eine regelmässige Periode erhalten"
+              "Mit NALU deine Periode regulieren"
             ) : (
               "Mit NALU deinen Zyklus harmonisieren"
             )}
