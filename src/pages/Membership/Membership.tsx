@@ -115,7 +115,7 @@ const Membership: React.FC = () => {
         <div className="title ion-text-center">
           <h2>
             {userGoals.includes('endometriosis') ? (
-              "Mit NALU zur Schmerzlinderung und zu mehr Wohlbefinden bei Endometriose"
+              "Mit NALU zu mehr Wohlbefinden bei Endometriose"
             ) : userGoals.includes('amenorrhea') ? (
               "Mit NALU eine regelmässige Periode erhalten"
             ) : (
@@ -181,7 +181,7 @@ const Membership: React.FC = () => {
               <IonCol size="5">
                 <h5>
                    {userGoals.includes('endometriosis') ? (
-                    "Kompletter NALU Endo Flow Online Kurs mit Übungen für weniger Schmerzen und mehr Wohlbefinden"
+                    "Kompletter NALU Endo Flow Online Kurs mit Übungen für mehr Wohlbefinden bei Endometriose"
                      ) : userGoals.includes('amenorrhea') ? (
                     "Kompletter NALU Zyklus Flow Online Kurs mit Übungen für eine regelmässige Periode"
                   ) : (
@@ -339,7 +339,7 @@ const Membership: React.FC = () => {
             <div>
               <div className="sec flex al-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
-                <h4>...du deine&nbsp;<strong>Schmerzen mit Endometriose reduzieren</strong>&nbsp;m&ouml;chtest</h4>
+                <h4>...du deine&nbsp;<strong>Beschwerden durch Endometriose auf natürliche Weise lindern</strong>&nbsp;m&ouml;chtest</h4>
               </div>
               <div className="sec flex al-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
