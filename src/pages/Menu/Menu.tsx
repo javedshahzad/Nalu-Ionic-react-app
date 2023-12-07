@@ -157,13 +157,13 @@ const Menu: React.FC = () => {
       Icon: "assets/imgs/menu9.svg",
     },
     {
-      title: "lisafilipe.nalu",
-      url: "https://www.instagram.com/lisafilipe.nalu/",
+      title: "nalu_health",
+      url: "https://www.mynalu.com/instagram",
       Icon: "assets/imgs/menu10.svg",
     },
     {
-      title: "lisafilipe.nalu",
-      url: "https://www.facebook.com/lisafilipe.nalu",
+      title: "nalu.health",
+      url: "https://www.mynalu.com/facebook",
       Icon: "assets/imgs/menu11.svg",
     },
   ];
