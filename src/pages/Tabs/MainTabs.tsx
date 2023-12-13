@@ -40,7 +40,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         <Redirect exact path="/tabs" to="/tabs/tab1" />
 
         <Route
-          path="/tabs/tab1"
+          path="/tabs/tab4"
           render={() => (
             <PrivateRoute page={"JournalCalendarRemade"}>
               <JournalCalendarRemade />
@@ -49,7 +49,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           exact={true}
         />
         <Route
-          path="/tabs/tab2"
+          path="/tabs/tab1"
           render={() => (
             <PrivateRoute page={"Courseoverviewpaid"}>
               <Courseoverviewpaid />
@@ -58,7 +58,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           exact={true}
         />
         <Route
-          path="/tabs/tab2/courseinneroverview"
+          path="/tabs/tab1/courseinneroverview"
           render={() => (
             <PrivateRoute page={"CourseInnerOverview"}>
               <CourseInnerOverview />
@@ -66,7 +66,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           )}
         />
         <Route
-          path="/tabs/tab2/courseinneroverview/:id"
+          path="/tabs/tab1/courseinneroverview/:id"
           render={() => (
             <PrivateRoute page={"CourseSubOverview"}>
               <CourseSubOverview />
@@ -75,7 +75,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         />
 
         <Route
-          path="/tabs/tab3"
+          path="/tabs/tab2"
           render={() => (
             <PrivateRoute page={"Mygroups"}>
               <Mygroups />
@@ -84,7 +84,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           exact={true}
         />
         <Route
-          path="/tabs/tab3/eventdetail"
+          path="/tabs/tab2/eventdetail"
           render={() => (
             <PrivateRoute page={"Eventdetail"}>
               <Eventdetail />
@@ -94,7 +94,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         />
 
         <Route
-          path="/tabs/tab4"
+          path="/tabs/tab3"
           render={() => (
             <PrivateRoute page={"Resources"}>
               <Resources />
@@ -103,7 +103,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           exact={true}
         />
         <Route
-          path="/tabs/tab4/resourcesubcateggory/:resource_sub_id"
+          path="/tabs/tab3/resourcesubcateggory/:resource_sub_id"
           render={() => (
             <PrivateRoute page={"ResourceSubCategory"}>
               <ResourceSubCategory />
@@ -111,7 +111,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           )}
         />
         <Route
-          path="/tabs/tab4/resourcedetail/:id"
+          path="/tabs/tab3/resourcedetail/:id"
           render={() => (
             <PrivateRoute page={"Resourcedetail"}>
               <Resourcedetail />
@@ -122,19 +122,6 @@ const MainTabs: React.FC<MainTabsProps> = () => {
 
       <IonTabBar slot="bottom" className="ion-no-border">
         <IonTabButton tab="tab1" href="/tabs/tab1">
-          <IonIcon
-            src="assets/imgs/tabicns/tab1.svg"
-            className="tab-icon-inactive"
-            id="inactive"
-          />
-          <IonIcon
-            src="assets/imgs/tabicns/tab1a.svg"
-            className="tab-icon-active"
-            id="active"
-          />
-          <IonLabel>Journal</IonLabel>
-        </IonTabButton>
-        <IonTabButton tab="tab2" href="/tabs/tab2">
           <IonIcon
             src="assets/imgs/tabicns/tab2.svg"
             className="tab-icon-inactive"
@@ -147,7 +134,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           />
           <IonLabel>Kurs</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="tab3" href="/tabs/tab3">
+        <IonTabButton tab="tab2" href="/tabs/tab2">
           <IonIcon
             src="assets/imgs/tabicns/tab3.svg"
             className="tab-icon-inactive"
@@ -160,7 +147,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           />
           <IonLabel>Community</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="tab4" href="/tabs/tab4">
+        <IonTabButton tab="tab3" href="/tabs/tab3">
           <IonIcon
             src="assets/imgs/tabicns/tab4.svg"
             className="tab-icon-inactive"
@@ -172,6 +159,19 @@ const MainTabs: React.FC<MainTabsProps> = () => {
             id="active"
           />
           <IonLabel>Ressourcen</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="tab4" href="/tabs/tab4">
+          <IonIcon
+            src="assets/imgs/tabicns/tab1.svg"
+            className="tab-icon-inactive"
+            id="inactive"
+          />
+          <IonIcon
+            src="assets/imgs/tabicns/tab1a.svg"
+            className="tab-icon-active"
+            id="active"
+          />
+          <IonLabel>Journal</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

@@ -181,7 +181,7 @@ const Filtermodal: React.FC = () => {
           console.log(response);
           
           
-          history.push('/tabs/tab4/resourcesubcateggory',{
+          history.push('/tabs/tab3/resourcesubcateggory',{
             filteredData: response.data.ressources,
             subCategory: response.data.sub_categories
           })
@@ -218,7 +218,7 @@ const Filtermodal: React.FC = () => {
                   <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
-                  <IonButton routerLink="/tabs/tab4">
+                  <IonButton routerLink="/tabs/tab3">
                     <IonIcon icon={close} />
                   </IonButton>
                 </IonButtons>

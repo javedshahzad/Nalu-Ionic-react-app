@@ -300,7 +300,7 @@ const ResourceSubCategory: React.FC = () => {
         response = response.data;
       }
       console.log(response);
-      history.push("/tabs/tab4/resourcedetail", { data: response });
+      history.push("/tabs/tab3/resourcedetail", { data: response });
     } catch (error) {
       console.error("Error fetching resource details by ID:", error);
     } finally {
@@ -330,7 +330,7 @@ const ResourceSubCategory: React.FC = () => {
                   <IonBackButton
                     color="dark"
                     text={""}
-                    defaultHref="/tabs/tab4"
+                    defaultHref="/tabs/tab3"
                   />
                 </IonButtons>
                 {/*<IonButtons slot="end">
@@ -417,7 +417,7 @@ const ResourceSubCategory: React.FC = () => {
                         <div className="resource-card" key={index}>
                           <IonItem
                             lines="none"
-                            onClick={() => history.push(`/tabs/tab4/resourcedetail/${card.id}`)}
+                            onClick={() => history.push(`/tabs/tab3/resourcedetail/${card.id}`)}
                           >
                             <div className="thumb" slot="start">
                               {card?.thumbnail_url ? (

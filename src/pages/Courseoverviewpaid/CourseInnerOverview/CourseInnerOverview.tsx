@@ -82,7 +82,7 @@ const CourseInnerOverview: React.FC = () => {
   //   setTogglePlay(value);
   // };
   const handleComplete = (id) => {
-    // history.push(`/tabs/tab2/courseinneroverview/${id}`);
+    // history.push(`/tabs/tab1/courseinneroverview/${id}`);
     getData(id, null);
   };
 
@@ -159,7 +159,7 @@ const CourseInnerOverview: React.FC = () => {
                   <IonBackButton
                     color="dark"
                     text={""}
-                    defaultHref="/tabs/tab2"
+                    defaultHref="/tabs/tab1"
                   />
                 </IonButtons>
                 <IonTitle>{courseData?.title}</IonTitle>

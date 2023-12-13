@@ -383,7 +383,7 @@ const Journal: React.FC = () => {
       }
       
       console.log(response);
-      history.push('/tabs/tab4/resourcedetail', {
+      history.push('/tabs/tab3/resourcedetail', {
         data: response
       });
   

@@ -454,7 +454,7 @@ function JournalAdditionRemade() {
             <h4>{showClickDate(clickedDate)}</h4>
             {/*<h4>Cycle Day 5</h4>*/}
           </div>
-          <div
+          {/*<div
             className="leave-calendar-content slide"
             id="week-view-wrapper"
             ref={parentRef}
@@ -507,7 +507,9 @@ function JournalAdditionRemade() {
                 </div>
               ))}
             </div>
-          </div>
+                      </div>*/}
+          <h2>[Das Zyklus Journal ist zur Zeit in Überarbeitung]</h2>
+          <p>Du erhältst eine E-Mail von uns, wenn das Journal wieder vollumfänglich verfügbar ist.</p>
           <IonModal
             isOpen={modalOpen}
             className="modaaal"

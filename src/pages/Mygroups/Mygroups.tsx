@@ -101,7 +101,7 @@ const Mygroups: React.FC = () => {
   };
 
   const navigateToNextPage = (id) => {
-    history.push("/tabs/tab3/eventdetail", {
+    history.push("/tabs/tab2/eventdetail", {
       event_id: id,
     });
   };

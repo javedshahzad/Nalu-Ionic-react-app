@@ -218,7 +218,7 @@ const Resourcedetail: React.FC = () => {
 
       const currentURL = window.location.pathname;
   
-      if (currentURL === "/tabs/tab4/resourcedetail/6999") {
+      if (currentURL === "/tabs/tab3/resourcedetail/6999") {
         window.history.go(-2);
       } else {
         window.history.back();

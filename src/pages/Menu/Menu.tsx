@@ -130,10 +130,10 @@ const Menu: React.FC = () => {
     },*/
     {
       title: "Notfallplan",
-      url: "/tabs/tab4/resourcedetail/6999",
+      url: "/tabs/tab3/resourcedetail/6999",
       Icon: "assets/imgs/menu5.svg",
       // onClick: () => getResourceDetailsByID(6999),
-      onClick: () => history.push("/tabs/tab4/resourcedetail/6999"),
+      onClick: () => history.push("/tabs/tab3/resourcedetail/6999"),
     },
     {
       title: "Quellen",

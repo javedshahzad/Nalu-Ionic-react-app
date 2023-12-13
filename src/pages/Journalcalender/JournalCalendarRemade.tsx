@@ -516,6 +516,8 @@ const JournalCalendarRemade = () => {
             </IonButton>
           </IonButtons>
         </IonToolbar>
+        <h2>[Das Zyklus Journal ist zur Zeit in Überarbeitung]</h2>
+        <p>Du erhältst eine E-Mail von uns, wenn das Journal wieder vollumfänglich verfügbar ist.</p>
         <div className="journalcalendar-main">
           <div className="calendar-container" onScroll={() => handleScroll()}>
             <div className="calendar-scrollable">
@@ -569,13 +571,13 @@ const JournalCalendarRemade = () => {
             </div>
           </div>
 
-          <IonButton className="period-btn" onClick={handleStartStop}>
+          {/*<IonButton className="period-btn" onClick={handleStartStop}>
             {todayPeriod == "false" ? (
               <IonLabel>Beginn der Periode</IonLabel>
             ) : (
               <IonLabel>Ende der Periode</IonLabel>
             )}
-          </IonButton>
+            </IonButton>*/}
         </div>
       </IonContent>
     </IonPage>

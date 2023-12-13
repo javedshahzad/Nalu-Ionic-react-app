@@ -194,7 +194,7 @@ const Resources: React.FC = () => {
   };  
   const getParentCategoryByID = (resource_sub_id) => {
 
-         history.push(`/tabs/tab4/resourcesubcateggory/${resource_sub_id}`);
+         history.push(`/tabs/tab3/resourcesubcateggory/${resource_sub_id}`);
 
     // setIsLoading(true);
     // setCategoryID(id);
@@ -211,7 +211,7 @@ const Resources: React.FC = () => {
     //   .then((response) => {
     //     console.log(response.data);
 
-    //     history.push(`/tabs/tab4/resourcesubcateggory/${id}`, {
+    //     history.push(`/tabs/tab3/resourcesubcateggory/${id}`, {
     //       filteredData: response.data.ressources,
     //       subCategory: response.data.sub_categories,
     //       parent_id: id,
@@ -312,12 +312,12 @@ const Resources: React.FC = () => {
         .then((response) => {
           console.log(response.data);
 
-          history.push("/tabs/tab4/resourcedetail", {
+          history.push("/tabs/tab3/resourcedetail", {
             data: response.data,
           });
     setIsLoading(false);
         
-          // router.push('/tabs/tab4/resourcedetail', 'root', 'replace');
+          // router.push('/tabs/tab3/resourcedetail', 'root', 'replace');
           // const dataParam = encodeURIComponent(JSON.stringify(response.data));
           // router.push(`/resourcedetail?data=${dataParam}`, 'root', 'replace');
 
@@ -439,7 +439,7 @@ const Resources: React.FC = () => {
                           <IonCol size="6" key={index}>
                             <div
                               className="rc-card ion-activatable ripple-parent"
-                              onClick={() => history.push(`/tabs/tab4/resourcedetail/${item.id}`)}
+                              onClick={() => history.push(`/tabs/tab3/resourcedetail/${item.id}`)}
                             >
                               <IonRippleEffect />
                               <div className="img-holder">

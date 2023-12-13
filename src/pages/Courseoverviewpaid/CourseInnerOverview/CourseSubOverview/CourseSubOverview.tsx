@@ -102,7 +102,7 @@ import { HTTP } from "@awesome-cordova-plugins/http";
             console.log(response.data);
             // setCourseData(response.data);
             if(response.data.status = "success"){
-            history.push(`/tabs/tab2/courseinneroverview`);
+            history.push(`/tabs/tab1/courseinneroverview`);
             }
             setIsMarlLoading(false);
           })
@@ -140,7 +140,7 @@ import { HTTP } from "@awesome-cordova-plugins/http";
                     <IonBackButton
                       color="dark"
                       text={""}
-                      defaultHref="/tabs/tab2/courseinneroverview"
+                      defaultHref="/tabs/tab1/courseinneroverview"
                     />
                   </IonButtons>
                   <IonTitle>{courseData?.title}</IonTitle>

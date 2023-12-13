@@ -105,7 +105,7 @@ const Courseoverviewpaid: React.FC = () => {
 
   const navigateToCourseInner = (id) => {
     console.log(id);
-    history.push("/tabs/tab2/courseinneroverview", {
+    history.push("/tabs/tab1/courseinneroverview", {
       course_id: id,
     });
   };

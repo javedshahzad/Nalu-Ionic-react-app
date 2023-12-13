@@ -216,7 +216,7 @@ const Eventdetail: React.FC = () => {
                   <IonBackButton
                     color="dark"
                     text={""}
-                    defaultHref="/tabs/tab3"
+                    defaultHref="/tabs/tab2"
                   />
                 </IonButtons>
                 <IonTitle dangerouslySetInnerHTML={event?.title} />
