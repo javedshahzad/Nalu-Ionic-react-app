@@ -32,6 +32,7 @@ import apiService from "../../../Services";
 import tokenService from "../../../token";
 import { CreateOutline } from "react-ionicons";
 import NotificationBell from "../../../components/NotificationBell";
+import authService from "../../../authService";
 
 const GroupInfo: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
@@ -68,7 +69,19 @@ const GroupInfo: React.FC = () => {
         setGroupImage(data.data.groupImage);
         setUserList(data.data.participants);
       })
-      .catch((error) => console.error("Error fetching data: 1", error));
+      .catch((error) => {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/login");
+          }
+        }
+
+        console.error(error);
+      });
   };
 
   const GetAllUsers = (keyword?: any) => {
@@ -93,7 +106,19 @@ const GroupInfo: React.FC = () => {
         });
         setAllUsers(usersObjArr);
       })
-      .catch((error) => console.error("Error fetching data: 2", error));
+      .catch((error) => {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/login");
+          }
+        }
+
+        console.error(error);
+      });
   };
 
   const AddUser = () => {
@@ -177,8 +202,18 @@ const GroupInfo: React.FC = () => {
 
           // setGroupName("");
         },
-        (err) => {
-          console.log("err from creating group", err);
+        (error) => {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/login");
+            }
+          }
+
+          console.error(error);
         }
       );
   };
@@ -199,8 +234,18 @@ const GroupInfo: React.FC = () => {
 
           // setGroupName("");
         },
-        (err) => {
-          console.log("err from updating group", err);
+        (error) => {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/login");
+            }
+          }
+
+          console.error(error);
         }
       );
   };

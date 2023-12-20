@@ -45,6 +45,7 @@ import { journalAction } from "../../actions/journalAction";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import React from "react";
+import authService from "../../authService";
 
 function JournalAdditionRemade() {
   const { dateParam } = useParams<{ dateParam: string }>();
@@ -108,6 +109,16 @@ function JournalAdditionRemade() {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/login");
+        }
+      }
+
       console.error(error);
     }
   };
@@ -300,19 +311,29 @@ function JournalAdditionRemade() {
     fields.value = updatedValue;
 
     CustomCategoryApiService.post(`https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`, {
-        entries: [
-            {
-                key: fields.key,
-                value: updatedValue,
-            },
-        ],
+      entries: [
+        {
+          key: fields.key,
+          value: updatedValue,
+        },
+      ],
     }).then(
-        (data) => {},
-        (err) => {
-            console.log("err sending data", err);
+      (data) => { },
+      (error) => {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/login");
+          }
         }
+
+        console.error(error);
+      }
     );
-};
+  };
 
 
   const getIcons = async () => {
@@ -337,6 +358,15 @@ function JournalAdditionRemade() {
 
       setMoonPhaseIcon(newArray);
     } catch (error) {
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/login");
+        }
+      }
       console.error(error);
     }
   };
@@ -367,6 +397,15 @@ function JournalAdditionRemade() {
 
       setIcons2(data);
     } catch (error) {
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/login");
+        }
+      }
       console.error(error);
     }
   };

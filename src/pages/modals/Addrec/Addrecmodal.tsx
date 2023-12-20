@@ -22,6 +22,8 @@ import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 
 import { useState } from "react";
+import authService from "../../../authService";
+import { useHistory } from "react-router";
 
 const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
   const [selectedCategory, setselectedCategory] = useState("");
@@ -31,6 +33,7 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
   const [titleError, setTitleError] = useState("");
 
   const [note, setNote] = useState("");
+  const history = useHistory()
 
   const isFormValid =
     !!selectedCategory && !!title && !categoryError && !titleError;
@@ -83,10 +86,29 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
           }
         })
         .catch((error) => {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/login");
+            }
+          }
+
           console.error(error);
         });
     } catch (error) {
-      console.error(error);
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/login");
+        }
+      }
+      console.error('error', error);
     }
   };
 

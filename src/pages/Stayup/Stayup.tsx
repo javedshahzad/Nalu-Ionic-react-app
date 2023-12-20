@@ -12,9 +12,12 @@ import {
 import "./Stayup.scss";
 import axios from 'axios';
 import { HTTP } from "@awesome-cordova-plugins/http";
+import authService from "../../authService";
+import { useHistory } from "react-router-dom";
 
 const handleSubscribe = async () => {
   const token = localStorage.getItem('jwtToken');
+  const history = useHistory()
   const headers = {
     'Authorization': `Bearer ${token}`
   };
@@ -32,7 +35,16 @@ const handleSubscribe = async () => {
 
     console.log('Subscription successful:', response);
   } catch (error) {
-    console.error('Error during subscription:', error);
+    if (error.response) {
+      const status = error.response.status;
+
+      if (status === 401 || status === 403 || status === 404) {
+        // Unauthorized, Forbidden, or Not Found
+        authService.logout();
+        history.push("/login");
+      }
+    }
+    console.error('error', error);
   }
 };
 
@@ -50,7 +62,7 @@ const Stayup: React.FC = () => {
 
         <div className="desp ion-text-center">
           <p className="ion-text-wrap">
-          Willst du per E-Mail Neuigkeiten von der NALU Gründerin Lisa über zyklisches Leben sowie Benachrichtigungen über Sonderangebote erhalten?
+            Willst du per E-Mail Neuigkeiten von der NALU Gründerin Lisa über zyklisches Leben sowie Benachrichtigungen über Sonderangebote erhalten?
           </p>
         </div>
 

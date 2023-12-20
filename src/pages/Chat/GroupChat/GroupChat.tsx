@@ -36,6 +36,7 @@ import tokenService from "../../../token";
 import DOMPurify from "dompurify";
 import moment from "moment";
 import NotificationBell from "../../../components/NotificationBell";
+import authService from "../../../authService";
 
 const GroupChat: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
@@ -75,7 +76,7 @@ const GroupChat: React.FC = () => {
         conversation: groupId,
       });
 
-      socket.on("join", (data) => {});
+      socket.on("join", (data) => { });
 
       socket.emit("message-list", {
         page: 1,
@@ -184,7 +185,19 @@ const GroupChat: React.FC = () => {
         // console.log("groupName", data);
         setGroupImage(data.data.groupImage);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/login");
+          }
+        }
+
+        console.error(error);
+      });
   };
 
   const handleSendMessage = () => {

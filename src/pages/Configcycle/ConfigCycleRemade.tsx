@@ -20,6 +20,8 @@ import CustomCategoryApiService from "../../CustomCategoryService";
 import MoonPhasesServce from "../../MoonPhasesService";
 import { ca } from "@vidstack/react/dist/types/vidstack-react";
 import moment from "moment";
+import authService from "../../authService";
+import { useHistory } from "react-router";
 
 const months = [
   "Januar",
@@ -52,6 +54,7 @@ function ConfigCycleRemade() {
   const [calendarDate, setCalendarDate] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmittingToLogin, setIsSubmittingToLogin] = useState(false);
+  const history = useHistory()
 
   const navigation = useIonRouter();
 
@@ -64,12 +67,12 @@ function ConfigCycleRemade() {
 
   const toLogin = async () => {
     setIsSubmittingToLogin(true);
-  
+
     const jwtToken = localStorage.getItem("jwtToken");
     const headers = {
       Authorization: `Bearer ${jwtToken}`,
     };
-  
+
     try {
       if (isPlatform("ios")) {
         // Use Cordova HTTP plugin for iOS
@@ -88,10 +91,20 @@ function ConfigCycleRemade() {
           }
         );
       }
-  
+
       navigation.push("/learnmore");
-    } catch (err) {
-      console.log("err sending data", err);
+    } catch (error) {
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          navigation.push("/login");
+        }
+      }
+
+      console.error(error);
     } finally {
       setIsSubmittingToLogin(false);
     }
@@ -121,9 +134,8 @@ function ConfigCycleRemade() {
     const tempMonthIndex = monthIndex + 1 + "";
     const tempDateIndex = dateIndex + "";
 
-    const dateParam = `${year}-${
-      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
-    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+    const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+      }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
     // url = `/journaladditionremade/${dateParam}`;
   };
@@ -238,7 +250,7 @@ function ConfigCycleRemade() {
   const goToLearnMore = async () => {
     const tempMonthIndex = activeMonthIndex + 1 + "";
     const tempDateIndex = activeIndex + "";
-  
+
     const data = {
       entries: [
         {
@@ -247,20 +259,19 @@ function ConfigCycleRemade() {
         },
       ],
     };
-  
-    const dateParam = `${year}-${
-      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
-    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
-  
+
+    const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+      }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+
     console.log("dateParam", dateParam);
     setIsSubmitting(true);
-  
+
     try {
       const jwtToken = localStorage.getItem("jwtToken");
       const headers = {
         'Authorization': `Bearer ${jwtToken}`,
       };
-    
+
       let response;
       if (isPlatform("ios")) {
         // Use Cordova HTTP plugin for iOS
@@ -280,25 +291,33 @@ function ConfigCycleRemade() {
           }
         );
       }
-    
-        console.log("data from custom category api", response);
-        navigation.push("/learnmore");
-      } catch (err) {
-        console.log("err sending data", err);
-      } finally {
-        setIsSubmitting(false);
+
+      console.log("data from custom category api", response);
+      navigation.push("/learnmore");
+    } catch (error) {
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          navigation.push("/login");
+        }
       }
-    };  
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <IonPage className="ConfigCycleRemade">
       <IonContent>
         <div className="configcycleMain">
           <h1 className="configTextMain">
-          Konfiguriere dein Zyklusjournal
+            Konfiguriere dein Zyklusjournal
           </h1>
           <h3 className="configTextSub">
-          Wann war der letzte Tag deiner letzten Periode?
+            Wann war der letzte Tag deiner letzten Periode?
           </h3>
 
           {/* <div className="calendar-container" onScroll={() => handleScroll()}>
@@ -334,18 +353,18 @@ function ConfigCycleRemade() {
             </div>
           </div>*/}
           <div className="bottom-text">
-          <IonButton
-            className="configTextBottom"
-            onClick={toLogin}
-            style={{ cursor: "pointer" }}
-            fill="clear"
-            disabled={isSubmittingToLogin}
-          >
-            {isSubmittingToLogin ? <IonSpinner name="crescent" /> : "Ich weiss es nicht / Ich hatte nie eine"}
-          </IonButton>
+            <IonButton
+              className="configTextBottom"
+              onClick={toLogin}
+              style={{ cursor: "pointer" }}
+              fill="clear"
+              disabled={isSubmittingToLogin}
+            >
+              {isSubmittingToLogin ? <IonSpinner name="crescent" /> : "Ich weiss es nicht / Ich hatte nie eine"}
+            </IonButton>
 
             <h3 className="configTextSubBottom">
-            Wenn du das Datum deiner letzten Periode nicht kennst oder nie eine hattest, wird dein Zyklus auf die Mondphasen abgestimmt, um dich mit dem zyklischen Lebensstil vertraut zu machen.
+              Wenn du das Datum deiner letzten Periode nicht kennst oder nie eine hattest, wird dein Zyklus auf die Mondphasen abgestimmt, um dich mit dem zyklischen Lebensstil vertraut zu machen.
             </h3>
           </div>
           <IonButton

@@ -52,6 +52,7 @@ import "react-toastify/dist/ReactToastify.css";
 import image_not_found from "../../Images/image-not-found.png";
 import { previousPaths } from "media-icons";
 import { useParams } from "react-router-dom";
+import authService from "../../authService";
 
 export interface r_id {
   resource_sub_id: string
@@ -68,7 +69,7 @@ const ResourceSubCategory: React.FC = () => {
   const [categoryID, setCategoryID] = useState(null);
 
   const history = useHistory();
-  const {resource_sub_id} : any = useParams();
+  const { resource_sub_id }: any = useParams();
   const location = useLocation();
 
   // const { filteredData, subCategory, parent_id } = (location?.state || {}) as {
@@ -100,20 +101,20 @@ const ResourceSubCategory: React.FC = () => {
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
         const cordovaResponse = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, 
-          { category_id: id }, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
+          { category_id: id },
           headers
         );
         response = JSON.parse(cordovaResponse.data);
       } else {
         const source = axios.CancelToken.source();
         response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
           { params: { category_id: id }, headers, cancelToken: source.token }
         );
         response = response.data;
@@ -121,11 +122,20 @@ const ResourceSubCategory: React.FC = () => {
       setFiltered(response.ressources);
       setSubCategories(response.sub_categories);
     } catch (error) {
-      console.error("Error fetching parent category by ID:", error);
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/login");
+        }
+      }
+      console.error('error', error);
     } finally {
       setIsLoading(false);
     }
-  };  
+  };
 
   const getCategoryByID = async (ids) => {
     if (ids.length > 0) {
@@ -133,32 +143,41 @@ const ResourceSubCategory: React.FC = () => {
       const headers = {
         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
       };
-  
+
       try {
         let response;
         if (isPlatform("ios")) {
           response = await HTTP.get(
-            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, 
-            { category_id: ids.toString() }, 
+            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
+            { category_id: ids.toString() },
             headers
           );
           response = JSON.parse(response.data);
         } else {
           const source = axios.CancelToken.source();
           response = await axios.get(
-            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, 
+            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
             { params: { category_id: ids.toString() }, headers, cancelToken: source.token }
           );
           response = response.data;
         }
         setFiltered(response.ressources);
       } catch (error) {
-        console.error("Error fetching category by IDs:", error);
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/login");
+          }
+        }
+        console.error('error', error);
       } finally {
         setIsCategoryLoading(false);
       }
     }
-  };  
+  };
 
   const addToArr = (id) => {
     // setCategoryIds((prev)=> Array.from(new Set ([... prev,id])))
@@ -168,8 +187,8 @@ const ResourceSubCategory: React.FC = () => {
         return val !== id;
       });
       console.log(data)
-      if(data.length === 0){
-    getParentCategoryByID(resource_sub_id)
+      if (data.length === 0) {
+        getParentCategoryByID(resource_sub_id)
 
       }
       setCategoryIds(data);
@@ -282,19 +301,19 @@ const ResourceSubCategory: React.FC = () => {
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
         response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`, 
-          {}, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`,
+          {},
           headers
         );
         response = JSON.parse(response.data);
       } else {
         response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`,
           { headers }
         );
         response = response.data;
@@ -306,7 +325,7 @@ const ResourceSubCategory: React.FC = () => {
     } finally {
       setIsCategoryLoading(false);
     }
-  };  
+  };
   return (
     <>
       <IonPage className="ResourceSubCategory">
@@ -365,37 +384,35 @@ const ResourceSubCategory: React.FC = () => {
                       </IonItem>*/}
 
                     {subCategories?.map((item, index) => (
-                        <IonItem
-                          key={index}
-                          lines="none"
-                          className={`img_div ${
-                            categoryIds.includes(item.id)
-                              ? "selected"
-                              : "non_selected"
+                      <IonItem
+                        key={index}
+                        lines="none"
+                        className={`img_div ${categoryIds.includes(item.id)
+                          ? "selected"
+                          : "non_selected"
                           }`}
-                          onClick={() => {
-                            addToArr(item.id);
-                          }}
-                        >
-                          <div className="icon_img">
-                            {item?.icon_url ? (
-                              <div
-                                className={`icon__ ${
-                                  categoryID === item.id
-                                    ? "blackIcon"
-                                    : "blackIcon"
+                        onClick={() => {
+                          addToArr(item.id);
+                        }}
+                      >
+                        <div className="icon_img">
+                          {item?.icon_url ? (
+                            <div
+                              className={`icon__ ${categoryID === item.id
+                                ? "blackIcon"
+                                : "blackIcon"
                                 }`}
-                                dangerouslySetInnerHTML={{
-                                  __html: item.svg_url,
-                                }}
-                              />
-                            ) : null}
-                          </div>
-                          <IonLabel style={{ marginLeft: "10px" }}>
-                            {item.name}
-                          </IonLabel>
-                        </IonItem>
-                      )
+                              dangerouslySetInnerHTML={{
+                                __html: item.svg_url,
+                              }}
+                            />
+                          ) : null}
+                        </div>
+                        <IonLabel style={{ marginLeft: "10px" }}>
+                          {item.name}
+                        </IonLabel>
+                      </IonItem>
+                    )
                     )}
                   </IonRadioGroup>
                 </div>
@@ -414,32 +431,32 @@ const ResourceSubCategory: React.FC = () => {
                     </div>
                   ) : (
                     filtered?.map((card, index) => (
-                        <div className="resource-card" key={index}>
-                          <IonItem
-                            lines="none"
-                            onClick={() => history.push(`/tabs/tab3/resourcedetail/${card.id}`)}
-                          >
-                            <div className="thumb" slot="start">
-                              {card?.thumbnail_url ? (
-                                <img src={card.thumbnail_url} alt="" />
-                              ) : (
-                                <span />
-                              )}
-                            </div>
+                      <div className="resource-card" key={index}>
+                        <IonItem
+                          lines="none"
+                          onClick={() => history.push(`/tabs/tab3/resourcedetail/${card.id}`)}
+                        >
+                          <div className="thumb" slot="start">
+                            {card?.thumbnail_url ? (
+                              <img src={card.thumbnail_url} alt="" />
+                            ) : (
+                              <span />
+                            )}
+                          </div>
 
-                            <IonLabel>
-                              <div className="first flex al-center">
-                                <h3>{card?.title}</h3>
-                              </div>
-                              <div className="second flex al-center">
-                              </div>
-                              <h5 className="ion-text-wrap">
-                                {card?.description}
-                              </h5>
-                            </IonLabel>
-                          </IonItem>
-                        </div>
-                      )
+                          <IonLabel>
+                            <div className="first flex al-center">
+                              <h3>{card?.title}</h3>
+                            </div>
+                            <div className="second flex al-center">
+                            </div>
+                            <h5 className="ion-text-wrap">
+                              {card?.description}
+                            </h5>
+                          </IonLabel>
+                        </IonItem>
+                      </div>
+                    )
                     )
                   )}
                 </div>

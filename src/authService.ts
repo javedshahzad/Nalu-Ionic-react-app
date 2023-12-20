@@ -1,6 +1,6 @@
-import { useHistory } from "react-router";
+// import { useHistory } from "react-router";
 
-const history = useHistory();
+// const history = useHistory();
 
 const authService = {
   logout: () => {
@@ -8,8 +8,7 @@ const authService = {
     sessionStorage.removeItem("jwtToken");
     localStorage.removeItem("roles");
     localStorage.removeItem("userId");
-
-    history.push("/login");
+    //   history.push("/login");
   },
 };
 

@@ -49,6 +49,7 @@ import filter from "../../Images/filter.png";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotificationBell from './../../components/NotificationBell';
+import authService from "../../authService";
 
 const Journal: React.FC = () => {
   const [activeSegment, setActiveSegment] = useState<string>("overview");
@@ -90,7 +91,7 @@ const Journal: React.FC = () => {
   });
 
   const navigateToNextPage = () => {
-    if(!isFilterSelected){
+    if (!isFilterSelected) {
       history.push("/resourcedetail");
     }
   };
@@ -113,25 +114,34 @@ const Journal: React.FC = () => {
   };
   const getCategoriesOverview = async () => {
     setIsLoading(true);
-  
+
     const jwtToken = localStorage.getItem("jwtToken");
     const headers = {
       Authorization: `Bearer ${jwtToken}`,
     };
-  
+
     if (isPlatform("ios")) {
       // Use Cordova HTTP plugin for iOS
       try {
         const response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`, 
-          {}, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
+          {},
           headers
         );
         const data = JSON.parse(response.data);
         console.log(data);
         setCategoriesOverview(data);
       } catch (error) {
-        console.error("Error fetching data", error);
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/login");
+          }
+        }
+        console.error(error);
       } finally {
         setIsLoading(false);
       }
@@ -139,13 +149,22 @@ const Journal: React.FC = () => {
       // Use Axios for other platforms
       try {
         const response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
           { headers }
         );
         console.log(response.data);
         setCategoriesOverview(response.data);
       } catch (error) {
-        console.error("Error fetching data", error);
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/login");
+          }
+        }
+        console.error(error);
       } finally {
         setIsLoading(false);
       }
@@ -153,96 +172,123 @@ const Journal: React.FC = () => {
   };
   const getCategoriesFavourites = async () => {
     setIsLoading(true);
-  
+
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
         response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`, 
-          {}, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
+          {},
           headers
         );
         response = JSON.parse(response.data);
       } else {
         response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
           { headers }
         );
       }
       console.log(response);
       setCategoriesFavourites(response.ressources);
     } catch (error) {
-      console.error("Error fetching data", error);
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/login");
+        }
+      }
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
-  };  
+  };
   const getRecommendations = async () => {
     setIsLoading(true);
-  
+
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
         response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`, 
-          {}, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
+          {},
           headers
         );
         response = JSON.parse(response.data);
       } else {
         response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
           { headers }
         );
       }
       console.log(response);
       setRecommendations(response.ressources);
     } catch (error) {
-      console.error("Error fetching data", error);
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/login");
+        }
+      }
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
-  };  
+  };
   const getCategoryByID = async (id) => {
     setIsLoading(true);
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
         response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, 
-          { category_id: id }, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
+          { category_id: id },
           headers
         );
         response = JSON.parse(response.data);
       } else {
         response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, 
-          { 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
+          {
             params: { category_id: id },
-            headers 
+            headers
           }
         );
       }
       console.log(response);
       setFiltered(response.data);
     } catch (error) {
-      console.error("Error fetching data", error);
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/login");
+        }
+      }
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
-  };  
+  };
   const handleUpvote = async (is_upvoted, id, is_downvoted) => {
     let URL;
     if (is_upvoted) {
@@ -252,11 +298,11 @@ const Journal: React.FC = () => {
     } else if (!is_upvoted && is_downvoted) {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
     }
-  
+
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
@@ -266,7 +312,7 @@ const Journal: React.FC = () => {
         response = await axios.post(URL, {}, { headers });
       }
       console.log(response.data);
-  
+
       // Refresh categories and recommendations based on the response
       if (response.data.message === "Upvote added successfully") {
         if (!isFilterSelected) {
@@ -276,9 +322,18 @@ const Journal: React.FC = () => {
         }
       }
     } catch (error) {
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/login");
+        }
+      }
       console.error(error);
     }
-  };  
+  };
   const handleDownvote = async (is_upvoted, id, is_downvoted) => {
     let URL;
     if (!is_downvoted && !is_upvoted) {
@@ -288,11 +343,11 @@ const Journal: React.FC = () => {
     } else if (is_downvoted) {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
     }
-  
+
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
@@ -302,7 +357,7 @@ const Journal: React.FC = () => {
         response = await axios.post(URL, {}, { headers });
       }
       console.log(response.data);
-  
+
       // Refresh categories and recommendations based on the response
       if (response.data.message === "Downvote removed successfully") {
         if (!isFilterSelected) {
@@ -312,9 +367,18 @@ const Journal: React.FC = () => {
         }
       }
     } catch (error) {
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/login");
+        }
+      }
       console.error(error);
     }
-  };  
+  };
   const handleSave = async (fav, id) => {
     let URL;
     if (fav) {
@@ -322,11 +386,11 @@ const Journal: React.FC = () => {
     } else {
       URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=true`;
     }
-  
+
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
@@ -336,13 +400,22 @@ const Journal: React.FC = () => {
         response = await axios.post(URL, {}, { headers });
       }
       console.log(response.data);
-  
+
       // Refresh the favourites based on the response
       getCategoriesFavourites();
     } catch (error) {
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/login");
+        }
+      }
       console.error(error);
     }
-  };  
+  };
   const getFavouriteColor = (fav) => {
     if (fav) {
       return "filled";
@@ -354,7 +427,7 @@ const Journal: React.FC = () => {
   const navigateFilter = () => {
     history.push("/filter");
   };
-  const setToastAndClose = (val)=>{
+  const setToastAndClose = (val) => {
     toast.success(val)
     setModalOpen(false)
   }
@@ -362,38 +435,47 @@ const Journal: React.FC = () => {
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
         // Use Cordova HTTP plugin for iOS
         const cordovaResponse = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`, 
-          {}, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`,
+          {},
           headers
         );
         response = JSON.parse(cordovaResponse.data);
       } else {
         // Use Axios for other platforms
         const axiosResponse = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`,
           { headers }
         );
         response = axiosResponse.data;
       }
-      
+
       console.log(response);
       history.push('/tabs/tab3/resourcedetail', {
         data: response
       });
-  
+
     } catch (error) {
-      console.error("Error fetching resource details:", error);
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/login");
+        }
+      }
+      console.error(error);
     }
   }
   return (
     <>
-            <ToastContainer autoClose={19000}/>
+      <ToastContainer autoClose={19000} />
       {isLoading ? (
         <>
           <div
@@ -450,9 +532,9 @@ const Journal: React.FC = () => {
                 className="modaaal"
                 onDidDismiss={handleModalClose}
               >
-                <Addrecmodal 
+                <Addrecmodal
 
-                onClose={(val) => setToastAndClose(val)} />
+                  onClose={(val) => setToastAndClose(val)} />
               </IonModal>
               {activeSegment === "overview" ? (
                 <>
@@ -463,9 +545,8 @@ const Journal: React.FC = () => {
                           <IonItem
                             key={index}
                             lines="none"
-                            className={`img_div ${
-                              categoryID === item.id ? "selected" : "non_selected"
-                            }`}
+                            className={`img_div ${categoryID === item.id ? "selected" : "non_selected"
+                              }`}
                             onClick={() => getCategoryByID(item.id)}
                           >
                             <div>
@@ -494,13 +575,13 @@ const Journal: React.FC = () => {
                               onClick={() => navigateToNextPage()}
                             >
                               <IonItem lines="none">
-                              <div className="thumb" slot="start">
-                              {card?.thumbnail_url ? (
-                                <img style={{"borderRadius":"15px"}} src={card.thumbnail_url} alt="" />
-                              ) : (
-                                <img src="Not found" alt="Image not found" />
-                              )}
-                            </div>
+                                <div className="thumb" slot="start">
+                                  {card?.thumbnail_url ? (
+                                    <img style={{ "borderRadius": "15px" }} src={card.thumbnail_url} alt="" />
+                                  ) : (
+                                    <img src="Not found" alt="Image not found" />
+                                  )}
+                                </div>
 
                                 <IonLabel>
                                   <div className="first flex al-center">
@@ -517,45 +598,45 @@ const Journal: React.FC = () => {
                                     {card.title}
                                   </h5>
                                   <div className="btns-holder flex al-center jc-between">
-                                    <div 
-                                    onClick={() =>
-                                      handleUpvote(
-                                        card.is_upvoted,
-                                        card.id,
-                                        card.is_downvoted
-                                      )
-                                    }
-                                    className="btn ion-activatable ripple-parent flex al-center">
+                                    <div
+                                      onClick={() =>
+                                        handleUpvote(
+                                          card.is_upvoted,
+                                          card.id,
+                                          card.is_downvoted
+                                        )
+                                      }
+                                      className="btn ion-activatable ripple-parent flex al-center">
                                       {card.is_upvoted ? (
-                                    <IonIcon src={thumbs_up}></IonIcon>
-                                  ) : (
-                                    <IonIcon src={thumbs_up_outline}></IonIcon>
-                                  )}
+                                        <IonIcon src={thumbs_up}></IonIcon>
+                                      ) : (
+                                        <IonIcon src={thumbs_up_outline}></IonIcon>
+                                      )}
                                       <h6>{card.upvotes_number}</h6>
                                     </div>
-                                    <div 
-                                     onClick={() =>
-                                      handleDownvote(
-                                        card.is_upvoted,
-                                        card.id,
-                                        card.is_downvoted
-                                      )
-                                    }
-                                    className="btn ion-activatable ripple-parent flex al-center">
+                                    <div
+                                      onClick={() =>
+                                        handleDownvote(
+                                          card.is_upvoted,
+                                          card.id,
+                                          card.is_downvoted
+                                        )
+                                      }
+                                      className="btn ion-activatable ripple-parent flex al-center">
                                       {card.is_downvoted ? (
-                                    <IonIcon src={thumbs_down}></IonIcon>
-                                  ) : (
-                                    <IonIcon
-                                      src={thumbs_down_outline}
-                                    ></IonIcon>
-                                  )}
+                                        <IonIcon src={thumbs_down}></IonIcon>
+                                      ) : (
+                                        <IonIcon
+                                          src={thumbs_down_outline}
+                                        ></IonIcon>
+                                      )}
                                       <h6>{card.downvotes_number}</h6>
                                     </div>
                                     <div
-                                    onClick={() =>
-                                      handleSave(card.favourite, card.id)
-                                    }
-                                     className="btn ion-activatable ripple-parent flex al-center">
+                                      onClick={() =>
+                                        handleSave(card.favourite, card.id)
+                                      }
+                                      className="btn ion-activatable ripple-parent flex al-center">
                                       {!card.favourite ? (
                                         <IonIcon src={h_outline}></IonIcon>
                                       ) : (
@@ -579,9 +660,9 @@ const Journal: React.FC = () => {
                           <IonRow>
                             {recommendations.map((item, index) => (
                               <IonCol size="6" key={index}>
-                                <div 
-                                className="rc-card ion-activatable ripple-parent"
-                                onClick={()=> getResourceDetailsByID(item.id)}
+                                <div
+                                  className="rc-card ion-activatable ripple-parent"
+                                  onClick={() => getResourceDetailsByID(item.id)}
                                 >
                                   <IonRippleEffect />
                                   <div className="img-holder">
