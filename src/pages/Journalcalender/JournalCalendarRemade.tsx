@@ -217,7 +217,7 @@ const JournalCalendarRemade = () => {
         if (obj === x && obj !== _x) {
           moonColorData[obj].entries.map((phase) => {
             if (phase.key === "period_bleeding" && parseInt(phase.value) > 0) {
-              style.backgroundColor = "#F0A6A9";
+              style.backgroundColor = "#ee5f64";
               style.color = "white";
             }
             if (phase.key === "cervical_mucus" && parseInt(phase.value) > 0) {
