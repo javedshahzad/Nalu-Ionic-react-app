@@ -589,7 +589,7 @@ function JournalAdditionRemade() {
                             <div className="tags-holder">
                               <IonRow>
                                 {entry.fields.map((fields: any) => (
-                                  <IonCol size="4" key={fields.key}>
+                                  <IonCol size="6" key={fields.key}>
                                     <IonItem
                                       lines="none"
                                       onClick={() => (fields.value = true)}
@@ -602,7 +602,7 @@ function JournalAdditionRemade() {
                                         id={fields.key}
                                       />
 
-                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonLabel style={{ whiteSpace: 'pre-wrap' }}>{fields.label}</IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
                                         onIonChange={(event) => updateField(event.detail.checked, fields, true)}
@@ -712,7 +712,7 @@ function JournalAdditionRemade() {
                             <div className="tags-holder">
                               <IonRow>
                                 {entry.fields.map((fields: any) => (
-                                  <IonCol size="4" key={fields.key}>
+                                  <IonCol size="6" key={fields.key}>
                                     <IonItem lines="none">
                                       <div
                                         className="svgIconss"
@@ -721,7 +721,7 @@ function JournalAdditionRemade() {
                                         }}
                                         id={fields.key}
                                       />
-                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonLabel style={{ whiteSpace: 'pre-wrap' }}>{fields.label}</IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
                                         onIonChange={(event) => updateField(event.detail.checked, fields, true)}
@@ -750,7 +750,7 @@ function JournalAdditionRemade() {
                             <div className="tags-holder">
                               <IonRow>
                                 {entry.fields.map((fields: any) => (
-                                  <IonCol size="4" key={fields.key}>
+                                  <IonCol size="6" key={fields.key}>
                                     <IonItem lines="none">
                                       <div
                                         className="svgIconss"
@@ -759,7 +759,7 @@ function JournalAdditionRemade() {
                                         }}
                                         id={fields.key}
                                       />
-                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonLabel style={{ whiteSpace: 'pre-wrap' }}>{fields.label}</IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
                                         onIonChange={(event) => updateField(event.detail.checked, fields, true)}
@@ -788,7 +788,7 @@ function JournalAdditionRemade() {
                             <div className="tags-holder">
                               <IonRow>
                                 {entry.fields.map((fields: any) => (
-                                  <IonCol size="4" key={fields.key}>
+                                  <IonCol size="6" key={fields.key}>
                                     <IonItem lines="none">
                                       <div
                                         className="svgIconss"
@@ -797,7 +797,7 @@ function JournalAdditionRemade() {
                                         }}
                                         id={fields.key}
                                       />
-                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonLabel style={{ whiteSpace: 'pre-wrap' }}>{fields.label}</IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
                                         onIonChange={(event) => updateField(event.detail.checked, fields, true)}
@@ -826,7 +826,7 @@ function JournalAdditionRemade() {
                             <div className="tags-holder">
                               <IonRow>
                                 {entry.fields.map((fields: any) => (
-                                  <IonCol size="4" key={fields.key}>
+                                  <IonCol size="6" key={fields.key}>
                                     <IonItem lines="none">
                                       <div
                                         className="svgIconss"
@@ -835,7 +835,7 @@ function JournalAdditionRemade() {
                                         }}
                                         id={fields.key}
                                       />
-                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonLabel style={{ whiteSpace: 'pre-wrap' }}>{fields.label}</IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
                                         onIonChange={(event) => updateField(event.detail.checked, fields, true)}
@@ -864,7 +864,7 @@ function JournalAdditionRemade() {
                             <div className="tags-holder">
                               <IonRow>
                                 {entry.fields.map((fields: any) => (
-                                  <IonCol size="4" key={fields.key}>
+                                  <IonCol size="6" key={fields.key}>
                                     <IonItem lines="none">
                                       <div
                                         className="svgIconss"
@@ -873,7 +873,7 @@ function JournalAdditionRemade() {
                                         }}
                                         id={fields.key}
                                       />
-                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonLabel style={{ whiteSpace: 'pre-wrap' }}>{fields.label}</IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
                                         onIonChange={(event) => updateField(event.detail.checked, fields, true)}
@@ -1190,7 +1190,7 @@ function JournalAdditionRemade() {
                                         lines="none"
                                         className="customIcon"
                                       >
-                                        <IonLabel>{field.label}</IonLabel>
+                                        <IonLabel style={{ whiteSpace: 'pre-wrap' }}>{field.label}</IonLabel>
                                         <IonCheckbox
                                           checked={!!field.value}
                                           onIonChange={(event) => updateField(event.detail.checked, field, true)}

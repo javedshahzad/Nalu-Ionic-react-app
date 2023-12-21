@@ -88,9 +88,8 @@ const JournalCalendarRemade = () => {
     const tempMonthIndex = monthIndex + 1 + "";
     const tempDateIndex = dateIndex + "";
 
-    const dateParam = `${year}-${
-      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
-    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+    const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+      }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
     url = `/journaladditionremade/${dateParam}`;
 
@@ -436,8 +435,8 @@ const JournalCalendarRemade = () => {
     for (let i = 1; i <= lastDateOfMonth; i++) {
       const isToday =
         i === new Date().getDate() &&
-        m === new Date().getMonth() &&
-        year === new Date().getFullYear()
+          m === new Date().getMonth() &&
+          year === new Date().getFullYear()
           ? "currentDay"
           : "";
 
@@ -446,10 +445,10 @@ const JournalCalendarRemade = () => {
         return (
           item.date ===
           year +
-            "-" +
-            (m + 1).toString().padStart(2, "0") +
-            "-" +
-            i.toString().padStart(2, "0")
+          "-" +
+          (m + 1).toString().padStart(2, "0") +
+          "-" +
+          i.toString().padStart(2, "0")
         );
       });
 
@@ -457,9 +456,8 @@ const JournalCalendarRemade = () => {
         <li
           key={`currentDay-${i}`}
           id={`${i}/${m + 1}/${year}`}
-          className={`calendar-day ${isToday} ${
-            activeIndex === i && activeMonthIndex === m ? "dayActive" : ""
-          }`}
+          className={`calendar-day ${isToday} ${activeIndex === i && activeMonthIndex === m ? "dayActive" : ""
+            }`}
           onClick={() => handleOnClick(i, m)}
           style={getColors(year, m + 1, i)}
         >
@@ -632,9 +630,8 @@ const JournalCalendarRemade = () => {
                 <div
                   id={`${months[mIndex]}`}
                   key={monthData.key}
-                  className={`calendar-month ${
-                    currentdivInView === months[mIndex] ? "fadeIn" : "fadeOut"
-                  }`}
+                  className={`calendar-month ${currentdivInView === months[mIndex] ? "fadeIn" : "fadeOut"
+                    }`}
                 >
                   {monthData}
                 </div>
