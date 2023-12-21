@@ -1,7 +1,7 @@
 /* calendar scss */
-.ConfigCycleRemade{
+.ConfigCycleRemade {
   $config-font-family: var(--ion-font-family);
-  $config-white: #F8F5F2;
+  $config-white: #f8f5f2;
   $config-pink: #ee5f64;
   $config-black: #2d2d2d;
 
@@ -14,7 +14,7 @@
   }
 
   ion-toolbar {
-    --background: #F8F5F2;
+    --background: #f8f5f2;
   }
 
   .fadeIn {
@@ -24,30 +24,30 @@
     opacity: 0.5;
   }
 
-  .popover-content {
-    display: flex;
-    padding: 10px;
-    flex-direction: column;
-    gap: 10px;
-    label {
-      flex-direction: column;
-      display: flex;
-      gap: 5px;
-    }
-  }
+  // .popover-content {
+  //   display: flex;
+  //   padding: 10px;
+  //   flex-direction: column;
+  //   gap: 10px;
+  //   label {
+  //     flex-direction: column;
+  //     display: flex;
+  //     gap: 5px;
+  //   }
+  // }
 
-  .go-button {
-    background-color: $config-pink !important;
-    color: $config-white !important;
-    border: none;
-    border-radius: 4px;
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    &:hover {
-      background-color: $config-pink !important;
-    }
-  }
+  // .go-button {
+  //   background-color: $config-pink !important;
+  //   color: $config-white !important;
+  //   border: none;
+  //   border-radius: 4px;
+  //   padding: 5px 10px;
+  //   cursor: pointer;
+  //   transition: background-color 0.3s ease;
+  //   &:hover {
+  //     background-color: $config-pink !important;
+  //   }
+  // }
 
   .month-select {
     padding: 5px;
@@ -118,23 +118,23 @@
     }
   }
 
-.currentDay {
-  background-color: #ee5f64;
-  border-radius: 10px;
-  color: $config-white;
-  //   display: flex;
-  //   flex-direction: column;
-  //   justify-content: center;
-  //   gap: 0;
-  //   &:hover {
-  //     background-color: $config-white !important;
-  //     border-radius: 10px;
-  //   }
-  //   &::before {
-  //     content: "Today";
-  //     font-size: 8px;
-  //   }
-}
+  .currentDay {
+    background-color: #ee5f64;
+    border-radius: 10px;
+    color: $config-white;
+    //   display: flex;
+    //   flex-direction: column;
+    //   justify-content: center;
+    //   gap: 0;
+    //   &:hover {
+    //     background-color: $config-white !important;
+    //     border-radius: 10px;
+    //   }
+    //   &::before {
+    //     content: "Today";
+    //     font-size: 8px;
+    //   }
+  }
 
   .configTextBottom ion-spinner {
     height: 50px;
@@ -234,21 +234,21 @@
     gap: 6px;
   }
 
-.cur-month-year-text {
-  font-size: 18px;
-  font-weight: 700;
-  text-align: left;
-}
-#cur-month-year-icon {
-  ion-button {
-    ion-icon {
-      width: 15px;
+  .cur-month-year-text {
+    font-size: 18px;
+    font-weight: 700;
+    text-align: left;
+  }
+  #cur-month-year-icon {
+    ion-button {
+      ion-icon {
+        width: 15px;
+      }
     }
   }
-}
-// .moonPhases {
-//   position: relative;
-//   top: 7px;
-//   right: 3px;
-// }
+  // .moonPhases {
+  //   position: relative;
+  //   top: 7px;
+  //   right: 3px;
+  // }
 }

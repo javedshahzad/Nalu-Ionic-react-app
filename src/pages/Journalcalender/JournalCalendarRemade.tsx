@@ -58,6 +58,8 @@ const JournalCalendarRemade = () => {
   const [todayPeriod, setTodayPeriod] = useState("false");
   const [icons2, setIcons2] = useState<any>([]);
   const [svg, setSvg] = useState("");
+  const [newMoonSvg, setNewMoonSvg] = useState("");
+  const [fullMoonSvg, setFullMoonSvg] = useState("");
   const history = useHistory(); // Use useHistory for navigation
 
   // const navigation = useIonRouter();
@@ -86,8 +88,9 @@ const JournalCalendarRemade = () => {
     const tempMonthIndex = monthIndex + 1 + "";
     const tempDateIndex = dateIndex + "";
 
-    const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
-      }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+    const dateParam = `${year}-${
+      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
     url = `/journaladditionremade/${dateParam}`;
 
@@ -433,8 +436,8 @@ const JournalCalendarRemade = () => {
     for (let i = 1; i <= lastDateOfMonth; i++) {
       const isToday =
         i === new Date().getDate() &&
-          m === new Date().getMonth() &&
-          year === new Date().getFullYear()
+        m === new Date().getMonth() &&
+        year === new Date().getFullYear()
           ? "currentDay"
           : "";
 
@@ -443,10 +446,10 @@ const JournalCalendarRemade = () => {
         return (
           item.date ===
           year +
-          "-" +
-          (m + 1).toString().padStart(2, "0") +
-          "-" +
-          i.toString().padStart(2, "0")
+            "-" +
+            (m + 1).toString().padStart(2, "0") +
+            "-" +
+            i.toString().padStart(2, "0")
         );
       });
 
@@ -454,8 +457,9 @@ const JournalCalendarRemade = () => {
         <li
           key={`currentDay-${i}`}
           id={`${i}/${m + 1}/${year}`}
-          className={`calendar-day ${isToday} ${activeIndex === i && activeMonthIndex === m ? "dayActive" : ""
-            }`}
+          className={`calendar-day ${isToday} ${
+            activeIndex === i && activeMonthIndex === m ? "dayActive" : ""
+          }`}
           onClick={() => handleOnClick(i, m)}
           style={getColors(year, m + 1, i)}
         >
@@ -463,9 +467,48 @@ const JournalCalendarRemade = () => {
             <>
               <div>
                 {moonPhase.phase_name === "Full Moon" ? (
-                  <img src={fullMoon} />
+                  <>
+                    <svg
+                      width="10"
+                      height="10"
+                      viewBox="0 0 10 10"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        cx="5"
+                        cy="5"
+                        r="4.5"
+                        style={{
+                          stroke:
+                            activeIndex === i && activeMonthIndex === m
+                              ? "#f8f5f2"
+                              : "#EE5F64",
+                        }}
+                      />
+                      <circle
+                        cx="5"
+                        cy="5"
+                        r="3"
+                        style={{
+                          fill:
+                            activeIndex === i && activeMonthIndex === m
+                              ? "#f8f5f2"
+                              : "#EE5F64",
+                        }}
+                      />
+                    </svg>
+                  </>
                 ) : moonPhase.phase_name === "New Moon" ? (
-                  <img src={newMoon} />
+                  <div
+                    style={{
+                      stroke:
+                        activeIndex === i && activeMonthIndex === m
+                          ? "#f8f5f2"
+                          : "#EE5F64",
+                    }}
+                    dangerouslySetInnerHTML={{ __html: newMoonSvg }}
+                  ></div>
                 ) : null}
               </div>
               {/* Added "null" for the empty condition */}
@@ -516,7 +559,7 @@ const JournalCalendarRemade = () => {
                   ))}
                 </select>
               </label>
-              <button onClick={handleGo} className="go-button">
+              <button onClick={handleGo} className="goBtn">
                 Bestätigen
               </button>
             </div>
@@ -540,6 +583,32 @@ const JournalCalendarRemade = () => {
 
     fetchSvg();
   }, [svg]);
+  useEffect(() => {
+    const newMoonIcon = async () => {
+      try {
+        const response = await fetch(newMoon);
+        const svgText = await response.text();
+        setNewMoonSvg(svgText);
+      } catch (error) {
+        console.error("Error loading SVG:", error);
+      }
+    };
+
+    newMoonIcon();
+  }, [newMoonSvg]);
+  useEffect(() => {
+    const fullMoonIcon = async () => {
+      try {
+        const response = await fetch(fullMoon);
+        const svgText = await response.text();
+        setFullMoonSvg(svgText);
+      } catch (error) {
+        console.error("Error loading SVG:", error);
+      }
+    };
+
+    fullMoonIcon();
+  }, [fullMoonSvg]);
 
   return (
     <IonPage className="JournalCalendarRemade">
@@ -552,7 +621,10 @@ const JournalCalendarRemade = () => {
           </IonButtons>
         </IonToolbar>
         <h2>[Das Zyklus Journal ist zur Zeit in Überarbeitung]</h2>
-        <p>Du erhältst eine E-Mail von uns, wenn das Journal wieder vollumfänglich verfügbar ist.</p>
+        <p>
+          Du erhältst eine E-Mail von uns, wenn das Journal wieder
+          vollumfänglich verfügbar ist.
+        </p>
         <div className="journalcalendar-main">
           <div className="calendar-container" onScroll={() => handleScroll()}>
             <div className="calendar-scrollable">
@@ -560,8 +632,9 @@ const JournalCalendarRemade = () => {
                 <div
                   id={`${months[mIndex]}`}
                   key={monthData.key}
-                  className={`calendar-month ${currentdivInView === months[mIndex] ? "fadeIn" : "fadeOut"
-                    }`}
+                  className={`calendar-month ${
+                    currentdivInView === months[mIndex] ? "fadeIn" : "fadeOut"
+                  }`}
                 >
                   {monthData}
                 </div>
@@ -575,8 +648,14 @@ const JournalCalendarRemade = () => {
                 <img src={menstruation} alt="" />
                 <p className="moon-text">Menstruation</p>
               </div>
-              <div className="new-moon bottom">
-                <img src={newMoon} alt="" />
+              <div
+                className="new-moon bottom"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <div
+                  style={{ stroke: "#EE5F64" }}
+                  dangerouslySetInnerHTML={{ __html: newMoonSvg }}
+                ></div>
                 <p className="moon-text">Neumond</p>
               </div>
             </div>
@@ -589,8 +668,14 @@ const JournalCalendarRemade = () => {
                 />
                 <p className="moon-text">Zervixschleim</p>
               </div>
-              <div className="full-moon bottom">
-                <img src={fullMoon} alt="" />
+              <div
+                className="full-moon bottom"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <div
+                  style={{ stroke: "#EE5F64", fill: "#EE5F64" }}
+                  dangerouslySetInnerHTML={{ __html: fullMoonSvg }}
+                ></div>
                 <p className="moon-text">Vollmond</p>
               </div>
             </div>
