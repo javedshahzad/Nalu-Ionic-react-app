@@ -60,7 +60,7 @@ import Pusher from "pusher-js";
 import { addNotification } from "./actions/notificationAction";
 import { useDispatch } from "react-redux";
 // import OneSignal from "onesignal-cordova-plugin";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { groupsListAction } from "./actions/groupsListAction";
 import tokenService from "./token";
 import { io } from "socket.io-client";
@@ -116,6 +116,23 @@ const App: React.FC = () => {
     dispatch(addNotification(data));
     presentToast(data.body.title);
   });
+
+  // ***Matomo*** ///
+  useEffect(() => {
+    // Create the Matomo script tag
+    const scriptTag = document.createElement("script");
+    scriptTag.async = true;
+    scriptTag.src = "https://analytics.mynalu.com/js/container_ZvpOihfN.js";
+    scriptTag.type = "text/javascript";
+
+    // Append the script tag to the document
+    document.body.appendChild(scriptTag);
+
+    return () => {
+      // Cleanup the script tag
+      document.body.removeChild(scriptTag);
+    };
+  }, []);
 
   // ***pusher*** //
 
