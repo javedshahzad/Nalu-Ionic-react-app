@@ -41,11 +41,12 @@ import tokenService from "../../token";
 import MoonPhasesServce from "../../MoonPhasesService";
 import { useDispatch } from "react-redux";
 import journalReducer from "../../reducers/journalReducer";
-import { journalAction } from "../../actions/journalAction";
+
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import React from "react";
 import authService from "../../authService";
+import { clearJournal, journalAction } from "../../actions/journalAction";
 
 function JournalAdditionRemade() {
   const { dateParam } = useParams<{ dateParam: string }>();
@@ -59,6 +60,7 @@ function JournalAdditionRemade() {
   const moonColorData = icons2;
 
   const typeObj: any = useSelector((state: RootState) => state.journalReducer);
+
 
   const dispatch = useDispatch();
 
@@ -83,12 +85,14 @@ function JournalAdditionRemade() {
   }
 
   const getJournalEntries = async () => {
+
     try {
       setIsLoading(true);
 
       const data = await JournalAdditionApiService.get(
         `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`
       );
+
 
       if (data.entries.length > 0) {
         const types = [...new Set(data.entries.map((item: any) => item.type))];
@@ -98,7 +102,7 @@ function JournalAdditionRemade() {
         dynamicStates = data.entries;
 
         // console.log("dynamic", dynamicStates);
-
+        dispatch(clearJournal());
         dispatch(journalAction(dynamicStates));
 
         setTimeout(() => {

@@ -1,9 +1,12 @@
-export const JOURNAL_ACTION_TYPE = "JOURNAL_ACTION_TYPE";
+// Make sure to import your action types
 
-export const journalAction = (data: any) => {
-  // console.log("journal data", journalAction);
-  return {
-    type: JOURNAL_ACTION_TYPE,
-    payload: data,
-  };
-};
+import { CLEAR_JOURNAL, JOURNAL_ACTION_TYPE } from "../reducers/journalReducer";
+
+export const clearJournal = () => ({
+  type: CLEAR_JOURNAL,
+});
+
+export const journalAction = (data: any) => ({
+  type: JOURNAL_ACTION_TYPE,
+  payload: data,
+});
