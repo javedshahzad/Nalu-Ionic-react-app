@@ -10,7 +10,13 @@ import {
   IonLabel,
   useIonViewWillEnter,
 } from "@ionic/react";
-import { menuOutline, notificationsOutline } from "ionicons/icons";
+import {
+  chevronBackOutline,
+  chevronForwardOutline,
+  chevronUpOutline,
+  menuOutline,
+  notificationsOutline,
+} from "ionicons/icons";
 import { useState, useRef, useEffect } from "react";
 import newMoon from "../../assets/images/new moon.svg";
 import fullMoon from "../../assets/images/full moon.svg";
@@ -60,6 +66,12 @@ const JournalCalendarRemade = () => {
   const [svg, setSvg] = useState("");
   const [newMoonSvg, setNewMoonSvg] = useState("");
   const [fullMoonSvg, setFullMoonSvg] = useState("");
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(
+    new Date().getMonth()
+  );
+  const [currentDisplayedMonthIndex, setCurrentDisplayedMonthIndex] =
+    useState(0);
+
   const history = useHistory(); // Use useHistory for navigation
 
   // const navigation = useIonRouter();
@@ -88,8 +100,9 @@ const JournalCalendarRemade = () => {
     const tempMonthIndex = monthIndex + 1 + "";
     const tempDateIndex = dateIndex + "";
 
-    const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
-      }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+    const dateParam = `${year}-${
+      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
     url = `/journaladditionremade/${dateParam}`;
 
@@ -339,7 +352,6 @@ const JournalCalendarRemade = () => {
             const status = error.response.status;
 
             if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
               authService.logout();
               history.push("/login");
             }
@@ -359,21 +371,54 @@ const JournalCalendarRemade = () => {
     setCurrentMonth(event.target.value);
   };
 
-  const handleGo = async () => {
-    if (popoverRef.current) {
-      await popoverRef.current.dismiss();
-      let element = document.getElementById(currentMonth);
+  const handleGo = async (direction) => {
+    // if (popoverRef.current) {
+    // await popoverRef.current.dismiss();
+
+    const currentIndex = currentMonthIndex;
+
+    let newIndex: any;
+    if (direction === "next" && currentMonthIndex < 11) {
+      newIndex = (currentIndex + 1) % months.length;
+      setCurrentMonthIndex(newIndex);
+      setCurrentDisplayedMonthIndex(newIndex);
+
+      const targetMonth = months[newIndex];
+      const element = document.getElementById(targetMonth);
 
       if (element !== null) {
-        if (currentMonth) {
-          setTimeout(() => {
-            element.scrollIntoView({ behavior: "smooth", block: "center" });
-          }, 500);
-        } else {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }
+        setTimeout(() => {
+          element.scrollIntoView({
+            inline: "center",
+            block: "center",
+            behavior: "smooth",
+          });
+        }, 500);
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } else if (direction === "prev" && currentMonthIndex > 0) {
+      newIndex = (currentIndex - 1 + months.length) % months.length;
+      setCurrentMonthIndex(newIndex);
+      setCurrentDisplayedMonthIndex(newIndex);
+
+      const targetMonth = months[newIndex];
+      const element = document.getElementById(targetMonth);
+
+      if (element !== null) {
+        setTimeout(() => {
+          element.scrollIntoView({
+            inline: "center",
+            block: "center",
+            behavior: "smooth",
+          });
+        }, 500);
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     }
+
+    // }
   };
 
   function isSectionVisible(sectionRef) {
@@ -435,8 +480,8 @@ const JournalCalendarRemade = () => {
     for (let i = 1; i <= lastDateOfMonth; i++) {
       const isToday =
         i === new Date().getDate() &&
-          m === new Date().getMonth() &&
-          year === new Date().getFullYear()
+        m === new Date().getMonth() &&
+        year === new Date().getFullYear()
           ? "currentDay"
           : "";
 
@@ -445,10 +490,10 @@ const JournalCalendarRemade = () => {
         return (
           item.date ===
           year +
-          "-" +
-          (m + 1).toString().padStart(2, "0") +
-          "-" +
-          i.toString().padStart(2, "0")
+            "-" +
+            (m + 1).toString().padStart(2, "0") +
+            "-" +
+            i.toString().padStart(2, "0")
         );
       });
 
@@ -456,71 +501,72 @@ const JournalCalendarRemade = () => {
         <li
           key={`currentDay-${i}`}
           id={`${i}/${m + 1}/${year}`}
-          className={`calendar-day ${isToday} ${activeIndex === i && activeMonthIndex === m ? "dayActive" : ""
-            }`}
+          className={`calendar-day ${isToday} ${
+            activeIndex === i && activeMonthIndex === m ? "dayActive" : ""
+          }`}
           onClick={() => handleOnClick(i, m)}
           style={getColors(year, m + 1, i)}
         >
           {moonPhase ? (
             <>
-              <div>
-                {moonPhase.phase_name === "Full Moon" ? (
-                  <>
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle
-                        cx="5"
-                        cy="5"
-                        r="4.5"
-                        style={{
-                          stroke:
-                            activeIndex === i && activeMonthIndex === m
-                              ? "#f8f5f2"
-                              : "#EE5F64",
-                        }}
-                      />
-                      <circle
-                        cx="5"
-                        cy="5"
-                        r="3"
-                        style={{
-                          fill:
-                            activeIndex === i && activeMonthIndex === m
-                              ? "#f8f5f2"
-                              : "#EE5F64",
-                        }}
-                      />
-                    </svg>
-                  </>
-                ) : moonPhase.phase_name === "New Moon" ? (
-                  <div
-                    style={{
-                      stroke:
-                        activeIndex === i && activeMonthIndex === m
-                          ? "#f8f5f2"
-                          : "#EE5F64",
-                    }}
-                    dangerouslySetInnerHTML={{ __html: newMoonSvg }}
-                  ></div>
-                ) : null}
-              </div>
-              {/* Added "null" for the empty condition */}
+              {moonPhase.phase_name === "Full Moon" ? (
+                <>
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 10 10"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="phases"
+                  >
+                    <circle
+                      cx="5"
+                      cy="5"
+                      r="4.5"
+                      style={{
+                        stroke:
+                          activeIndex === i && activeMonthIndex === m
+                            ? "#f8f5f2"
+                            : "#EE5F64",
+                      }}
+                    />
+                    <circle
+                      cx="5"
+                      cy="5"
+                      r="3"
+                      style={{
+                        fill:
+                          activeIndex === i && activeMonthIndex === m
+                            ? "#f8f5f2"
+                            : "#EE5F64",
+                      }}
+                    />
+                  </svg>
+                </>
+              ) : moonPhase.phase_name === "New Moon" ? (
+                <div
+                  style={{
+                    stroke:
+                      activeIndex === i && activeMonthIndex === m
+                        ? "#f8f5f2"
+                        : "#EE5F64",
+                  }}
+                  className="phases"
+                  dangerouslySetInnerHTML={{ __html: newMoonSvg }}
+                ></div>
+              ) : null}
+
               <div className="dayToday">
                 {isToday ? (
                   <span style={{ fontSize: "9px" }}>Heute</span>
                 ) : null}
-                <p className={isToday ? "isToday" : ""}>{i}</p>
+                <p>{i}</p>
               </div>
             </>
           ) : (
             <div className="dayToday">
               {isToday ? <span style={{ fontSize: "9px" }}>Heute</span> : null}
-              <p className={isToday ? "isToday" : ""}>{i}</p>
+              <p>{i}</p>
             </div>
           )}
         </li>
@@ -532,7 +578,7 @@ const JournalCalendarRemade = () => {
         <div className="cur-month-year">
           <span className="cur-month-year-text">{months[m]}</span>
           <span className="cur-month-year-text">{year}</span>
-          <span id="cur-month-year-icon">
+          {/* <span id="cur-month-year-icon">
             <IonButton fill="clear" onClick={handleClick}>
               <IonIcon icon={chevronDownOutline}></IonIcon>
             </IonButton>
@@ -561,7 +607,13 @@ const JournalCalendarRemade = () => {
                 Bestätigen
               </button>
             </div>
-          </IonPopover>
+          </IonPopover> */}
+          <IonButton onClick={() => handleGo("prev")} fill="clear">
+            <IonIcon icon={chevronUpOutline} />
+          </IonButton>
+          <IonButton onClick={() => handleGo("next")} fill="clear">
+            <IonIcon icon={chevronDownOutline} />
+          </IonButton>
         </div>
         <ul className="calendar-data">{monthData}</ul>
       </div>
@@ -625,16 +677,20 @@ const JournalCalendarRemade = () => {
         </p>
         <div className="journalcalendar-main">
           <div className="calendar-container" onScroll={() => handleScroll()}>
+            <div className="calendar-controls"></div>
             <div className="calendar-scrollable">
               {calendarMonths.map((monthData, mIndex) => (
-                <div
-                  id={`${months[mIndex]}`}
-                  key={monthData.key}
-                  className={`calendar-month ${currentdivInView === months[mIndex] ? "fadeIn" : "fadeOut"
+                <>
+                  <div
+                    id={`${months[mIndex]}`}
+                    key={monthData.key}
+                    className={`calendar-month ${
+                      currentdivInView === months[mIndex] ? "fadeIn" : "fadeOut"
                     }`}
-                >
-                  {monthData}
-                </div>
+                  >
+                    {monthData}
+                  </div>
+                </>
               ))}
             </div>
           </div>

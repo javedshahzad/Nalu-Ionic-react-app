@@ -6,11 +6,14 @@
 
   .journalcalendar-main {
     background-color: $config-white;
-    padding: 0 15px 0 15px;
   }
 
   ion-toolbar {
     --background: #f8f5f2;
+  }
+
+  .calendar-month {
+    scroll-snap-align: center;
   }
 
   .calendar-day {
@@ -20,6 +23,7 @@
     width: 40px;
     height: 40px;
     border-radius: 10px;
+    position: relative;
     cursor: pointer;
     &:hover {
       background-color: $config-pink !important;
@@ -39,7 +43,10 @@
   .calendar-container {
     margin: 0 auto;
     overflow-y: auto;
-    max-height: 40vh;
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    max-height: 335px;
     &::-webkit-scrollbar {
       display: none;
     }
@@ -48,6 +55,8 @@
     display: flex;
     align-items: center;
     gap: 6px;
+    margin-top: 30px;
+    margin-bottom: 10px;
   }
   .cur-month-year-text {
     font-size: 18px;
@@ -162,7 +171,7 @@
   }
 
   .currentDay {
-    background-color: #E4CEB6;
+    background-color: #e4ceb6;
     border-radius: 10px;
     color: $config-white;
     // display: flex !important;
@@ -180,12 +189,6 @@
     color: $config-white;
   }
 
-  .todayMoonPhase {
-    left: 98px;
-    position: absolute;
-    bottom: 586px;
-  }
-
   .dayToday {
     display: flex;
     flex-direction: column;
@@ -199,13 +202,6 @@
     font-size: 15px;
     font-weight: bold;
     margin: 0;
-  }
-
-  .daysIcon {
-    position: relative;
-    max-width: 100%;
-    top: 4px;
-    right: 2px;
   }
 
   ion-button {
@@ -289,5 +285,11 @@
     position: relative;
     top: 7px;
     right: 3px;
+  }
+
+  .phases {
+    position: absolute !important;
+    left: 1px;
+    bottom: 8px;
   }
 }
