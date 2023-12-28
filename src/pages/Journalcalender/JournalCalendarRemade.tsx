@@ -59,7 +59,9 @@ const JournalCalendarRemade = () => {
   const popoverRef = useRef(null);
   const [currentdivInView, setCurrentDivInView] = useState("January");
   const [activeIndex, setActiveIndex] = useState(new Date().getDate());
-  const [activeMonthIndex, setActiveMonthIndex] = useState(new Date().getMonth());
+  const [activeMonthIndex, setActiveMonthIndex] = useState(
+    new Date().getMonth()
+  );
   const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
   const [todayPeriod, setTodayPeriod] = useState("false");
   const [icons2, setIcons2] = useState<any>([]);
@@ -100,8 +102,9 @@ const JournalCalendarRemade = () => {
     const tempMonthIndex = monthIndex + 1 + "";
     const tempDateIndex = dateIndex + "";
 
-    const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
-      }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+    const dateParam = `${year}-${
+      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
     url = `/journaladditionremade/${dateParam}`;
 
@@ -170,6 +173,7 @@ const JournalCalendarRemade = () => {
 
     try {
       const data = await MoonPhasesServce.get(
+        // `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
         `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
       );
 
@@ -223,29 +227,32 @@ const JournalCalendarRemade = () => {
 
     let _x = `${_year}-${_month}-${_day}`;
 
-
     if (_month) {
-
       Object.keys(moonColorData).map((obj) => {
         if (obj === x && obj !== _x) {
-
           moonColorData[obj].entries.map((phase, index) => {
-
-            if (moonColorData[obj].entries[index].key === "period_bleeding" && parseInt(phase.value) > 0) {
+            if (
+              moonColorData[obj].entries[index].key === "period_bleeding" &&
+              parseInt(phase.value) > 0
+            ) {
               style.backgroundColor = "#ee5f64";
               style.color = "white";
-            }
-            else if (moonColorData[obj].entries[index].key === "cervical_mucus" && parseInt(phase.value) > 0) {
+            } else if (
+              moonColorData[obj].entries[index].key === "cervical_mucus" &&
+              parseInt(phase.value) > 0
+            ) {
               style.backgroundColor = "#3684B3";
               style.color = "white";
-            }
-            else if ((moonColorData[obj].entries[0].value && parseInt(moonColorData[obj].entries[0].value) > 0)
-              && (moonColorData[obj].entries[1].value && parseInt(moonColorData[obj].entries[1].value) > 0)) {
-              console.log('date', moonColorData[obj].entries)
+            } else if (
+              moonColorData[obj].entries[0].value &&
+              parseInt(moonColorData[obj].entries[0].value) > 0 &&
+              moonColorData[obj].entries[1].value &&
+              parseInt(moonColorData[obj].entries[1].value) > 0
+            ) {
+              console.log("date", moonColorData[obj].entries);
               style.backgroundColor = "#ee5f64";
               style.color = "white";
             }
-
           });
         }
       });
@@ -431,11 +438,9 @@ const JournalCalendarRemade = () => {
   };
 
   function isSectionVisible(sectionRef, index) {
-
     const section = document.getElementById(sectionRef);
 
     if (section) {
-
       const rect = section.getBoundingClientRect();
 
       if (
@@ -452,7 +457,6 @@ const JournalCalendarRemade = () => {
   }
 
   const handleScroll = () => {
-
     for (let i = 0; i <= months.length - 1; i++) {
       isSectionVisible(months[i], i);
     }
@@ -494,8 +498,8 @@ const JournalCalendarRemade = () => {
     for (let i = 1; i <= lastDateOfMonth; i++) {
       const isToday =
         i === new Date().getDate() &&
-          m === new Date().getMonth() &&
-          year === new Date().getFullYear()
+        m === new Date().getMonth() &&
+        year === new Date().getFullYear()
           ? "currentDay"
           : "";
 
@@ -504,10 +508,10 @@ const JournalCalendarRemade = () => {
         return (
           item.date ===
           year +
-          "-" +
-          (m + 1).toString().padStart(2, "0") +
-          "-" +
-          i.toString().padStart(2, "0")
+            "-" +
+            (m + 1).toString().padStart(2, "0") +
+            "-" +
+            i.toString().padStart(2, "0")
         );
       });
 
@@ -515,8 +519,9 @@ const JournalCalendarRemade = () => {
         <li
           key={`currentDay-${i}`}
           id={`${i}/${m + 1}/${year}`}
-          className={`calendar-day ${isToday} ${activeIndex === (i + 1) && activeMonthIndex === m ? "dayActive" : ""
-            }`}
+          className={`calendar-day ${isToday} ${
+            activeIndex === i + 1 && activeMonthIndex === m ? "dayActive" : ""
+          }`}
           onClick={() => handleOnClick(i, m)}
           style={getColors(year, m + 1, i)}
         >
@@ -538,7 +543,7 @@ const JournalCalendarRemade = () => {
                       r="4.5"
                       style={{
                         stroke:
-                          (activeMonthIndex === m && activeIndex === (i + 1))
+                          activeMonthIndex === m && activeIndex === i + 1
                             ? "#f8f5f2"
                             : "#EE5F64",
                       }}
@@ -549,7 +554,7 @@ const JournalCalendarRemade = () => {
                       r="3"
                       style={{
                         fill:
-                          (activeMonthIndex === m && activeIndex === (i + 1))
+                          activeMonthIndex === m && activeIndex === i + 1
                             ? "#f8f5f2"
                             : "#EE5F64",
                       }}
@@ -697,8 +702,9 @@ const JournalCalendarRemade = () => {
                   <div
                     id={`${months[mIndex]}`}
                     key={monthData.key}
-                    className={`calendar-month ${currentdivInView === months[mIndex] ? "fadeIn" : "fadeOut"
-                      }`}
+                    className={`calendar-month ${
+                      currentdivInView === months[mIndex] ? "fadeIn" : "fadeOut"
+                    }`}
                   >
                     {monthData}
                   </div>
