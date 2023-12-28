@@ -538,7 +538,7 @@ const JournalCalendarRemade = () => {
                       r="4.5"
                       style={{
                         stroke:
-                          activeMonthIndex === m
+                          (activeMonthIndex === m && activeIndex === (i + 1))
                             ? "#f8f5f2"
                             : "#EE5F64",
                       }}
@@ -549,7 +549,7 @@ const JournalCalendarRemade = () => {
                       r="3"
                       style={{
                         fill:
-                          activeMonthIndex === m
+                          (activeMonthIndex === m && activeIndex === (i + 1))
                             ? "#f8f5f2"
                             : "#EE5F64",
                       }}
