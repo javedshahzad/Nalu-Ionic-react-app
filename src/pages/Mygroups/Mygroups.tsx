@@ -49,6 +49,7 @@ import tokenService from "../../token";
 import { io } from "socket.io-client";
 import { groupsListAction } from "../../actions/groupsListAction";
 import authService from "../../authService";
+import groupImg from "../../assets/images/groupImage.png";
 
 const Mygroups: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -131,7 +132,7 @@ const Mygroups: React.FC = () => {
           `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`,
           {
             headers,
-            cancelToken: source.token
+            cancelToken: source.token,
           }
         );
         response = axiosResponse.data;
@@ -147,7 +148,7 @@ const Mygroups: React.FC = () => {
           history.push("/login");
         }
       }
-      console.error('error', error);
+      console.error("error", error);
     } finally {
       setIsLoading(false);
     }
@@ -167,6 +168,8 @@ const Mygroups: React.FC = () => {
   const [present] = useIonActionSheet();
 
   const groups = useSelector((state: RootState) => state.groups);
+
+  console.log("groups>>>>>>", groups);
 
   const wp_token = tokenService.getWPToken();
 
@@ -392,7 +395,7 @@ const Mygroups: React.FC = () => {
                   key={index}
                 >
                   <img
-                    src={group.groupImage}
+                    src={group?.groupImage || groupImg}
                     alt=""
                     className="profile-image my-auto"
                     style={{
@@ -448,10 +451,10 @@ const Mygroups: React.FC = () => {
                           event?.is_bookmarked
                             ? "assets/imgs/bookmark-blue.svg"
                             : event?.is_cancelled
-                              ? "assets/imgs/cross-icon.svg"
-                              : event?.is_registered
-                                ? checkmarkCircle
-                                : "assets/imgs/closed-letterr.svg"
+                            ? "assets/imgs/cross-icon.svg"
+                            : event?.is_registered
+                            ? checkmarkCircle
+                            : "assets/imgs/closed-letterr.svg"
                         }
                       />
                     </div>

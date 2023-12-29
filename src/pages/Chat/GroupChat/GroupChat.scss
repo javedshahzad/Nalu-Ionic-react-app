@@ -51,9 +51,12 @@
 
   .chatLoad {
     background-color: $config-white !important;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: 0;
     border: none;
+    height: 100%;
   }
 
   .flex {
@@ -312,8 +315,7 @@
   .h-auto {
     height: auto;
   }
-
-  .closeBtn {
-    color: $config-white;
-  }
+}
+.closeBtn {
+  color: #f8f5f2;
 }

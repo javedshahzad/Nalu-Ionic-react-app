@@ -49,6 +49,7 @@ const GroupChat: React.FC = () => {
   const [GroupImage, setGroupImage] = useState("");
   const [sendloading, setSendLoading] = useState(false);
   const [chatLoading, setChatLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true); // New state variable
   const [page, setPage] = useState(1);
   const user = tokenService.getUserId();
 
@@ -76,7 +77,7 @@ const GroupChat: React.FC = () => {
         conversation: groupId,
       });
 
-      socket.on("join", (data) => { });
+      socket.on("join", (data) => {});
 
       socket.emit("message-list", {
         page: 1,
@@ -84,6 +85,8 @@ const GroupChat: React.FC = () => {
         user: user,
         conversation: groupId,
       });
+
+      setInitialLoading(true);
 
       socket.on("message-list", (data) => {
         // console.log("data", data);
@@ -139,6 +142,7 @@ const GroupChat: React.FC = () => {
             })
           );
         }
+        setInitialLoading(false);
       });
     }, 5000);
   });
@@ -201,7 +205,14 @@ const GroupChat: React.FC = () => {
   };
 
   const handleSendMessage = () => {
-    if (filesArray.length > 0 && socket.connected) {
+    if (newMessage !== "" || (filesArray.length > 0 && socket.connected)) {
+      socket.emit("send-message", {
+        user: user,
+        conversation: groupId,
+        message: `<p>${newMessage}</p>`,
+        type: "message",
+      });
+
       const nameArray = [];
       for (var i = 0; i < filesArray.length; i++) {
         const fileName = filesArray[i]?.name;
@@ -224,24 +235,14 @@ const GroupChat: React.FC = () => {
         message: nameArray,
         type: "file",
       });
+      setFilesArray([]);
+      setSendLoading(true);
 
-    } else {
-      if (newMessage !== "") {
-        socket.emit("send-message", {
-          user: user,
-          conversation: groupId,
-          message: `<p>${newMessage}</p>`,
-          type: "message",
-        });
+      setTimeout(() => {
+        setSendLoading(false);
+      }, 500);
 
-        setSendLoading(true);
-
-        setTimeout(() => {
-          setSendLoading(false);
-        }, 500);
-
-        setNewMessage("");
-      }
+      setNewMessage("");
     }
   };
 
@@ -454,71 +455,90 @@ const GroupChat: React.FC = () => {
         onScroll={handleScroll}
         className="groupChatContent"
       >
-        {grpMessage.map((message: any, index: any) => (
-          <div key={index}>
-            {message.sender._id === user ? (
-              <>
-                <div className="msg right-msg" id={index}>
-                  <div className="msg-bubble">
-                    {message.files.length > 0 && (
-                      <img
-                        src={message.files[0]}
-                        className="h-auto w-20 max-w-md rounded-sm"
-                        alt="Message Image"
-                        onClick={() => handleImageClick(message.files[0])}
-                      />
-                    )}
-                    <IonModal isOpen={showModal}>
-                      <img src={selectedImage} />
-                      <IonButton
-                        onClick={() => setShowModal(false)}
-                        className="closeBtn"
-                      >
-                        Close
-                      </IonButton>
-                    </IonModal>
-                    <div className="msg-text">
-                      {message.message && (
-                        <div
-                          dangerouslySetInnerHTML={sanitizeHTML(
-                            message.message
+        {initialLoading ? (
+          <div className="chatLoad">
+            <IonSpinner
+              color={"primary"}
+              name="crescent"
+              className="h-20px w-20px"
+            />
+          </div>
+        ) : (
+          <>
+            {grpMessage.map((message: any, index: any) => (
+              <div key={index}>
+                {message.sender._id === user ? (
+                  <>
+                    <div className="msg right-msg" id={index}>
+                      <div className="msg-bubble">
+                        {message.files.length > 0 && (
+                          <img
+                            src={message.files[0]}
+                            className="h-auto w-20 max-w-md rounded-sm"
+                            alt="Message Image"
+                            onClick={() => handleImageClick(message.files[0])}
+                          />
+                        )}
+                        <IonModal isOpen={showModal}>
+                          <img src={selectedImage} />
+                          <IonButton
+                            onClick={() => setShowModal(false)}
+                            className="closeBtn"
+                          >
+                            Close
+                          </IonButton>
+                        </IonModal>
+                        <div className="msg-text">
+                          {message.message && (
+                            <div
+                              dangerouslySetInnerHTML={sanitizeHTML(
+                                message.message
+                              )}
+                            />
                           )}
-                        />
-                      )}
-                    </div>
-                  </div>
-                  <p className="message-time">{message.relativeTimestamp}</p>
-                </div>
-              </>
-            ) : (
-              <div style={{ display: "flex", marginLeft: "10px" }}>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <img
-                    src={message.sender.userImage}
-                    alt="User"
-                    className="profile-image"
-                  />
-                </div>
-                <div className="msg left-msg">
-                  <div>
-                    <div className="msg-bubble">
-                      <div className="msg-info">
-                        <div className="msg-info-name">
-                          {message.sender.name}
                         </div>
                       </div>
-                      <div
-                        className="other-msg-text"
-                        dangerouslySetInnerHTML={sanitizeHTML(message.message)}
+                      <p className="message-time">
+                        {message.relativeTimestamp}
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ display: "flex", marginLeft: "10px" }}>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <img
+                        src={message.sender.userImage}
+                        alt="User"
+                        className="profile-image"
                       />
                     </div>
-                    <p className="message-time2">{message.relativeTimestamp}</p>
+                    <div className="msg left-msg">
+                      <div>
+                        <div className="msg-bubble">
+                          <div className="msg-info">
+                            <div className="msg-info-name">
+                              {message.sender.name}
+                            </div>
+                          </div>
+                          <div
+                            className="other-msg-text"
+                            dangerouslySetInnerHTML={sanitizeHTML(
+                              message.message
+                            )}
+                          />
+                        </div>
+                        <p className="message-time2">
+                          {message.relativeTimestamp}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
-            )}
-          </div>
-        ))}
+            ))}
+          </>
+        )}
+
         <div id="chatEnd"></div>
       </div>
 
