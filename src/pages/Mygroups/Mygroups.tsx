@@ -260,8 +260,8 @@ const Mygroups: React.FC = () => {
 
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/login");
+            // authService.logout();
+            // history.push("/login");
           }
         }
 

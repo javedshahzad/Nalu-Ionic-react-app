@@ -102,9 +102,8 @@ const JournalCalendarRemade = () => {
     const tempMonthIndex = monthIndex + 1 + "";
     const tempDateIndex = dateIndex + "";
 
-    const dateParam = `${year}-${
-      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
-    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+    const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+      }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
     url = `/journaladditionremade/${dateParam}`;
 
@@ -252,6 +251,139 @@ const JournalCalendarRemade = () => {
               console.log("date", moonColorData[obj].entries);
               style.backgroundColor = "#ee5f64";
               style.color = "white";
+            }
+          });
+        }
+      });
+    }
+    return style;
+  };
+
+  const getStroke: any = (year, month, date) => {
+    if (month < 10) {
+      month = "0" + month;
+    }
+    if (date < 10) {
+      date = "0" + date;
+    }
+
+    let x = `${year}-${month}-${date}`;
+
+    const data = icons2;
+
+    let style: any = {};
+
+    let _day: any = new Date().getDate();
+    let _month: any = new Date().getMonth() + 1;
+
+    let _year = new Date().getFullYear();
+
+    if (_month < 10) {
+      _month = "0" + _month;
+    }
+    if (_day < 10) {
+      _day = "0" + _day;
+    }
+
+    let _x = `${_year}-${_month}-${_day}`;
+
+    if (_month) {
+      Object.keys(moonColorData).map((obj) => {
+        if (obj === x && obj !== _x) {
+          moonColorData[obj].entries.map((phase, index) => {
+            if (
+              moonColorData[obj].entries[index].key === "period_bleeding" &&
+              parseInt(phase.value) > 0
+            ) {
+              style.stroke = "#f8f5f2";
+
+            } else if (
+              moonColorData[obj].entries[index].key === "cervical_mucus" &&
+              parseInt(phase.value) > 0
+            ) {
+              style.stroke = "#f8f5f2";
+            } else if (
+              moonColorData[obj].entries[0].value &&
+              parseInt(moonColorData[obj].entries[0].value) > 0 &&
+              moonColorData[obj].entries[1].value &&
+              parseInt(moonColorData[obj].entries[1].value) > 0
+            ) {
+
+              style.stroke = "#f8f5f2";
+            }
+            else if (
+              (moonColorData[obj].entries[0].value &&
+                moonColorData[obj].entries[0].value === null) &&
+              (moonColorData[obj].entries[1].value &&
+                moonColorData[obj].entries[1].value === null)
+            ) {
+              style.stroke = "#EE5F64";
+            }
+          });
+        }
+      });
+    }
+    return style;
+  };
+  const getFill: any = (year, month, date) => {
+    if (month < 10) {
+      month = "0" + month;
+    }
+    if (date < 10) {
+      date = "0" + date;
+    }
+
+    let x = `${year}-${month}-${date}`;
+
+    const data = icons2;
+
+    let style: any = {};
+
+    let _day: any = new Date().getDate();
+    let _month: any = new Date().getMonth() + 1;
+
+    let _year = new Date().getFullYear();
+
+    if (_month < 10) {
+      _month = "0" + _month;
+    }
+    if (_day < 10) {
+      _day = "0" + _day;
+    }
+
+    let _x = `${_year}-${_month}-${_day}`;
+
+    if (_month) {
+      Object.keys(moonColorData).map((obj) => {
+        if (obj === x && obj !== _x) {
+          moonColorData[obj].entries.map((phase, index) => {
+            if (
+              moonColorData[obj].entries[index].key === "period_bleeding" &&
+              parseInt(phase.value) > 0
+            ) {
+              style.stroke = "#f8f5f2";
+
+            } else if (
+              moonColorData[obj].entries[index].key === "cervical_mucus" &&
+              parseInt(phase.value) > 0
+            ) {
+              style.stroke = "#f8f5f2";
+            } else if (
+              moonColorData[obj].entries[0].value &&
+              parseInt(moonColorData[obj].entries[0].value) > 0 &&
+              moonColorData[obj].entries[1].value &&
+              parseInt(moonColorData[obj].entries[1].value) > 0
+            ) {
+
+              style.stroke = "#f8f5f2";
+            }
+            else if (
+              (moonColorData[obj].entries[0].value &&
+                moonColorData[obj].entries[0].value === null) &&
+              (moonColorData[obj].entries[1].value &&
+                moonColorData[obj].entries[1].value === null)
+            ) {
+              style.stroke = "#EE5F64";
             }
           });
         }
@@ -498,8 +630,8 @@ const JournalCalendarRemade = () => {
     for (let i = 1; i <= lastDateOfMonth; i++) {
       const isToday =
         i === new Date().getDate() &&
-        m === new Date().getMonth() &&
-        year === new Date().getFullYear()
+          m === new Date().getMonth() &&
+          year === new Date().getFullYear()
           ? "currentDay"
           : "";
 
@@ -508,10 +640,10 @@ const JournalCalendarRemade = () => {
         return (
           item.date ===
           year +
-            "-" +
-            (m + 1).toString().padStart(2, "0") +
-            "-" +
-            i.toString().padStart(2, "0")
+          "-" +
+          (m + 1).toString().padStart(2, "0") +
+          "-" +
+          i.toString().padStart(2, "0")
         );
       });
 
@@ -519,9 +651,8 @@ const JournalCalendarRemade = () => {
         <li
           key={`currentDay-${i}`}
           id={`${i}/${m + 1}/${year}`}
-          className={`calendar-day ${isToday} ${
-            activeIndex === i + 1 && activeMonthIndex === m ? "dayActive" : ""
-          }`}
+          className={`calendar-day ${isToday} ${activeIndex === i + 1 && activeMonthIndex === m ? "dayActive" : ""
+            }`}
           onClick={() => handleOnClick(i, m)}
           style={getColors(year, m + 1, i)}
         >
@@ -541,23 +672,13 @@ const JournalCalendarRemade = () => {
                       cx="5"
                       cy="5"
                       r="4.5"
-                      style={{
-                        stroke:
-                          activeMonthIndex === m && activeIndex === i + 1
-                            ? "#f8f5f2"
-                            : "#EE5F64",
-                      }}
+                      style={getStroke(year, m + 1, i)}
                     />
                     <circle
                       cx="5"
                       cy="5"
                       r="3"
-                      style={{
-                        fill:
-                          activeMonthIndex === m && activeIndex === i + 1
-                            ? "#f8f5f2"
-                            : "#EE5F64",
-                      }}
+                      style={getFill(year, m + 1, i)}
                     />
                   </svg>
                 </>
@@ -702,9 +823,8 @@ const JournalCalendarRemade = () => {
                   <div
                     id={`${months[mIndex]}`}
                     key={monthData.key}
-                    className={`calendar-month ${
-                      currentdivInView === months[mIndex] ? "fadeIn" : "fadeOut"
-                    }`}
+                    className={`calendar-month ${currentdivInView === months[mIndex] ? "fadeIn" : "fadeOut"
+                      }`}
                   >
                     {monthData}
                   </div>

@@ -224,6 +224,7 @@ const GroupChat: React.FC = () => {
         message: nameArray,
         type: "file",
       });
+
     } else {
       if (newMessage !== "") {
         socket.emit("send-message", {
@@ -597,7 +598,7 @@ const GroupChat: React.FC = () => {
               />
             )}
           </div>
-          {/*<label htmlFor="upload-image" className="attach-btn">
+          <label htmlFor="upload-image" className="attach-btn">
             <IonIcon icon={attachOutline}></IonIcon>
             <input
               hidden
@@ -641,7 +642,7 @@ const GroupChat: React.FC = () => {
                 e.target.value = null;
               }}
             />
-          </label>*/}
+          </label>
         </div>
       </IonFooter>
     </IonPage>
