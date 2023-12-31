@@ -205,7 +205,7 @@ const GroupChat: React.FC = () => {
   };
 
   const handleSendMessage = () => {
-    if (newMessage !== "" || (filesArray.length > 0 && socket.connected)) {
+    if (newMessage !== "") {
       socket.emit("send-message", {
         user: user,
         conversation: groupId,
@@ -213,6 +213,16 @@ const GroupChat: React.FC = () => {
         type: "message",
       });
 
+      setSendLoading(true);
+
+      setTimeout(() => {
+        setSendLoading(false);
+      }, 500);
+
+      setNewMessage("");
+    }
+
+    if (filesArray.length > 0 && socket.connected) {
       const nameArray = [];
       for (var i = 0; i < filesArray.length; i++) {
         const fileName = filesArray[i]?.name;
@@ -229,20 +239,18 @@ const GroupChat: React.FC = () => {
         user: user,
         conversation: groupId,
       });
+
       socket.emit("send-message", {
         user: user,
         conversation: groupId,
         message: nameArray,
         type: "file",
       });
-      setFilesArray([]);
       setSendLoading(true);
-
       setTimeout(() => {
         setSendLoading(false);
       }, 500);
-
-      setNewMessage("");
+      setFilesArray([]);
     }
   };
 

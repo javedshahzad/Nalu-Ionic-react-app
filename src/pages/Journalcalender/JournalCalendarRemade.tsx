@@ -132,6 +132,7 @@ const JournalCalendarRemade = () => {
         `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
       );
 
+      console.log("data>>>", data);
       const newArray = [];
 
       for (const date in data.moonphase) {
@@ -241,7 +242,7 @@ const JournalCalendarRemade = () => {
               moonColorData[obj].entries[index].key === "cervical_mucus" &&
               parseInt(phase.value) > 0
             ) {
-              style.backgroundColor = "#3684B3";
+              style.backgroundColor = "#89bcdc";
               style.color = "white";
             } else if (
               moonColorData[obj].entries[0].value &&
@@ -249,7 +250,6 @@ const JournalCalendarRemade = () => {
               moonColorData[obj].entries[1].value &&
               parseInt(moonColorData[obj].entries[1].value) > 0
             ) {
-              console.log("date", moonColorData[obj].entries);
               style.backgroundColor = "#ee5f64";
               style.color = "white";
             }
@@ -260,7 +260,7 @@ const JournalCalendarRemade = () => {
     return style;
   };
 
-  const getStroke: any = (year, month, date) => {
+  const getStroke: any = (year, month, date, option) => {
     if (month < 10) {
       month = "0" + month;
     }
@@ -320,6 +320,15 @@ const JournalCalendarRemade = () => {
           });
         }
       });
+
+      if (option) {
+        console.log("option uper", style.stroke);
+      }
+    } else {
+      if (option) {
+        console.log("option neeche");
+      }
+      style.stroke = "#EE5F64";
     }
     return style;
   };
@@ -680,12 +689,7 @@ const JournalCalendarRemade = () => {
                 </>
               ) : moonPhase.phase_name === "New Moon" ? (
                 <div
-                  style={{
-                    stroke:
-                      activeIndex === i && activeMonthIndex === m
-                        ? "#f8f5f2"
-                        : "#EE5F64",
-                  }}
+                  style={getStroke(year, m + 1, i, 1)}
                   className="phases"
                   dangerouslySetInnerHTML={{ __html: newMoonSvg }}
                 ></div>

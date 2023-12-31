@@ -185,7 +185,7 @@ const Login: React.FC = () => {
             // Save additional data, including _id, in localStorage
             localStorage.setItem("accessToken", access.token);
             localStorage.setItem("refreshToken", refresh.token);
-            console.log("token set", refresh.token);
+
             localStorage.setItem(
               "chatApiUserId",
               naluApiResponse.data.data.user._id
@@ -201,6 +201,7 @@ const Login: React.FC = () => {
 
         // Navigation
         history.push("/tabs/tab1");
+        window.location.reload();
       }
     } catch (error) {
       console.log("Error", error.response?.data?.message || error.message);
