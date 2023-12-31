@@ -169,8 +169,6 @@ const Mygroups: React.FC = () => {
 
   const groups = useSelector((state: RootState) => state.groups);
 
-  console.log("groups>>>>>>", groups);
-
   const wp_token = tokenService.getWPToken();
 
   useEffect(() => {
