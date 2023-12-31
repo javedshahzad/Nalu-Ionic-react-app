@@ -57,7 +57,7 @@ const JournalCalendarRemade = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [currentMonth, setCurrentMonth] = useState();
   const popoverRef = useRef(null);
-  const [currentdivInView, setCurrentDivInView] = useState("January");
+  const [currentdivInView, setCurrentDivInView] = useState(new Date().getMonth().toString());
   const [activeIndex, setActiveIndex] = useState(new Date().getDate());
   const [activeMonthIndex, setActiveMonthIndex] = useState(
     new Date().getMonth()
@@ -102,9 +102,8 @@ const JournalCalendarRemade = () => {
     const tempMonthIndex = monthIndex + 1 + "";
     const tempDateIndex = dateIndex + "";
 
-    const dateParam = `${year}-${
-      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
-    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+    const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+      }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
     url = `/journaladditionremade/${dateParam}`;
 
@@ -260,7 +259,7 @@ const JournalCalendarRemade = () => {
     return style;
   };
 
-  const getStroke: any = (year, month, date, option) => {
+  const getStroke: any = (year, month, date) => {
     if (month < 10) {
       month = "0" + month;
     }
@@ -270,68 +269,49 @@ const JournalCalendarRemade = () => {
 
     let x = `${year}-${month}-${date}`;
 
-    const data = icons2;
-
     let style: any = {};
 
-    let _day: any = new Date().getDate();
-    let _month: any = new Date().getMonth() + 1;
+    if (month) {
+      const foundDate = Object.keys(moonColorData).find((obj) => obj === x);
 
-    let _year = new Date().getFullYear();
-
-    if (_month < 10) {
-      _month = "0" + _month;
-    }
-    if (_day < 10) {
-      _day = "0" + _day;
-    }
-
-    let _x = `${_year}-${_month}-${_day}`;
-
-    if (_month) {
-      Object.keys(moonColorData).map((obj) => {
-        if (obj === x && obj !== _x) {
-          moonColorData[obj].entries.map((phase, index) => {
-            if (
-              moonColorData[obj].entries[index].key === "period_bleeding" &&
-              parseInt(phase.value) > 0
-            ) {
-              style.stroke = "#f8f5f2";
-            } else if (
-              moonColorData[obj].entries[index].key === "cervical_mucus" &&
-              parseInt(phase.value) > 0
-            ) {
-              style.stroke = "#f8f5f2";
-            } else if (
-              moonColorData[obj].entries[0].value &&
-              parseInt(moonColorData[obj].entries[0].value) > 0 &&
-              moonColorData[obj].entries[1].value &&
-              parseInt(moonColorData[obj].entries[1].value) > 0
-            ) {
-              style.stroke = "#f8f5f2";
-            } else if (
-              moonColorData[obj].entries[0].value &&
-              moonColorData[obj].entries[0].value === null &&
-              moonColorData[obj].entries[1].value &&
-              moonColorData[obj].entries[1].value === null
-            ) {
-              style.stroke = "#EE5F64";
-            }
-          });
-        }
-      });
-
-      if (option) {
-        console.log("option uper", style.stroke);
+      if (foundDate) {
+        moonColorData[foundDate].entries.forEach((phase, index) => {
+          if (
+            moonColorData[foundDate].entries[index].key === "period_bleeding" &&
+            parseInt(phase.value) > 0
+          ) {
+            style.stroke = "#f8f5f2";
+          } else if (
+            moonColorData[foundDate].entries[index].key === "cervical_mucus" &&
+            parseInt(phase.value) > 0
+          ) {
+            style.stroke = "#f8f5f2";
+          } else if (
+            moonColorData[foundDate].entries[0].value &&
+            parseInt(moonColorData[foundDate].entries[0].value) > 0 &&
+            moonColorData[foundDate].entries[1].value &&
+            parseInt(moonColorData[foundDate].entries[1].value) > 0
+          ) {
+            style.stroke = "#f8f5f2";
+          } else if (
+            moonColorData[foundDate].entries[0].value === null &&
+            moonColorData[foundDate].entries[1].value === null
+          ) {
+            style.stroke = "#EE5F64"; // Default color for days without color information
+          } else {
+            style.stroke = "#f8f5f2";
+          }
+        });
+      } else {
+        style.stroke = "#EE5F64"; // Default color for days in the current month without color information
       }
-    } else {
-      if (option) {
-        console.log("option neeche");
-      }
-      style.stroke = "#EE5F64";
     }
+
     return style;
   };
+
+
+
   const getFill: any = (year, month, date) => {
     if (month < 10) {
       month = "0" + month;
@@ -342,57 +322,44 @@ const JournalCalendarRemade = () => {
 
     let x = `${year}-${month}-${date}`;
 
-    const data = icons2;
-
     let style: any = {};
 
-    let _day: any = new Date().getDate();
-    let _month: any = new Date().getMonth() + 1;
+    if (month) {
+      const foundDate = Object.keys(moonColorData).find((obj) => obj === x);
 
-    let _year = new Date().getFullYear();
-
-    if (_month < 10) {
-      _month = "0" + _month;
+      if (foundDate) {
+        moonColorData[foundDate].entries.forEach((phase, index) => {
+          if (
+            moonColorData[foundDate].entries[index].key === "period_bleeding" &&
+            parseInt(phase.value) > 0
+          ) {
+            style.fill = "#f8f5f2";
+          } else if (
+            moonColorData[foundDate].entries[index].key === "cervical_mucus" &&
+            parseInt(phase.value) > 0
+          ) {
+            style.fill = "#f8f5f2";
+          } else if (
+            moonColorData[foundDate].entries[0].value &&
+            parseInt(moonColorData[foundDate].entries[0].value) > 0 &&
+            moonColorData[foundDate].entries[1].value &&
+            parseInt(moonColorData[foundDate].entries[1].value) > 0
+          ) {
+            style.fill = "#f8f5f2";
+          } else if (
+            moonColorData[foundDate].entries[0].value === null &&
+            moonColorData[foundDate].entries[1].value === null
+          ) {
+            style.fill = "#EE5F64"; // Default color for days without color information
+          } else {
+            style.fill = "#f8f5f2";
+          }
+        });
+      } else {
+        style.fill = "#EE5F64"; // Default color for days in the current month without color information
+      }
     }
-    if (_day < 10) {
-      _day = "0" + _day;
-    }
 
-    let _x = `${_year}-${_month}-${_day}`;
-
-    if (_month) {
-      Object.keys(moonColorData).map((obj) => {
-        if (obj === x && obj !== _x) {
-          moonColorData[obj].entries.map((phase, index) => {
-            if (
-              moonColorData[obj].entries[index].key === "period_bleeding" &&
-              parseInt(phase.value) > 0
-            ) {
-              style.fill = "#f8f5f2";
-            } else if (
-              moonColorData[obj].entries[index].key === "cervical_mucus" &&
-              parseInt(phase.value) > 0
-            ) {
-              style.stroke = "#f8f5f2";
-            } else if (
-              moonColorData[obj].entries[0].value &&
-              parseInt(moonColorData[obj].entries[0].value) > 0 &&
-              moonColorData[obj].entries[1].value &&
-              parseInt(moonColorData[obj].entries[1].value) > 0
-            ) {
-              style.stroke = "#f8f5f2";
-            } else if (
-              moonColorData[obj].entries[0].value &&
-              moonColorData[obj].entries[0].value === null &&
-              moonColorData[obj].entries[1].value &&
-              moonColorData[obj].entries[1].value === null
-            ) {
-              style.stroke = "#EE5F64";
-            }
-          });
-        }
-      });
-    }
     return style;
   };
 
@@ -634,8 +601,8 @@ const JournalCalendarRemade = () => {
     for (let i = 1; i <= lastDateOfMonth; i++) {
       const isToday =
         i === new Date().getDate() &&
-        m === new Date().getMonth() &&
-        year === new Date().getFullYear()
+          m === new Date().getMonth() &&
+          year === new Date().getFullYear()
           ? "currentDay"
           : "";
 
@@ -644,10 +611,10 @@ const JournalCalendarRemade = () => {
         return (
           item.date ===
           year +
-            "-" +
-            (m + 1).toString().padStart(2, "0") +
-            "-" +
-            i.toString().padStart(2, "0")
+          "-" +
+          (m + 1).toString().padStart(2, "0") +
+          "-" +
+          i.toString().padStart(2, "0")
         );
       });
 
@@ -655,9 +622,8 @@ const JournalCalendarRemade = () => {
         <li
           key={`currentDay-${i}`}
           id={`${i}/${m + 1}/${year}`}
-          className={`calendar-day ${isToday} ${
-            activeIndex === i + 1 && activeMonthIndex === m ? "dayActive" : ""
-          }`}
+          className={`calendar-day ${isToday} ${activeIndex === i + 1 && activeMonthIndex === m ? "dayActive" : ""
+            }`}
           onClick={() => handleOnClick(i, m)}
           style={getColors(year, m + 1, i)}
         >
@@ -689,7 +655,7 @@ const JournalCalendarRemade = () => {
                 </>
               ) : moonPhase.phase_name === "New Moon" ? (
                 <div
-                  style={getStroke(year, m + 1, i, 1)}
+                  style={getStroke(year, m + 1, i)}
                   className="phases"
                   dangerouslySetInnerHTML={{ __html: newMoonSvg }}
                 ></div>
@@ -823,9 +789,8 @@ const JournalCalendarRemade = () => {
                   <div
                     id={`${months[mIndex]}`}
                     key={monthData.key}
-                    className={`calendar-month ${
-                      currentdivInView === months[mIndex] ? "fadeIn" : "fadeOut"
-                    }`}
+                    className={`calendar-month ${currentdivInView == months[mIndex] ? "fadeIn" : "fadeOut"
+                      }`}
                   >
                     {monthData}
                   </div>
