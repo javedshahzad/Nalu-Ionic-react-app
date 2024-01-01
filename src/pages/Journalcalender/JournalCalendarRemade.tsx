@@ -9,6 +9,7 @@ import {
   IonToolbar,
   IonLabel,
   useIonViewWillEnter,
+  IonHeader,
 } from "@ionic/react";
 import {
   chevronBackOutline,
@@ -768,7 +769,7 @@ const JournalCalendarRemade = () => {
 
   return (
     <IonPage className="JournalCalendarRemade">
-      <IonContent>
+      <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="end">
             <IonButton color="dark" onClick={() => history.push("/menu")}>
@@ -776,6 +777,8 @@ const JournalCalendarRemade = () => {
             </IonButton>
           </IonButtons>
         </IonToolbar>
+      </IonHeader>
+      <IonContent>
         <h2>[Das Zyklus Journal ist zur Zeit in Überarbeitung]</h2>
         <p>
           Du erhältst eine E-Mail von uns, wenn das Journal wieder

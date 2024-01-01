@@ -62,6 +62,8 @@ const GroupChat: React.FC = () => {
     top: 0,
   });
 
+  console.log("grpmes>>>", grpMessage);
+
   const history = useHistory();
 
   const [filesArray, setFilesArray] = useState([]);
@@ -450,11 +452,11 @@ const GroupChat: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       {loading ? (
-        <div className="chatLoad">
+        <div className="chatMessageLoad">
           <IonSpinner
             color={"primary"}
             name="crescent"
-            className="h-20px w-20px"
+            className="prevMessageLoadSpinner"
           />
         </div>
       ) : null}

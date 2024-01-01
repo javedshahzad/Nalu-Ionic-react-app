@@ -58,6 +58,19 @@
     border: none;
     height: 100%;
   }
+  .chatMessageLoad {
+    background-color: $config-white !important;
+    display: flex;
+    justify-content: center;
+    align-items: top;
+    margin: 0;
+    border: none;
+
+    .prevMessageLoadSpinner {
+      height: 40px;
+      width: 40px;
+    }
+  }
 
   .flex {
     display: flex;
