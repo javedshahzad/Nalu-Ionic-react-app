@@ -480,6 +480,23 @@ function JournalAdditionRemade() {
     getColors();
   }, []);
 
+
+  const [disableInput, setDisableInput] = useState(false)
+
+  const handleScrollStart = (event: CustomEvent) => {
+    // Access scroll event properties from `event.detail`
+
+    setDisableInput(true)
+  };
+
+  const handleScrollEnd = (event: CustomEvent) => {
+    // Access scroll event properties from `event.detail`
+
+    setDisableInput(false)
+  };
+
+
+
   return (
     <IonPage className="JournalAdditionRemade">
       <IonHeader className="ion-no-border">
@@ -491,7 +508,9 @@ function JournalAdditionRemade() {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent onIonScrollStart={handleScrollStart}
+        onIonScrollEnd={handleScrollEnd}
+        scrollEvents={true}>
         <div className="journal-addition-main">
           <div className="today-clicked-date">
             <h4>{showClickDate(clickedDate)}</h4>
@@ -652,6 +671,7 @@ function JournalAdditionRemade() {
                                         dualKnobs={false}
                                         ticks={true}
                                         snaps={true}
+                                        disabled={disableInput}
                                         min={0}
                                         max={10}
                                         value={field.value ? field.value : 0}
@@ -984,6 +1004,7 @@ function JournalAdditionRemade() {
                                 dualKnobs={false}
                                 ticks={true}
                                 snaps={true}
+                                disabled={disableInput}
                                 min={0}
                                 max={5}
                                 value={entry.value ? entry.value : 0}
@@ -1032,6 +1053,7 @@ function JournalAdditionRemade() {
                                 dualKnobs={false}
                                 ticks={true}
                                 snaps={true}
+                                disabled={disableInput}
                                 min={0}
                                 max={12}
                                 value={entry.value ? entry.value : 0}
@@ -1088,6 +1110,7 @@ function JournalAdditionRemade() {
                                           dualKnobs={false}
                                           ticks={true}
                                           snaps={true}
+                                          disabled={disableInput}
                                           min={0}
                                           max={5}
                                           value={field.value ? field.value : 0}
@@ -1141,6 +1164,7 @@ function JournalAdditionRemade() {
                                           dualKnobs={false}
                                           ticks={true}
                                           snaps={true}
+                                          disabled={disableInput}
                                           min={0}
                                           max={10}
                                           value={field.value ? field.value : 0}
