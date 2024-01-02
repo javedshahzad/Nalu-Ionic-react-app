@@ -61,7 +61,6 @@ function JournalAdditionRemade() {
 
   const typeObj: any = useSelector((state: RootState) => state.journalReducer);
 
-
   const dispatch = useDispatch();
 
   const roles = JSON.parse(localStorage.getItem("roles")) || {};
@@ -85,14 +84,12 @@ function JournalAdditionRemade() {
   }
 
   const getJournalEntries = async () => {
-
     try {
       setIsLoading(true);
 
       const data = await JournalAdditionApiService.get(
         `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`
       );
-
 
       if (data.entries.length > 0) {
         const types = [...new Set(data.entries.map((item: any) => item.type))];
@@ -314,15 +311,18 @@ function JournalAdditionRemade() {
     const updatedValue = isCheckbox ? (val ? 1 : 0) : val;
     fields.value = updatedValue;
 
-    CustomCategoryApiService.post(`https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`, {
-      entries: [
-        {
-          key: fields.key,
-          value: updatedValue,
-        },
-      ],
-    }).then(
-      (data) => { },
+    CustomCategoryApiService.post(
+      `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`,
+      {
+        entries: [
+          {
+            key: fields.key,
+            value: updatedValue,
+          },
+        ],
+      }
+    ).then(
+      (data) => {},
       (error) => {
         if (error.response) {
           const status = error.response.status;
@@ -338,7 +338,6 @@ function JournalAdditionRemade() {
       }
     );
   };
-
 
   const getIcons = async () => {
     try {
@@ -480,37 +479,34 @@ function JournalAdditionRemade() {
     getColors();
   }, []);
 
-
-  const [disableInput, setDisableInput] = useState(false)
+  const [disableInput, setDisableInput] = useState(false);
 
   const handleScrollStart = (event: CustomEvent) => {
     // Access scroll event properties from `event.detail`
 
-    setDisableInput(true)
+    setDisableInput(true);
   };
 
   const handleScrollEnd = (event: CustomEvent) => {
     // Access scroll event properties from `event.detail`
 
-    setDisableInput(false)
+    setDisableInput(false);
   };
-
-
 
   return (
     <IonPage className="JournalAdditionRemade">
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton routerLink="/tabs/tab1">
-              <IonIcon icon={arrowBackOutline}></IonIcon>
-            </IonButton>
+            <IonBackButton></IonBackButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent onIonScrollStart={handleScrollStart}
+      <IonContent
+        onIonScrollStart={handleScrollStart}
         onIonScrollEnd={handleScrollEnd}
-        scrollEvents={true}>
+        scrollEvents={true}
+      >
         <div className="journal-addition-main">
           <div className="today-clicked-date">
             <h4>{showClickDate(clickedDate)}</h4>
@@ -571,7 +567,10 @@ function JournalAdditionRemade() {
             </div>
                       </div>*/}
           <h2>[Das Zyklus Journal ist zur Zeit in Überarbeitung]</h2>
-          <p>Du erhältst eine E-Mail von uns, wenn das Journal wieder vollumfänglich verfügbar ist.</p>
+          <p>
+            Du erhältst eine E-Mail von uns, wenn das Journal wieder
+            vollumfänglich verfügbar ist.
+          </p>
           <IonModal
             isOpen={modalOpen}
             className="modaaal"
@@ -625,10 +624,20 @@ function JournalAdditionRemade() {
                                         id={fields.key}
                                       />
 
-                                      <IonLabel style={{ whiteSpace: 'pre-wrap' }}>{fields.label}</IonLabel>
+                                      <IonLabel
+                                        style={{ whiteSpace: "pre-wrap" }}
+                                      >
+                                        {fields.label}
+                                      </IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
-                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.detail.checked,
+                                            fields,
+                                            true
+                                          )
+                                        }
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -745,10 +754,20 @@ function JournalAdditionRemade() {
                                         }}
                                         id={fields.key}
                                       />
-                                      <IonLabel style={{ whiteSpace: 'pre-wrap' }}>{fields.label}</IonLabel>
+                                      <IonLabel
+                                        style={{ whiteSpace: "pre-wrap" }}
+                                      >
+                                        {fields.label}
+                                      </IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
-                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.detail.checked,
+                                            fields,
+                                            true
+                                          )
+                                        }
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -783,10 +802,20 @@ function JournalAdditionRemade() {
                                         }}
                                         id={fields.key}
                                       />
-                                      <IonLabel style={{ whiteSpace: 'pre-wrap' }}>{fields.label}</IonLabel>
+                                      <IonLabel
+                                        style={{ whiteSpace: "pre-wrap" }}
+                                      >
+                                        {fields.label}
+                                      </IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
-                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.detail.checked,
+                                            fields,
+                                            true
+                                          )
+                                        }
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -821,10 +850,20 @@ function JournalAdditionRemade() {
                                         }}
                                         id={fields.key}
                                       />
-                                      <IonLabel style={{ whiteSpace: 'pre-wrap' }}>{fields.label}</IonLabel>
+                                      <IonLabel
+                                        style={{ whiteSpace: "pre-wrap" }}
+                                      >
+                                        {fields.label}
+                                      </IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
-                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.detail.checked,
+                                            fields,
+                                            true
+                                          )
+                                        }
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -859,10 +898,20 @@ function JournalAdditionRemade() {
                                         }}
                                         id={fields.key}
                                       />
-                                      <IonLabel style={{ whiteSpace: 'pre-wrap' }}>{fields.label}</IonLabel>
+                                      <IonLabel
+                                        style={{ whiteSpace: "pre-wrap" }}
+                                      >
+                                        {fields.label}
+                                      </IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
-                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.detail.checked,
+                                            fields,
+                                            true
+                                          )
+                                        }
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -897,10 +946,20 @@ function JournalAdditionRemade() {
                                         }}
                                         id={fields.key}
                                       />
-                                      <IonLabel style={{ whiteSpace: 'pre-wrap' }}>{fields.label}</IonLabel>
+                                      <IonLabel
+                                        style={{ whiteSpace: "pre-wrap" }}
+                                      >
+                                        {fields.label}
+                                      </IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
-                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.detail.checked,
+                                            fields,
+                                            true
+                                          )
+                                        }
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -1218,10 +1277,20 @@ function JournalAdditionRemade() {
                                         lines="none"
                                         className="customIcon"
                                       >
-                                        <IonLabel style={{ whiteSpace: 'pre-wrap' }}>{field.label}</IonLabel>
+                                        <IonLabel
+                                          style={{ whiteSpace: "pre-wrap" }}
+                                        >
+                                          {field.label}
+                                        </IonLabel>
                                         <IonCheckbox
                                           checked={!!field.value}
-                                          onIonChange={(event) => updateField(event.detail.checked, field, true)}
+                                          onIonChange={(event) =>
+                                            updateField(
+                                              event.detail.checked,
+                                              field,
+                                              true
+                                            )
+                                          }
                                         />
                                       </IonItem>
                                     </IonCol>

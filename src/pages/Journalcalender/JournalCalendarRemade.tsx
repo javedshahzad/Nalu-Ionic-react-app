@@ -176,7 +176,6 @@ const JournalCalendarRemade = () => {
 
     try {
       const data = await MoonPhasesServce.get(
-        // `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
         `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
       );
 
@@ -231,33 +230,42 @@ const JournalCalendarRemade = () => {
     let _x = `${_year}-${_month}-${_day}`;
 
     if (_month) {
-      Object.keys(moonColorData).map((obj) => {
-        if (obj === x && obj !== _x) {
-          moonColorData[obj].entries.map((phase, index) => {
-            if (
-              moonColorData[obj].entries[index].key === "period_bleeding" &&
-              parseInt(phase.value) > 0
-            ) {
-              style.backgroundColor = "#ee5f64";
-              style.color = "white";
-            } else if (
-              moonColorData[obj].entries[index].key === "cervical_mucus" &&
-              parseInt(phase.value) > 0
-            ) {
-              style.backgroundColor = "#89bcdc";
-              style.color = "white";
-            } else if (
-              moonColorData[obj].entries[0].value &&
-              parseInt(moonColorData[obj].entries[0].value) > 0 &&
-              moonColorData[obj].entries[1].value &&
-              parseInt(moonColorData[obj].entries[1].value) > 0
-            ) {
-              style.backgroundColor = "#ee5f64";
-              style.color = "white";
-            }
-          });
-        }
-      });
+      const foundDate = Object.keys(moonColorData).find((obj) => obj === x);
+
+      if (foundDate) {
+        moonColorData[foundDate].entries.forEach((phase, index) => {
+          if (
+            moonColorData[foundDate].entries[index].key === "period_bleeding" &&
+            parseInt(phase.value) > 0
+          ) {
+            style.backgroundColor = "#ee5f64";
+            style.color = "white";
+          } else if (
+            moonColorData[foundDate].entries[index].key === "cervical_mucus" &&
+            parseInt(phase.value) > 0
+          ) {
+            style.backgroundColor = "#89bcdc";
+            style.color = "white";
+          } else if (
+            moonColorData[foundDate].entries[0].value &&
+            parseInt(moonColorData[foundDate].entries[0].value) > 0 &&
+            moonColorData[foundDate].entries[1].value &&
+            parseInt(moonColorData[foundDate].entries[1].value) > 0
+          ) {
+            style.backgroundColor = "#ee5f64";
+            style.color = "white";
+          } else if (
+            moonColorData[foundDate].entries[0].value === null &&
+            moonColorData[foundDate].entries[1].value === null
+          ) {
+            // style.stroke = "#EE5F64"; // Default color for days without color information
+          } else {
+            // style.stroke = "#f8f5f2";
+          }
+        });
+      } else {
+        style.stroke = "#EE5F64"; // Default color for days in the current month without color information
+      }
     }
     return style;
   };

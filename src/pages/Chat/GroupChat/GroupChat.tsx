@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+  IonBackButton,
   IonButton,
   IonButtons,
   IonContent,
@@ -490,7 +491,7 @@ const GroupChat: React.FC = () => {
                           />
                         )}
                         <IonModal isOpen={showModal}>
-                          <img src={selectedImage} />
+                          <img src={selectedImage} className="chatImage" />
                           <IonButton
                             onClick={() => setShowModal(false)}
                             className="closeBtn"

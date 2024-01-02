@@ -12,6 +12,10 @@
     --right-msg-bg: #fff7ef;
   }
 
+  .chatImage {
+    min-height: calc(100vh - 70px);
+  }
+
   .top-row {
     display: flex;
     justify-content: center;
