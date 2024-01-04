@@ -59,8 +59,8 @@ const Login: React.FC = () => {
         e.target.focusedValue.trim() === ""
           ? "Bitte gebe deine E-Mail-Adresse ein."
           : !emailRegexx.test(e.target.focusedValue)
-          ? "Bitte gebe eine gültige E-Mail-Adresse ein."
-          : ""
+            ? "Bitte gebe eine gültige E-Mail-Adresse ein."
+            : ""
       );
       setErrorMessage(e.target.focusedValue.trim() === "" ? "" : "");
     }
@@ -72,8 +72,8 @@ const Login: React.FC = () => {
         e.target.focusedValue.trim() === ""
           ? "Bitte gebe dein Passwort ein."
           : e.target.focusedValue.length < 6
-          ? "Das Passwort muss mindestens 6 Zeichen lang sein."
-          : ""
+            ? "Das Passwort muss mindestens 6 Zeichen lang sein."
+            : ""
       );
       setErrorMessage(e.target.focusedValue.trim() === "" ? "" : "");
     }

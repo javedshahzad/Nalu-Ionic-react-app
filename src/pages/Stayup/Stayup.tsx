@@ -25,13 +25,13 @@ const handleSubscribe = async () => {
 
   try {
     let response;
-    if (isPlatform("ios")) {
-      const cordovaResponse = await HTTP.post(url, {}, headers);
-      response = JSON.parse(cordovaResponse.data);
-    } else {
-      const axiosResponse = await axios.post(url, {}, { headers });
-      response = axiosResponse.data;
-    }
+    // if (isPlatform("ios")) {
+    //   const cordovaResponse = await HTTP.post(url, {}, headers);
+    //   response = JSON.parse(cordovaResponse.data);
+    // } else {
+    const axiosResponse = await axios.post(url, {}, { headers });
+    response = axiosResponse.data;
+    //    }
 
     console.log('Subscription successful:', response);
   } catch (error) {

@@ -69,58 +69,58 @@ const Courseoverviewpaid: React.FC = () => {
       Authorization: `Bearer ${jwtToken}`,
     };
 
-    if (isPlatform("ios")) {
-      // Use Cordova HTTP plugin for iOS
-      HTTP.get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`, {}, headers)
-        .then(response => {
-          const data = JSON.parse(response.data);
-          console.log(data);
-          setCourseData(data);
-          setIsLoading(false);
-        })
-        .catch(error => {
-          if (error.response) {
-            const status = error.response.status;
+    // if (isPlatform("ios")) {
+    //   // Use Cordova HTTP plugin for iOS
+    //   HTTP.get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`, {}, headers)
+    //     .then(response => {
+    //       const data = JSON.parse(response.data);
+    //       console.log(data);
+    //       setCourseData(data);
+    //       setIsLoading(false);
+    //     })
+    //     .catch(error => {
+    //       if (error.response) {
+    //         const status = error.response.status;
 
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/login");
-            }
-          }
+    //         if (status === 401 || status === 403 || status === 404) {
+    //           // Unauthorized, Forbidden, or Not Found
+    //           authService.logout();
+    //           history.push("/login");
+    //         }
+    //       }
 
-          console.error(error);
-          setIsLoading(false);
-        });
-    } else {
-      // Use Axios for other platforms
-      const source = axios.CancelToken.source();
-      axiosCancelToken = source;
+    //       console.error(error);
+    //       setIsLoading(false);
+    //     });
+    // } else {
+    // Use Axios for other platforms
+    const source = axios.CancelToken.source();
+    axiosCancelToken = source;
 
-      axios.get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`, {
-        headers: headers,
-        cancelToken: source.token,
+    axios.get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`, {
+      headers: headers,
+      cancelToken: source.token,
+    })
+      .then(response => {
+        console.log(response.data);
+        setCourseData(response.data);
+        setIsLoading(false);
       })
-        .then(response => {
-          console.log(response.data);
-          setCourseData(response.data);
-          setIsLoading(false);
-        })
-        .catch(error => {
-          if (error.response) {
-            const status = error.response.status;
+      .catch(error => {
+        if (error.response) {
+          const status = error.response.status;
 
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/login");
-            }
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/login");
           }
+        }
 
-          console.error(error);
-          setIsLoading(false);
-        });
-    }
+        console.error(error);
+        setIsLoading(false);
+      });
+    // }
   };
 
 

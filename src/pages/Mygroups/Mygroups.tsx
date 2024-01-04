@@ -117,26 +117,26 @@ const Mygroups: React.FC = () => {
 
     try {
       let response;
-      if (isPlatform("ios")) {
-        const cordovaResponse = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`,
-          {},
-          headers
-        );
-        response = JSON.parse(cordovaResponse.data);
-      } else {
-        const source = axios.CancelToken.source();
-        axiosCancelToken = source;
+      // if (isPlatform("ios")) {
+      //   const cordovaResponse = await HTTP.get(
+      //     `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`,
+      //     {},
+      //     headers
+      //   );
+      //   response = JSON.parse(cordovaResponse.data);
+      // } else {
+      const source = axios.CancelToken.source();
+      axiosCancelToken = source;
 
-        const axiosResponse = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`,
-          {
-            headers,
-            cancelToken: source.token,
-          }
-        );
-        response = axiosResponse.data;
-      }
+      const axiosResponse = await axios.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`,
+        {
+          headers,
+          cancelToken: source.token,
+        }
+      );
+      response = axiosResponse.data;
+      //   }
       setEvents(response);
     } catch (error) {
       if (error.response) {
@@ -449,10 +449,10 @@ const Mygroups: React.FC = () => {
                           event?.is_bookmarked
                             ? "assets/imgs/bookmark-blue.svg"
                             : event?.is_cancelled
-                            ? "assets/imgs/cross-icon.svg"
-                            : event?.is_registered
-                            ? checkmarkCircle
-                            : "assets/imgs/closed-letterr.svg"
+                              ? "assets/imgs/cross-icon.svg"
+                              : event?.is_registered
+                                ? checkmarkCircle
+                                : "assets/imgs/closed-letterr.svg"
                         }
                       />
                     </div>

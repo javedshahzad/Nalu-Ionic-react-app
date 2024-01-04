@@ -60,20 +60,20 @@ const Resourcedetail: React.FC = () => {
 
     try {
       let responseData;
-      if (isPlatform("ios")) {
-        const cordovaResponse = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${params.id}`,
-          {},
-          headers
-        );
-        responseData = JSON.parse(cordovaResponse.data); // Assuming the Cordova plugin returns the response directly
-      } else {
-        const axiosResponse = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${params.id}`,
-          { headers }
-        );
-        responseData = axiosResponse.data; // Axios encapsulates response in a .data property
-      }
+      // if (isPlatform("ios")) {
+      //   const cordovaResponse = await HTTP.get(
+      //     `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${params.id}`,
+      //     {},
+      //     headers
+      //   );
+      //   responseData = JSON.parse(cordovaResponse.data); // Assuming the Cordova plugin returns the response directly
+      // } else {
+      const axiosResponse = await axios.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${params.id}`,
+        { headers }
+      );
+      responseData = axiosResponse.data; // Axios encapsulates response in a .data property
+      //  }
       console.log(responseData);
       setResourceData({ data: responseData }); // Normalize the structure
     } catch (error) {
@@ -105,13 +105,13 @@ const Resourcedetail: React.FC = () => {
 
     try {
       let response;
-      if (isPlatform("ios")) {
-        response = await HTTP.post(URL, {}, headers);
-        response = JSON.parse(response.data);
-      } else {
-        response = await axios.post(URL, {}, { headers });
-        response = response.data;
-      }
+      // if (isPlatform("ios")) {
+      //   response = await HTTP.post(URL, {}, headers);
+      //   response = JSON.parse(response.data);
+      // } else {
+      response = await axios.post(URL, {}, { headers });
+      response = response.data;
+      //    }
       console.log(response);
       getResourceDetailsByID();
     } catch (error) {
@@ -137,13 +137,13 @@ const Resourcedetail: React.FC = () => {
 
     try {
       let response;
-      if (isPlatform("ios")) {
-        response = await HTTP.post(URL, {}, headers);
-        response = JSON.parse(response.data);
-      } else {
-        response = await axios.post(URL, {}, { headers });
-        response = response.data;
-      }
+      // if (isPlatform("ios")) {
+      //   response = await HTTP.post(URL, {}, headers);
+      //   response = JSON.parse(response.data);
+      // } else {
+      response = await axios.post(URL, {}, { headers });
+      response = response.data;
+      //   }
       console.log(response);
       getResourceDetailsByID();
     } catch (error) {
@@ -169,13 +169,13 @@ const Resourcedetail: React.FC = () => {
 
     try {
       let response;
-      if (isPlatform("ios")) {
-        response = await HTTP.post(URL, {}, headers);
-        response = JSON.parse(response.data);
-      } else {
-        response = await axios.post(URL, {}, { headers });
-        response = response.data;
-      }
+      // if (isPlatform("ios")) {
+      //   response = await HTTP.post(URL, {}, headers);
+      //   response = JSON.parse(response.data);
+      // } else {
+      response = await axios.post(URL, {}, { headers });
+      response = response.data;
+      //    }
       console.log(response);
       getResourceDetailsByID();
     } catch (error) {

@@ -108,22 +108,22 @@ const Resources: React.FC = () => {
 
     try {
       let response;
-      if (isPlatform("ios")) {
-        response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
-          {},
-          headers
-        );
-        response = JSON.parse(response.data);
-      } else {
-        const source = axios.CancelToken.source();
-        axiosCancelToken_1 = source;
-        response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
-          { headers, cancelToken: source.token }
-        );
-        response = response.data;
-      }
+      // if (isPlatform("ios")) {
+      //   response = await HTTP.get(
+      //     `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
+      //     {},
+      //     headers
+      //   );
+      //   response = JSON.parse(response.data);
+      // } else {
+      const source = axios.CancelToken.source();
+      axiosCancelToken_1 = source;
+      response = await axios.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
+        { headers, cancelToken: source.token }
+      );
+      response = response.data;
+      //    }
       setCategoriesOverview(response);
     } catch (error) {
       if (error.response) {
@@ -148,22 +148,22 @@ const Resources: React.FC = () => {
 
     try {
       let response;
-      if (isPlatform("ios")) {
-        response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
-          {},
-          headers
-        );
-        response = JSON.parse(response.data);
-      } else {
-        const source = axios.CancelToken.source();
-        axiosCancelToken_3 = source;
-        response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
-          { headers, cancelToken: source.token }
-        );
-        response = response.data;
-      }
+      // if (isPlatform("ios")) {
+      //   response = await HTTP.get(
+      //     `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
+      //     {},
+      //     headers
+      //   );
+      //   response = JSON.parse(response.data);
+      // } else {
+      const source = axios.CancelToken.source();
+      axiosCancelToken_3 = source;
+      response = await axios.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
+        { headers, cancelToken: source.token }
+      );
+      response = response.data;
+      //     }
       setCategoriesFavourites(response.ressources);
     } catch (error) {
       if (error.response) {
@@ -188,22 +188,22 @@ const Resources: React.FC = () => {
 
     try {
       let response;
-      if (isPlatform("ios")) {
-        response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
-          {},
-          headers
-        );
-        response = JSON.parse(response.data);
-      } else {
-        const source = axios.CancelToken.source();
-        axiosCancelToken_2 = source;
-        response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
-          { headers, cancelToken: source.token }
-        );
-        response = response.data;
-      }
+      // if (isPlatform("ios")) {
+      //   response = await HTTP.get(
+      //     `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
+      //     {},
+      //     headers
+      //   );
+      //   response = JSON.parse(response.data);
+      // } else {
+      const source = axios.CancelToken.source();
+      axiosCancelToken_2 = source;
+      response = await axios.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
+        { headers, cancelToken: source.token }
+      );
+      response = response.data;
+      //   }
       setRecommendations(response.ressources);
     } catch (error) {
       if (error.response) {
@@ -259,13 +259,13 @@ const Resources: React.FC = () => {
 
     try {
       let response;
-      if (isPlatform("ios")) {
-        response = await HTTP.post(URL, {}, headers);
-        response = JSON.parse(response.data);
-      } else {
-        response = await axios.post(URL, {}, { headers });
-        response = response.data;
-      }
+      // if (isPlatform("ios")) {
+      //   response = await HTTP.post(URL, {}, headers);
+      //   response = JSON.parse(response.data);
+      // } else {
+      response = await axios.post(URL, {}, { headers });
+      response = response.data;
+      //      }
       console.log(response);
       if (response.message === "Upvote handled successfully" ||
         response.message === "Downvote removed successfully" ||
@@ -293,13 +293,13 @@ const Resources: React.FC = () => {
 
     try {
       let response;
-      if (isPlatform("ios")) {
-        response = await HTTP.post(URL, {}, headers);
-        response = JSON.parse(response.data);
-      } else {
-        response = await axios.post(URL, {}, { headers });
-        response = response.data;
-      }
+      // if (isPlatform("ios")) {
+      //   response = await HTTP.post(URL, {}, headers);
+      //   response = JSON.parse(response.data);
+      // } else {
+      response = await axios.post(URL, {}, { headers });
+      response = response.data;
+      //     }
       console.log(response);
       if (response.message === "Downvote removed successfully" ||
         response.message === "Downvote added successfully" ||
@@ -328,13 +328,13 @@ const Resources: React.FC = () => {
 
     try {
       let response;
-      if (isPlatform("ios")) {
-        response = await HTTP.post(URL, {}, headers);
-        response = JSON.parse(response.data);
-      } else {
-        response = await axios.post(URL, {}, { headers });
-        response = response.data;
-      }
+      // if (isPlatform("ios")) {
+      //   response = await HTTP.post(URL, {}, headers);
+      //   response = JSON.parse(response.data);
+      // } else {
+      response = await axios.post(URL, {}, { headers });
+      response = response.data;
+      //   }
       console.log(response);
       if (response.message === "Post removed from favourites successfully" ||
         response.message === "Post added to favourites successfully") {

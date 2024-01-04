@@ -58,13 +58,13 @@ const Yourdata: React.FC = () => {
 
     try {
       let response;
-      if (isPlatform("ios")) {
-        const cordovaResponse = await HTTP.put(url, {}, headers);
-        response = JSON.parse(cordovaResponse.data);
-      } else {
-        const axiosResponse = await axios.put(url, {}, { headers });
-        response = axiosResponse.data;
-      }
+      // if (isPlatform("ios")) {
+      //   const cordovaResponse = await HTTP.put(url, {}, headers);
+      //   response = JSON.parse(cordovaResponse.data);
+      // } else {
+      const axiosResponse = await axios.put(url, {}, { headers });
+      response = axiosResponse.data;
+      //    }
 
       console.log('Consent updated successfully!', response);
     } catch (error) {
