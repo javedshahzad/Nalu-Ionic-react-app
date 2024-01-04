@@ -131,7 +131,7 @@ const JournalCalendarRemade = () => {
   const getIcons = async () => {
     try {
       const data = await MoonPhasesServce.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/mon/${year}`
+        `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
       );
 
       const newArray = [];
