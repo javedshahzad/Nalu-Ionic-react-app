@@ -496,7 +496,7 @@ const GroupChat: React.FC = () => {
                             onClick={() => setShowModal(false)}
                             className="closeBtn"
                           >
-                            Close
+                            Schliessen
                           </IonButton>
                         </IonModal>
                         <div className="msg-text">
