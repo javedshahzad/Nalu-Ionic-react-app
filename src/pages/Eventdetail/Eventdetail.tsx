@@ -68,70 +68,70 @@ const Eventdetail: React.FC = () => {
       Authorization: `Bearer ${jwtToken}`,
     };
 
-    // if (isPlatform("ios")) {
-    //   // Use Cordova HTTP plugin for iOS
-    //   HTTP.get(
-    //     `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
-    //     {},
-    //     headers
-    //   )
-    //     .then(response => {
-    //       const data = JSON.parse(response.data);
-    //       console.log(data);
-    //       setEvent(data);
-    //       setIsLoading(false);
-    //     })
-    //     .catch(error => {
-    //       if (error.response) {
-    //         const status = error.response.status;
+    if (isPlatform("ios")) {
+      // Use Cordova HTTP plugin for iOS
+      HTTP.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
+        {},
+        headers
+      )
+        .then(response => {
+          const data = JSON.parse(response.data);
+          console.log(data);
+          setEvent(data);
+          setIsLoading(false);
+        })
+        .catch(error => {
+          if (error) {
+            const status = error.status;
 
-    //         if (status === 401 || status === 403 || status === 404) {
-    //           // Unauthorized, Forbidden, or Not Found
-    //           authService.logout();
-    //           history.push("/login");
-    //         }
-    //       }
-
-    //       console.error(error);
-    //       setIsLoading(false);
-    //     });
-    // } else {
-    // Use Axios for other platforms
-    const source = axios.CancelToken.source();
-    axiosCancelToken = source;
-
-    axios.get(
-      `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
-      {
-        headers: headers,
-        cancelToken: source.token,
-      }
-    )
-      .then(response => {
-        console.log(response.data);
-        setEvent(response.data);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        setIsLoading(false);
-        if (axios.isCancel(error)) {
-          console.log("Request was canceled:", error.message);
-        } else {
-          console.log(error);
-        }
-        if (error.response) {
-          const status = error.response.status;
-
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/login");
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/login");
+            }
           }
-        }
 
-        console.error(error);
-      });
-    //    }
+          console.error(error);
+          setIsLoading(false);
+        });
+    } else {
+      // Use Axios for other platforms
+      const source = axios.CancelToken.source();
+      axiosCancelToken = source;
+
+      axios.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
+        {
+          headers: headers,
+          cancelToken: source.token,
+        }
+      )
+        .then(response => {
+          console.log(response.data);
+          setEvent(response.data);
+          setIsLoading(false);
+        })
+        .catch(error => {
+          setIsLoading(false);
+          if (axios.isCancel(error)) {
+            console.log("Request was canceled:", error.message);
+          } else {
+            console.log(error);
+          }
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/login");
+            }
+          }
+
+          console.error(error);
+        });
+    }
   };
 
   const handleDateChange = (event, date_event, registration_link) => {

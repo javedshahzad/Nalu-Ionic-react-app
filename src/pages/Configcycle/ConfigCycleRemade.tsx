@@ -58,12 +58,12 @@ function ConfigCycleRemade() {
 
   const navigation = useIonRouter();
 
-  // if (isPlatform("ios")) {
-  //   useEffect(() => {
-  //     HTTP.setDataSerializer('json');
-  //     HTTP.setHeader('*', 'Content-Type', 'application/json');
-  //   }, []);
-  // }
+  if (isPlatform("ios")) {
+    useEffect(() => {
+      HTTP.setDataSerializer('json');
+      HTTP.setHeader('*', 'Content-Type', 'application/json');
+    }, []);
+  }
 
   const toLogin = async () => {
     setIsSubmittingToLogin(true);
@@ -74,28 +74,28 @@ function ConfigCycleRemade() {
     };
 
     try {
-      // if (isPlatform("ios")) {
-      //   // Use Cordova HTTP plugin for iOS
-      //   await HTTP.put(
-      //     'https://app.mynalu.com/wp-json/nalu-app/v1/no-period',
-      //     {},
-      //     headers
-      //   );
-      // } else {
-      // Use Axios for other platforms
-      await axios.put(
-        'https://app.mynalu.com/wp-json/nalu-app/v1/no-period',
-        {},
-        {
-          headers: headers,
-        }
-      );
-      // }
+      if (isPlatform("ios")) {
+        // Use Cordova HTTP plugin for iOS
+        await HTTP.put(
+          'https://app.mynalu.com/wp-json/nalu-app/v1/no-period',
+          {},
+          headers
+        );
+      } else {
+        // Use Axios for other platforms
+        await axios.put(
+          'https://app.mynalu.com/wp-json/nalu-app/v1/no-period',
+          {},
+          {
+            headers: headers,
+          }
+        );
+      }
 
       navigation.push("/learnmore");
     } catch (error) {
-      if (error.response) {
-        const status = error.response.status;
+      if (error) {
+        const status = error.status;
 
         if (status === 401 || status === 403 || status === 404) {
           // Unauthorized, Forbidden, or Not Found
@@ -273,30 +273,30 @@ function ConfigCycleRemade() {
       };
 
       let response;
-      // if (isPlatform("ios")) {
-      //   // Use Cordova HTTP plugin for iOS
-      //   response = await HTTP.post(
-      //     `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${calendarDate}`,
-      //     data,
-      //     headers
-      //   );
-      //   response.data = JSON.parse(response.data); // Parsing the response data
-      // } else {
-      // Use Axios for other platforms
-      response = await axios.post(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${calendarDate}`,
-        data,
-        {
-          headers: headers,
-        }
-      );
-      //  }
+      if (isPlatform("ios")) {
+        // Use Cordova HTTP plugin for iOS
+        response = await HTTP.post(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${calendarDate}`,
+          data,
+          headers
+        );
+        response.data = JSON.parse(response.data); // Parsing the response data
+      } else {
+        // Use Axios for other platforms
+        response = await axios.post(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${calendarDate}`,
+          data,
+          {
+            headers: headers,
+          }
+        );
+      }
 
       console.log("data from custom category api", response);
       navigation.push("/learnmore");
     } catch (error) {
-      if (error.response) {
-        const status = error.response.status;
+      if (error) {
+        const status = error.status;
 
         if (status === 401 || status === 403 || status === 404) {
           // Unauthorized, Forbidden, or Not Found

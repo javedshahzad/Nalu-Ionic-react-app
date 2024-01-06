@@ -104,31 +104,44 @@ const ResourceSubCategory: React.FC = () => {
 
     try {
       let response;
-      // if (isPlatform("ios")) {
-      //   const cordovaResponse = await HTTP.get(
-      //     `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
-      //     { category_id: id },
-      //     headers
-      //   );
-      //   response = JSON.parse(cordovaResponse.data);
-      // } else {
-      const source = axios.CancelToken.source();
-      response = await axios.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
-        { params: { category_id: id }, headers, cancelToken: source.token }
-      );
-      response = response.data;
-      //    }
+      if (isPlatform("ios")) {
+        const cordovaResponse = await HTTP.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
+          { category_id: id },
+          headers
+        );
+        response = JSON.parse(cordovaResponse.data);
+      } else {
+        const source = axios.CancelToken.source();
+        response = await axios.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
+          { params: { category_id: id }, headers, cancelToken: source.token }
+        );
+        response = response.data;
+      }
       setFiltered(response.ressources);
       setSubCategories(response.sub_categories);
     } catch (error) {
-      if (error.response) {
-        const status = error.response.status;
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
 
-        if (status === 401 || status === 403 || status === 404) {
-          // Unauthorized, Forbidden, or Not Found
-          authService.logout();
-          history.push("/login");
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/login");
+          }
+        }
+      }
+      else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/login");
+          }
         }
       }
       console.error('error', error);
@@ -146,30 +159,43 @@ const ResourceSubCategory: React.FC = () => {
 
       try {
         let response;
-        // if (isPlatform("ios")) {
-        //   response = await HTTP.get(
-        //     `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
-        //     { category_id: ids.toString() },
-        //     headers
-        //   );
-        //   response = JSON.parse(response.data);
-        // } else {
-        const source = axios.CancelToken.source();
-        response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
-          { params: { category_id: ids.toString() }, headers, cancelToken: source.token }
-        );
-        response = response.data;
-        //    }
+        if (isPlatform("ios")) {
+          response = await HTTP.get(
+            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
+            { category_id: ids.toString() },
+            headers
+          );
+          response = JSON.parse(response.data);
+        } else {
+          const source = axios.CancelToken.source();
+          response = await axios.get(
+            `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
+            { params: { category_id: ids.toString() }, headers, cancelToken: source.token }
+          );
+          response = response.data;
+        }
         setFiltered(response.ressources);
       } catch (error) {
-        if (error.response) {
-          const status = error.response.status;
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/login");
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/login");
+            }
+          }
+        }
+        else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/login");
+            }
           }
         }
         console.error('error', error);
@@ -304,20 +330,20 @@ const ResourceSubCategory: React.FC = () => {
 
     try {
       let response;
-      // if (isPlatform("ios")) {
-      //   response = await HTTP.get(
-      //     `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`,
-      //     {},
-      //     headers
-      //   );
-      //   response = JSON.parse(response.data);
-      // } else {
-      response = await axios.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`,
-        { headers }
-      );
-      response = response.data;
-      //   }
+      if (isPlatform("ios")) {
+        response = await HTTP.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`,
+          {},
+          headers
+        );
+        response = JSON.parse(response.data);
+      } else {
+        response = await axios.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`,
+          { headers }
+        );
+        response = response.data;
+      }
       console.log(response);
       history.push("/tabs/tab3/resourcedetail", { data: response });
     } catch (error) {

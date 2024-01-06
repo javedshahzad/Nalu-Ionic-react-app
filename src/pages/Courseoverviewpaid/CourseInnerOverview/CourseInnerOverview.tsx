@@ -95,13 +95,13 @@ const CourseInnerOverview: React.FC = () => {
 
     try {
       let response;
-      // if (isPlatform("ios")) {
-      //   const cordovaResponse = await HTTP.get(URL, {}, headers);
-      //   response = JSON.parse(cordovaResponse.data);
-      // } else {
-      const axiosResponse = await axios.get(URL, { headers });
-      response = axiosResponse.data;
-      //  }
+      if (isPlatform("ios")) {
+        const cordovaResponse = await HTTP.get(URL, {}, headers);
+        response = JSON.parse(cordovaResponse.data);
+      } else {
+        const axiosResponse = await axios.get(URL, { headers });
+        response = axiosResponse.data;
+      }
       console.log(response);
       setCourseData(response);
     } catch (error) {
@@ -119,13 +119,13 @@ const CourseInnerOverview: React.FC = () => {
 
     try {
       let response;
-      // if (isPlatform("ios")) {
-      //   const cordovaResponse = await HTTP.post(URL, {}, headers);
-      //   response = JSON.parse(cordovaResponse.data);
-      // } else {
-      const axiosResponse = await axios.post(URL, null, { headers });
-      response = axiosResponse.data;
-      //  }
+      if (isPlatform("ios")) {
+        const cordovaResponse = await HTTP.post(URL, {}, headers);
+        response = JSON.parse(cordovaResponse.data);
+      } else {
+        const axiosResponse = await axios.post(URL, null, { headers });
+        response = axiosResponse.data;
+      }
       console.log(response);
       if (response.status === "success") {
         getData(null, course?.next_chapter);

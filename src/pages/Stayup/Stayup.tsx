@@ -25,23 +25,36 @@ const handleSubscribe = async () => {
 
   try {
     let response;
-    // if (isPlatform("ios")) {
-    //   const cordovaResponse = await HTTP.post(url, {}, headers);
-    //   response = JSON.parse(cordovaResponse.data);
-    // } else {
-    const axiosResponse = await axios.post(url, {}, { headers });
-    response = axiosResponse.data;
-    //    }
+    if (isPlatform("ios")) {
+      const cordovaResponse = await HTTP.post(url, {}, headers);
+      response = JSON.parse(cordovaResponse.data);
+    } else {
+      const axiosResponse = await axios.post(url, {}, { headers });
+      response = axiosResponse.data;
+    }
 
     console.log('Subscription successful:', response);
   } catch (error) {
-    if (error.response) {
-      const status = error.response.status;
+    if (isPlatform("ios")) {
+      if (error) {
+        const status = error.status;
 
-      if (status === 401 || status === 403 || status === 404) {
-        // Unauthorized, Forbidden, or Not Found
-        authService.logout();
-        history.push("/login");
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/login");
+        }
+      }
+    }
+    else {
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/login");
+        }
       }
     }
     console.error('error', error);

@@ -218,26 +218,26 @@ const Addcustomcategory: React.FC = () => {
 
     try {
       let response;
-      // if (isPlatform("ios")) {
-      //   // Use Cordova HTTP plugin for iOS
-      //   response = await HTTP.post(
-      //     `https://app.mynalu.com/wp-json/nalu-app/v1/add-custom-field`,
-      //     data,
-      //     { Authorization: `Bearer ${jwtToken}` }
-      //   );
-      //   response.data = JSON.parse(response.data);
-      // } else {
-      // Use Axios for other platforms
-      response = await axios.post(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/add-custom-field`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
-        }
-      );
-      //  }
+      if (isPlatform("ios")) {
+        // Use Cordova HTTP plugin for iOS
+        response = await HTTP.post(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/add-custom-field`,
+          data,
+          { Authorization: `Bearer ${jwtToken}` }
+        );
+        response.data = JSON.parse(response.data);
+      } else {
+        // Use Axios for other platforms
+        response = await axios.post(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/add-custom-field`,
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
+          }
+        );
+      }
 
       console.log(response.data);
 

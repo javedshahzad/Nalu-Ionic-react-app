@@ -62,22 +62,35 @@ const Learnmore: React.FC = () => {
     const fetchData = async () => {
       try {
         let response;
-        // if (isPlatform("ios")) {
-        //   const cordovaResponse = await HTTP.get(url, {}, headers);
-        //   response = JSON.parse(cordovaResponse.data);
-        // } else {
-        const axiosResponse = await axios.get(url, { headers });
-        response = axiosResponse.data;
-        //    }
+        if (isPlatform("ios")) {
+          const cordovaResponse = await HTTP.get(url, {}, headers);
+          response = JSON.parse(cordovaResponse.data);
+        } else {
+          const axiosResponse = await axios.get(url, { headers });
+          response = axiosResponse.data;
+        }
         setEvent(response);
       } catch (error) {
-        if (error.response) {
-          const status = error.response.status;
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/login");
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/login");
+            }
+          }
+        }
+        else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/login");
+            }
           }
         }
         console.error(error);
@@ -116,23 +129,36 @@ const Learnmore: React.FC = () => {
 
       try {
         let response;
-        // if (isPlatform("ios")) {
-        //   const cordovaResponse = await HTTP.post(updatedRegistrationLink, {}, headers);
-        //   response = JSON.parse(cordovaResponse.data);
-        // } else {
-        const axiosResponse = await axios.post(updatedRegistrationLink, {}, { headers });
-        response = axiosResponse.data;
-        //  }
+        if (isPlatform("ios")) {
+          const cordovaResponse = await HTTP.post(updatedRegistrationLink, {}, headers);
+          response = JSON.parse(cordovaResponse.data);
+        } else {
+          const axiosResponse = await axios.post(updatedRegistrationLink, {}, { headers });
+          response = axiosResponse.data;
+        }
         console.log(response);
         // Handle successful registration (e.g., navigate to a success page or show a message)
       } catch (error) {
-        if (error.response) {
-          const status = error.response.status;
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/login");
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/login");
+            }
+          }
+        }
+        else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/login");
+            }
           }
         }
         console.error(error);

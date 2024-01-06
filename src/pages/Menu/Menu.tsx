@@ -84,11 +84,11 @@ const Menu: React.FC = () => {
       };
 
       try {
-        // if (isPlatform("ios")) {
-        //   await HTTP.post('https://app.mynalu.com/wp-json/nalu-app/v1/account-deletion', {}, headers);
-        // } else {
-        await axios.post('https://app.mynalu.com/wp-json/nalu-app/v1/account-deletion', {}, { headers });
-        //  }
+        if (isPlatform("ios")) {
+          await HTTP.post('https://app.mynalu.com/wp-json/nalu-app/v1/account-deletion', {}, headers);
+        } else {
+          await axios.post('https://app.mynalu.com/wp-json/nalu-app/v1/account-deletion', {}, { headers });
+        }
         setShowDeleteSuccess(true);
         handleLogout();
       } catch (error) {
