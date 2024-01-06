@@ -71,7 +71,7 @@ const GroupChat: React.FC = () => {
   const inputRef = useRef(null);
   const refFiles: any = useRef();
   const chatContentRef = useRef<HTMLDivElement | null>(null);
-  const [presentToast] = useIonToast();
+  const [presentToast, dismissToast] = useIonToast();
 
   useIonViewWillEnter(() => {
     setTimeout(() => {
@@ -80,7 +80,7 @@ const GroupChat: React.FC = () => {
         conversation: groupId,
       });
 
-      socket.on("join", (data) => {});
+      socket.on("join", (data) => { });
 
       socket.emit("message-list", {
         page: 1,
@@ -243,6 +243,7 @@ const GroupChat: React.FC = () => {
         conversation: groupId,
       });
 
+      console.log('nameArr', nameArray)
       socket.emit("send-message", {
         user: user,
         conversation: groupId,
@@ -660,13 +661,21 @@ const GroupChat: React.FC = () => {
                   fileArrays.push(selectedFile[0]);
                   setFilesArray(fileArrays);
                 } else if (!isOnlyImage) {
-                  presentToast(
-                    "Du kannst nur png, jpg, jpeg, webp und heic Dateien hochladen"
-                  );
+
+                  presentToast({
+                    buttons: [{ text: 'Schliessen', handler: dismissToast }],
+                    message: "Du kannst nur png, jpg, jpeg, webp und heic Dateien hochladen",
+                    duration: 3000, // duration in milliseconds
+                    position: 'bottom', // 'top', 'bottom', 'middle'
+                  });
                 } else if (!isFileSize) {
-                  presentToast(
-                    "Die maximale Dateigröße ist auf 5 MB begrenzt."
-                  );
+
+                  presentToast({
+                    buttons: [{ text: 'Schliessen', handler: dismissToast }],
+                    message: "Die maximale Dateigröße ist auf 5 MB begrenzt.",
+                    duration: 3000, // duration in milliseconds
+                    position: 'bottom', // 'top', 'bottom', 'middle'
+                  });
                 }
 
                 e.target.files = null;
