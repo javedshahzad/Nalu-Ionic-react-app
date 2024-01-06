@@ -121,7 +121,7 @@ const MyGroups: React.FC = () => {
             if (status === 401 || status === 403 || status === 404) {
               // Unauthorized, Forbidden, or Not Found
               authService.logout();
-              history.push("/login");
+              history.push("/onboarding");
             }
           }
 
@@ -153,7 +153,7 @@ const MyGroups: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             // authService.logout();
-            // history.push("/login");
+            // history.push("/onboarding");
           }
         }
 

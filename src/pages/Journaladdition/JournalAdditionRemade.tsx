@@ -116,7 +116,7 @@ function JournalAdditionRemade() {
         if (status === 401 || status === 403 || status === 404) {
           // Unauthorized, Forbidden, or Not Found
           authService.logout();
-          history.push("/login");
+          history.push("/onboarding");
         }
       }
 
@@ -330,7 +330,7 @@ function JournalAdditionRemade() {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
 
@@ -367,7 +367,7 @@ function JournalAdditionRemade() {
         if (status === 401 || status === 403 || status === 404) {
           // Unauthorized, Forbidden, or Not Found
           authService.logout();
-          history.push("/login");
+          history.push("/onboarding");
         }
       }
       console.error(error);
@@ -406,7 +406,7 @@ function JournalAdditionRemade() {
         if (status === 401 || status === 403 || status === 404) {
           // Unauthorized, Forbidden, or Not Found
           authService.logout();
-          history.push("/login");
+          history.push("/onboarding");
         }
       }
       console.error(error);

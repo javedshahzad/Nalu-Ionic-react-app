@@ -75,20 +75,20 @@ const Eventdetail: React.FC = () => {
         {},
         headers
       )
-        .then(response => {
+        .then((response) => {
           const data = JSON.parse(response.data);
           console.log(data);
           setEvent(data);
           setIsLoading(false);
         })
-        .catch(error => {
+        .catch((error) => {
           if (error) {
             const status = error.status;
 
             if (status === 401 || status === 403 || status === 404) {
               // Unauthorized, Forbidden, or Not Found
               authService.logout();
-              history.push("/login");
+              history.push("/onboarding");
             }
           }
 
@@ -100,19 +100,20 @@ const Eventdetail: React.FC = () => {
       const source = axios.CancelToken.source();
       axiosCancelToken = source;
 
-      axios.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
-        {
-          headers: headers,
-          cancelToken: source.token,
-        }
-      )
-        .then(response => {
+      axios
+        .get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
+          {
+            headers: headers,
+            cancelToken: source.token,
+          }
+        )
+        .then((response) => {
           console.log(response.data);
           setEvent(response.data);
           setIsLoading(false);
         })
-        .catch(error => {
+        .catch((error) => {
           setIsLoading(false);
           if (axios.isCancel(error)) {
             console.log("Request was canceled:", error.message);
@@ -125,7 +126,7 @@ const Eventdetail: React.FC = () => {
             if (status === 401 || status === 403 || status === 404) {
               // Unauthorized, Forbidden, or Not Found
               authService.logout();
-              history.push("/login");
+              history.push("/onboarding");
             }
           }
 
@@ -160,7 +161,7 @@ const Eventdetail: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
 
@@ -203,7 +204,7 @@ const Eventdetail: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
 
@@ -237,7 +238,7 @@ const Eventdetail: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
 
@@ -439,7 +440,7 @@ const Eventdetail: React.FC = () => {
                                     fill="clear"
                                     color={
                                       event?.is_registered === false ||
-                                        event?.is_registered === null
+                                      event?.is_registered === null
                                         ? "dark"
                                         : ""
                                     }
@@ -466,7 +467,7 @@ const Eventdetail: React.FC = () => {
                                     fill="clear"
                                     color={
                                       event?.is_bookmarked === false ||
-                                        event?.is_bookmarked === null
+                                      event?.is_bookmarked === null
                                         ? "dark"
                                         : ""
                                     }
@@ -492,7 +493,7 @@ const Eventdetail: React.FC = () => {
                                     fill="clear"
                                     color={
                                       event?.is_cancelled === false ||
-                                        event?.is_cancelled === null
+                                      event?.is_cancelled === null
                                         ? "dark"
                                         : ""
                                     }

@@ -80,7 +80,7 @@ const GroupChat: React.FC = () => {
         conversation: groupId,
       });
 
-      socket.on("join", (data) => { });
+      socket.on("join", (data) => {});
 
       socket.emit("message-list", {
         page: 1,
@@ -199,7 +199,7 @@ const GroupChat: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
 
@@ -243,7 +243,7 @@ const GroupChat: React.FC = () => {
         conversation: groupId,
       });
 
-      console.log('nameArr', nameArray)
+      console.log("nameArr", nameArray);
       socket.emit("send-message", {
         user: user,
         conversation: groupId,
@@ -661,20 +661,19 @@ const GroupChat: React.FC = () => {
                   fileArrays.push(selectedFile[0]);
                   setFilesArray(fileArrays);
                 } else if (!isOnlyImage) {
-
                   presentToast({
-                    buttons: [{ text: 'Schliessen', handler: dismissToast }],
-                    message: "Du kannst nur png, jpg, jpeg, webp und heic Dateien hochladen",
+                    buttons: [{ text: "Schliessen", handler: dismissToast }],
+                    message:
+                      "Du kannst nur png, jpg, jpeg, webp und heic Dateien hochladen",
                     duration: 3000, // duration in milliseconds
-                    position: 'bottom', // 'top', 'bottom', 'middle'
+                    position: "bottom", // 'top', 'bottom', 'middle'
                   });
                 } else if (!isFileSize) {
-
                   presentToast({
-                    buttons: [{ text: 'Schliessen', handler: dismissToast }],
+                    buttons: [{ text: "Schliessen", handler: dismissToast }],
                     message: "Die maximale Dateigröße ist auf 5 MB begrenzt.",
                     duration: 3000, // duration in milliseconds
-                    position: 'bottom', // 'top', 'bottom', 'middle'
+                    position: "bottom", // 'top', 'bottom', 'middle'
                   });
                 }
 

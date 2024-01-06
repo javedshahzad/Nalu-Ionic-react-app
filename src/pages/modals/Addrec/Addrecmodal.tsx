@@ -33,7 +33,7 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
   const [titleError, setTitleError] = useState("");
 
   const [note, setNote] = useState("");
-  const history = useHistory()
+  const history = useHistory();
 
   const isFormValid =
     !!selectedCategory && !!title && !categoryError && !titleError;
@@ -92,7 +92,7 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
             if (status === 401 || status === 403 || status === 404) {
               // Unauthorized, Forbidden, or Not Found
               authService.logout();
-              history.push("/login");
+              history.push("/onboarding");
             }
           }
 
@@ -105,10 +105,10 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
         if (status === 401 || status === 403 || status === 404) {
           // Unauthorized, Forbidden, or Not Found
           authService.logout();
-          history.push("/login");
+          history.push("/onboarding");
         }
       }
-      console.error('error', error);
+      console.error("error", error);
     }
   };
 

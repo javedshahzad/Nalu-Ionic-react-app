@@ -46,9 +46,9 @@ import thumbs_up_outline from "../../Images/thumbs-up-outline.svg";
 import thumbs_down from "../../Images/thumbs-down.svg";
 import thumbs_down_outline from "../../Images/thumbs-down-outline.svg";
 import filter from "../../Images/filter.png";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import NotificationBell from './../../components/NotificationBell';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import NotificationBell from "./../../components/NotificationBell";
 import authService from "../../authService";
 
 const Journal: React.FC = () => {
@@ -60,7 +60,7 @@ const Journal: React.FC = () => {
   const [categoriesFavourites, setCategoriesFavourites] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
   const [filtered, setFiltered] = useState([]);
-  const [categoryID, setCategoryID] = useState('');
+  const [categoryID, setCategoryID] = useState("");
 
   const history = useHistory();
   const location = useLocation();
@@ -104,8 +104,8 @@ const Journal: React.FC = () => {
       localStorage.removeItem("DATA");
     } else {
       getCategoriesFavourites();
-      setIsFilterSelected(false)
-      setCategoryID('')
+      setIsFilterSelected(false);
+      setCategoryID("");
     }
   };
 
@@ -138,7 +138,7 @@ const Journal: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
         console.error(error);
@@ -161,7 +161,7 @@ const Journal: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
         console.error(error);
@@ -201,7 +201,7 @@ const Journal: React.FC = () => {
         if (status === 401 || status === 403 || status === 404) {
           // Unauthorized, Forbidden, or Not Found
           authService.logout();
-          history.push("/login");
+          history.push("/onboarding");
         }
       }
       console.error(error);
@@ -240,7 +240,7 @@ const Journal: React.FC = () => {
         if (status === 401 || status === 403 || status === 404) {
           // Unauthorized, Forbidden, or Not Found
           authService.logout();
-          history.push("/login");
+          history.push("/onboarding");
         }
       }
       console.error(error);
@@ -268,7 +268,7 @@ const Journal: React.FC = () => {
           `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
           {
             params: { category_id: id },
-            headers
+            headers,
           }
         );
       }
@@ -281,7 +281,7 @@ const Journal: React.FC = () => {
         if (status === 401 || status === 403 || status === 404) {
           // Unauthorized, Forbidden, or Not Found
           authService.logout();
-          history.push("/login");
+          history.push("/onboarding");
         }
       }
       console.error(error);
@@ -329,18 +329,17 @@ const Journal: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
       }
@@ -387,18 +386,17 @@ const Journal: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
       }
@@ -437,18 +435,17 @@ const Journal: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
       }
@@ -467,9 +464,9 @@ const Journal: React.FC = () => {
     history.push("/filter");
   };
   const setToastAndClose = (val) => {
-    toast.success(val)
-    setModalOpen(false)
-  }
+    toast.success(val);
+    setModalOpen(false);
+  };
   const getResourceDetailsByID = async (id) => {
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -495,10 +492,9 @@ const Journal: React.FC = () => {
       }
 
       console.log(response);
-      history.push('/tabs/tab3/resourcedetail', {
-        data: response
+      history.push("/tabs/tab3/resourcedetail", {
+        data: response,
       });
-
     } catch (error) {
       if (isPlatform("ios")) {
         if (error) {
@@ -507,24 +503,23 @@ const Journal: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
       }
       console.error(error);
     }
-  }
+  };
   return (
     <>
       <ToastContainer autoClose={19000} />
@@ -548,7 +543,10 @@ const Journal: React.FC = () => {
             <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
-                  <IonButton color={"dark"} onClick={() => history.push('/menu')}>
+                  <IonButton
+                    color={"dark"}
+                    onClick={() => history.push("/menu")}
+                  >
                     <IonIcon icon={menuOutline} />
                   </IonButton>
                 </IonButtons>
@@ -584,9 +582,7 @@ const Journal: React.FC = () => {
                 className="modaaal"
                 onDidDismiss={handleModalClose}
               >
-                <Addrecmodal
-
-                  onClose={(val) => setToastAndClose(val)} />
+                <Addrecmodal onClose={(val) => setToastAndClose(val)} />
               </IonModal>
               {activeSegment === "overview" ? (
                 <>
@@ -597,8 +593,11 @@ const Journal: React.FC = () => {
                           <IonItem
                             key={index}
                             lines="none"
-                            className={`img_div ${categoryID === item.id ? "selected" : "non_selected"
-                              }`}
+                            className={`img_div ${
+                              categoryID === item.id
+                                ? "selected"
+                                : "non_selected"
+                            }`}
                             onClick={() => getCategoryByID(item.id)}
                           >
                             <div>
@@ -629,9 +628,16 @@ const Journal: React.FC = () => {
                               <IonItem lines="none">
                                 <div className="thumb" slot="start">
                                   {card?.thumbnail_url ? (
-                                    <img style={{ "borderRadius": "15px" }} src={card.thumbnail_url} alt="" />
+                                    <img
+                                      style={{ borderRadius: "15px" }}
+                                      src={card.thumbnail_url}
+                                      alt=""
+                                    />
                                   ) : (
-                                    <img src="Not found" alt="Image not found" />
+                                    <img
+                                      src="Not found"
+                                      alt="Image not found"
+                                    />
                                   )}
                                 </div>
 
@@ -658,11 +664,14 @@ const Journal: React.FC = () => {
                                           card.is_downvoted
                                         )
                                       }
-                                      className="btn ion-activatable ripple-parent flex al-center">
+                                      className="btn ion-activatable ripple-parent flex al-center"
+                                    >
                                       {card.is_upvoted ? (
                                         <IonIcon src={thumbs_up}></IonIcon>
                                       ) : (
-                                        <IonIcon src={thumbs_up_outline}></IonIcon>
+                                        <IonIcon
+                                          src={thumbs_up_outline}
+                                        ></IonIcon>
                                       )}
                                       <h6>{card.upvotes_number}</h6>
                                     </div>
@@ -674,7 +683,8 @@ const Journal: React.FC = () => {
                                           card.is_downvoted
                                         )
                                       }
-                                      className="btn ion-activatable ripple-parent flex al-center">
+                                      className="btn ion-activatable ripple-parent flex al-center"
+                                    >
                                       {card.is_downvoted ? (
                                         <IonIcon src={thumbs_down}></IonIcon>
                                       ) : (
@@ -688,7 +698,8 @@ const Journal: React.FC = () => {
                                       onClick={() =>
                                         handleSave(card.favourite, card.id)
                                       }
-                                      className="btn ion-activatable ripple-parent flex al-center">
+                                      className="btn ion-activatable ripple-parent flex al-center"
+                                    >
                                       {!card.favourite ? (
                                         <IonIcon src={h_outline}></IonIcon>
                                       ) : (
@@ -714,7 +725,9 @@ const Journal: React.FC = () => {
                               <IonCol size="6" key={index}>
                                 <div
                                   className="rc-card ion-activatable ripple-parent"
-                                  onClick={() => getResourceDetailsByID(item.id)}
+                                  onClick={() =>
+                                    getResourceDetailsByID(item.id)
+                                  }
                                 >
                                   <IonRippleEffect />
                                   <div className="img-holder">
@@ -880,4 +893,3 @@ const Journal: React.FC = () => {
 };
 
 export default Journal;
-

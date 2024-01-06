@@ -84,22 +84,21 @@ const Resourcedetail: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
       }
-      console.error('error', error);
+      console.error("error", error);
     } finally {
       setIsLoading(false);
     }
@@ -135,22 +134,21 @@ const Resourcedetail: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
       }
-      console.error('error', error);
+      console.error("error", error);
     }
   };
 
@@ -180,22 +178,21 @@ const Resourcedetail: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
       }
-      console.error('error', error);
+      console.error("error", error);
     }
   };
 
@@ -225,22 +222,21 @@ const Resourcedetail: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
       }
-      console.error('error', error);
+      console.error("error", error);
     }
   };
   // const getResourceDetailsByID = (id) => {
@@ -333,7 +329,12 @@ const Resourcedetail: React.FC = () => {
         <>
           <IonHeader className="ion-no-border">
             <IonToolbar>
-              <IonButton slot="start" fill="clear" color="dark" onClick={backHandler}>
+              <IonButton
+                slot="start"
+                fill="clear"
+                color="dark"
+                onClick={backHandler}
+              >
                 <IonIcon icon={arrowBackOutline}></IonIcon>
               </IonButton>
               <IonTitle>{resourseData?.data.title}</IonTitle>
@@ -394,7 +395,10 @@ const Resourcedetail: React.FC = () => {
                     {resourseData?.data?.authority?.title ? (
                       <div className="start-slot flex al-start " slot="start">
                         <IonAvatar>
-                          <img src={resourseData?.data?.authority?.image} alt="" />
+                          <img
+                            src={resourseData?.data?.authority?.image}
+                            alt=""
+                          />
                         </IonAvatar>
 
                         <IonIcon
@@ -466,7 +470,9 @@ const Resourcedetail: React.FC = () => {
                           ) : (
                             <IonIcon src="assets/imgs/heart-unfilled.svg"></IonIcon>
                           )}
-                          <h6 style={{ marginLeft: "5px", color: "#636363" }}></h6>
+                          <h6
+                            style={{ marginLeft: "5px", color: "#636363" }}
+                          ></h6>
                         </div>
                       </div>
                     </IonLabel>

@@ -18,27 +18,26 @@ import {
   IonToolbar,
   isPlatform,
 } from "@ionic/react";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
-import { HTTP } from '@awesome-cordova-plugins/http';
-import axios from 'axios';
+import { HTTP } from "@awesome-cordova-plugins/http";
+import axios from "axios";
 
 import "./Membership.scss";
 import authService from "../../authService";
 import { useHistory } from "react-router-dom";
 
-
 const Membership: React.FC = () => {
-  const [selectedPackage, setSelectedPackage] = useState<string>('raten');
+  const [selectedPackage, setSelectedPackage] = useState<string>("raten");
   const [userGoals, setUserGoals] = useState<string[]>([]);
   const [isDiscountActive, setIsDiscountActive] = useState(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const history = useHistory()
+  const history = useHistory();
 
   useEffect(() => {
     const today = new Date();
-    const discountEndDate = new Date('2023-12-25');
+    const discountEndDate = new Date("2023-12-25");
     if (today > discountEndDate) {
       setIsDiscountActive(false);
     }
@@ -52,10 +51,12 @@ const Membership: React.FC = () => {
     setIsLoading(true);
     try {
       let response;
-      const url = 'https://app.mynalu.com/wp-json/nalu-app/v1/user-goal';
-      const headers = { Authorization: `Bearer ${localStorage.getItem('jwtToken')}` };
+      const url = "https://app.mynalu.com/wp-json/nalu-app/v1/user-goal";
+      const headers = {
+        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+      };
 
-      if (isPlatform('ios')) {
+      if (isPlatform("ios")) {
         const cordovaResponse = await HTTP.get(url, {}, headers);
         response = { data: JSON.parse(cordovaResponse.data) };
       } else {
@@ -63,23 +64,29 @@ const Membership: React.FC = () => {
       }
 
       if (!response.data) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
 
       setUserGoals(response.data.goals);
       setIsLoading(false);
     } catch (error) {
-      console.error('There has been a problem with fetching the user goals:', error);
+      console.error(
+        "There has been a problem with fetching the user goals:",
+        error
+      );
       if (error.response) {
         const status = error.response.status;
 
         if (status === 401 || status === 403 || status === 404) {
           // Unauthorized, Forbidden, or Not Found
           authService.logout();
-          history.push("/login");
+          history.push("/onboarding");
         }
       }
-      console.error('There has been a problem with fetching the user goals:', error);
+      console.error(
+        "There has been a problem with fetching the user goals:",
+        error
+      );
       setIsLoading(false);
     }
   };
@@ -89,28 +96,36 @@ const Membership: React.FC = () => {
   };
 
   const handleButtonClick = () => {
-    let url = '';
+    let url = "";
 
-    if (userGoals.includes('endometriosis')) {
-      url = selectedPackage === 'einmal' ? 'https://www.mynalu.com/bestellung/endo-flow/' : 'https://www.mynalu.com/bestellung/endo-flow-raten/';
+    if (userGoals.includes("endometriosis")) {
+      url =
+        selectedPackage === "einmal"
+          ? "https://www.mynalu.com/bestellung/endo-flow/"
+          : "https://www.mynalu.com/bestellung/endo-flow-raten/";
     } else {
-      url = selectedPackage === 'einmal' ? 'https://www.mynalu.com/bestellung/zyklus-flow/' : 'https://www.mynalu.com/bestellung/zyklus-flow-raten/';
+      url =
+        selectedPackage === "einmal"
+          ? "https://www.mynalu.com/bestellung/zyklus-flow/"
+          : "https://www.mynalu.com/bestellung/zyklus-flow-raten/";
     }
 
     if (url) {
-      window.open(url, '_system');
+      window.open(url, "_system");
     }
   };
 
   if (isLoading) {
     return (
-      <div style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        backgroundColor: "#F8F5F2",
-      }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          backgroundColor: "#F8F5F2",
+        }}
+      >
         <IonSpinner name="crescent"></IonSpinner>
       </div>
     );
@@ -128,13 +143,11 @@ const Membership: React.FC = () => {
       <IonContent className="ion-padding-horizontal" fullscreen>
         <div className="title ion-text-center">
           <h2>
-            {userGoals.includes('endometriosis') ? (
-              "Mit NALU zu mehr Wohlbefinden bei Endometriose"
-            ) : userGoals.includes('amenorrhea') ? (
-              "Mit NALU deine Periode regulieren"
-            ) : (
-              "Mit NALU deinen Zyklus harmonisieren"
-            )}
+            {userGoals.includes("endometriosis")
+              ? "Mit NALU zu mehr Wohlbefinden bei Endometriose"
+              : userGoals.includes("amenorrhea")
+              ? "Mit NALU deine Periode regulieren"
+              : "Mit NALU deinen Zyklus harmonisieren"}
           </h2>
         </div>
         <div className="section sec1">
@@ -153,13 +166,11 @@ const Membership: React.FC = () => {
             <IonRow className="value-row">
               <IonCol size="5">
                 <h5>
-                  {userGoals.includes('endometriosis') ? (
-                    "Kursbestandteil Verstehe Endometriose"
-                  ) : userGoals.includes('amenorrhea') ? (
-                    "Kursbestandteil Verstehe deinen weiblichen Zyklus"
-                  ) : (
-                    "Kursbestandteil Verstehe deinen weiblichen Zyklus"
-                  )}
+                  {userGoals.includes("endometriosis")
+                    ? "Kursbestandteil Verstehe Endometriose"
+                    : userGoals.includes("amenorrhea")
+                    ? "Kursbestandteil Verstehe deinen weiblichen Zyklus"
+                    : "Kursbestandteil Verstehe deinen weiblichen Zyklus"}
                 </h5>
               </IonCol>
               <IonCol size="2" className="ion-text-center">
@@ -194,13 +205,11 @@ const Membership: React.FC = () => {
             <IonRow className="value-row">
               <IonCol size="5">
                 <h5>
-                  {userGoals.includes('endometriosis') ? (
-                    "Kompletter NALU Endo Flow Online Kurs mit Übungen für mehr Wohlbefinden bei Endometriose"
-                  ) : userGoals.includes('amenorrhea') ? (
-                    "Kompletter NALU Zyklus Flow Online Kurs mit Übungen für eine regelmässige Periode"
-                  ) : (
-                    "Kompletter NALU Zyklus Flow Online Kurs mit Übungen zur Harmonisierung des Zyklus"
-                  )}
+                  {userGoals.includes("endometriosis")
+                    ? "Kompletter NALU Endo Flow Online Kurs mit Übungen für mehr Wohlbefinden bei Endometriose"
+                    : userGoals.includes("amenorrhea")
+                    ? "Kompletter NALU Zyklus Flow Online Kurs mit Übungen für eine regelmässige Periode"
+                    : "Kompletter NALU Zyklus Flow Online Kurs mit Übungen zur Harmonisierung des Zyklus"}
                 </h5>
               </IonCol>
               <IonCol size="2" className="ion-text-center">
@@ -213,13 +222,11 @@ const Membership: React.FC = () => {
             <IonRow className="value-row">
               <IonCol size="5">
                 <h5>
-                  {userGoals.includes('endometriosis') ? (
-                    "Monatliche Live Q&A Sessions (mit Ärzt:innen & zert. Coaches) während 1 Jahr"
-                  ) : userGoals.includes('amenorrhea') ? (
-                    "Monatliche Live Q&A Sessions während 1 Jahr"
-                  ) : (
-                    "Monatliche Live Q&A Sessions während 1 Jahr"
-                  )}
+                  {userGoals.includes("endometriosis")
+                    ? "Monatliche Live Q&A Sessions (mit Ärzt:innen & zert. Coaches) während 1 Jahr"
+                    : userGoals.includes("amenorrhea")
+                    ? "Monatliche Live Q&A Sessions während 1 Jahr"
+                    : "Monatliche Live Q&A Sessions während 1 Jahr"}
                 </h5>
               </IonCol>
               <IonCol size="2" className="ion-text-center">
@@ -273,7 +280,7 @@ const Membership: React.FC = () => {
                 <IonIcon src="assets/imgs/icn-badge.svg" />
               </IonCol>
             </IonRow>
-            {userGoals.includes('endometriosis') ? (
+            {userGoals.includes("endometriosis") ? (
               ""
             ) : (
               <div>
@@ -334,102 +341,162 @@ const Membership: React.FC = () => {
                 </IonRow>
               </div>
             )}
-
           </IonGrid>
         </div>
 
         <div className="nalu">
           <div className="title ion-text-center">
             <h3>
-              {userGoals.includes('endometriosis') ? (
-                "NALU Endo Flow ist geeignet "
-              ) : (
-                "NALU Zyklus Flow ist geeignet "
-              )}
-              <br />für dich, wenn...
+              {userGoals.includes("endometriosis")
+                ? "NALU Endo Flow ist geeignet "
+                : "NALU Zyklus Flow ist geeignet "}
+              <br />
+              für dich, wenn...
             </h3>
           </div>
-          {userGoals.includes('endometriosis') ? (
+          {userGoals.includes("endometriosis") ? (
             <div>
               <div className="sec flex al-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
-                <h4>...du deine&nbsp;<strong>Beschwerden durch Endometriose auf natürliche Weise lindern</strong>&nbsp;m&ouml;chtest</h4>
+                <h4>
+                  ...du deine&nbsp;
+                  <strong>
+                    Beschwerden durch Endometriose auf natürliche Weise lindern
+                  </strong>
+                  &nbsp;m&ouml;chtest
+                </h4>
               </div>
               <div className="sec flex al-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
-                <h4>...du deine&nbsp;<strong>Lebensqualität für mehr Wohlbefinden verbessern</strong>&nbsp;m&ouml;chtest</h4>
+                <h4>
+                  ...du deine&nbsp;
+                  <strong>
+                    Lebensqualität für mehr Wohlbefinden verbessern
+                  </strong>
+                  &nbsp;m&ouml;chtest
+                </h4>
               </div>
               <div className="sec flex al-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
-                <h4>...du in&nbsp;<strong>Balance&nbsp;</strong>sein und mehr&nbsp;<strong>Energie&nbsp;</strong>haben m&ouml;chtest</h4>
+                <h4>
+                  ...du in&nbsp;<strong>Balance&nbsp;</strong>sein und
+                  mehr&nbsp;<strong>Energie&nbsp;</strong>haben m&ouml;chtest
+                </h4>
               </div>
               <div className="sec flex al-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
-                <h4>...dich mit deiner&nbsp;<strong>weiblichen Energie verbinden&nbsp;</strong>m&ouml;chtest</h4>
+                <h4>
+                  ...dich mit deiner&nbsp;
+                  <strong>weiblichen Energie verbinden&nbsp;</strong>
+                  m&ouml;chtest
+                </h4>
               </div>
             </div>
-          ) : userGoals.includes('amenorrhea') ? (
+          ) : userGoals.includes("amenorrhea") ? (
             <div>
               <div className="sec flex al-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
-                <h4>...du deine&nbsp;<strong>Periode auf nat&uuml;rliche Weise regulieren</strong>&nbsp;m&ouml;chtest</h4>
+                <h4>
+                  ...du deine&nbsp;
+                  <strong>Periode auf nat&uuml;rliche Weise regulieren</strong>
+                  &nbsp;m&ouml;chtest
+                </h4>
               </div>
               <div className="sec flex al-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
-                <h4>...du&nbsp;<strong>funktionelle Amenorrhoe</strong>in den Griff kriegen m&ouml;chtest</h4>
+                <h4>
+                  ...du&nbsp;<strong>funktionelle Amenorrhoe</strong>in den
+                  Griff kriegen m&ouml;chtest
+                </h4>
               </div>
               <div className="sec flex al-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
-                <h4>...du deine&nbsp;<strong>Fruchtbarkeit st&auml;rken</strong>&nbsp;und dich auf eine&nbsp;<strong>gesunde Schwangerschaft vorbereiten</strong>&nbsp;m&ouml;chtest</h4>
+                <h4>
+                  ...du deine&nbsp;<strong>Fruchtbarkeit st&auml;rken</strong>
+                  &nbsp;und dich auf eine&nbsp;
+                  <strong>gesunde Schwangerschaft vorbereiten</strong>
+                  &nbsp;m&ouml;chtest
+                </h4>
               </div>
               <div className="sec flex al-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
-                <h4>...du in&nbsp;<strong>Balance&nbsp;</strong>sein und mehr&nbsp;<strong>Energie&nbsp;</strong>haben m&ouml;chtest</h4>
+                <h4>
+                  ...du in&nbsp;<strong>Balance&nbsp;</strong>sein und
+                  mehr&nbsp;<strong>Energie&nbsp;</strong>haben m&ouml;chtest
+                </h4>
               </div>
               <div className="sec flex al-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
-                <h4>...dich mit deiner&nbsp;<strong>weiblichen Energie verbinden&nbsp;</strong>m&ouml;chtest</h4>
+                <h4>
+                  ...dich mit deiner&nbsp;
+                  <strong>weiblichen Energie verbinden&nbsp;</strong>
+                  m&ouml;chtest
+                </h4>
               </div>
             </div>
           ) : (
             <div>
               <div className="sec flex al-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
-                <h4>...du deinen&nbsp;<strong>Zyklus auf nat&uuml;rliche Weise regulieren</strong>&nbsp;m&ouml;chtest</h4>
+                <h4>
+                  ...du deinen&nbsp;
+                  <strong>Zyklus auf nat&uuml;rliche Weise regulieren</strong>
+                  &nbsp;m&ouml;chtest
+                </h4>
               </div>
               <div className="sec flex al-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
-                <h4>...du&nbsp;<strong>Amenorrhoe, unregelm&auml;ssige Periode, PCOS oder starkes PMS&nbsp;</strong>in den Griff kriegen m&ouml;chtest</h4>
+                <h4>
+                  ...du&nbsp;
+                  <strong>
+                    Amenorrhoe, unregelm&auml;ssige Periode, PCOS oder starkes
+                    PMS&nbsp;
+                  </strong>
+                  in den Griff kriegen m&ouml;chtest
+                </h4>
               </div>
               <div className="sec flex al-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
-                <h4>...du deine&nbsp;<strong>Fruchtbarkeit st&auml;rken</strong>&nbsp;und dich auf eine&nbsp;<strong>gesunde Schwangerschaft vorbereiten</strong>&nbsp;m&ouml;chtest</h4>
+                <h4>
+                  ...du deine&nbsp;<strong>Fruchtbarkeit st&auml;rken</strong>
+                  &nbsp;und dich auf eine&nbsp;
+                  <strong>gesunde Schwangerschaft vorbereiten</strong>
+                  &nbsp;m&ouml;chtest
+                </h4>
               </div>
               <div className="sec flex al-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
-                <h4>...du in&nbsp;<strong>Balance&nbsp;</strong>sein und mehr&nbsp;<strong>Energie&nbsp;</strong>haben m&ouml;chtest</h4>
+                <h4>
+                  ...du in&nbsp;<strong>Balance&nbsp;</strong>sein und
+                  mehr&nbsp;<strong>Energie&nbsp;</strong>haben m&ouml;chtest
+                </h4>
               </div>
               <div className="sec flex al-center">
                 <IonIcon src="assets/imgs/icn-badge.svg" />
-                <h4>...dich mit deiner&nbsp;<strong>weiblichen Energie verbinden&nbsp;</strong>m&ouml;chtest</h4>
+                <h4>
+                  ...dich mit deiner&nbsp;
+                  <strong>weiblichen Energie verbinden&nbsp;</strong>
+                  m&ouml;chtest
+                </h4>
               </div>
             </div>
           )}
         </div>
 
-
-        {userGoals.includes('endometriosis') ? (
+        {userGoals.includes("endometriosis") ? (
           <div>
             <div className="title title2 ion-text-center">
               <h2 className="ion-text-wrap">
-                In Partnerschaft mit Ärzt:innen und Therapeutinnen des Universitätsspitals Inselspital Bern als medizinische App entwickelt
+                In Partnerschaft mit Ärzt:innen und Therapeutinnen des
+                Universitätsspitals Inselspital Bern als medizinische App
+                entwickelt
               </h2>
             </div>
             <div className="logo-holder ion-text-center">
               <img src="assets/imgs/companylogo.png" alt="" />
             </div>
           </div>
-        ) : userGoals.includes('amenorrhea') ? (
+        ) : userGoals.includes("amenorrhea") ? (
           <div>
             <div className="slider ion-padding">
               <Swiper
@@ -444,9 +511,16 @@ const Membership: React.FC = () => {
                   <div className="quote-holder">
                     <img src="assets/imgs/quote1.svg" alt="" />
                     <div className="flex al-center ion-padding-horizontal">
-                      <img className="quote2" src="assets/imgs/quote2.svg" alt="" />
+                      <img
+                        className="quote2"
+                        src="assets/imgs/quote2.svg"
+                        alt=""
+                      />
                       <h6 className="ion-text-wrap">
-                        Nach wenigen Wochen bemerkte ich grosse körperliche Veränderungen und nach sechs Monaten ist mein Hormonhaushalt bereits so ausgeglichen, wie noch nie in meinem Leben als erwachsene Frau zuvor.
+                        Nach wenigen Wochen bemerkte ich grosse körperliche
+                        Veränderungen und nach sechs Monaten ist mein
+                        Hormonhaushalt bereits so ausgeglichen, wie noch nie in
+                        meinem Leben als erwachsene Frau zuvor.
                       </h6>
                     </div>
                   </div>
@@ -455,9 +529,17 @@ const Membership: React.FC = () => {
                   <div className="quote-holder">
                     <img src="assets/imgs/quote1.svg" alt="" />
                     <div className="flex al-center ion-padding-horizontal">
-                      <img className="quote2" src="assets/imgs/quote2.svg" alt="" />
+                      <img
+                        className="quote2"
+                        src="assets/imgs/quote2.svg"
+                        alt=""
+                      />
                       <h6 className="ion-text-wrap">
-                        Fundierte Informationen multimedial verpackt. Kurzweilige Videos, Texte, Übungen und Online Sessions (Frauenkreise und Q&As). Das ganze Programm ist sehr kraftspendend, motivierend und inspirierend - wirklich jeder Frau zu empfehlen!
+                        Fundierte Informationen multimedial verpackt.
+                        Kurzweilige Videos, Texte, Übungen und Online Sessions
+                        (Frauenkreise und Q&As). Das ganze Programm ist sehr
+                        kraftspendend, motivierend und inspirierend - wirklich
+                        jeder Frau zu empfehlen!
                       </h6>
                     </div>
                   </div>
@@ -466,9 +548,17 @@ const Membership: React.FC = () => {
                   <div className="quote-holder">
                     <img src="assets/imgs/quote1.svg" alt="" />
                     <div className="flex al-center ion-padding-horizontal">
-                      <img className="quote2" src="assets/imgs/quote2.svg" alt="" />
+                      <img
+                        className="quote2"
+                        src="assets/imgs/quote2.svg"
+                        alt=""
+                      />
                       <h6 className="ion-text-wrap">
-                        Der Kurs beinhaltet weit mehr als nur Theorie und gibt einem auch praktische Anleitungen und Übungen, um die Frau deiner Träume zu werden. Ich würde sagen, dass ich nun dank NALU auf dem besten Wege dazu bin. Danke vielmals.
+                        Der Kurs beinhaltet weit mehr als nur Theorie und gibt
+                        einem auch praktische Anleitungen und Übungen, um die
+                        Frau deiner Träume zu werden. Ich würde sagen, dass ich
+                        nun dank NALU auf dem besten Wege dazu bin. Danke
+                        vielmals.
                       </h6>
                     </div>
                   </div>
@@ -478,7 +568,9 @@ const Membership: React.FC = () => {
 
             <div className="title title2 ion-text-center">
               <h2 className="ion-text-wrap">
-                In Partnerschaft mit Ärzt:innen und Therapeutinnen des Universitätsspitals Inselspital Bern als medizinische App entwickelt
+                In Partnerschaft mit Ärzt:innen und Therapeutinnen des
+                Universitätsspitals Inselspital Bern als medizinische App
+                entwickelt
               </h2>
             </div>
             <div className="logo-holder ion-text-center">
@@ -500,9 +592,16 @@ const Membership: React.FC = () => {
                   <div className="quote-holder">
                     <img src="assets/imgs/quote1.svg" alt="" />
                     <div className="flex al-center ion-padding-horizontal">
-                      <img className="quote2" src="assets/imgs/quote2.svg" alt="" />
+                      <img
+                        className="quote2"
+                        src="assets/imgs/quote2.svg"
+                        alt=""
+                      />
                       <h6 className="ion-text-wrap">
-                        Nach wenigen Wochen bemerkte ich grosse körperliche Veränderungen und nach sechs Monaten ist mein Hormonhaushalt bereits so ausgeglichen, wie noch nie in meinem Leben als erwachsene Frau zuvor.
+                        Nach wenigen Wochen bemerkte ich grosse körperliche
+                        Veränderungen und nach sechs Monaten ist mein
+                        Hormonhaushalt bereits so ausgeglichen, wie noch nie in
+                        meinem Leben als erwachsene Frau zuvor.
                       </h6>
                     </div>
                   </div>
@@ -511,9 +610,17 @@ const Membership: React.FC = () => {
                   <div className="quote-holder">
                     <img src="assets/imgs/quote1.svg" alt="" />
                     <div className="flex al-center ion-padding-horizontal">
-                      <img className="quote2" src="assets/imgs/quote2.svg" alt="" />
+                      <img
+                        className="quote2"
+                        src="assets/imgs/quote2.svg"
+                        alt=""
+                      />
                       <h6 className="ion-text-wrap">
-                        Fundierte Informationen multimedial verpackt. Kurzweilige Videos, Texte, Übungen und Online Sessions (Frauenkreise und Q&As). Das ganze Programm ist sehr kraftspendend, motivierend und inspirierend - wirklich jeder Frau zu empfehlen!
+                        Fundierte Informationen multimedial verpackt.
+                        Kurzweilige Videos, Texte, Übungen und Online Sessions
+                        (Frauenkreise und Q&As). Das ganze Programm ist sehr
+                        kraftspendend, motivierend und inspirierend - wirklich
+                        jeder Frau zu empfehlen!
                       </h6>
                     </div>
                   </div>
@@ -522,9 +629,17 @@ const Membership: React.FC = () => {
                   <div className="quote-holder">
                     <img src="assets/imgs/quote1.svg" alt="" />
                     <div className="flex al-center ion-padding-horizontal">
-                      <img className="quote2" src="assets/imgs/quote2.svg" alt="" />
+                      <img
+                        className="quote2"
+                        src="assets/imgs/quote2.svg"
+                        alt=""
+                      />
                       <h6 className="ion-text-wrap">
-                        Der Kurs beinhaltet weit mehr als nur Theorie und gibt einem auch praktische Anleitungen und Übungen, um die Frau deiner Träume zu werden. Ich würde sagen, dass ich nun dank NALU auf dem besten Wege dazu bin. Danke vielmals.
+                        Der Kurs beinhaltet weit mehr als nur Theorie und gibt
+                        einem auch praktische Anleitungen und Übungen, um die
+                        Frau deiner Träume zu werden. Ich würde sagen, dass ich
+                        nun dank NALU auf dem besten Wege dazu bin. Danke
+                        vielmals.
                       </h6>
                     </div>
                   </div>
@@ -534,21 +649,33 @@ const Membership: React.FC = () => {
           </div>
         )}
 
-
-        {isDiscountActive ?
+        {isDiscountActive ? (
           <div className="ion-text-wrap ion-text-center ion-padding-vertical discount-description">
-            <h3>Nur für kurze Zeit:<br /><strong>20% Einführungsrabatt</strong></h3>
+            <h3>
+              Nur für kurze Zeit:
+              <br />
+              <strong>20% Einführungsrabatt</strong>
+            </h3>
           </div>
-          :
+        ) : (
           ""
-        }
+        )}
 
         <div className="packages">
-          <IonRadioGroup value={selectedPackage} onIonChange={e => handleRadioButtonChange(e.detail.value)}>
+          <IonRadioGroup
+            value={selectedPackage}
+            onIonChange={(e) => handleRadioButtonChange(e.detail.value)}
+          >
             <IonItem lines="none">
               <IonLabel>
                 <div className="first flex al-center jc-between">
-                  {isDiscountActive ? <h3><s>45.-</s> 37.- / Monat</h3> : <h3>45.- / Monat</h3>}
+                  {isDiscountActive ? (
+                    <h3>
+                      <s>45.-</s> 37.- / Monat
+                    </h3>
+                  ) : (
+                    <h3>45.- / Monat</h3>
+                  )}
                 </div>
                 <p>12 monatliche Raten mit Zugriff für 1 Jahr</p>
               </IonLabel>
@@ -557,8 +684,18 @@ const Membership: React.FC = () => {
             <IonItem lines="none">
               <IonLabel>
                 <div className="second flex al-center jc-between">
-                  {isDiscountActive ? <h3><s>500.-</s> 400.-</h3> : <h3>500.-</h3>}
-                  {isDiscountActive ? <IonBadge className="ion-text-center">Spare 144.-</IonBadge> : <IonBadge className="ion-text-center">Spare 40.-</IonBadge>}
+                  {isDiscountActive ? (
+                    <h3>
+                      <s>500.-</s> 400.-
+                    </h3>
+                  ) : (
+                    <h3>500.-</h3>
+                  )}
+                  {isDiscountActive ? (
+                    <IonBadge className="ion-text-center">Spare 144.-</IonBadge>
+                  ) : (
+                    <IonBadge className="ion-text-center">Spare 40.-</IonBadge>
+                  )}
                 </div>
                 <p className="ion-text-wrap">
                   Einmalige Zahlung​ mit Zugriff für 1 Jahr
@@ -570,7 +707,9 @@ const Membership: React.FC = () => {
         </div>
 
         <div className="btn-holder ion-text-center ion-padding-vertical">
-          <IonButton expand="block" onClick={handleButtonClick}>Jetzt anmelden</IonButton>
+          <IonButton expand="block" onClick={handleButtonClick}>
+            Jetzt anmelden
+          </IonButton>
         </div>
       </IonContent>
     </IonPage>

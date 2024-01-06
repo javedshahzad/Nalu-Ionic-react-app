@@ -55,7 +55,7 @@ import { useParams } from "react-router-dom";
 import authService from "../../authService";
 
 export interface r_id {
-  resource_sub_id: string
+  resource_sub_id: string;
 }
 const ResourceSubCategory: React.FC = () => {
   const [activeSegment, setActiveSegment] = useState<string>("overview");
@@ -88,13 +88,12 @@ const ResourceSubCategory: React.FC = () => {
     // setSubCategories(subCategory);
     // setParentId(parent_id);
     // console.log(id)
-    getParentCategoryByID(resource_sub_id)
+    getParentCategoryByID(resource_sub_id);
   }, [resource_sub_id]);
 
   useEffect(() => {
     getCategoryByID(categoryIds);
   }, [categoryIds]);
-
 
   const getParentCategoryByID = async (id) => {
     setIsLoading(true);
@@ -129,22 +128,21 @@ const ResourceSubCategory: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
       }
-      console.error('error', error);
+      console.error("error", error);
     } finally {
       setIsLoading(false);
     }
@@ -170,7 +168,11 @@ const ResourceSubCategory: React.FC = () => {
           const source = axios.CancelToken.source();
           response = await axios.get(
             `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
-            { params: { category_id: ids.toString() }, headers, cancelToken: source.token }
+            {
+              params: { category_id: ids.toString() },
+              headers,
+              cancelToken: source.token,
+            }
           );
           response = response.data;
         }
@@ -183,22 +185,21 @@ const ResourceSubCategory: React.FC = () => {
             if (status === 401 || status === 403 || status === 404) {
               // Unauthorized, Forbidden, or Not Found
               authService.logout();
-              history.push("/login");
+              history.push("/onboarding");
             }
           }
-        }
-        else {
+        } else {
           if (error.response) {
             const status = error.response.status;
 
             if (status === 401 || status === 403 || status === 404) {
               // Unauthorized, Forbidden, or Not Found
               authService.logout();
-              history.push("/login");
+              history.push("/onboarding");
             }
           }
         }
-        console.error('error', error);
+        console.error("error", error);
       } finally {
         setIsCategoryLoading(false);
       }
@@ -212,10 +213,9 @@ const ResourceSubCategory: React.FC = () => {
       const data = categoryIds.filter((val) => {
         return val !== id;
       });
-      console.log(data)
+      console.log(data);
       if (data.length === 0) {
-        getParentCategoryByID(resource_sub_id)
-
+        getParentCategoryByID(resource_sub_id);
       }
       setCategoryIds(data);
     } else {
@@ -413,10 +413,11 @@ const ResourceSubCategory: React.FC = () => {
                       <IonItem
                         key={index}
                         lines="none"
-                        className={`img_div ${categoryIds.includes(item.id)
-                          ? "selected"
-                          : "non_selected"
-                          }`}
+                        className={`img_div ${
+                          categoryIds.includes(item.id)
+                            ? "selected"
+                            : "non_selected"
+                        }`}
                         onClick={() => {
                           addToArr(item.id);
                         }}
@@ -424,10 +425,11 @@ const ResourceSubCategory: React.FC = () => {
                         <div className="icon_img">
                           {item?.icon_url ? (
                             <div
-                              className={`icon__ ${categoryID === item.id
-                                ? "blackIcon"
-                                : "blackIcon"
-                                }`}
+                              className={`icon__ ${
+                                categoryID === item.id
+                                  ? "blackIcon"
+                                  : "blackIcon"
+                              }`}
                               dangerouslySetInnerHTML={{
                                 __html: item.svg_url,
                               }}
@@ -438,8 +440,7 @@ const ResourceSubCategory: React.FC = () => {
                           {item.name}
                         </IonLabel>
                       </IonItem>
-                    )
-                    )}
+                    ))}
                   </IonRadioGroup>
                 </div>
 
@@ -460,7 +461,9 @@ const ResourceSubCategory: React.FC = () => {
                       <div className="resource-card" key={index}>
                         <IonItem
                           lines="none"
-                          onClick={() => history.push(`/tabs/tab3/resourcedetail/${card.id}`)}
+                          onClick={() =>
+                            history.push(`/tabs/tab3/resourcedetail/${card.id}`)
+                          }
                         >
                           <div className="thumb" slot="start">
                             {card?.thumbnail_url ? (
@@ -474,16 +477,14 @@ const ResourceSubCategory: React.FC = () => {
                             <div className="first flex al-center">
                               <h3>{card?.title}</h3>
                             </div>
-                            <div className="second flex al-center">
-                            </div>
+                            <div className="second flex al-center"></div>
                             <h5 className="ion-text-wrap">
                               {card?.description}
                             </h5>
                           </IonLabel>
                         </IonItem>
                       </div>
-                    )
-                    )
+                    ))
                   )}
                 </div>
               </div>

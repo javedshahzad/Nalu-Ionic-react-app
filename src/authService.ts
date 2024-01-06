@@ -8,7 +8,7 @@ const authService = {
     sessionStorage.removeItem("jwtToken");
     localStorage.removeItem("roles");
     localStorage.removeItem("userId");
-    //   history.push("/login");
+    //   history.push("/onboarding");
   },
 };
 

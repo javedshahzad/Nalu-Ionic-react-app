@@ -64,7 +64,7 @@ const GroupInfo: React.FC = () => {
     apiService
       .get(`https://apidev.mynalu.com/v1/conversation/get/${groupId}`)
       .then((data: any) => {
-        console.log('data from group', data)
+        console.log("data from group", data);
         setGroupName(data.data.groupName);
         setGroupImage(data.data.groupImage);
         setUserList(data.data.participants);
@@ -76,7 +76,7 @@ const GroupInfo: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
 
@@ -90,7 +90,7 @@ const GroupInfo: React.FC = () => {
         `https://app.mynalu.com/wp-json/wp/v2/users?per_page=20&page=1&search=`
       )
       .then((data) => {
-        console.log('users', data)
+        console.log("users", data);
         const usersObjArr = [];
         data.map((user) => {
           const userObj: any = user;
@@ -113,7 +113,7 @@ const GroupInfo: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
 
@@ -209,7 +209,7 @@ const GroupInfo: React.FC = () => {
             if (status === 401 || status === 403 || status === 404) {
               // Unauthorized, Forbidden, or Not Found
               authService.logout();
-              history.push("/login");
+              history.push("/onboarding");
             }
           }
 
@@ -241,7 +241,7 @@ const GroupInfo: React.FC = () => {
             if (status === 401 || status === 403 || status === 404) {
               // Unauthorized, Forbidden, or Not Found
               authService.logout();
-              history.push("/login");
+              history.push("/onboarding");
             }
           }
 

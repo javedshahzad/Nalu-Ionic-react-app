@@ -42,7 +42,7 @@ import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import image_not_found from '../../Images/image-not-found.png'
+import image_not_found from "../../Images/image-not-found.png";
 import authService from "../../authService";
 
 const Resources: React.FC = () => {
@@ -89,7 +89,6 @@ const Resources: React.FC = () => {
       getRecommendations();
       localStorage.removeItem("DATA");
     } else {
-
       setIsLoading(true);
       getCategoriesFavourites();
       setIsFilterSelected(false);
@@ -133,22 +132,21 @@ const Resources: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
       }
-      console.error('error', error);
+      console.error("error", error);
     } finally {
       setIsLoading(false);
     }
@@ -186,22 +184,21 @@ const Resources: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
       }
-      console.error('error', error);
+      console.error("error", error);
     } finally {
       setIsLoading(false);
     }
@@ -239,28 +236,26 @@ const Resources: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
       }
-      console.error('error', error);
+      console.error("error", error);
     } finally {
       setIsLoading(false);
     }
   };
   const getParentCategoryByID = (resource_sub_id) => {
-
     history.push(`/tabs/tab3/resourcesubcateggory/${resource_sub_id}`);
 
     // setIsLoading(true);
@@ -306,9 +301,11 @@ const Resources: React.FC = () => {
         response = response.data;
       }
       console.log(response);
-      if (response.message === "Upvote handled successfully" ||
+      if (
+        response.message === "Upvote handled successfully" ||
         response.message === "Downvote removed successfully" ||
-        response.message === "Upvote removed successfully") {
+        response.message === "Upvote removed successfully"
+      ) {
         getCategoriesFavourites();
       }
     } catch (error) {
@@ -319,22 +316,21 @@ const Resources: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
       }
-      console.error('error', error);
+      console.error("error", error);
     }
   };
   const handleDownvote = async (is_upvoted, id, is_downvoted) => {
@@ -353,10 +349,12 @@ const Resources: React.FC = () => {
         response = response.data;
       }
       console.log(response);
-      if (response.message === "Downvote removed successfully" ||
+      if (
+        response.message === "Downvote removed successfully" ||
         response.message === "Downvote added successfully" ||
         response.message === "Upvote removed successfully" ||
-        response.message === "Upvote handled successfully") {
+        response.message === "Upvote handled successfully"
+      ) {
         getCategoriesFavourites();
       }
     } catch (error) {
@@ -367,22 +365,21 @@ const Resources: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
       }
-      console.error('error', error);
+      console.error("error", error);
     }
   };
   const handleSave = async (favourite, id) => {
@@ -401,8 +398,10 @@ const Resources: React.FC = () => {
         response = response.data;
       }
       console.log(response);
-      if (response.message === "Post removed from favourites successfully" ||
-        response.message === "Post added to favourites successfully") {
+      if (
+        response.message === "Post removed from favourites successfully" ||
+        response.message === "Post added to favourites successfully"
+      ) {
         getCategoriesFavourites();
       }
     } catch (error) {
@@ -413,22 +412,21 @@ const Resources: React.FC = () => {
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
           if (status === 401 || status === 403 || status === 404) {
             // Unauthorized, Forbidden, or Not Found
             authService.logout();
-            history.push("/login");
+            history.push("/onboarding");
           }
         }
       }
-      console.error('error', error);
+      console.error("error", error);
     }
   };
 
@@ -453,9 +451,6 @@ const Resources: React.FC = () => {
           // router.push('/tabs/tab3/resourcedetail', 'root', 'replace');
           // const dataParam = encodeURIComponent(JSON.stringify(response.data));
           // router.push(`/resourcedetail?data=${dataParam}`, 'root', 'replace');
-
-
-
         })
         .catch((error) => {
           if (error.response) {
@@ -464,13 +459,12 @@ const Resources: React.FC = () => {
             if (status === 401 || status === 403 || status === 404) {
               // Unauthorized, Forbidden, or Not Found
               authService.logout();
-              history.push("/login");
+              history.push("/onboarding");
             }
           }
 
           console.error(error);
           setIsLoading(false);
-
         });
     } catch (error) {
       if (error.response) {
@@ -479,13 +473,12 @@ const Resources: React.FC = () => {
         if (status === 401 || status === 403 || status === 404) {
           // Unauthorized, Forbidden, or Not Found
           authService.logout();
-          history.push("/login");
+          history.push("/onboarding");
         }
       }
 
       console.error(error);
       setIsLoading(false);
-
     }
   };
   return (
@@ -493,30 +486,28 @@ const Resources: React.FC = () => {
       <ToastContainer autoClose={19000} />
 
       <IonPage className="Resources">
-        {
-          isLoading ? (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100vh",
-                backgroundColor: "#F8F5F2",
-              }}
-            >
-              <IonSpinner name="crescent"></IonSpinner>
-            </div>
-          ) :
-            (
-              <>
-                <IonHeader className="ion-no-border">
-                  <IonToolbar>
-                    <IonButtons slot="end">
-                      <IonButton color="dark" onClick={() => history.push('/menu')}>
-                        <IonIcon icon={menuOutline} />
-                      </IonButton>
-                    </IonButtons>
-                    {/*<IonButtons slot="end">
+        {isLoading ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+              backgroundColor: "#F8F5F2",
+            }}
+          >
+            <IonSpinner name="crescent"></IonSpinner>
+          </div>
+        ) : (
+          <>
+            <IonHeader className="ion-no-border">
+              <IonToolbar>
+                <IonButtons slot="end">
+                  <IonButton color="dark" onClick={() => history.push("/menu")}>
+                    <IonIcon icon={menuOutline} />
+                  </IonButton>
+                </IonButtons>
+                {/*<IonButtons slot="end">
                   <IonButton color="dark">
                     <IonIcon icon={searchOutline} />
                   </IonButton>
@@ -526,83 +517,86 @@ const Resources: React.FC = () => {
                     <IonIcon icon={notificationsOutline} />
                   </IonButton>
               </IonButtons>*/}
-                  </IonToolbar>
-                  <IonToolbar>
-                    <IonSegment
-                      mode="md"
-                      onIonChange={(e) => segmentChanged(e)}
-                      value={activeSegment as any}
-                    >
-                      <IonSegmentButton value={"overview"}>
-                        <IonLabel>Übersicht</IonLabel>
-                      </IonSegmentButton>
-                      <IonSegmentButton value={"favourites"}>
-                        <IonLabel>Favoriten</IonLabel>
-                      </IonSegmentButton>
-                    </IonSegment>
-                  </IonToolbar>
-                </IonHeader>
-                <IonContent fullscreen>
-                  <IonModal
-                    isOpen={modalOpen}
-                    className="modaaal"
-                    onDidDismiss={handleModalClose}
-                  >
-                    <Addrecmodal onClose={(val) => setToastAndClose(val)} />
-                  </IonModal>
-                  {activeSegment === "overview" ? (
-                    <>
-                      <div className="overview">
-                        <div className="selector mtype">
-                          <IonRadioGroup>
-                            {categoriesOverview.map((item, index) => (
-                              <IonItem
-                                key={index}
-                                lines="none"
-                                onClick={() => getParentCategoryByID(item.id)}
-                              >
-                                <div className="red_circle">
+              </IonToolbar>
+              <IonToolbar>
+                <IonSegment
+                  mode="md"
+                  onIonChange={(e) => segmentChanged(e)}
+                  value={activeSegment as any}
+                >
+                  <IonSegmentButton value={"overview"}>
+                    <IonLabel>Übersicht</IonLabel>
+                  </IonSegmentButton>
+                  <IonSegmentButton value={"favourites"}>
+                    <IonLabel>Favoriten</IonLabel>
+                  </IonSegmentButton>
+                </IonSegment>
+              </IonToolbar>
+            </IonHeader>
+            <IonContent fullscreen>
+              <IonModal
+                isOpen={modalOpen}
+                className="modaaal"
+                onDidDismiss={handleModalClose}
+              >
+                <Addrecmodal onClose={(val) => setToastAndClose(val)} />
+              </IonModal>
+              {activeSegment === "overview" ? (
+                <>
+                  <div className="overview">
+                    <div className="selector mtype">
+                      <IonRadioGroup>
+                        {categoriesOverview.map((item, index) => (
+                          <IonItem
+                            key={index}
+                            lines="none"
+                            onClick={() => getParentCategoryByID(item.id)}
+                          >
+                            <div className="red_circle">
+                              <div className="icon_img">
+                                {item?.icon_url ? (
+                                  <div
+                                    className="red_icon"
+                                    dangerouslySetInnerHTML={{
+                                      __html: item?.svg_url,
+                                    }}
+                                  />
+                                ) : null}
+                              </div>
+                            </div>
 
-                                  <div className="icon_img">
-                                    {item?.icon_url ? (
-                                      <div
-                                        className="red_icon"
-                                        dangerouslySetInnerHTML={{
-                                          __html: item?.svg_url,
-                                        }}
-                                      />
-                                    ) : null}
-                                  </div>
-                                </div>
+                            <IonLabel style={{ color: "#636363" }}>
+                              {item.name}
+                            </IonLabel>
+                          </IonItem>
+                        ))}
+                      </IonRadioGroup>
+                    </div>
 
-                                <IonLabel style={{ color: "#636363" }}>
-                                  {item.name}
-                                </IonLabel>
-                              </IonItem>
-                            ))}
-                          </IonRadioGroup>
-                        </div>
+                    <div className="recommended">
+                      <div className="title-holder">
+                        <h3>Für dich empfohlen</h3>
+                      </div>
+                      <IonRow>
+                        {recommendations.map((item, index) => (
+                          <IonCol size="6" key={index}>
+                            <div
+                              className="rc-card ion-activatable ripple-parent"
+                              onClick={() =>
+                                history.push(
+                                  `/tabs/tab3/resourcedetail/${item.id}`
+                                )
+                              }
+                            >
+                              <IonRippleEffect />
+                              <div className="img-holder">
+                                {item?.thumbnail_url ? (
+                                  <img src={item?.thumbnail_url} />
+                                ) : (
+                                  <span style={{ width: "100%" }} />
+                                )}
 
-                        <div className="recommended">
-                          <div className="title-holder">
-                            <h3>Für dich empfohlen</h3>
-                          </div>
-                          <IonRow>
-                            {recommendations.map((item, index) => (
-                              <IonCol size="6" key={index}>
-                                <div
-                                  className="rc-card ion-activatable ripple-parent"
-                                  onClick={() => history.push(`/tabs/tab3/resourcedetail/${item.id}`)}
-                                >
-                                  <IonRippleEffect />
-                                  <div className="img-holder">
-                                    {item?.thumbnail_url ? (
-                                      <img src={item?.thumbnail_url} />
-                                    ) : (
-                                      <span style={{ 'width': '100%' }} />
-                                    )}
-
-                                    {/*<div className="btn ion-activatable ripple-parent flex al-center jc-center">
+                                {/*<div className="btn ion-activatable ripple-parent flex al-center jc-center">
                                   {item.parent_category.map((value, index) =>
                                     value.icon_url ? (
                                     
@@ -618,132 +612,160 @@ const Resources: React.FC = () => {
                                     )
                                   )}
                                     </div>*/}
-                                  </div>
+                              </div>
 
-                                  <h4 style={{ fontFamily: 'GBold', fontSize: '16px', margin: '10px 0', width: '-webkit-fill-available', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.title}</h4>
-                                </div>
-                              </IonCol>
-                            ))}
-                          </IonRow>
-                        </div>
-
-                        <div className="add-recommendation ion-text-center">
-                          <IonButton onClick={() => setModalOpen(true)}>
-                            <IonIcon icon={add} />
-                          </IonButton>
-                          <h4>Empfehlung hinzufügen</h4>
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="Resources">
-                      <IonContent className="ion-padding" fullscreen>
-                        <div className="the-list">
-                          {categoriesFavourites.map((card, index) => (
-                            <div className="resource-card" key={index}>
-                              <IonItem
-                                lines="none"
-                                onClick={() => getResourceDetailsByID(card.id)}
+                              <h4
+                                style={{
+                                  fontFamily: "GBold",
+                                  fontSize: "16px",
+                                  margin: "10px 0",
+                                  width: "-webkit-fill-available",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
                               >
-                                <div className="thumb" slot="start">
-                                  {card?.thumbnail_url ? (
-                                    <img src={card.thumbnail_url} alt="" />
+                                {item.title}
+                              </h4>
+                            </div>
+                          </IonCol>
+                        ))}
+                      </IonRow>
+                    </div>
+
+                    <div className="add-recommendation ion-text-center">
+                      <IonButton onClick={() => setModalOpen(true)}>
+                        <IonIcon icon={add} />
+                      </IonButton>
+                      <h4>Empfehlung hinzufügen</h4>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="Resources">
+                  <IonContent className="ion-padding" fullscreen>
+                    <div className="the-list">
+                      {categoriesFavourites.map((card, index) => (
+                        <div className="resource-card" key={index}>
+                          <IonItem
+                            lines="none"
+                            onClick={() => getResourceDetailsByID(card.id)}
+                          >
+                            <div className="thumb" slot="start">
+                              {card?.thumbnail_url ? (
+                                <img src={card.thumbnail_url} alt="" />
+                              ) : (
+                                <img
+                                  style={{ width: "100%" }}
+                                  src={""}
+                                  alt="Image not found"
+                                />
+                              )}
+                            </div>
+
+                            <IonLabel>
+                              <div className="first flex al-center">
+                                <h3>{card?.title}</h3>
+                                {card.category &&
+                                card.category.length > 0 &&
+                                card.category[0].svg_url ? (
+                                  <div
+                                    className={`icon__ ${
+                                      categoryID === card.category[0].id
+                                        ? "blackIcon"
+                                        : "blackIcon"
+                                    }`}
+                                    dangerouslySetInnerHTML={{
+                                      __html: card.category[0].svg_url,
+                                    }}
+                                  />
+                                ) : null}
+                              </div>
+                              <div className="second flex al-center">
+                                {card?.sponsored && (
+                                  <>
+                                    <IonIcon icon={informationCircleOutline} />{" "}
+                                    <p className="ion-text-wrap">Gesponsert</p>
+                                  </>
+                                )}
+                                {!card?.sponsored &&
+                                  card.authority &&
+                                  card.authority[0]?.title && (
+                                    <>
+                                      <IonIcon
+                                        icon={informationCircleOutline}
+                                      />{" "}
+                                      <p className="ion-text-wrap">
+                                        Empfohlen von {card.authority[0].title}
+                                      </p>
+                                    </>
+                                  )}
+                              </div>
+                              <h5 className="ion-text-wrap">
+                                {card.description}
+                              </h5>
+                              <div className="btns-holder flex al-center jc-between">
+                                <div
+                                  className="btn ion-activatable ripple-parent flex al-center"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleUpvote(
+                                      card.is_upvoted,
+                                      card.id,
+                                      card.is_downvoted
+                                    );
+                                  }}
+                                >
+                                  {card.is_upvoted ? (
+                                    <IonIcon src="assets/imgs/like-filled.svg" />
                                   ) : (
-                                    <img style={{ 'width': '100%' }} src={''} alt="Image not found" />
+                                    <IonIcon src="assets/imgs/like-unfilled.svg" />
+                                  )}
+                                  <h6>{card.upvotes_number}</h6>
+                                </div>
+                                <div
+                                  className="btn ion-activatable ripple-parent flex al-center"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDownvote(
+                                      card.is_upvoted,
+                                      card.id,
+                                      card.is_downvoted
+                                    );
+                                  }}
+                                >
+                                  {card.is_downvoted ? (
+                                    <IonIcon src="assets/imgs/dislike-filled.svg" />
+                                  ) : (
+                                    <IonIcon src="assets/imgs/dislike-unfilled.svg"></IonIcon>
                                   )}
                                 </div>
-
-                                <IonLabel>
-                                  <div className="first flex al-center">
-                                    <h3>{card?.title}</h3>
-                                    {card.category && card.category.length > 0 && card.category[0].svg_url ? (
-                                      <div
-                                        className={`icon__ ${categoryID === card.category[0].id ? "blackIcon" : "blackIcon"}`}
-                                        dangerouslySetInnerHTML={{
-                                          __html: card.category[0].svg_url,
-                                        }}
-                                      />
-                                    ) : null}
-                                  </div>
-                                  <div className="second flex al-center">
-                                    {card?.sponsored && (
-                                      <>
-                                        <IonIcon icon={informationCircleOutline} /> <p className="ion-text-wrap">Gesponsert</p>
-                                      </>
-                                    )}
-                                    {!card?.sponsored && card.authority && card.authority[0]?.title && (
-                                      <>
-                                        <IonIcon icon={informationCircleOutline} /> <p className="ion-text-wrap">Empfohlen von {card.authority[0].title}</p>
-                                      </>
-                                    )}
-                                  </div>
-                                  <h5 className="ion-text-wrap">{card.description}</h5>
-                                  <div className="btns-holder flex al-center jc-between">
-                                    <div
-                                      className="btn ion-activatable ripple-parent flex al-center"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleUpvote(
-                                          card.is_upvoted,
-                                          card.id,
-                                          card.is_downvoted
-                                        );
-                                      }}
-                                    >
-                                      {card.is_upvoted ? (
-                                        <IonIcon src="assets/imgs/like-filled.svg" />
-                                      ) : (
-                                        <IonIcon src="assets/imgs/like-unfilled.svg" />
-                                      )}
-                                      <h6>{card.upvotes_number}</h6>
-                                    </div>
-                                    <div
-                                      className="btn ion-activatable ripple-parent flex al-center"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleDownvote(
-                                          card.is_upvoted,
-                                          card.id,
-                                          card.is_downvoted
-                                        );
-                                      }}
-                                    >
-                                      {card.is_downvoted ? (
-                                        <IonIcon src="assets/imgs/dislike-filled.svg" />
-                                      ) : (
-                                        <IonIcon src="assets/imgs/dislike-unfilled.svg"></IonIcon>
-                                      )}
-                                    </div>
-                                    <div
-                                      className="btn ion-activatable ripple-parent flex al-center"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleSave(card.favourite, card.id);
-                                      }}
-                                    >
-                                      {!card.favourite ? (
-                                        <IonIcon src="assets/imgs/heart-unfilled.svg"></IonIcon>
-                                      ) : (
-                                        <IonIcon src="assets/imgs/heart-filled.svg" />
-                                      )}
-                                      <h6>Save</h6>
-                                    </div>
-                                  </div>
-                                </IonLabel>
-                              </IonItem>
-                            </div>
-                          ))}
+                                <div
+                                  className="btn ion-activatable ripple-parent flex al-center"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleSave(card.favourite, card.id);
+                                  }}
+                                >
+                                  {!card.favourite ? (
+                                    <IonIcon src="assets/imgs/heart-unfilled.svg"></IonIcon>
+                                  ) : (
+                                    <IonIcon src="assets/imgs/heart-filled.svg" />
+                                  )}
+                                  <h6>Save</h6>
+                                </div>
+                              </div>
+                            </IonLabel>
+                          </IonItem>
                         </div>
-                      </IonContent>
+                      ))}
                     </div>
-                  )}
-                </IonContent>
-              </>
-            )
-        }
-
+                  </IonContent>
+                </div>
+              )}
+            </IonContent>
+          </>
+        )}
       </IonPage>
-
     </>
   );
 };

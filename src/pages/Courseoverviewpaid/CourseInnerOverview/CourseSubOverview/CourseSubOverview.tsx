@@ -52,7 +52,6 @@ import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 import authService from "../../../../authService";
 
-
 const CourseSubOverview: React.FC = () => {
   const history = useHistory();
   const [togglePlay, setTogglePlay] = useState("video");
@@ -61,7 +60,6 @@ const CourseSubOverview: React.FC = () => {
   const [ismarkLoading, setIsMarlLoading] = useState(false);
   const data: any = useParams();
   console.log("ID from route:", data);
-
 
   useEffect(() => {
     getData(data.id);
@@ -93,7 +91,7 @@ const CourseSubOverview: React.FC = () => {
             if (status === 401 || status === 403 || status === 404) {
               // Unauthorized, Forbidden, or Not Found
               authService.logout();
-              history.push("/login");
+              history.push("/onboarding");
             }
           }
 
@@ -112,7 +110,7 @@ const CourseSubOverview: React.FC = () => {
         .then((response) => {
           console.log(response.data);
           // setCourseData(response.data);
-          if (response.data.status = "success") {
+          if ((response.data.status = "success")) {
             history.push(`/tabs/tab1/courseinneroverview`);
           }
           setIsMarlLoading(false);
@@ -125,7 +123,7 @@ const CourseSubOverview: React.FC = () => {
             if (status === 401 || status === 403 || status === 404) {
               // Unauthorized, Forbidden, or Not Found
               authService.logout();
-              history.push("/login");
+              history.push("/onboarding");
             }
           }
 
@@ -139,7 +137,7 @@ const CourseSubOverview: React.FC = () => {
         if (status === 401 || status === 403 || status === 404) {
           // Unauthorized, Forbidden, or Not Found
           authService.logout();
-          history.push("/login");
+          history.push("/onboarding");
         }
       }
 
@@ -196,8 +194,7 @@ const CourseSubOverview: React.FC = () => {
                     />
                   </div>
                 ) : (
-                  <>
-                  </>
+                  <></>
                 )}
                 <div className="title">
                   <h3>{courseData?.title}</h3>
@@ -278,10 +275,14 @@ const CourseSubOverview: React.FC = () => {
                       <IonSpinner
                         class="mark_loading_spinner"
                         name="crescent"
-                        style={{ "color": "white", "width": "30px", "height": "30px" }}
+                        style={{
+                          color: "white",
+                          width: "30px",
+                          height: "30px",
+                        }}
                       />
                     ) : (
-                      <p style={{ "color": "white" }}>Mark as Done</p>
+                      <p style={{ color: "white" }}>Mark as Done</p>
                     )}
                   </div>
                 ) : (
