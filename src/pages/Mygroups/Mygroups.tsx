@@ -238,13 +238,26 @@ const Mygroups: React.FC = () => {
           setGroupName("");
         },
         (error) => {
-          if (error.response) {
-            const status = error.response.status;
+          if (isPlatform("ios")) {
+            if (error) {
+              const status = error.status;
 
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+          else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
             }
           }
         }
@@ -268,15 +281,29 @@ const Mygroups: React.FC = () => {
         setUsers(data);
       })
       .catch((error) => {
-        if (error.response) {
-          const status = error.response.status;
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            // authService.logout();
-            // history.push("/onboarding");
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              // authService.logout();
+              // history.push("/onboarding");
+            }
           }
         }
+        else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              // authService.logout();
+              // history.push("/onboarding");
+            }
+          }
+        }
+
 
         console.error(error);
       });
@@ -461,10 +488,10 @@ const Mygroups: React.FC = () => {
                           event?.is_bookmarked
                             ? "assets/imgs/bookmark-blue.svg"
                             : event?.is_cancelled
-                            ? "assets/imgs/cross-icon.svg"
-                            : event?.is_registered
-                            ? checkmarkCircle
-                            : "assets/imgs/closed-letterr.svg"
+                              ? "assets/imgs/cross-icon.svg"
+                              : event?.is_registered
+                                ? checkmarkCircle
+                                : "assets/imgs/closed-letterr.svg"
                         }
                       />
                     </div>

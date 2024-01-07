@@ -33,6 +33,8 @@ import tokenService from "../../../token";
 import { CreateOutline } from "react-ionicons";
 import NotificationBell from "../../../components/NotificationBell";
 import authService from "../../../authService";
+import { isPlatform } from "@ionic/react";
+
 
 const GroupInfo: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
@@ -70,13 +72,26 @@ const GroupInfo: React.FC = () => {
         setUserList(data.data.participants);
       })
       .catch((error) => {
-        if (error.response) {
-          const status = error.response.status;
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+        else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
           }
         }
 
@@ -107,13 +122,26 @@ const GroupInfo: React.FC = () => {
         setAllUsers(usersObjArr);
       })
       .catch((error) => {
-        if (error.response) {
-          const status = error.response.status;
+        if (isPlatform("ios")) {
+          if (error.response) {
+            const status = error.response.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+        else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
           }
         }
 
@@ -203,13 +231,26 @@ const GroupInfo: React.FC = () => {
           // setGroupName("");
         },
         (error) => {
-          if (error.response) {
-            const status = error.response.status;
+          if (isPlatform("ios")) {
+            if (error) {
+              const status = error.status;
 
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+          else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
             }
           }
 
@@ -235,13 +276,26 @@ const GroupInfo: React.FC = () => {
           // setGroupName("");
         },
         (error) => {
-          if (error.response) {
-            const status = error.response.status;
+          if (isPlatform("ios")) {
+            if (error) {
+              const status = error.status;
 
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+          else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
             }
           }
 

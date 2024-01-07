@@ -16,6 +16,7 @@ import {
   IonRow,
   IonSpinner,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 
 import "./Filtermodal.scss";
@@ -25,6 +26,7 @@ import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 import { useHistory } from "react-router";
 import authService from "../../../authService";
+import apiService from "../../../Services";
 
 const Filtermodal: React.FC = () => {
   const [rangeValues, setRangeValues] = useState({ lower: null, upper: null });
@@ -53,7 +55,7 @@ const Filtermodal: React.FC = () => {
   const getValues = () => {
     setIsLoading(true);
 
-    axios
+    apiService
       .get(`https://app.mynalu.com/wp-json/nalu-app/v1/filter-values?lang=de`)
       .then((response) => {
         console.log(response.data);
@@ -90,13 +92,26 @@ const Filtermodal: React.FC = () => {
         setIsLoading(false);
       })
       .catch((error) => {
-        if (error.response) {
-          const status = error.response.status;
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+        else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
           }
         }
 
@@ -178,44 +193,98 @@ const Filtermodal: React.FC = () => {
 
   const handleFilters = async () => {
     try {
-      axios
-        .get("https://app.mynalu.com/wp-json/nalu-app/v1/ressources", {
+      if (isPlatform("ios")) {
+        const jwtToken = localStorage.getItem("jwtToken");
+        const headers = {
+          Authorization: `Bearer ${jwtToken}`,
+        };
+        HTTP.get("https://app.mynalu.com/wp-json/nalu-app/v1/ressources", {
           params: {
             category_name: activeLabelsString,
             "authority.title": activeRecommendationsString,
             upvotes_number_min: rangeValues.lower,
-            upvotes_number_max: rangeValues.upper,
-          },
-        })
-        .then((response) => {
-          console.log(response);
-
-          history.push("/tabs/tab3/resourcesubcateggory", {
-            filteredData: response.data.ressources,
-            subCategory: response.data.sub_categories,
-          });
-        })
-        .catch((error) => {
-          if (error.response) {
-            const status = error.response.status;
-
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
-            }
+            upvotes_number_max: rangeValues.upper
           }
+        }, headers)
+          .then((response) => {
+            console.log(response);
 
-          console.error(error);
-        });
+
+            history.push('/tabs/tab3/resourcesubcateggory', {
+              filteredData: response.data.ressources,
+              subCategory: response.data.sub_categories
+            })
+
+          })
+          .catch((error) => {
+            if (error) {
+              const status = error.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+
+            console.error(error);
+          });
+      }
+      else {
+        axios
+          .get("https://app.mynalu.com/wp-json/nalu-app/v1/ressources", {
+            params: {
+              category_name: activeLabelsString,
+              "authority.title": activeRecommendationsString,
+              upvotes_number_min: rangeValues.lower,
+              upvotes_number_max: rangeValues.upper
+            },
+          })
+          .then((response) => {
+            console.log(response);
+
+
+            history.push('/tabs/tab3/resourcesubcateggory', {
+              filteredData: response.data.ressources,
+              subCategory: response.data.sub_categories
+            })
+
+          })
+          .catch((error) => {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+
+            console.error(error);
+          });
+      }
     } catch (error) {
-      if (error.response) {
-        const status = error.response.status;
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
 
-        if (status === 401 || status === 403 || status === 404) {
-          // Unauthorized, Forbidden, or Not Found
-          authService.logout();
-          history.push("/onboarding");
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
         }
       }
       console.error("error", error);

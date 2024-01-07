@@ -155,6 +155,7 @@ const Journal: React.FC = () => {
         console.log(response.data);
         setCategoriesOverview(response.data);
       } catch (error) {
+
         if (error.response) {
           const status = error.response.status;
 
@@ -275,13 +276,26 @@ const Journal: React.FC = () => {
       console.log(response);
       setFiltered(response.data);
     } catch (error) {
-      if (error.response) {
-        const status = error.response.status;
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
 
-        if (status === 401 || status === 403 || status === 404) {
-          // Unauthorized, Forbidden, or Not Found
-          authService.logout();
-          history.push("/onboarding");
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
         }
       }
       console.error(error);
@@ -593,11 +607,10 @@ const Journal: React.FC = () => {
                           <IonItem
                             key={index}
                             lines="none"
-                            className={`img_div ${
-                              categoryID === item.id
-                                ? "selected"
-                                : "non_selected"
-                            }`}
+                            className={`img_div ${categoryID === item.id
+                              ? "selected"
+                              : "non_selected"
+                              }`}
                             onClick={() => getCategoryByID(item.id)}
                           >
                             <div>

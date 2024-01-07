@@ -39,6 +39,9 @@ import moment from "moment";
 import NotificationBell from "../../../components/NotificationBell";
 import authService from "../../../authService";
 
+import { isPlatform } from "@ionic/react";
+
+
 const GroupChat: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
 
@@ -80,7 +83,7 @@ const GroupChat: React.FC = () => {
         conversation: groupId,
       });
 
-      socket.on("join", (data) => {});
+      socket.on("join", (data) => { });
 
       socket.emit("message-list", {
         page: 1,
@@ -193,13 +196,26 @@ const GroupChat: React.FC = () => {
         setGroupImage(data.data.groupImage);
       })
       .catch((error) => {
-        if (error.response) {
-          const status = error.response.status;
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+        else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
           }
         }
 

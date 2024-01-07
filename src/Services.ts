@@ -4,7 +4,7 @@ import { isPlatform } from "@ionic/react";
 
 const jwtToken = localStorage.getItem("jwtToken");
 
-const customAxiosHeaders = {
+const customAxiosHeaders: any = {
   headers: {
     Authorization: `Bearer ${jwtToken}`,
   },
@@ -20,6 +20,15 @@ const apiService = {
       const response = await HTTP.get(url, {}, customCordovaHeaders);
       return JSON.parse(response.data);
     } else {
+      return (await axios.get(url, customAxiosHeaders)).data;
+    }
+  },
+  getWithParam: async (url: string, param: any) => {
+    if (isPlatform("ios")) {
+      const response = await HTTP.get(url, param, customCordovaHeaders);
+      return JSON.parse(response.data);
+    } else {
+      customAxiosHeaders.param = param;
       return (await axios.get(url, customAxiosHeaders)).data;
     }
   },

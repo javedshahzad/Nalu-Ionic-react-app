@@ -51,6 +51,7 @@ import {
 import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 import authService from "../../../../authService";
+import { isPlatform } from "@ionic/react";
 
 const CourseSubOverview: React.FC = () => {
   const history = useHistory();
@@ -85,13 +86,26 @@ const CourseSubOverview: React.FC = () => {
         })
         .catch((error) => {
           setIsLoading(false);
-          if (error.response) {
-            const status = error.response.status;
+          if (isPlatform("ios")) {
+            if (error) {
+              const status = error.status;
 
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+          else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
             }
           }
 
@@ -117,13 +131,28 @@ const CourseSubOverview: React.FC = () => {
         })
         .catch((error) => {
           setIsMarlLoading(false);
-          if (error.response) {
-            const status = error.response.status;
 
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
+          if (isPlatform("ios")) {
+
+            if (error) {
+              const status = error.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+          else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
             }
           }
 
@@ -131,13 +160,26 @@ const CourseSubOverview: React.FC = () => {
         });
     } catch (error) {
       setIsMarlLoading(false);
-      if (error.response) {
-        const status = error.response.status;
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
 
-        if (status === 401 || status === 403 || status === 404) {
-          // Unauthorized, Forbidden, or Not Found
-          authService.logout();
-          history.push("/onboarding");
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
         }
       }
 

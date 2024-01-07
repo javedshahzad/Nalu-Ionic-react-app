@@ -100,7 +100,7 @@ function ConfigCycleRemade() {
         if (status === 401 || status === 403 || status === 404) {
           // Unauthorized, Forbidden, or Not Found
           authService.logout();
-          navigation.push("/login");
+          navigation.push("/onboarding");
         }
       }
 
@@ -301,7 +301,7 @@ function ConfigCycleRemade() {
         if (status === 401 || status === 403 || status === 404) {
           // Unauthorized, Forbidden, or Not Found
           authService.logout();
-          navigation.push("/login");
+          navigation.push("/onboarding");
         }
       }
     } finally {

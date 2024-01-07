@@ -33,6 +33,8 @@ import NotificationBell from "../../components/NotificationBell";
 import { useLocation } from "react-router-dom";
 import authService from "../../authService";
 
+
+
 const Courseoverviewpaid: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [courseData, setCourseData] = useState(null);

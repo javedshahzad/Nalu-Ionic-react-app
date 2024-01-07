@@ -33,6 +33,7 @@ import "./journalcalendarremade.scss";
 import MoonPhasesServce from "../../MoonPhasesService";
 import CustomCategoryApiService from "../../CustomCategoryService";
 import authService from "../../authService";
+import { isPlatform } from "@ionic/react";
 
 const months = [
   "Januar",
@@ -105,9 +106,8 @@ const JournalCalendarRemade = () => {
     const tempMonthIndex = monthIndex + 1 + "";
     const tempDateIndex = dateIndex + "";
 
-    const dateParam = `${year}-${
-      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
-    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+    const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+      }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
     url = `/journaladditionremade/${dateParam}`;
 
@@ -151,13 +151,26 @@ const JournalCalendarRemade = () => {
 
       setMoonPhaseIcon(newArray);
     } catch (error) {
-      if (error.response) {
-        const status = error.response.status;
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
 
-        if (status === 401 || status === 403 || status === 404) {
-          // Unauthorized, Forbidden, or Not Found
-          authService.logout();
-          history.push("/onboarding");
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
         }
       }
       console.error(error);
@@ -188,13 +201,26 @@ const JournalCalendarRemade = () => {
       }
       setIcons2(data);
     } catch (error) {
-      if (error.response) {
-        const status = error.response.status;
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
 
-        if (status === 401 || status === 403 || status === 404) {
-          // Unauthorized, Forbidden, or Not Found
-          authService.logout();
-          history.push("/onboarding");
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
         }
       }
       console.error(error);
@@ -446,13 +472,26 @@ const JournalCalendarRemade = () => {
           setTodayPeriod("true");
         },
         (error) => {
-          if (error.response) {
-            const status = error.response.status;
+          if (isPlatform("ios")) {
+            if (error) {
+              const status = error.status;
 
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+          else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
             }
           }
         }
@@ -476,12 +515,24 @@ const JournalCalendarRemade = () => {
           setTodayPeriod("false");
         },
         (error) => {
-          if (error.response) {
-            const status = error.response.status;
+          if (isPlatform("ios")) {
+            if (error) {
+              const status = error.status;
 
-            if (status === 401 || status === 403 || status === 404) {
-              authService.logout();
-              history.push("/onboarding");
+              if (status === 401 || status === 403 || status === 404) {
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+          else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                authService.logout();
+                history.push("/onboarding");
+              }
             }
           }
 
@@ -610,8 +661,8 @@ const JournalCalendarRemade = () => {
     for (let i = 1; i <= lastDateOfMonth; i++) {
       const isToday =
         i === new Date().getDate() &&
-        m === new Date().getMonth() &&
-        year === new Date().getFullYear()
+          m === new Date().getMonth() &&
+          year === new Date().getFullYear()
           ? "currentDay"
           : "";
 
@@ -620,10 +671,10 @@ const JournalCalendarRemade = () => {
         return (
           item.date ===
           year +
-            "-" +
-            (m + 1).toString().padStart(2, "0") +
-            "-" +
-            i.toString().padStart(2, "0")
+          "-" +
+          (m + 1).toString().padStart(2, "0") +
+          "-" +
+          i.toString().padStart(2, "0")
         );
       });
 
@@ -631,9 +682,8 @@ const JournalCalendarRemade = () => {
         <li
           key={`currentDay-${i}`}
           id={`${i}/${m + 1}/${year}`}
-          className={`calendar-day ${isToday} ${
-            activeIndex === i + 1 && activeMonthIndex === m ? "dayActive" : ""
-          }`}
+          className={`calendar-day ${isToday} ${activeIndex === i + 1 && activeMonthIndex === m ? "dayActive" : ""
+            }`}
           onClick={() => handleOnClick(i, m)}
           style={getColors(year, m + 1, i)}
         >
@@ -801,9 +851,8 @@ const JournalCalendarRemade = () => {
                   <div
                     id={`${months[mIndex]}`}
                     key={monthData.key}
-                    className={`calendar-month ${
-                      currentdivInView == months[mIndex] ? "fadeIn" : "fadeOut"
-                    }`}
+                    className={`calendar-month ${currentdivInView == months[mIndex] ? "fadeIn" : "fadeOut"
+                      }`}
                   >
                     {monthData}
                   </div>
