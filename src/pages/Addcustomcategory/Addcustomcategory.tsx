@@ -331,7 +331,7 @@ const Addcustomcategory: React.FC = () => {
                 <IonItem>
                   <IonLabel className="ion-text-center">
                     <IonRange
-                      className="custom-tick ion-no-padding"
+                      className="custom-tick ion-no-padding custom-slider"
                       dualKnobs={false}
                       ticks={true}
                       snaps={true}
@@ -349,7 +349,7 @@ const Addcustomcategory: React.FC = () => {
                 <IonItem>
                   <IonLabel className="ion-text-center">
                     <IonRange
-                      className="custom-tick ion-no-padding"
+                      className="custom-tick ion-no-padding custom-slider"
                       dualKnobs={false}
                       ticks={true}
                       snaps={true}

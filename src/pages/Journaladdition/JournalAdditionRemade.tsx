@@ -728,12 +728,12 @@ function JournalAdditionRemade() {
                                     <h3>{field.label}</h3>
                                     <div>
                                       <IonRange
-                                        className="custom-tick"
+                                        className="custom-tick custom-slider"
                                         aria-label="Dual Knobs Range"
                                         dualKnobs={false}
                                         ticks={true}
                                         snaps={true}
-                                        disabled={disableInput}
+
                                         min={0}
                                         max={10}
                                         value={field.value ? field.value : 0}
@@ -1111,12 +1111,12 @@ function JournalAdditionRemade() {
                             </IonCol>
                             <IonCol size="9">
                               <IonRange
-                                className="custom-tick"
+                                className="custom-tick custom-slider"
                                 aria-label="Dual Knobs Range"
                                 dualKnobs={false}
                                 ticks={true}
                                 snaps={true}
-                                disabled={disableInput}
+
                                 min={0}
                                 max={5}
                                 value={entry.value ? entry.value : 0}
@@ -1160,12 +1160,12 @@ function JournalAdditionRemade() {
                             </IonCol>
                             <IonCol size="9">
                               <IonRange
-                                className="custom-tick"
+                                className="custom-tick custom-slider"
                                 aria-label="Dual Knobs Range"
                                 dualKnobs={false}
                                 ticks={true}
                                 snaps={true}
-                                disabled={disableInput}
+
                                 min={0}
                                 max={12}
                                 value={entry.value ? entry.value : 0}
@@ -1217,12 +1217,12 @@ function JournalAdditionRemade() {
                                           {field.label}
                                         </h3>
                                         <IonRange
-                                          className="custom-tick"
+                                          className="custom-tick custom-slider"
                                           aria-label="Dual Knobs Range"
                                           dualKnobs={false}
                                           ticks={true}
                                           snaps={true}
-                                          disabled={disableInput}
+
                                           min={0}
                                           max={5}
                                           value={field.value ? field.value : 0}
@@ -1271,12 +1271,12 @@ function JournalAdditionRemade() {
                                         </h3>
 
                                         <IonRange
-                                          className="custom-tick"
+                                          className="custom-tick custom-slider"
                                           aria-label="Dual Knobs Range"
                                           dualKnobs={false}
                                           ticks={true}
                                           snaps={true}
-                                          disabled={disableInput}
+
                                           min={0}
                                           max={10}
                                           value={field.value ? field.value : 0}

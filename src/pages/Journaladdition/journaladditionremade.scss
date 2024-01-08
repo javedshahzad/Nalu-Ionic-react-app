@@ -8,6 +8,16 @@
     background-color: $config-white !important;
   }
 
+
+  .custom-slider {
+    pointer-events: none;
+  }
+  
+  .custom-slider::part(knob),
+  .custom-slider::part(pin) {
+    pointer-events: auto;
+  }
+
   #week-view-wrapper {
     max-width: 100dvw;
     background-color: $config-white;
