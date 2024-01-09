@@ -59,8 +59,8 @@ const Login: React.FC = () => {
         e.target.focusedValue.trim() === ""
           ? "Bitte gebe deine E-Mail-Adresse ein."
           : !emailRegexx.test(e.target.focusedValue)
-          ? "Bitte gebe eine gültige E-Mail-Adresse ein."
-          : ""
+            ? "Bitte gebe eine gültige E-Mail-Adresse ein."
+            : ""
       );
       setErrorMessage(e.target.focusedValue.trim() === "" ? "" : "");
     }
@@ -72,8 +72,8 @@ const Login: React.FC = () => {
         e.target.focusedValue.trim() === ""
           ? "Bitte gebe dein Passwort ein."
           : e.target.focusedValue.length < 6
-          ? "Das Passwort muss mindestens 6 Zeichen lang sein."
-          : ""
+            ? "Das Passwort muss mindestens 6 Zeichen lang sein."
+            : ""
       );
       setErrorMessage(e.target.focusedValue.trim() === "" ? "" : "");
     }
@@ -185,7 +185,7 @@ const Login: React.FC = () => {
             // Save additional data, including _id, in localStorage
             localStorage.setItem("accessToken", access.token);
             localStorage.setItem("refreshToken", refresh.token);
-            console.log("token set", refresh.token);
+
             localStorage.setItem(
               "chatApiUserId",
               naluApiResponse.data.data.user._id
@@ -201,6 +201,7 @@ const Login: React.FC = () => {
 
         // Navigation
         history.push("/tabs/tab1");
+        window.location.reload();
       }
     } catch (error) {
       console.log("Error", error.response?.data?.message || error.message);

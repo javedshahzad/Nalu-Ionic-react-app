@@ -14,6 +14,7 @@ import {
   IonSelectOption,
   IonTextarea,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 import { addCircle, checkmarkCircle } from "ionicons/icons";
 
@@ -22,6 +23,9 @@ import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 
 import { useState } from "react";
+import authService from "../../../authService";
+import { useHistory } from "react-router";
+import apiService from "../../../Services";
 
 const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
   const [selectedCategory, setselectedCategory] = useState("");
@@ -31,6 +35,7 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
   const [titleError, setTitleError] = useState("");
 
   const [note, setNote] = useState("");
+  const history = useHistory();
 
   const isFormValid =
     !!selectedCategory && !!title && !categoryError && !titleError;
@@ -60,18 +65,13 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
     }
 
     try {
-      axios
+      apiService
         .post(
           "https://app.mynalu.com/wp-json/nalu-app/v1/recommendation",
           {
             category: selectedCategory,
             name: title,
             description: note,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-            },
           }
         )
         .then((response) => {
@@ -83,10 +83,55 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
           }
         })
         .catch((error) => {
+          if (isPlatform("ios")) {
+            if (error) {
+              const status = error.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+          else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+
           console.error(error);
         });
     } catch (error) {
-      console.error(error);
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      console.error("error", error);
     }
   };
 

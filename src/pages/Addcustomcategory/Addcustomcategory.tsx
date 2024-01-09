@@ -18,7 +18,7 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
-  isPlatform ,
+  isPlatform,
 } from "@ionic/react";
 import {
   add,
@@ -103,7 +103,7 @@ const Addcustomcategory: React.FC = () => {
     modal.current?.dismiss();
   }
 
-  useEffect(() => {}, [customCategoryData]);
+  useEffect(() => { }, [customCategoryData]);
 
   const handleLabelClick = (data) => {
     setSelectedCategory(data);
@@ -208,14 +208,14 @@ const Addcustomcategory: React.FC = () => {
   const saveCustomCategoryData = async () => {
     setIsSubmitting(true);
     setApiErrorMessage("");
-  
+
     const jwtToken = localStorage.getItem("jwtToken");
     const data = {
       category_name: customName,
       category_icon: selectedLogoValue,
       type: selectedType,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
@@ -238,7 +238,7 @@ const Addcustomcategory: React.FC = () => {
           }
         );
       }
-  
+
       console.log(response.data);
 
       // If the API call is successful, handle the rest of the logic, such as updating the Redux store
@@ -331,7 +331,7 @@ const Addcustomcategory: React.FC = () => {
                 <IonItem>
                   <IonLabel className="ion-text-center">
                     <IonRange
-                      className="custom-tick ion-no-padding"
+                      className="custom-tick ion-no-padding custom-slider"
                       dualKnobs={false}
                       ticks={true}
                       snaps={true}
@@ -349,7 +349,7 @@ const Addcustomcategory: React.FC = () => {
                 <IonItem>
                   <IonLabel className="ion-text-center">
                     <IonRange
-                      className="custom-tick ion-no-padding"
+                      className="custom-tick ion-no-padding custom-slider"
                       dualKnobs={false}
                       ticks={true}
                       snaps={true}

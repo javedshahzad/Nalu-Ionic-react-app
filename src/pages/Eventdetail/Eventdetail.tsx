@@ -30,9 +30,10 @@ import {
 import "./Eventdetail.scss";
 import { useState, useEffect } from "react";
 import NotificationBell from "../../components/NotificationBell";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
+import authService from "../../authService";
 
 const Eventdetail: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState("");
@@ -45,6 +46,7 @@ const Eventdetail: React.FC = () => {
   const [isDateSelected, setIsDateSelected] = useState(false);
 
   const location = useLocation();
+  const history = useHistory();
   const data: any = location?.state;
   const [event_Id, setEventId] = useState(data?.event_id);
   let axiosCancelToken;
@@ -60,56 +62,91 @@ const Eventdetail: React.FC = () => {
 
   const getEventByID = (event_id) => {
     setIsLoading(true);
-    
+
     const jwtToken = localStorage.getItem("jwtToken");
     const headers = {
       Authorization: `Bearer ${jwtToken}`,
     };
-  
+
     if (isPlatform("ios")) {
       // Use Cordova HTTP plugin for iOS
       HTTP.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`, 
-        {}, 
+        `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
+        {},
         headers
       )
-        .then(response => {
+        .then((response) => {
           const data = JSON.parse(response.data);
           console.log(data);
           setEvent(data);
           setIsLoading(false);
         })
-        .catch(error => {
-          console.error("Error fetching data", error);
+        .catch((error) => {
+          if (error) {
+            const status = error.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+
+          console.error(error);
           setIsLoading(false);
         });
     } else {
       // Use Axios for other platforms
       const source = axios.CancelToken.source();
       axiosCancelToken = source;
-  
-      axios.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`, 
-        {
-          headers: headers,
-          cancelToken: source.token,
-        }
-      )
-      .then(response => {
-        console.log(response.data);
-        setEvent(response.data);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        setIsLoading(false);
-        if (axios.isCancel(error)) {
-          console.log("Request was canceled:", error.message);
-        } else {
-          console.log(error);
-        }
-      });
+
+      axios
+        .get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
+          {
+            headers: headers,
+            cancelToken: source.token,
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          setEvent(response.data);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          if (axios.isCancel(error)) {
+            console.log("Request was canceled:", error.message);
+          } else {
+            console.log(error);
+          }
+          if (isPlatform("ios")) {
+            if (error) {
+              const status = error.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+          else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+
+          console.error(error);
+        });
     }
-  };  
+  };
 
   const handleDateChange = (event, date_event, registration_link) => {
     console.log(date_event);
@@ -131,7 +168,30 @@ const Eventdetail: React.FC = () => {
         setIsLoaderLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+        else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+
+        console.error(error);
         setIsLoaderLoading(false);
       });
 
@@ -164,7 +224,30 @@ const Eventdetail: React.FC = () => {
         setIsLoaderLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+        else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+
+        console.error(error);
         setIsLoaderLoading(false);
       });
     setSelectedDate(value);
@@ -188,7 +271,30 @@ const Eventdetail: React.FC = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+        else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+
+        console.error(error);
         setIsLoading(false);
       });
   };
@@ -246,7 +352,7 @@ const Eventdetail: React.FC = () => {
 
                 <div className="rec">
                   <div className="details">
-                    <h2 dangerouslySetInnerHTML={{__html: event?.title}}></h2>
+                    <h2 dangerouslySetInnerHTML={{ __html: event?.title }}></h2>
 
                     <IonItem lines="none">
                       <div className="start-slot flex al-start " slot="start">
@@ -386,7 +492,7 @@ const Eventdetail: React.FC = () => {
                                     fill="clear"
                                     color={
                                       event?.is_registered === false ||
-                                      event?.is_registered === null
+                                        event?.is_registered === null
                                         ? "dark"
                                         : ""
                                     }
@@ -413,7 +519,7 @@ const Eventdetail: React.FC = () => {
                                     fill="clear"
                                     color={
                                       event?.is_bookmarked === false ||
-                                      event?.is_bookmarked === null
+                                        event?.is_bookmarked === null
                                         ? "dark"
                                         : ""
                                     }
@@ -439,7 +545,7 @@ const Eventdetail: React.FC = () => {
                                     fill="clear"
                                     color={
                                       event?.is_cancelled === false ||
-                                      event?.is_cancelled === null
+                                        event?.is_cancelled === null
                                         ? "dark"
                                         : ""
                                     }

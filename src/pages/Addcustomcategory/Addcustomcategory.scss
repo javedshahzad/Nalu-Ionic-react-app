@@ -205,6 +205,15 @@
     padding: 20px 15px 20px 15px;
   }
 
+  .custom-slider {
+    pointer-events: none;
+  }
+  
+  .custom-slider::part(knob),
+  .custom-slider::part(pin) {
+    pointer-events: auto;
+  }
+
   .customType {
     padding: 20px 0 20px 0 !important;
   }

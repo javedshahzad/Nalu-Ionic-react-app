@@ -30,7 +30,10 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
 import NotificationBell from "../../components/NotificationBell";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
+import authService from "../../authService";
+
+
 
 const Courseoverviewpaid: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -43,7 +46,7 @@ const Courseoverviewpaid: React.FC = () => {
 
   useEffect(() => {
     getData();
-  
+
     return () => {
       if (axiosCancelToken) {
         axiosCancelToken.cancel("Component unmounted");
@@ -51,57 +54,81 @@ const Courseoverviewpaid: React.FC = () => {
     };
   }, [location.pathname]);
 
-  const roles = JSON.parse(localStorage.getItem('roles')) || {};
+  const roles = JSON.parse(localStorage.getItem("roles")) || {};
   let isPremium = false; // Default to false
   try {
-    const roles = JSON.parse(localStorage.getItem('roles') || '{}'); // Parse the roles or default to an empty object
-    isPremium = Object.values(roles).includes('premium'); // Check if 'premium' is one of the roles
+    const roles = JSON.parse(localStorage.getItem("roles") || "{}"); // Parse the roles or default to an empty object
+    isPremium = Object.values(roles).includes("premium"); // Check if 'premium' is one of the roles
   } catch (e) {
-    console.error('Error parsing roles from localStorage:', e);
+    console.error("Error parsing roles from localStorage:", e);
   }
 
   const getData = () => {
     setIsLoading(true);
-    
+
     const jwtToken = localStorage.getItem("jwtToken");
     const headers = {
       Authorization: `Bearer ${jwtToken}`,
     };
-  
+
     if (isPlatform("ios")) {
       // Use Cordova HTTP plugin for iOS
-      HTTP.get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`, {}, headers)
-        .then(response => {
+      HTTP.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`,
+        {},
+        headers
+      )
+        .then((response) => {
           const data = JSON.parse(response.data);
           console.log(data);
           setCourseData(data);
           setIsLoading(false);
         })
-        .catch(error => {
-          console.error("Error fetching data", error);
+        .catch((error) => {
+          if (error) {
+            const status = error.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+
+          console.error(error);
           setIsLoading(false);
         });
     } else {
       // Use Axios for other platforms
       const source = axios.CancelToken.source();
       axiosCancelToken = source;
-  
-      axios.get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`, {
-        headers: headers,
-        cancelToken: source.token,
-      })
-      .then(response => {
-        console.log(response.data);
-        setCourseData(response.data);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        console.error("Error fetching data", error);
-        setIsLoading(false);
-      });
+
+      axios
+        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`, {
+          headers: headers,
+          cancelToken: source.token,
+        })
+        .then((response) => {
+          console.log(response.data);
+          setCourseData(response.data);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+
+          console.error(error);
+          setIsLoading(false);
+        });
     }
   };
-  
 
   const navigateToCourseInner = (id) => {
     console.log(id);
@@ -111,30 +138,28 @@ const Courseoverviewpaid: React.FC = () => {
   };
   return (
     <>
-      
-          <IonPage className="Courseoverviewpaid">
-            {
-              isLoading?(
-                <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100vh",
-                  backgroundColor: "#F8F5F2",
-                }}
-              >
-                <IonSpinner name="crescent"></IonSpinner>
-              </div>
-              ):(
-                <>
-                <IonHeader className="ion-no-border">
+      <IonPage className="Courseoverviewpaid">
+        {isLoading ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+              backgroundColor: "#F8F5F2",
+            }}
+          >
+            <IonSpinner name="crescent"></IonSpinner>
+          </div>
+        ) : (
+          <>
+            <IonHeader className="ion-no-border">
               <IonToolbar>
-              <IonButtons slot="end">
-                  <IonButton color="dark" onClick={() => history.push('/menu')}>
-                      <IonIcon icon={menuOutline} />
+                <IonButtons slot="end">
+                  <IonButton color="dark" onClick={() => history.push("/menu")}>
+                    <IonIcon icon={menuOutline} />
                   </IonButton>
-              </IonButtons>
+                </IonButtons>
 
                 {/*<IonButtons slot="end">
                   <IonButton slot="end" fill="clear">
@@ -152,7 +177,10 @@ const Courseoverviewpaid: React.FC = () => {
                     </div>
                     {course.id !== 866 && !isPremium && (
                       <div className="btn-holder ion-text-center ion-padding-vertical join-btn">
-                        <IonButton expand="block" onClick={() => history.push('/membership')}>
+                        <IonButton
+                          expand="block"
+                          onClick={() => history.push("/membership")}
+                        >
                           {course.title} beitreten
                         </IonButton>
                       </div>
@@ -172,10 +200,14 @@ const Courseoverviewpaid: React.FC = () => {
                       <div
                         className="resume-holder"
                         onClick={() => {
-                          if (!course.next_chapter.protected || course.next_chapter.preview || isPremium) {
+                          if (
+                            !course.next_chapter.protected ||
+                            course.next_chapter.preview ||
+                            isPremium
+                          ) {
                             navigateToCourseInner(course.next_chapter.id);
                           }
-                        }}                        
+                        }}
                       >
                         <h3>Kurs fortsetzen</h3>
                         <IonItem button detail lines="none">
@@ -183,33 +215,71 @@ const Courseoverviewpaid: React.FC = () => {
                         </IonItem>
                       </div>
                     )}
-                    <IonAccordionGroup multiple={false} className="course-content">
+                    <IonAccordionGroup
+                      multiple={false}
+                      className="course-content"
+                    >
                       {course.items.map((module, moduleIndex) => (
-                        <IonAccordion className="first_accord" value={moduleIndex} key={moduleIndex}>
+                        <IonAccordion
+                          className="first_accord"
+                          value={moduleIndex}
+                          key={moduleIndex}
+                        >
                           <IonItem slot="header" lines="none">
-                            <IonLabel style={{ fontWeight: "600" }}>{module.title}</IonLabel>
+                            <IonLabel style={{ fontWeight: "600" }}>
+                              {module.title}
+                            </IonLabel>
                           </IonItem>
                           <div slot="content">
                             {module?.items?.map((chapter, chapterIndex) => (
-                              <IonAccordionGroup key={chapterIndex} multiple={false}>
+                              <IonAccordionGroup
+                                key={chapterIndex}
+                                multiple={false}
+                              >
                                 <IonAccordion value={chapterIndex}>
                                   <IonItem
                                     slot="header"
                                     lines="inset"
                                     onClick={() => {
-                                      if (!chapter.items && chapter.protected && !isPremium && !chapter.preview) {
-                                        history.push('/membership');
-                                      } else if (!chapter.items && (!chapter.protected || chapter.preview || isPremium)) {
+                                      if (
+                                        !chapter.items &&
+                                        chapter.protected &&
+                                        !isPremium &&
+                                        !chapter.preview
+                                      ) {
+                                        history.push("/membership");
+                                      } else if (
+                                        !chapter.items &&
+                                        (!chapter.protected ||
+                                          chapter.preview ||
+                                          isPremium)
+                                      ) {
                                         navigateToCourseInner(chapter.id);
                                       }
                                     }}
                                   >
-                                    <IonLabel style={{ marginLeft: "10px", color: "#636363" }}>
-                                      <div className="paragraph" dangerouslySetInnerHTML={{ __html: `${chapter.title}` }}></div>
+                                    <IonLabel
+                                      style={{
+                                        marginLeft: "10px",
+                                        color: "#636363",
+                                      }}
+                                    >
+                                      <div
+                                        className="paragraph"
+                                        dangerouslySetInnerHTML={{
+                                          __html: `${chapter.title}`,
+                                        }}
+                                      ></div>
                                     </IonLabel>
                                     {!chapter.items && (
                                       <IonIcon
-                                        src={chapter.protected && !isPremium && !chapter.preview ? "assets/imgs/icn-lock.svg" : "assets/imgs/right-arrow.svg"}
+                                        src={
+                                          chapter.protected &&
+                                          !isPremium &&
+                                          !chapter.preview
+                                            ? "assets/imgs/icn-lock.svg"
+                                            : "assets/imgs/right-arrow.svg"
+                                        }
                                         slot="end"
                                         size="small"
                                         className="ion-accordion-toggle-icon no-rotation"
@@ -218,32 +288,51 @@ const Courseoverviewpaid: React.FC = () => {
                                   </IonItem>
                                   {chapter?.items && (
                                     <div className="ion-padding" slot="content">
-                                      {chapter?.items?.map((sub_chapter, sub_chapter_index) => (
-                                        <IonItem
-                                          key={sub_chapter_index}
-                                          lines="inset"
-                                          onClick={() => {
-                                            if (sub_chapter.protected && !isPremium && !sub_chapter.preview) {
-                                              history.push('/membership');
-                                            } else if (!sub_chapter.items && (!sub_chapter.protected || sub_chapter.preview || isPremium)) {
-                                              navigateToCourseInner(sub_chapter.id);
-                                            }
-                                          }}
-                                        >
-                                          <IonLabel style={{ color: "#636363" }}>{sub_chapter.title}</IonLabel>
-                                          <IonIcon
-                                            src={
-                                              sub_chapter.items
-                                                ? "assets/imgs/right-arrow.svg"
-                                                : (sub_chapter.protected && !isPremium && !sub_chapter.preview)
+                                      {chapter?.items?.map(
+                                        (sub_chapter, sub_chapter_index) => (
+                                          <IonItem
+                                            key={sub_chapter_index}
+                                            lines="inset"
+                                            onClick={() => {
+                                              if (
+                                                sub_chapter.protected &&
+                                                !isPremium &&
+                                                !sub_chapter.preview
+                                              ) {
+                                                history.push("/membership");
+                                              } else if (
+                                                !sub_chapter.items &&
+                                                (!sub_chapter.protected ||
+                                                  sub_chapter.preview ||
+                                                  isPremium)
+                                              ) {
+                                                navigateToCourseInner(
+                                                  sub_chapter.id
+                                                );
+                                              }
+                                            }}
+                                          >
+                                            <IonLabel
+                                              style={{ color: "#636363" }}
+                                            >
+                                              {sub_chapter.title}
+                                            </IonLabel>
+                                            <IonIcon
+                                              src={
+                                                sub_chapter.items
+                                                  ? "assets/imgs/right-arrow.svg"
+                                                  : sub_chapter.protected &&
+                                                    !isPremium &&
+                                                    !sub_chapter.preview
                                                   ? "assets/imgs/icn-lock.svg"
                                                   : "assets/imgs/right-arrow.svg"
-                                            }
-                                            className="ion-accordion-toggle-icon custom-icon custom_icon"
-                                            slot="end"
-                                          ></IonIcon>
-                                        </IonItem>
-                                      ))}
+                                              }
+                                              className="ion-accordion-toggle-icon custom-icon custom_icon"
+                                              slot="end"
+                                            ></IonIcon>
+                                          </IonItem>
+                                        )
+                                      )}
                                     </div>
                                   )}
                                 </IonAccordion>
@@ -257,12 +346,9 @@ const Courseoverviewpaid: React.FC = () => {
                 ))}
               </div>
             </IonContent>
-                </>
-              )
-            }
-            
-          </IonPage>
-       
+          </>
+        )}
+      </IonPage>
     </>
   );
 };

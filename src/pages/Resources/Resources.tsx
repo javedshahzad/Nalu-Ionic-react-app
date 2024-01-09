@@ -42,7 +42,8 @@ import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import image_not_found from '../../Images/image-not-found.png'
+import image_not_found from "../../Images/image-not-found.png";
+import authService from "../../authService";
 
 const Resources: React.FC = () => {
   const [activeSegment, setActiveSegment] = useState<string>("overview");
@@ -88,7 +89,6 @@ const Resources: React.FC = () => {
       getRecommendations();
       localStorage.removeItem("DATA");
     } else {
-
       setIsLoading(true);
       getCategoriesFavourites();
       setIsFilterSelected(false);
@@ -104,13 +104,13 @@ const Resources: React.FC = () => {
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
         response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`, 
-          {}, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
+          {},
           headers
         );
         response = JSON.parse(response.data);
@@ -118,30 +118,51 @@ const Resources: React.FC = () => {
         const source = axios.CancelToken.source();
         axiosCancelToken_1 = source;
         response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
           { headers, cancelToken: source.token }
         );
         response = response.data;
       }
       setCategoriesOverview(response);
     } catch (error) {
-      console.error("Error fetching categories overview:", error);
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      } else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      console.error("error", error);
     } finally {
       setIsLoading(false);
     }
-  };  
+  };
   const getCategoriesFavourites = async () => {
     setIsLoading(true);
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
         response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`, 
-          {}, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
+          {},
           headers
         );
         response = JSON.parse(response.data);
@@ -149,30 +170,51 @@ const Resources: React.FC = () => {
         const source = axios.CancelToken.source();
         axiosCancelToken_3 = source;
         response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
           { headers, cancelToken: source.token }
         );
         response = response.data;
       }
       setCategoriesFavourites(response.ressources);
     } catch (error) {
-      console.error("Error fetching favourites:", error);
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      } else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      console.error("error", error);
     } finally {
       setIsLoading(false);
     }
-  };  
+  };
   const getRecommendations = async () => {
     setIsLoading(true);
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
         response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`, 
-          {}, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
+          {},
           headers
         );
         response = JSON.parse(response.data);
@@ -180,21 +222,41 @@ const Resources: React.FC = () => {
         const source = axios.CancelToken.source();
         axiosCancelToken_2 = source;
         response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
           { headers, cancelToken: source.token }
         );
         response = response.data;
       }
       setRecommendations(response.ressources);
     } catch (error) {
-      console.error("Error fetching recommendations:", error);
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      } else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      console.error("error", error);
     } finally {
       setIsLoading(false);
     }
-  };  
+  };
   const getParentCategoryByID = (resource_sub_id) => {
-
-         history.push(`/tabs/tab3/resourcesubcateggory/${resource_sub_id}`);
+    history.push(`/tabs/tab3/resourcesubcateggory/${resource_sub_id}`);
 
     // setIsLoading(true);
     // setCategoryID(id);
@@ -228,7 +290,7 @@ const Resources: React.FC = () => {
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
@@ -239,21 +301,44 @@ const Resources: React.FC = () => {
         response = response.data;
       }
       console.log(response);
-      if (response.message === "Upvote handled successfully" ||
-          response.message === "Downvote removed successfully" ||
-          response.message === "Upvote removed successfully") {
+      if (
+        response.message === "Upvote handled successfully" ||
+        response.message === "Downvote removed successfully" ||
+        response.message === "Upvote removed successfully"
+      ) {
         getCategoriesFavourites();
       }
     } catch (error) {
-      console.error("Error handling upvote:", error);
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      } else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      console.error("error", error);
     }
-  };  
+  };
   const handleDownvote = async (is_upvoted, id, is_downvoted) => {
     let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=${!is_downvoted}`;
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
@@ -264,22 +349,45 @@ const Resources: React.FC = () => {
         response = response.data;
       }
       console.log(response);
-      if (response.message === "Downvote removed successfully" ||
-          response.message === "Downvote added successfully" ||
-          response.message === "Upvote removed successfully" ||
-          response.message === "Upvote handled successfully") {
+      if (
+        response.message === "Downvote removed successfully" ||
+        response.message === "Downvote added successfully" ||
+        response.message === "Upvote removed successfully" ||
+        response.message === "Upvote handled successfully"
+      ) {
         getCategoriesFavourites();
       }
     } catch (error) {
-      console.error("Error handling downvote:", error);
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      } else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      console.error("error", error);
     }
-  };  
+  };
   const handleSave = async (favourite, id) => {
     let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=${!favourite}`;
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
@@ -290,14 +398,37 @@ const Resources: React.FC = () => {
         response = response.data;
       }
       console.log(response);
-      if (response.message === "Post removed from favourites successfully" ||
-          response.message === "Post added to favourites successfully") {
+      if (
+        response.message === "Post removed from favourites successfully" ||
+        response.message === "Post added to favourites successfully"
+      ) {
         getCategoriesFavourites();
       }
     } catch (error) {
-      console.error("Error handling save:", error);
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      } else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      console.error("error", error);
     }
-  };  
+  };
 
   const setToastAndClose = (val) => {
     toast.success(val);
@@ -315,55 +446,68 @@ const Resources: React.FC = () => {
           history.push("/tabs/tab3/resourcedetail", {
             data: response.data,
           });
-    setIsLoading(false);
-        
+          setIsLoading(false);
+
           // router.push('/tabs/tab3/resourcedetail', 'root', 'replace');
           // const dataParam = encodeURIComponent(JSON.stringify(response.data));
           // router.push(`/resourcedetail?data=${dataParam}`, 'root', 'replace');
-
-          
-
         })
         .catch((error) => {
-          console.log(error);
-    setIsLoading(false);
+          if (error.response) {
+            const status = error.response.status;
 
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+
+          console.error(error);
+          setIsLoading(false);
         });
     } catch (error) {
-      console.log(error);
-    setIsLoading(false);
+      if (error.response) {
+        const status = error.response.status;
 
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/onboarding");
+        }
+      }
+
+      console.error(error);
+      setIsLoading(false);
     }
   };
   return (
     <>
       <ToastContainer autoClose={19000} />
-      
-          <IonPage className="Resources">
-            {
-              isLoading?(
-<div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          backgroundColor: "#F8F5F2",
-        }}
-      >
-        <IonSpinner name="crescent"></IonSpinner>
-      </div>
-              ):
-              (
-<>
-<IonHeader className="ion-no-border">
+
+      <IonPage className="Resources">
+        {isLoading ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+              backgroundColor: "#F8F5F2",
+            }}
+          >
+            <IonSpinner name="crescent"></IonSpinner>
+          </div>
+        ) : (
+          <>
+            <IonHeader className="ion-no-border">
               <IonToolbar>
-              <IonButtons slot="end">
-                  <IonButton color="dark" onClick={() => history.push('/menu')}>
-                      <IonIcon icon={menuOutline} />
+                <IonButtons slot="end">
+                  <IonButton color="dark" onClick={() => history.push("/menu")}>
+                    <IonIcon icon={menuOutline} />
                   </IonButton>
-              </IonButtons>
-              {/*<IonButtons slot="end">
+                </IonButtons>
+                {/*<IonButtons slot="end">
                   <IonButton color="dark">
                     <IonIcon icon={searchOutline} />
                   </IonButton>
@@ -409,17 +553,16 @@ const Resources: React.FC = () => {
                             onClick={() => getParentCategoryByID(item.id)}
                           >
                             <div className="red_circle">
-
-                            <div className="icon_img">
-                              {item?.icon_url ? (
-                                <div
-                                  className="red_icon"
-                                  dangerouslySetInnerHTML={{
-                                    __html: item?.svg_url,
-                                  }}
-                                />
-                              ) : null}
-                            </div>
+                              <div className="icon_img">
+                                {item?.icon_url ? (
+                                  <div
+                                    className="red_icon"
+                                    dangerouslySetInnerHTML={{
+                                      __html: item?.svg_url,
+                                    }}
+                                  />
+                                ) : null}
+                              </div>
                             </div>
 
                             <IonLabel style={{ color: "#636363" }}>
@@ -439,15 +582,19 @@ const Resources: React.FC = () => {
                           <IonCol size="6" key={index}>
                             <div
                               className="rc-card ion-activatable ripple-parent"
-                              onClick={() => history.push(`/tabs/tab3/resourcedetail/${item.id}`)}
+                              onClick={() =>
+                                history.push(
+                                  `/tabs/tab3/resourcedetail/${item.id}`
+                                )
+                              }
                             >
                               <IonRippleEffect />
                               <div className="img-holder">
                                 {item?.thumbnail_url ? (
-                                   <img src={item?.thumbnail_url} />
+                                  <img src={item?.thumbnail_url} />
                                 ) : (
-                                  <span style={{'width':'100%'}} />
-                                  )}
+                                  <span style={{ width: "100%" }} />
+                                )}
 
                                 {/*<div className="btn ion-activatable ripple-parent flex al-center jc-center">
                                   {item.parent_category.map((value, index) =>
@@ -467,7 +614,18 @@ const Resources: React.FC = () => {
                                     </div>*/}
                               </div>
 
-                              <h4 style={{ fontFamily: 'GBold', fontSize: '16px', margin: '10px 0', width: '-webkit-fill-available', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.title}</h4>
+                              <h4
+                                style={{
+                                  fontFamily: "GBold",
+                                  fontSize: "16px",
+                                  margin: "10px 0",
+                                  width: "-webkit-fill-available",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                {item.title}
+                              </h4>
                             </div>
                           </IonCol>
                         ))}
@@ -496,16 +654,26 @@ const Resources: React.FC = () => {
                               {card?.thumbnail_url ? (
                                 <img src={card.thumbnail_url} alt="" />
                               ) : (
-                                <img style={{'width':'100%'}} src={''} alt="Image not found" />
-                                )}
+                                <img
+                                  style={{ width: "100%" }}
+                                  src={""}
+                                  alt="Image not found"
+                                />
+                              )}
                             </div>
 
                             <IonLabel>
                               <div className="first flex al-center">
                                 <h3>{card?.title}</h3>
-                                {card.category && card.category.length > 0 && card.category[0].svg_url ? (
+                                {card.category &&
+                                card.category.length > 0 &&
+                                card.category[0].svg_url ? (
                                   <div
-                                    className={`icon__ ${categoryID === card.category[0].id ? "blackIcon" : "blackIcon"}`}
+                                    className={`icon__ ${
+                                      categoryID === card.category[0].id
+                                        ? "blackIcon"
+                                        : "blackIcon"
+                                    }`}
                                     dangerouslySetInnerHTML={{
                                       __html: card.category[0].svg_url,
                                     }}
@@ -515,16 +683,26 @@ const Resources: React.FC = () => {
                               <div className="second flex al-center">
                                 {card?.sponsored && (
                                   <>
-                                    <IonIcon icon={informationCircleOutline} /> <p className="ion-text-wrap">Gesponsert</p>
+                                    <IonIcon icon={informationCircleOutline} />{" "}
+                                    <p className="ion-text-wrap">Gesponsert</p>
                                   </>
                                 )}
-                                {!card?.sponsored && card.authority && card.authority[0]?.title && (
-                                  <>
-                                    <IonIcon icon={informationCircleOutline} /> <p className="ion-text-wrap">Empfohlen von {card.authority[0].title}</p>
-                                  </>
-                                )}
+                                {!card?.sponsored &&
+                                  card.authority &&
+                                  card.authority[0]?.title && (
+                                    <>
+                                      <IonIcon
+                                        icon={informationCircleOutline}
+                                      />{" "}
+                                      <p className="ion-text-wrap">
+                                        Empfohlen von {card.authority[0].title}
+                                      </p>
+                                    </>
+                                  )}
                               </div>
-                              <h5 className="ion-text-wrap">{card.description}</h5>
+                              <h5 className="ion-text-wrap">
+                                {card.description}
+                              </h5>
                               <div className="btns-holder flex al-center jc-between">
                                 <div
                                   className="btn ion-activatable ripple-parent flex al-center"
@@ -585,12 +763,9 @@ const Resources: React.FC = () => {
                 </div>
               )}
             </IonContent>
-</>
-              )
-            }
-            
-          </IonPage>
-       
+          </>
+        )}
+      </IonPage>
     </>
   );
 };

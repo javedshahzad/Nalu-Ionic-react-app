@@ -33,6 +33,7 @@ import { Player } from "./../../components/videoPlayer/Player";
 import React, { useRef, useEffect } from "react";
 import { Browser } from "@capacitor/browser";
 import { useParams } from "react-router-dom";
+import authService from "../../authService";
 
 const Resourcedetail: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +57,7 @@ const Resourcedetail: React.FC = () => {
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let responseData;
       if (isPlatform("ios")) {
@@ -76,11 +77,32 @@ const Resourcedetail: React.FC = () => {
       console.log(responseData);
       setResourceData({ data: responseData }); // Normalize the structure
     } catch (error) {
-      console.error("Error fetching resource details:", error);
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      } else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      console.error("error", error);
     } finally {
       setIsLoading(false);
     }
-  };  
+  };
 
   useEffect(() => {
     getResourceDetailsByID();
@@ -88,11 +110,11 @@ const Resourcedetail: React.FC = () => {
 
   const handleUpvote = async (is_upvoted, id, is_downvoted) => {
     let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=${!is_upvoted}`;
-  
+
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
@@ -105,17 +127,38 @@ const Resourcedetail: React.FC = () => {
       console.log(response);
       getResourceDetailsByID();
     } catch (error) {
-      console.error("Error handling upvote:", error);
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      } else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      console.error("error", error);
     }
-  };  
+  };
 
   const handleDownvote = async (is_upvoted, id, is_downvoted) => {
     let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=${!is_downvoted}`;
-  
+
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
@@ -128,17 +171,38 @@ const Resourcedetail: React.FC = () => {
       console.log(response);
       getResourceDetailsByID();
     } catch (error) {
-      console.error("Error handling downvote:", error);
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      } else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      console.error("error", error);
     }
-  };  
+  };
 
   const handleSave = async (favourite, id) => {
     let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=${!favourite}`;
-  
+
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
@@ -151,9 +215,30 @@ const Resourcedetail: React.FC = () => {
       console.log(response);
       getResourceDetailsByID();
     } catch (error) {
-      console.error("Error handling save:", error);
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      } else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      console.error("error", error);
     }
-  };  
+  };
   // const getResourceDetailsByID = (id) => {
   //   try {
   //     axios
@@ -217,7 +302,7 @@ const Resourcedetail: React.FC = () => {
       num = 1;
 
       const currentURL = window.location.pathname;
-  
+
       if (currentURL === "/tabs/tab3/resourcedetail/6999") {
         window.history.go(-2);
       } else {
@@ -241,14 +326,19 @@ const Resourcedetail: React.FC = () => {
           <IonSpinner name="crescent" />
         </div>
       ) : (
-          <>
-      <IonHeader className="ion-no-border">
-        <IonToolbar>
-          <IonButton slot="start" fill="clear" color="dark" onClick={backHandler}>
-            <IonIcon icon={arrowBackOutline}></IonIcon>
-          </IonButton>
-          <IonTitle>{resourseData?.data.title}</IonTitle>
-          {/*<IonButtons slot="end">
+        <>
+          <IonHeader className="ion-no-border">
+            <IonToolbar>
+              <IonButton
+                slot="start"
+                fill="clear"
+                color="dark"
+                onClick={backHandler}
+              >
+                <IonIcon icon={arrowBackOutline}></IonIcon>
+              </IonButton>
+              <IonTitle>{resourseData?.data.title}</IonTitle>
+              {/*<IonButtons slot="end">
             <IonButton color="dark">
               <IonIcon icon={heartOutline} />
             </IonButton>
@@ -258,146 +348,151 @@ const Resourcedetail: React.FC = () => {
               <NotificationBell />
             </IonButton>
           </IonButtons>*/}
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen ref={contentRef}>
-        <div className="top-img-holder ion-text-center">
-          {resourseData?.data?.featured_video ? (
-            <div className="player-wrapper">
-              <ReactPlayer
-                url={resourseData?.data?.featured_video}
-                width="100%"
-                height="100%"
-                className="react-player"
-                controls={true}
-                playsinline={true}
-              />
+            </IonToolbar>
+          </IonHeader>
+          <IonContent fullscreen ref={contentRef}>
+            <div className="top-img-holder ion-text-center">
+              {resourseData?.data?.featured_video ? (
+                <div className="player-wrapper">
+                  <ReactPlayer
+                    url={resourseData?.data?.featured_video}
+                    width="100%"
+                    height="100%"
+                    className="react-player"
+                    controls={true}
+                    playsinline={true}
+                  />
+                </div>
+              ) : resourseData?.data?.image_url ? (
+                <img src={resourseData?.data?.image_url} />
+              ) : null}
             </div>
-          ) : resourseData?.data?.image_url ? (
-            <img src={resourseData?.data?.image_url} />
-          ) : null}
-        </div>
-        <div className="content ion-padding">
-          {resourseData?.data?.parent_category[0]?.svg_url ? (
-            <div className="category-tag">
-              <IonItem lines="none">
-                <div
-                  slot="start"
-                  dangerouslySetInnerHTML={{
-                    __html: resourseData?.data?.parent_category[0]?.svg_url,
-                  }}
-                />
-                <IonLabel>
-                  {resourseData?.data?.parent_category[0]?.name}
-                </IonLabel>
-                <IonRadio value="Movies"></IonRadio>
-              </IonItem>
-            </div>
-          ) : null}
-
-          <div className="rec">
-            <div className="details">
-              {resourseData?.data?.authority?.title ? (
-                <h2>{resourseData?.data?.authority?.title}</h2>
+            <div className="content ion-padding">
+              {resourseData?.data?.parent_category[0]?.svg_url ? (
+                <div className="category-tag">
+                  <IonItem lines="none">
+                    <div
+                      slot="start"
+                      dangerouslySetInnerHTML={{
+                        __html: resourseData?.data?.parent_category[0]?.svg_url,
+                      }}
+                    />
+                    <IonLabel>
+                      {resourseData?.data?.parent_category[0]?.name}
+                    </IonLabel>
+                    <IonRadio value="Movies"></IonRadio>
+                  </IonItem>
+                </div>
               ) : null}
 
-              <IonItem lines="none">
-                {resourseData?.data?.authority?.title ? (
-                  <div className="start-slot flex al-start " slot="start">
-                    <IonAvatar>
-                      <img src={resourseData?.data?.authority?.image} alt="" />
-                    </IonAvatar>
+              <div className="rec">
+                <div className="details">
+                  {resourseData?.data?.authority?.title ? (
+                    <h2>{resourseData?.data?.authority?.title}</h2>
+                  ) : null}
 
-                    <IonIcon
-                      className="verify"
-                      src="assets/imgs/icn-verify.svg"
-                    />
-                  </div>
-                ) : null}
-                <IonLabel>
-                  {resourseData?.data.authority?.title && (
-                    <>
-                      <p>Recommended by</p>
-                      <h6 className="ion-text-wrap">
-                        <span>{resourseData?.data.authority?.title}</span>
-                        {resourseData?.data?.authority?.description}
-                      </h6>
-                    </>
-                  )}
-                  <div className="btns-holder flex al-center">
-                    <div
-                      onClick={() =>
-                        handleUpvote(
-                          resourseData?.data.is_upvoted,
-                          resourseData?.data.id,
-                          resourseData?.data.is_downvoted
-                        )
-                      }
-                      className="btn ion-activatable ripple-parent flex al-center"
-                    >
-                      {resourseData?.data.is_upvoted ? (
-                        <IonIcon src="assets/imgs/like-filled.svg" />
-                      ) : (
-                        <IonIcon src="assets/imgs/like-unfilled.svg" />
-                      )}
-                      &ensp;
-                      {resourseData?.data.upvotes_number > 0 && (
-                        <h6>{resourseData?.data.upvotes_number}</h6>
-                      )}
-                    </div>
-                    <div
-                      onClick={() =>
-                        handleDownvote(
-                          resourseData?.data.is_upvoted,
-                          resourseData?.data.id,
-                          resourseData?.data.is_downvoted
-                        )
-                      }
-                      className="btn ion-activatable ripple-parent flex al-center"
-                      style={{ marginLeft: "29px" }}
-                    >
-                      {resourseData?.data.is_downvoted ? (
-                        <IonIcon src="assets/imgs/dislike-filled.svg" />
-                      ) : (
-                        <IonIcon src="assets/imgs/dislike-unfilled.svg"></IonIcon>
-                      )}
-                    </div>
-                    <div
-                      onClick={() =>
-                        handleSave(
-                          resourseData?.data.favourite,
-                          resourseData?.data.id
-                        )
-                      }
-                      className="btn ion-activatable ripple-parent flex al-center"
-                      style={{ marginLeft: "29px" }}
-                    >
-                      {resourseData?.data.favourite ? (
-                        <IonIcon src="assets/imgs/heart-filled.svg" />
-                      ) : (
-                        <IonIcon src="assets/imgs/heart-unfilled.svg"></IonIcon>
-                      )}
-                      <h6 style={{ marginLeft: "5px", color: "#636363" }}></h6>
-                    </div>
-                  </div>
-                </IonLabel>
-              </IonItem>
+                  <IonItem lines="none">
+                    {resourseData?.data?.authority?.title ? (
+                      <div className="start-slot flex al-start " slot="start">
+                        <IonAvatar>
+                          <img
+                            src={resourseData?.data?.authority?.image}
+                            alt=""
+                          />
+                        </IonAvatar>
 
-              <div className="desc">
-                <h3>{resourseData?.data.title}</h3>
-                <p
-                  className="ion-text-wrap"
-                  dangerouslySetInnerHTML={{
-                    __html: resourseData?.data.content,
-                  }}
-                ></p>
+                        <IonIcon
+                          className="verify"
+                          src="assets/imgs/icn-verify.svg"
+                        />
+                      </div>
+                    ) : null}
+                    <IonLabel>
+                      {resourseData?.data.authority?.title && (
+                        <>
+                          <p>Recommended by</p>
+                          <h6 className="ion-text-wrap">
+                            <span>{resourseData?.data.authority?.title}</span>
+                            {resourseData?.data?.authority?.description}
+                          </h6>
+                        </>
+                      )}
+                      <div className="btns-holder flex al-center">
+                        <div
+                          onClick={() =>
+                            handleUpvote(
+                              resourseData?.data.is_upvoted,
+                              resourseData?.data.id,
+                              resourseData?.data.is_downvoted
+                            )
+                          }
+                          className="btn ion-activatable ripple-parent flex al-center"
+                        >
+                          {resourseData?.data.is_upvoted ? (
+                            <IonIcon src="assets/imgs/like-filled.svg" />
+                          ) : (
+                            <IonIcon src="assets/imgs/like-unfilled.svg" />
+                          )}
+                          &ensp;
+                          {resourseData?.data.upvotes_number > 0 && (
+                            <h6>{resourseData?.data.upvotes_number}</h6>
+                          )}
+                        </div>
+                        <div
+                          onClick={() =>
+                            handleDownvote(
+                              resourseData?.data.is_upvoted,
+                              resourseData?.data.id,
+                              resourseData?.data.is_downvoted
+                            )
+                          }
+                          className="btn ion-activatable ripple-parent flex al-center"
+                          style={{ marginLeft: "29px" }}
+                        >
+                          {resourseData?.data.is_downvoted ? (
+                            <IonIcon src="assets/imgs/dislike-filled.svg" />
+                          ) : (
+                            <IonIcon src="assets/imgs/dislike-unfilled.svg"></IonIcon>
+                          )}
+                        </div>
+                        <div
+                          onClick={() =>
+                            handleSave(
+                              resourseData?.data.favourite,
+                              resourseData?.data.id
+                            )
+                          }
+                          className="btn ion-activatable ripple-parent flex al-center"
+                          style={{ marginLeft: "29px" }}
+                        >
+                          {resourseData?.data.favourite ? (
+                            <IonIcon src="assets/imgs/heart-filled.svg" />
+                          ) : (
+                            <IonIcon src="assets/imgs/heart-unfilled.svg"></IonIcon>
+                          )}
+                          <h6
+                            style={{ marginLeft: "5px", color: "#636363" }}
+                          ></h6>
+                        </div>
+                      </div>
+                    </IonLabel>
+                  </IonItem>
+
+                  <div className="desc">
+                    <h3>{resourseData?.data.title}</h3>
+                    <p
+                      className="ion-text-wrap"
+                      dangerouslySetInnerHTML={{
+                        __html: resourseData?.data.content,
+                      }}
+                    ></p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </IonContent>
-          </>
-        )}
+          </IonContent>
+        </>
+      )}
     </IonPage>
   );
 };

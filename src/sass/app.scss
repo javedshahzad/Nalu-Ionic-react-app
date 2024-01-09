@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+$config-font-family: var(--ion-font-family);
+$config-white: #f8f5f2;
+$config-pink: #ee5f64;
+$config-black: #2d2d2d;
+
 .flex {
   display: flex;
 }
@@ -48,7 +53,6 @@
 
 .modaaal {
   --background: rgba(255, 255, 255, 0.26) !important;
-  
 }
 
 .ripple-parent {
@@ -60,9 +64,8 @@ ion-button {
   text-transform: none;
 }
 
-ion-tab-bar
-{
-  --background: #F8F5F2 !important;
+ion-tab-bar {
+  --background: #f8f5f2 !important;
   border: none !important;
 }
 ion-tab-button {
@@ -80,7 +83,7 @@ ion-tab-button {
     display: none;
   }
 
-   #active {
+  #active {
     display: inline;
   }
 }
@@ -164,53 +167,46 @@ ion-footer {
 //   counter-reset: tick-counter -1;
 // }
 
-ion-toolbar
-    {
-        --background: #F8F5F2;
+ion-toolbar {
+  --background: #f8f5f2;
 
-        [slot="start"]
-        {
-          min-width: 20%;
-        }
+  [slot="start"] {
+    min-width: 20%;
+  }
 
-        [slot="end"]
-        {
-          min-width: 0%;
-          margin-right: -15px;
-        }
+  [slot="end"] {
+    min-width: 0%;
+    margin-right: -15px;
+  }
 
-        ion-icon
-        {
-            color: #2D2D2D;
-            margin-right: 16px !important;
-        }
+  ion-icon {
+    color: #2d2d2d;
+    margin-right: 16px !important;
+  }
 
-        ion-title
-        {
-          font-size: 20px;
-          --color: #636363;
-          text-align: center;
-          width: 100%;
-          margin: 0 auto;
-          position: relative;
-          padding: 0 20% 0 0;
-        }
+  ion-title {
+    font-size: 20px;
+    --color: #636363;
+    text-align: center;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    padding: 0 20% 0 0;
+  }
 
-        h1
-        {
-            font-size: 20px;
-            padding: 0;
-            margin: 0 auto;
-            text-align: center;
-        }
-        
-    }
+  h1 {
+    font-size: 20px;
+    padding: 0;
+    margin: 0 auto;
+    text-align: center;
+  }
+}
 
-    ion-content {
-      --ion-background-color: #F8F5F2;
-      --padding-start: 20px;
-      --padding-end: 20px;
-    }
+ion-content {
+  --ion-background-color: #f8f5f2;
+  --padding-start: 20px;
+  --padding-end: 20px;
+}
 
 ion-accordion.accordion-animated > [slot="header"] .ion-accordion-toggle-icon {
   color: #2d2d2d !important;
@@ -218,10 +214,9 @@ ion-accordion.accordion-animated > [slot="header"] .ion-accordion-toggle-icon {
 }
 
 ion-page {
-  --ion-background-color: #F8F5F2;
-  --background: #F8F5F2;
+  --ion-background-color: #f8f5f2;
+  --background: #f8f5f2;
 }
-
 
 ion-range::part(knob) {
   --knob-size: 16px;
@@ -250,4 +245,34 @@ ion-range::part(knob) {
 
 .aligncenter {
   text-align: center;
+}
+
+.popover-content {
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  gap: 10px;
+  label {
+    flex-direction: column;
+    display: flex;
+    gap: 5px;
+  }
+  .popoverHeading {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .goBtn {
+    background-color: $config-pink !important;
+    color: $config-white !important;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    &:hover {
+      background-color: $config-pink !important;
+    }
+  }
 }

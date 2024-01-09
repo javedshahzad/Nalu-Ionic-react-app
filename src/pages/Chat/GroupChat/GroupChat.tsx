@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+  IonBackButton,
   IonButton,
   IonButtons,
   IonContent,
@@ -36,6 +37,10 @@ import tokenService from "../../../token";
 import DOMPurify from "dompurify";
 import moment from "moment";
 import NotificationBell from "../../../components/NotificationBell";
+import authService from "../../../authService";
+
+import { isPlatform } from "@ionic/react";
+
 
 const GroupChat: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
@@ -48,6 +53,7 @@ const GroupChat: React.FC = () => {
   const [GroupImage, setGroupImage] = useState("");
   const [sendloading, setSendLoading] = useState(false);
   const [chatLoading, setChatLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true); // New state variable
   const [page, setPage] = useState(1);
   const user = tokenService.getUserId();
 
@@ -60,13 +66,15 @@ const GroupChat: React.FC = () => {
     top: 0,
   });
 
+  console.log("grpmes>>>", grpMessage);
+
   const history = useHistory();
 
   const [filesArray, setFilesArray] = useState([]);
   const inputRef = useRef(null);
   const refFiles: any = useRef();
   const chatContentRef = useRef<HTMLDivElement | null>(null);
-  const [presentToast] = useIonToast();
+  const [presentToast, dismissToast] = useIonToast();
 
   useIonViewWillEnter(() => {
     setTimeout(() => {
@@ -75,7 +83,7 @@ const GroupChat: React.FC = () => {
         conversation: groupId,
       });
 
-      socket.on("join", (data) => {});
+      socket.on("join", (data) => { });
 
       socket.emit("message-list", {
         page: 1,
@@ -83,6 +91,8 @@ const GroupChat: React.FC = () => {
         user: user,
         conversation: groupId,
       });
+
+      setInitialLoading(true);
 
       socket.on("message-list", (data) => {
         // console.log("data", data);
@@ -138,6 +148,7 @@ const GroupChat: React.FC = () => {
             })
           );
         }
+        setInitialLoading(false);
       });
     }, 5000);
   });
@@ -184,10 +195,52 @@ const GroupChat: React.FC = () => {
         // console.log("groupName", data);
         setGroupImage(data.data.groupImage);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => {
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+        else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+
+        console.error(error);
+      });
   };
 
   const handleSendMessage = () => {
+    if (newMessage !== "") {
+      socket.emit("send-message", {
+        user: user,
+        conversation: groupId,
+        message: `<p>${newMessage}</p>`,
+        type: "message",
+      });
+
+      setSendLoading(true);
+
+      setTimeout(() => {
+        setSendLoading(false);
+      }, 500);
+
+      setNewMessage("");
+    }
+
     if (filesArray.length > 0 && socket.connected) {
       const nameArray = [];
       for (var i = 0; i < filesArray.length; i++) {
@@ -205,29 +258,19 @@ const GroupChat: React.FC = () => {
         user: user,
         conversation: groupId,
       });
+
+      console.log("nameArr", nameArray);
       socket.emit("send-message", {
         user: user,
         conversation: groupId,
         message: nameArray,
         type: "file",
       });
-    } else {
-      if (newMessage !== "") {
-        socket.emit("send-message", {
-          user: user,
-          conversation: groupId,
-          message: `<p>${newMessage}</p>`,
-          type: "message",
-        });
-
-        setSendLoading(true);
-
-        setTimeout(() => {
-          setSendLoading(false);
-        }, 500);
-
-        setNewMessage("");
-      }
+      setSendLoading(true);
+      setTimeout(() => {
+        setSendLoading(false);
+      }, 500);
+      setFilesArray([]);
     }
   };
 
@@ -427,11 +470,11 @@ const GroupChat: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       {loading ? (
-        <div className="chatLoad">
+        <div className="chatMessageLoad">
           <IonSpinner
             color={"primary"}
             name="crescent"
-            className="h-20px w-20px"
+            className="prevMessageLoadSpinner"
           />
         </div>
       ) : null}
@@ -440,71 +483,90 @@ const GroupChat: React.FC = () => {
         onScroll={handleScroll}
         className="groupChatContent"
       >
-        {grpMessage.map((message: any, index: any) => (
-          <div key={index}>
-            {message.sender._id === user ? (
-              <>
-                <div className="msg right-msg" id={index}>
-                  <div className="msg-bubble">
-                    {message.files.length > 0 && (
-                      <img
-                        src={message.files[0]}
-                        className="h-auto w-20 max-w-md rounded-sm"
-                        alt="Message Image"
-                        onClick={() => handleImageClick(message.files[0])}
-                      />
-                    )}
-                    <IonModal isOpen={showModal}>
-                      <img src={selectedImage} />
-                      <IonButton
-                        onClick={() => setShowModal(false)}
-                        className="closeBtn"
-                      >
-                        Close
-                      </IonButton>
-                    </IonModal>
-                    <div className="msg-text">
-                      {message.message && (
-                        <div
-                          dangerouslySetInnerHTML={sanitizeHTML(
-                            message.message
+        {initialLoading ? (
+          <div className="chatLoad">
+            <IonSpinner
+              color={"primary"}
+              name="crescent"
+              className="h-20px w-20px"
+            />
+          </div>
+        ) : (
+          <>
+            {grpMessage.map((message: any, index: any) => (
+              <div key={index}>
+                {message.sender._id === user ? (
+                  <>
+                    <div className="msg right-msg" id={index}>
+                      <div className="msg-bubble">
+                        {message.files.length > 0 && (
+                          <img
+                            src={message.files[0]}
+                            className="h-auto w-20 max-w-md rounded-sm"
+                            alt="Message Image"
+                            onClick={() => handleImageClick(message.files[0])}
+                          />
+                        )}
+                        <IonModal isOpen={showModal}>
+                          <img src={selectedImage} className="chatImage" />
+                          <IonButton
+                            onClick={() => setShowModal(false)}
+                            className="closeBtn"
+                          >
+                            Schliessen
+                          </IonButton>
+                        </IonModal>
+                        <div className="msg-text">
+                          {message.message && (
+                            <div
+                              dangerouslySetInnerHTML={sanitizeHTML(
+                                message.message
+                              )}
+                            />
                           )}
-                        />
-                      )}
-                    </div>
-                  </div>
-                  <p className="message-time">{message.relativeTimestamp}</p>
-                </div>
-              </>
-            ) : (
-              <div style={{ display: "flex", marginLeft: "10px" }}>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <img
-                    src={message.sender.userImage}
-                    alt="User"
-                    className="profile-image"
-                  />
-                </div>
-                <div className="msg left-msg">
-                  <div>
-                    <div className="msg-bubble">
-                      <div className="msg-info">
-                        <div className="msg-info-name">
-                          {message.sender.name}
                         </div>
                       </div>
-                      <div
-                        className="other-msg-text"
-                        dangerouslySetInnerHTML={sanitizeHTML(message.message)}
+                      <p className="message-time">
+                        {message.relativeTimestamp}
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ display: "flex", marginLeft: "10px" }}>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <img
+                        src={message.sender.userImage}
+                        alt="User"
+                        className="profile-image"
                       />
                     </div>
-                    <p className="message-time2">{message.relativeTimestamp}</p>
+                    <div className="msg left-msg">
+                      <div>
+                        <div className="msg-bubble">
+                          <div className="msg-info">
+                            <div className="msg-info-name">
+                              {message.sender.name}
+                            </div>
+                          </div>
+                          <div
+                            className="other-msg-text"
+                            dangerouslySetInnerHTML={sanitizeHTML(
+                              message.message
+                            )}
+                          />
+                        </div>
+                        <p className="message-time2">
+                          {message.relativeTimestamp}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
-            )}
-          </div>
-        ))}
+            ))}
+          </>
+        )}
+
         <div id="chatEnd"></div>
       </div>
 
@@ -584,7 +646,7 @@ const GroupChat: React.FC = () => {
               />
             )}
           </div>
-          {/*<label htmlFor="upload-image" className="attach-btn">
+          <label htmlFor="upload-image" className="attach-btn">
             <IonIcon icon={attachOutline}></IonIcon>
             <input
               hidden
@@ -615,20 +677,27 @@ const GroupChat: React.FC = () => {
                   fileArrays.push(selectedFile[0]);
                   setFilesArray(fileArrays);
                 } else if (!isOnlyImage) {
-                  presentToast(
-                    "Du kannst nur png, jpg, jpeg, webp und heic Dateien hochladen"
-                  );
+                  presentToast({
+                    buttons: [{ text: "Schliessen", handler: dismissToast }],
+                    message:
+                      "Du kannst nur png, jpg, jpeg, webp und heic Dateien hochladen",
+                    duration: 3000, // duration in milliseconds
+                    position: "bottom", // 'top', 'bottom', 'middle'
+                  });
                 } else if (!isFileSize) {
-                  presentToast(
-                    "Die maximale Dateigröße ist auf 5 MB begrenzt."
-                  );
+                  presentToast({
+                    buttons: [{ text: "Schliessen", handler: dismissToast }],
+                    message: "Die maximale Dateigröße ist auf 5 MB begrenzt.",
+                    duration: 3000, // duration in milliseconds
+                    position: "bottom", // 'top', 'bottom', 'middle'
+                  });
                 }
 
                 e.target.files = null;
                 e.target.value = null;
               }}
             />
-          </label>*/}
+          </label>
         </div>
       </IonFooter>
     </IonPage>

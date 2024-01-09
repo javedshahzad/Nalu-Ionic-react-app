@@ -34,6 +34,9 @@ import { notificationsOutline } from "ionicons/icons";
 import apiService from "../../../Services";
 
 import tokenService from "../../../token";
+import authService from "../../../authService";
+
+import { isPlatform } from "@ionic/react";
 
 const MyGroups: React.FC = () => {
   const [showPopover, setShowPopover] = useState(false);
@@ -113,8 +116,31 @@ const MyGroups: React.FC = () => {
           setSelectedUsers([]);
           setGroupName("");
         },
-        (err) => {
-          console.log("err from creating group", err);
+        (error) => {
+          if (isPlatform("ios")) {
+            if (error) {
+              const status = error.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+          else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+
+          console.error(error);
         }
       );
   };
@@ -135,7 +161,32 @@ const MyGroups: React.FC = () => {
       .then((data) => {
         setUsers(data);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => {
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              // authService.logout();
+              // history.push("/onboarding");
+            }
+          }
+        }
+        else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              // authService.logout();
+              // history.push("/onboarding");
+            }
+          }
+        }
+
+        console.error(error);
+      });
   };
 
   const handleGroupClick = (groupId: any) => {

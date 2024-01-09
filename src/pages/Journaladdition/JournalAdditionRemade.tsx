@@ -41,10 +41,13 @@ import tokenService from "../../token";
 import MoonPhasesServce from "../../MoonPhasesService";
 import { useDispatch } from "react-redux";
 import journalReducer from "../../reducers/journalReducer";
-import { journalAction } from "../../actions/journalAction";
+
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import React from "react";
+import authService from "../../authService";
+import { clearJournal, journalAction } from "../../actions/journalAction";
+import { isPlatform } from "@ionic/react";
 
 function JournalAdditionRemade() {
   const { dateParam } = useParams<{ dateParam: string }>();
@@ -97,7 +100,7 @@ function JournalAdditionRemade() {
         dynamicStates = data.entries;
 
         // console.log("dynamic", dynamicStates);
-
+        dispatch(clearJournal());
         dispatch(journalAction(dynamicStates));
 
         setTimeout(() => {
@@ -108,6 +111,29 @@ function JournalAdditionRemade() {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+
       console.error(error);
     }
   };
@@ -299,21 +325,46 @@ function JournalAdditionRemade() {
     const updatedValue = isCheckbox ? (val ? 1 : 0) : val;
     fields.value = updatedValue;
 
-    CustomCategoryApiService.post(`https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`, {
+    CustomCategoryApiService.post(
+      `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`,
+      {
         entries: [
-            {
-                key: fields.key,
-                value: updatedValue,
-            },
+          {
+            key: fields.key,
+            value: updatedValue,
+          },
         ],
-    }).then(
-        (data) => {},
-        (err) => {
-            console.log("err sending data", err);
-        }
-    );
-};
+      }
+    ).then(
+      (data) => { },
+      (error) => {
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
 
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+        else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+
+        console.error(error);
+      }
+    );
+  };
 
   const getIcons = async () => {
     try {
@@ -337,6 +388,28 @@ function JournalAdditionRemade() {
 
       setMoonPhaseIcon(newArray);
     } catch (error) {
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
       console.error(error);
     }
   };
@@ -367,6 +440,28 @@ function JournalAdditionRemade() {
 
       setIcons2(data);
     } catch (error) {
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
       console.error(error);
     }
   };
@@ -437,18 +532,34 @@ function JournalAdditionRemade() {
     getColors();
   }, []);
 
+  const [disableInput, setDisableInput] = useState(false);
+
+  const handleScrollStart = (event: CustomEvent) => {
+    // Access scroll event properties from `event.detail`
+
+    setDisableInput(true);
+  };
+
+  const handleScrollEnd = (event: CustomEvent) => {
+    // Access scroll event properties from `event.detail`
+
+    setDisableInput(false);
+  };
+
   return (
     <IonPage className="JournalAdditionRemade">
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton routerLink="/tabs/tab1">
-              <IonIcon icon={arrowBackOutline}></IonIcon>
-            </IonButton>
+            <IonBackButton></IonBackButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent
+        onIonScrollStart={handleScrollStart}
+        onIonScrollEnd={handleScrollEnd}
+        scrollEvents={true}
+      >
         <div className="journal-addition-main">
           <div className="today-clicked-date">
             <h4>{showClickDate(clickedDate)}</h4>
@@ -509,7 +620,10 @@ function JournalAdditionRemade() {
             </div>
                       </div>*/}
           <h2>[Das Zyklus Journal ist zur Zeit in Überarbeitung]</h2>
-          <p>Du erhältst eine E-Mail von uns, wenn das Journal wieder vollumfänglich verfügbar ist.</p>
+          <p>
+            Du erhältst eine E-Mail von uns, wenn das Journal wieder
+            vollumfänglich verfügbar ist.
+          </p>
           <IonModal
             isOpen={modalOpen}
             className="modaaal"
@@ -550,7 +664,7 @@ function JournalAdditionRemade() {
                             <div className="tags-holder">
                               <IonRow>
                                 {entry.fields.map((fields: any) => (
-                                  <IonCol size="4" key={fields.key}>
+                                  <IonCol size="6" key={fields.key}>
                                     <IonItem
                                       lines="none"
                                       onClick={() => (fields.value = true)}
@@ -563,10 +677,20 @@ function JournalAdditionRemade() {
                                         id={fields.key}
                                       />
 
-                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonLabel
+                                        style={{ whiteSpace: "pre-wrap" }}
+                                      >
+                                        {fields.label}
+                                      </IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
-                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.detail.checked,
+                                            fields,
+                                            true
+                                          )
+                                        }
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -604,11 +728,12 @@ function JournalAdditionRemade() {
                                     <h3>{field.label}</h3>
                                     <div>
                                       <IonRange
-                                        className="custom-tick"
+                                        className="custom-tick custom-slider"
                                         aria-label="Dual Knobs Range"
                                         dualKnobs={false}
                                         ticks={true}
                                         snaps={true}
+
                                         min={0}
                                         max={10}
                                         value={field.value ? field.value : 0}
@@ -673,7 +798,7 @@ function JournalAdditionRemade() {
                             <div className="tags-holder">
                               <IonRow>
                                 {entry.fields.map((fields: any) => (
-                                  <IonCol size="4" key={fields.key}>
+                                  <IonCol size="6" key={fields.key}>
                                     <IonItem lines="none">
                                       <div
                                         className="svgIconss"
@@ -682,10 +807,20 @@ function JournalAdditionRemade() {
                                         }}
                                         id={fields.key}
                                       />
-                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonLabel
+                                        style={{ whiteSpace: "pre-wrap" }}
+                                      >
+                                        {fields.label}
+                                      </IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
-                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.detail.checked,
+                                            fields,
+                                            true
+                                          )
+                                        }
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -711,7 +846,7 @@ function JournalAdditionRemade() {
                             <div className="tags-holder">
                               <IonRow>
                                 {entry.fields.map((fields: any) => (
-                                  <IonCol size="4" key={fields.key}>
+                                  <IonCol size="6" key={fields.key}>
                                     <IonItem lines="none">
                                       <div
                                         className="svgIconss"
@@ -720,10 +855,20 @@ function JournalAdditionRemade() {
                                         }}
                                         id={fields.key}
                                       />
-                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonLabel
+                                        style={{ whiteSpace: "pre-wrap" }}
+                                      >
+                                        {fields.label}
+                                      </IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
-                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.detail.checked,
+                                            fields,
+                                            true
+                                          )
+                                        }
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -749,7 +894,7 @@ function JournalAdditionRemade() {
                             <div className="tags-holder">
                               <IonRow>
                                 {entry.fields.map((fields: any) => (
-                                  <IonCol size="4" key={fields.key}>
+                                  <IonCol size="6" key={fields.key}>
                                     <IonItem lines="none">
                                       <div
                                         className="svgIconss"
@@ -758,10 +903,20 @@ function JournalAdditionRemade() {
                                         }}
                                         id={fields.key}
                                       />
-                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonLabel
+                                        style={{ whiteSpace: "pre-wrap" }}
+                                      >
+                                        {fields.label}
+                                      </IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
-                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.detail.checked,
+                                            fields,
+                                            true
+                                          )
+                                        }
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -787,7 +942,7 @@ function JournalAdditionRemade() {
                             <div className="tags-holder">
                               <IonRow>
                                 {entry.fields.map((fields: any) => (
-                                  <IonCol size="4" key={fields.key}>
+                                  <IonCol size="6" key={fields.key}>
                                     <IonItem lines="none">
                                       <div
                                         className="svgIconss"
@@ -796,10 +951,20 @@ function JournalAdditionRemade() {
                                         }}
                                         id={fields.key}
                                       />
-                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonLabel
+                                        style={{ whiteSpace: "pre-wrap" }}
+                                      >
+                                        {fields.label}
+                                      </IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
-                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.detail.checked,
+                                            fields,
+                                            true
+                                          )
+                                        }
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -825,7 +990,7 @@ function JournalAdditionRemade() {
                             <div className="tags-holder">
                               <IonRow>
                                 {entry.fields.map((fields: any) => (
-                                  <IonCol size="4" key={fields.key}>
+                                  <IonCol size="6" key={fields.key}>
                                     <IonItem lines="none">
                                       <div
                                         className="svgIconss"
@@ -834,10 +999,20 @@ function JournalAdditionRemade() {
                                         }}
                                         id={fields.key}
                                       />
-                                      <IonLabel>{fields.label}</IonLabel>
+                                      <IonLabel
+                                        style={{ whiteSpace: "pre-wrap" }}
+                                      >
+                                        {fields.label}
+                                      </IonLabel>
                                       <IonCheckbox
                                         checked={!!fields.value}
-                                        onIonChange={(event) => updateField(event.detail.checked, fields, true)}
+                                        onIonChange={(event) =>
+                                          updateField(
+                                            event.detail.checked,
+                                            fields,
+                                            true
+                                          )
+                                        }
                                       />
                                     </IonItem>
                                   </IonCol>
@@ -936,11 +1111,12 @@ function JournalAdditionRemade() {
                             </IonCol>
                             <IonCol size="9">
                               <IonRange
-                                className="custom-tick"
+                                className="custom-tick custom-slider"
                                 aria-label="Dual Knobs Range"
                                 dualKnobs={false}
                                 ticks={true}
                                 snaps={true}
+
                                 min={0}
                                 max={5}
                                 value={entry.value ? entry.value : 0}
@@ -984,11 +1160,12 @@ function JournalAdditionRemade() {
                             </IonCol>
                             <IonCol size="9">
                               <IonRange
-                                className="custom-tick"
+                                className="custom-tick custom-slider"
                                 aria-label="Dual Knobs Range"
                                 dualKnobs={false}
                                 ticks={true}
                                 snaps={true}
+
                                 min={0}
                                 max={12}
                                 value={entry.value ? entry.value : 0}
@@ -1040,11 +1217,12 @@ function JournalAdditionRemade() {
                                           {field.label}
                                         </h3>
                                         <IonRange
-                                          className="custom-tick"
+                                          className="custom-tick custom-slider"
                                           aria-label="Dual Knobs Range"
                                           dualKnobs={false}
                                           ticks={true}
                                           snaps={true}
+
                                           min={0}
                                           max={5}
                                           value={field.value ? field.value : 0}
@@ -1093,11 +1271,12 @@ function JournalAdditionRemade() {
                                         </h3>
 
                                         <IonRange
-                                          className="custom-tick"
+                                          className="custom-tick custom-slider"
                                           aria-label="Dual Knobs Range"
                                           dualKnobs={false}
                                           ticks={true}
                                           snaps={true}
+
                                           min={0}
                                           max={10}
                                           value={field.value ? field.value : 0}
@@ -1151,10 +1330,20 @@ function JournalAdditionRemade() {
                                         lines="none"
                                         className="customIcon"
                                       >
-                                        <IonLabel>{field.label}</IonLabel>
+                                        <IonLabel
+                                          style={{ whiteSpace: "pre-wrap" }}
+                                        >
+                                          {field.label}
+                                        </IonLabel>
                                         <IonCheckbox
                                           checked={!!field.value}
-                                          onIonChange={(event) => updateField(event.detail.checked, field, true)}
+                                          onIonChange={(event) =>
+                                            updateField(
+                                              event.detail.checked,
+                                              field,
+                                              true
+                                            )
+                                          }
                                         />
                                       </IonItem>
                                     </IonCol>

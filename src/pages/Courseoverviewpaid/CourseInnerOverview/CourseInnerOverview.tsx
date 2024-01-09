@@ -92,7 +92,7 @@ const CourseInnerOverview: React.FC = () => {
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
@@ -109,14 +109,14 @@ const CourseInnerOverview: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };  
+  };
   const markAsDone = async (course) => {
     setIsMarlLoading(true);
     const URL = course?.completion_link;
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
@@ -135,7 +135,7 @@ const CourseInnerOverview: React.FC = () => {
     } finally {
       setIsMarlLoading(false);
     }
-  };  
+  };
   return (
     <>
       <IonPage className="CourseInnerOverview">

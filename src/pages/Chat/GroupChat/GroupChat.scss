@@ -12,6 +12,10 @@
     --right-msg-bg: #fff7ef;
   }
 
+  .chatImage {
+    min-height: calc(100vh - 70px);
+  }
+
   .top-row {
     display: flex;
     justify-content: center;
@@ -51,9 +55,25 @@
 
   .chatLoad {
     background-color: $config-white !important;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: 0;
     border: none;
+    height: 100%;
+  }
+  .chatMessageLoad {
+    background-color: $config-white !important;
+    display: flex;
+    justify-content: center;
+    align-items: top;
+    margin: 0;
+    border: none;
+
+    .prevMessageLoadSpinner {
+      height: 40px;
+      width: 40px;
+    }
   }
 
   .flex {
@@ -312,8 +332,7 @@
   .h-auto {
     height: auto;
   }
-
-  .closeBtn {
-    color: $config-white;
-  }
+}
+.closeBtn {
+  color: #f8f5f2;
 }

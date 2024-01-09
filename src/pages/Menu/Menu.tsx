@@ -242,45 +242,45 @@ const Menu: React.FC = () => {
             );
           })}
         </IonList>
-      {isPlatform('ios') && (
-        <IonMenuToggle autoHide={false} className="delete-account">
-          <IonItem button onClick={() => setShowDeleteConfirm(true)}>
-            <IonIcon aria-hidden="true" slot="start" src={trashBinOutline} />
-            <IonLabel>NALU Konto löschen</IonLabel>
-          </IonItem>
-        </IonMenuToggle>
-      )}
+        {isPlatform('ios') && (
+          <IonMenuToggle autoHide={false} className="delete-account">
+            <IonItem button onClick={() => setShowDeleteConfirm(true)}>
+              <IonIcon aria-hidden="true" slot="start" src={trashBinOutline} />
+              <IonLabel>NALU Konto löschen</IonLabel>
+            </IonItem>
+          </IonMenuToggle>
+        )}
 
-      <div className="btnnn-holder ion-text-center ion-padding-top">
-        <IonButton onClick={handleLogout}>
-          <IonIcon src={logOutOutline} slot="start" />
-          Abmelden
-        </IonButton>
-      </div>
-      <IonAlert
-        isOpen={showDeleteConfirm}
-        onDidDismiss={() => setShowDeleteConfirm(false)}
-        header={'Konto löschen'}
-        message={'Bist du dir sicher, dass du dein Konto löschen willst? Alle deine Daten werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'}
-        buttons={[
-          {
-            text: 'Nein',
-            role: 'cancel',
-            cssClass: 'secondary',
-          },
-          {
-            text: 'Ja, löschen',
-            handler: handleAccountDeletion,
-          },
-        ]}
-      />
-      <IonAlert
-        isOpen={showDeleteSuccess}
-        onDidDismiss={() => history.push('/onboarding')}
-        header={'Kontolöschung eingeleitet'}
-        message={'Der Kontolöschungsprozess wurde erfolgreich eingeleitet und wird in den nächsten 2 Wochen abgeschlossen.'}
-        buttons={['OK']}
-      />
+        <div className="btnnn-holder ion-text-center ion-padding-top">
+          <IonButton onClick={handleLogout}>
+            <IonIcon src={logOutOutline} slot="start" />
+            Abmelden
+          </IonButton>
+        </div>
+        <IonAlert
+          isOpen={showDeleteConfirm}
+          onDidDismiss={() => setShowDeleteConfirm(false)}
+          header={'Konto löschen'}
+          message={'Bist du dir sicher, dass du dein Konto löschen willst? Alle deine Daten werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'}
+          buttons={[
+            {
+              text: 'Nein',
+              role: 'cancel',
+              cssClass: 'secondary',
+            },
+            {
+              text: 'Ja, löschen',
+              handler: handleAccountDeletion,
+            },
+          ]}
+        />
+        <IonAlert
+          isOpen={showDeleteSuccess}
+          onDidDismiss={() => history.push('/onboarding')}
+          header={'Kontolöschung eingeleitet'}
+          message={'Der Kontolöschungsprozess wurde erfolgreich eingeleitet und wird in den nächsten 2 Wochen abgeschlossen.'}
+          buttons={['OK']}
+        />
       </IonContent>
     </IonPage>
   );

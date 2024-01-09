@@ -16,6 +16,7 @@ import {
   IonRow,
   IonSpinner,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 
 import "./Filtermodal.scss";
@@ -24,10 +25,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 import { useHistory } from "react-router";
+import authService from "../../../authService";
+import apiService from "../../../Services";
 
 const Filtermodal: React.FC = () => {
   const [rangeValues, setRangeValues] = useState({ lower: null, upper: null });
-  const [apiRangeValues, setAPIRangeValues] = useState({ lower: null, upper: null });
+  const [apiRangeValues, setAPIRangeValues] = useState({
+    lower: null,
+    upper: null,
+  });
 
   const [menuType, setMenuType] = useState([]);
   const [filterValues, setFilterValues] = useState("");
@@ -43,14 +49,13 @@ const Filtermodal: React.FC = () => {
   };
 
   useEffect(() => {
-
     getValues();
   }, []);
 
   const getValues = () => {
     setIsLoading(true);
 
-    axios
+    apiService
       .get(`https://app.mynalu.com/wp-json/nalu-app/v1/filter-values?lang=de`)
       .then((response) => {
         console.log(response.data);
@@ -85,10 +90,32 @@ const Filtermodal: React.FC = () => {
         });
 
         setIsLoading(false);
-      
       })
       .catch((error) => {
-        console.log(error);
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+        else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+
+        console.error(error);
         setIsLoading(false);
       });
   };
@@ -157,65 +184,131 @@ const Filtermodal: React.FC = () => {
   const activeLabels = mediaItems
     .filter((item) => item.active)
     .map((item) => item.name);
-  const activeLabelsString = activeLabels.join(', ');
-
+  const activeLabelsString = activeLabels.join(", ");
 
   const activeRecommendations = recommendedItems
     .filter((item) => item.active)
     .map((item) => item.name);
-  const activeRecommendationsString = activeRecommendations.join(', ');
-
+  const activeRecommendationsString = activeRecommendations.join(", ");
 
   const handleFilters = async () => {
     try {
-      axios
-        .get("https://app.mynalu.com/wp-json/nalu-app/v1/ressources", {
+      if (isPlatform("ios")) {
+        const jwtToken = localStorage.getItem("jwtToken");
+        const headers = {
+          Authorization: `Bearer ${jwtToken}`,
+        };
+        HTTP.get("https://app.mynalu.com/wp-json/nalu-app/v1/ressources", {
           params: {
             category_name: activeLabelsString,
             "authority.title": activeRecommendationsString,
             upvotes_number_min: rangeValues.lower,
             upvotes_number_max: rangeValues.upper
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          
-          
-          history.push('/tabs/tab3/resourcesubcateggory',{
-            filteredData: response.data.ressources,
-            subCategory: response.data.sub_categories
+          }
+        }, headers)
+          .then((response) => {
+            console.log(response);
+
+
+            history.push('/tabs/tab3/resourcesubcateggory', {
+              filteredData: response.data.ressources,
+              subCategory: response.data.sub_categories
+            })
+
           })
-          
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          .catch((error) => {
+            if (error) {
+              const status = error.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+
+            console.error(error);
+          });
+      }
+      else {
+        axios
+          .get("https://app.mynalu.com/wp-json/nalu-app/v1/ressources", {
+            params: {
+              category_name: activeLabelsString,
+              "authority.title": activeRecommendationsString,
+              upvotes_number_min: rangeValues.lower,
+              upvotes_number_max: rangeValues.upper
+            },
+          })
+          .then((response) => {
+            console.log(response);
+
+
+            history.push('/tabs/tab3/resourcesubcateggory', {
+              filteredData: response.data.ressources,
+              subCategory: response.data.sub_categories
+            })
+
+          })
+          .catch((error) => {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+
+            console.error(error);
+          });
+      }
     } catch (error) {
-      console.log("Error", error);
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      console.error("error", error);
     }
-    
   };
 
   return (
     <>
-      
-          <IonPage className="Filtermodal">
-            {
-              isLoading? (
-                <div
-           style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height:"100vh",
-            backgroundColor: "#F8F5F2",
-          }}
+      <IonPage className="Filtermodal">
+        {isLoading ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+              backgroundColor: "#F8F5F2",
+            }}
           >
             <IonSpinner name="crescent"></IonSpinner>
           </div>
-              ):(
-                <>
-                  <IonHeader className="ion-no-border">
+        ) : (
+          <>
+            <IonHeader className="ion-no-border">
               <IonToolbar>
                 <IonButtons slot="start">
                   <IonButton routerLink="/tabs/tab3">
@@ -327,12 +420,9 @@ const Filtermodal: React.FC = () => {
                 </IonButton>
               </div>
             </IonContent>
-                </>
-              )
-            }
-          
-          </IonPage>
-        
+          </>
+        )}
+      </IonPage>
     </>
   );
 };

@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import {
   IonAvatar,
   IonBackButton,
@@ -31,18 +31,21 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import authService from "../../authService";
+import { useHistory } from "react-router";
 
 const Learnmore: React.FC = () => {
-  const [selectedDate, setSelectedDate] = useState('');
-  const [dateError, setDateError] = useState('');
+  const [selectedDate, setSelectedDate] = useState("");
+  const [dateError, setDateError] = useState("");
   const [event, setEvent] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedScheduleId, setSelectedScheduleId] = useState(null);
+  const history = useHistory();
 
   useEffect(() => {
     setLoading(true);
     const selectedGoal = localStorage.getItem("selectedGoal");
-  
+
     let url = "https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/2095";
     if (selectedGoal === "endometriosis") {
       url = "https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/7967";
@@ -51,11 +54,11 @@ const Learnmore: React.FC = () => {
     } else if (selectedGoal === "harmony") {
       url = "https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/2095";
     }
-  
+
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     const fetchData = async () => {
       try {
         let response;
@@ -68,59 +71,118 @@ const Learnmore: React.FC = () => {
         }
         setEvent(response);
       } catch (error) {
-        console.error("Error fetching event data:", error);
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        } else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+        console.error(error);
       } finally {
         setLoading(false);
       }
     };
-  
+
     fetchData();
-  }, []);  
+  }, []);
 
   const isFormValid = !!selectedDate && !dateError;
-  
+
   const handleDateChangeWebinar = (e) => {
     const selectedDateString = e.target.value;
     setSelectedDate(selectedDateString);
-  
+
     // Find the corresponding date object in event.dates and set the schedule ID
-    const selectedDateObj = event?.dates?.find(dateObj => dateObj.date === selectedDateString);
+    const selectedDateObj = event?.dates?.find(
+      (dateObj) => dateObj.date === selectedDateString
+    );
     if (selectedDateObj) {
       setSelectedScheduleId(selectedDateObj.schedule_id);
     } else {
       setSelectedScheduleId(null); // Reset schedule ID if no match is found
     }
-  
-    setDateError(selectedDateString.trim() === "" ? "Bitte wähle ein Datum aus, um fortzufahren." : "");
-  };   
+
+    setDateError(
+      selectedDateString.trim() === ""
+        ? "Bitte wähle ein Datum aus, um fortzufahren."
+        : ""
+    );
+  };
 
   const handleRegistration = async () => {
     if (isFormValid && selectedScheduleId) {
-      const updatedRegistrationLink = event?.registration_link.replace('{schedule_id}', selectedScheduleId);
-  
+      const updatedRegistrationLink = event?.registration_link.replace(
+        "{schedule_id}",
+        selectedScheduleId
+      );
+
       const headers = {
         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
       };
-  
+
       try {
         let response;
         if (isPlatform("ios")) {
-          const cordovaResponse = await HTTP.post(updatedRegistrationLink, {}, headers);
+          const cordovaResponse = await HTTP.post(
+            updatedRegistrationLink,
+            {},
+            headers
+          );
           response = JSON.parse(cordovaResponse.data);
         } else {
-          const axiosResponse = await axios.post(updatedRegistrationLink, {}, { headers });
+          const axiosResponse = await axios.post(
+            updatedRegistrationLink,
+            {},
+            { headers }
+          );
           response = axiosResponse.data;
         }
         console.log(response);
         // Handle successful registration (e.g., navigate to a success page or show a message)
       } catch (error) {
-        console.error("Error during registration:", error);
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        } else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              authService.logout();
+              history.push("/onboarding");
+            }
+          }
+        }
+        console.error(error);
         // Handle errors (e.g., show an error message)
       }
     } else {
       // Handle form invalid or no schedule_id selected (e.g., show a message to the user)
     }
-  };  
+  };
 
   if (loading) {
     return (
@@ -142,11 +204,9 @@ const Learnmore: React.FC = () => {
     <IonPage className="learnmore">
       <IonContent className="ion-padding" fullscreen>
         <div className="title-holder ion-text-center">
-          <h3>
-          {event?.title}
-          </h3>
+          <h3>{event?.title}</h3>
         </div>
-        
+
         <div className="slider">
           <Swiper
             modules={[Pagination]}
@@ -161,9 +221,7 @@ const Learnmore: React.FC = () => {
                 <img src="assets/imgs/quote1.svg" alt="" />
                 <div className="inside flex al-center ion-padding-horizontal">
                   <img className="quote2" src="assets/imgs/quote2.svg" alt="" />
-                  <h6 className="ion-text-wrap">
-                  {event?.slides?.slide1}
-                  </h6>
+                  <h6 className="ion-text-wrap">{event?.slides?.slide1}</h6>
                 </div>
               </div>
             </SwiperSlide>
@@ -172,9 +230,7 @@ const Learnmore: React.FC = () => {
                 <img src="assets/imgs/quote1.svg" alt="" />
                 <div className="inside flex al-center ion-padding-horizontal">
                   <img className="quote2" src="assets/imgs/quote2.svg" alt="" />
-                  <h6 className="ion-text-wrap">
-                  {event?.slides?.slide2}
-                  </h6>
+                  <h6 className="ion-text-wrap">{event?.slides?.slide2}</h6>
                 </div>
               </div>
             </SwiperSlide>
@@ -183,9 +239,7 @@ const Learnmore: React.FC = () => {
                 <img src="assets/imgs/quote1.svg" alt="" />
                 <div className="inside flex al-center ion-padding-horizontal">
                   <img className="quote2" src="assets/imgs/quote2.svg" alt="" />
-                  <h6 className="ion-text-wrap">
-                  {event?.slides?.slide3}
-                  </h6>
+                  <h6 className="ion-text-wrap">{event?.slides?.slide3}</h6>
                 </div>
               </div>
             </SwiperSlide>
@@ -208,13 +262,14 @@ const Learnmore: React.FC = () => {
                 <h6>
                   <span>{event?.event_host?.title}</span>
                 </h6>
-                <p>NALU Co-Gründerin, zert. Coach für Zyklusgesundheit & Medizinethnologin</p>
+                <p>
+                  NALU Co-Gründerin, zert. Coach für Zyklusgesundheit &
+                  Medizinethnologin
+                </p>
               </IonLabel>
             </IonItem>
 
-            <h4 className="ion-text-wrap">
-              {event?.excerpt}
-            </h4>
+            <h4 className="ion-text-wrap">{event?.excerpt}</h4>
           </div>
 
           <div>
@@ -239,17 +294,22 @@ const Learnmore: React.FC = () => {
         </div>
 
         <div className="btn-holder ion-text-center ion-padding-vertical">
-          <IonButton expand="block" routerLink="/stayup" onClick={handleRegistration} disabled={!isFormValid}>Jetzt anmelden</IonButton>
+          <IonButton
+            expand="block"
+            routerLink="/stayup"
+            onClick={handleRegistration}
+            disabled={!isFormValid}
+          >
+            Jetzt anmelden
+          </IonButton>
         </div>
 
         <div className="bottom-holder flex al-center jc-center ion-activatable ripple-parent ion-text-center">
-        
-        <IonRouterLink routerLink="/stayup">
-        <h6>Ich habe kein Interesse,</h6>
-        <IonRippleEffect></IonRippleEffect>
-        <h5>weiter zur App</h5>
-        </IonRouterLink>
-
+          <IonRouterLink routerLink="/stayup">
+            <h6>Ich habe kein Interesse,</h6>
+            <IonRippleEffect></IonRippleEffect>
+            <h5>weiter zur App</h5>
+          </IonRouterLink>
         </div>
       </IonContent>
     </IonPage>

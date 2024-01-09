@@ -9,8 +9,15 @@ import {
   IonToolbar,
   IonLabel,
   useIonViewWillEnter,
+  IonHeader,
 } from "@ionic/react";
-import { menuOutline, notificationsOutline } from "ionicons/icons";
+import {
+  chevronBackOutline,
+  chevronForwardOutline,
+  chevronUpOutline,
+  menuOutline,
+  notificationsOutline,
+} from "ionicons/icons";
 import { useState, useRef, useEffect } from "react";
 import newMoon from "../../assets/images/new moon.svg";
 import fullMoon from "../../assets/images/full moon.svg";
@@ -25,6 +32,8 @@ import { useParams } from "react-router-dom";
 import "./journalcalendarremade.scss";
 import MoonPhasesServce from "../../MoonPhasesService";
 import CustomCategoryApiService from "../../CustomCategoryService";
+import authService from "../../authService";
+import { isPlatform } from "@ionic/react";
 
 const months = [
   "Januar",
@@ -50,13 +59,25 @@ const JournalCalendarRemade = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [currentMonth, setCurrentMonth] = useState();
   const popoverRef = useRef(null);
-  const [currentdivInView, setCurrentDivInView] = useState("January");
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [activeMonthIndex, setActiveMonthIndex] = useState(null);
+  const [currentdivInView, setCurrentDivInView] = useState(
+    new Date().getMonth().toString()
+  );
+  const [activeIndex, setActiveIndex] = useState(new Date().getDate());
+  const [activeMonthIndex, setActiveMonthIndex] = useState(
+    new Date().getMonth()
+  );
   const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
   const [todayPeriod, setTodayPeriod] = useState("false");
   const [icons2, setIcons2] = useState<any>([]);
   const [svg, setSvg] = useState("");
+  const [newMoonSvg, setNewMoonSvg] = useState("");
+  const [fullMoonSvg, setFullMoonSvg] = useState("");
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(
+    new Date().getMonth()
+  );
+  const [currentDisplayedMonthIndex, setCurrentDisplayedMonthIndex] =
+    useState(0);
+
   const history = useHistory(); // Use useHistory for navigation
 
   // const navigation = useIonRouter();
@@ -64,7 +85,7 @@ const JournalCalendarRemade = () => {
 
   const date: Date = new Date();
 
-  const moonColorData = icons2;
+  const moonColorData = icons2.entries;
 
   const curDate: string = date.toLocaleDateString();
 
@@ -85,9 +106,8 @@ const JournalCalendarRemade = () => {
     const tempMonthIndex = monthIndex + 1 + "";
     const tempDateIndex = dateIndex + "";
 
-    const dateParam = `${year}-${
-      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
-    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+    const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+      }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
     url = `/journaladditionremade/${dateParam}`;
 
@@ -131,6 +151,28 @@ const JournalCalendarRemade = () => {
 
       setMoonPhaseIcon(newArray);
     } catch (error) {
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
       console.error(error);
     }
   };
@@ -157,9 +199,30 @@ const JournalCalendarRemade = () => {
       } else {
         console.log("No data found for today");
       }
-
       setIcons2(data);
     } catch (error) {
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
       console.error(error);
     }
   };
@@ -193,21 +256,145 @@ const JournalCalendarRemade = () => {
     let _x = `${_year}-${_month}-${_day}`;
 
     if (_month) {
-      Object.keys(moonColorData).map((obj) => {
-        if (obj === x && obj !== _x) {
-          moonColorData[obj].entries.map((phase) => {
-            if (phase.key === "period_bleeding" && parseInt(phase.value) > 0) {
-              style.backgroundColor = "#F0A6A9";
-              style.color = "white";
-            }
-            if (phase.key === "cervical_mucus" && parseInt(phase.value) > 0) {
-              style.backgroundColor = "#3684B3";
-              style.color = "white";
-            }
-          });
-        }
-      });
+      const foundDate = Object.keys(moonColorData).find((obj) => obj === x);
+
+      if (foundDate) {
+        moonColorData[foundDate].entries.forEach((phase, index) => {
+          if (
+            moonColorData[foundDate].entries[index].key === "period_bleeding" &&
+            parseInt(phase.value) > 0
+          ) {
+            style.backgroundColor = "#ee5f64";
+            style.color = "white";
+          } else if (
+            moonColorData[foundDate].entries[index].key === "cervical_mucus" &&
+            parseInt(phase.value) > 0
+          ) {
+            style.backgroundColor = "#89bcdc";
+            style.color = "white";
+          } else if (
+            moonColorData[foundDate].entries[0].value &&
+            parseInt(moonColorData[foundDate].entries[0].value) > 0 &&
+            moonColorData[foundDate].entries[1].value &&
+            parseInt(moonColorData[foundDate].entries[1].value) > 0
+          ) {
+            style.backgroundColor = "#ee5f64";
+            style.color = "white";
+          } else if (
+            moonColorData[foundDate].entries[0].value === null &&
+            moonColorData[foundDate].entries[1].value === null
+          ) {
+            // style.stroke = "#EE5F64"; // Default color for days without color information
+          } else {
+            // style.stroke = "#f8f5f2";
+          }
+        });
+      } else {
+        style.stroke = "#EE5F64"; // Default color for days in the current month without color information
+      }
     }
+    return style;
+  };
+
+  const getStroke: any = (year, month, date) => {
+    if (month < 10) {
+      month = "0" + month;
+    }
+    if (date < 10) {
+      date = "0" + date;
+    }
+
+    let x = `${year}-${month}-${date}`;
+
+    let style: any = {};
+
+    if (month) {
+      const foundDate = Object.keys(moonColorData).find((obj) => obj === x);
+
+      if (foundDate) {
+        moonColorData[foundDate].entries.forEach((phase, index) => {
+          if (
+            moonColorData[foundDate].entries[index].key === "period_bleeding" &&
+            parseInt(phase.value) > 0
+          ) {
+            style.stroke = "#f8f5f2";
+          } else if (
+            moonColorData[foundDate].entries[index].key === "cervical_mucus" &&
+            parseInt(phase.value) > 0
+          ) {
+            style.stroke = "#f8f5f2";
+          } else if (
+            moonColorData[foundDate].entries[0].value &&
+            parseInt(moonColorData[foundDate].entries[0].value) > 0 &&
+            moonColorData[foundDate].entries[1].value &&
+            parseInt(moonColorData[foundDate].entries[1].value) > 0
+          ) {
+            style.stroke = "#f8f5f2";
+          } else if (
+            moonColorData[foundDate].entries[0].value === null &&
+            moonColorData[foundDate].entries[1].value === null
+          ) {
+            style.stroke = "#EE5F64"; // Default color for days without color information
+          } else {
+            style.stroke = "#f8f5f2";
+          }
+        });
+      } else {
+        style.stroke = "#EE5F64"; // Default color for days in the current month without color information
+      }
+    }
+
+    return style;
+  };
+
+  const getFill: any = (year, month, date) => {
+    if (month < 10) {
+      month = "0" + month;
+    }
+    if (date < 10) {
+      date = "0" + date;
+    }
+
+    let x = `${year}-${month}-${date}`;
+
+    let style: any = {};
+
+    if (month) {
+      const foundDate = Object.keys(moonColorData).find((obj) => obj === x);
+
+      if (foundDate) {
+        moonColorData[foundDate].entries.forEach((phase, index) => {
+          if (
+            moonColorData[foundDate].entries[index].key === "period_bleeding" &&
+            parseInt(phase.value) > 0
+          ) {
+            style.fill = "#f8f5f2";
+          } else if (
+            moonColorData[foundDate].entries[index].key === "cervical_mucus" &&
+            parseInt(phase.value) > 0
+          ) {
+            style.fill = "#f8f5f2";
+          } else if (
+            moonColorData[foundDate].entries[0].value &&
+            parseInt(moonColorData[foundDate].entries[0].value) > 0 &&
+            moonColorData[foundDate].entries[1].value &&
+            parseInt(moonColorData[foundDate].entries[1].value) > 0
+          ) {
+            style.fill = "#f8f5f2";
+          } else if (
+            moonColorData[foundDate].entries[0].value === null &&
+            moonColorData[foundDate].entries[1].value === null
+          ) {
+            style.fill = "#EE5F64"; // Default color for days without color information
+          } else {
+            style.fill = "#f8f5f2";
+          }
+        });
+      } else {
+        style.fill = "#EE5F64"; // Default color for days in the current month without color information
+      }
+    }
+
     return style;
   };
 
@@ -284,8 +471,29 @@ const JournalCalendarRemade = () => {
         (data) => {
           setTodayPeriod("true");
         },
-        (err) => {
-          console.log("err sending data", err);
+        (error) => {
+          if (isPlatform("ios")) {
+            if (error) {
+              const status = error.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+          else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
         }
       );
     }
@@ -306,8 +514,29 @@ const JournalCalendarRemade = () => {
         (data) => {
           setTodayPeriod("false");
         },
-        (err) => {
-          console.log("err sending data", err);
+        (error) => {
+          if (isPlatform("ios")) {
+            if (error) {
+              const status = error.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+          else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+
+          console.error(error);
         }
       );
     }
@@ -321,24 +550,57 @@ const JournalCalendarRemade = () => {
     setCurrentMonth(event.target.value);
   };
 
-  const handleGo = async () => {
-    if (popoverRef.current) {
-      await popoverRef.current.dismiss();
-      let element = document.getElementById(currentMonth);
+  const handleGo = async (direction) => {
+    // if (popoverRef.current) {
+    // await popoverRef.current.dismiss();
+
+    const currentIndex = currentMonthIndex;
+
+    let newIndex: any;
+    if (direction === "next" && currentMonthIndex < 11) {
+      newIndex = (currentIndex + 1) % months.length;
+      setCurrentMonthIndex(newIndex);
+      setCurrentDisplayedMonthIndex(newIndex);
+
+      const targetMonth = months[newIndex];
+      const element = document.getElementById(targetMonth);
 
       if (element !== null) {
-        if (currentMonth) {
-          setTimeout(() => {
-            element.scrollIntoView({ behavior: "smooth", block: "center" });
-          }, 500);
-        } else {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }
+        setTimeout(() => {
+          element.scrollIntoView({
+            inline: "center",
+            block: "center",
+            behavior: "smooth",
+          });
+        }, 500);
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } else if (direction === "prev" && currentMonthIndex > 0) {
+      newIndex = (currentIndex - 1 + months.length) % months.length;
+      setCurrentMonthIndex(newIndex);
+      setCurrentDisplayedMonthIndex(newIndex);
+
+      const targetMonth = months[newIndex];
+      const element = document.getElementById(targetMonth);
+
+      if (element !== null) {
+        setTimeout(() => {
+          element.scrollIntoView({
+            inline: "center",
+            block: "center",
+            behavior: "smooth",
+          });
+        }, 500);
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     }
+
+    // }
   };
 
-  function isSectionVisible(sectionRef) {
+  function isSectionVisible(sectionRef, index) {
     const section = document.getElementById(sectionRef);
 
     if (section) {
@@ -349,6 +611,8 @@ const JournalCalendarRemade = () => {
         rect.bottom >= 0.2 * window.innerHeight
       ) {
         setCurrentDivInView(sectionRef);
+        setCurrentMonthIndex(index);
+        setCurrentDisplayedMonthIndex(index);
         return true;
       }
     }
@@ -356,8 +620,8 @@ const JournalCalendarRemade = () => {
   }
 
   const handleScroll = () => {
-    for (const month of months) {
-      isSectionVisible(month);
+    for (let i = 0; i <= months.length - 1; i++) {
+      isSectionVisible(months[i], i);
     }
   };
 
@@ -397,8 +661,8 @@ const JournalCalendarRemade = () => {
     for (let i = 1; i <= lastDateOfMonth; i++) {
       const isToday =
         i === new Date().getDate() &&
-        m === new Date().getMonth() &&
-        year === new Date().getFullYear()
+          m === new Date().getMonth() &&
+          year === new Date().getFullYear()
           ? "currentDay"
           : "";
 
@@ -407,10 +671,10 @@ const JournalCalendarRemade = () => {
         return (
           item.date ===
           year +
-            "-" +
-            (m + 1).toString().padStart(2, "0") +
-            "-" +
-            i.toString().padStart(2, "0")
+          "-" +
+          (m + 1).toString().padStart(2, "0") +
+          "-" +
+          i.toString().padStart(2, "0")
         );
       });
 
@@ -418,33 +682,56 @@ const JournalCalendarRemade = () => {
         <li
           key={`currentDay-${i}`}
           id={`${i}/${m + 1}/${year}`}
-          className={`calendar-day ${isToday} ${
-            activeIndex === i && activeMonthIndex === m ? "dayActive" : ""
-          }`}
+          className={`calendar-day ${isToday} ${activeIndex === i + 1 && activeMonthIndex === m ? "dayActive" : ""
+            }`}
           onClick={() => handleOnClick(i, m)}
           style={getColors(year, m + 1, i)}
         >
           {moonPhase ? (
             <>
-              <div>
-                {moonPhase.phase_name === "Full Moon" ? (
-                  <img src={fullMoon} />
-                ) : moonPhase.phase_name === "New Moon" ? (
-                  <img src={newMoon} />
-                ) : null}
-              </div>
-              {/* Added "null" for the empty condition */}
+              {moonPhase.phase_name === "Full Moon" ? (
+                <>
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 10 10"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="phases"
+                  >
+                    <circle
+                      cx="5"
+                      cy="5"
+                      r="4.5"
+                      style={getStroke(year, m + 1, i)}
+                    />
+                    <circle
+                      cx="5"
+                      cy="5"
+                      r="3"
+                      style={getFill(year, m + 1, i)}
+                    />
+                  </svg>
+                </>
+              ) : moonPhase.phase_name === "New Moon" ? (
+                <div
+                  style={getStroke(year, m + 1, i)}
+                  className="phases"
+                  dangerouslySetInnerHTML={{ __html: newMoonSvg }}
+                ></div>
+              ) : null}
+
               <div className="dayToday">
                 {isToday ? (
                   <span style={{ fontSize: "9px" }}>Heute</span>
                 ) : null}
-                <p className={isToday ? "isToday" : ""}>{i}</p>
+                <p>{i}</p>
               </div>
             </>
           ) : (
             <div className="dayToday">
               {isToday ? <span style={{ fontSize: "9px" }}>Heute</span> : null}
-              <p className={isToday ? "isToday" : ""}>{i}</p>
+              <p>{i}</p>
             </div>
           )}
         </li>
@@ -456,7 +743,7 @@ const JournalCalendarRemade = () => {
         <div className="cur-month-year">
           <span className="cur-month-year-text">{months[m]}</span>
           <span className="cur-month-year-text">{year}</span>
-          <span id="cur-month-year-icon">
+          {/* <span id="cur-month-year-icon">
             <IonButton fill="clear" onClick={handleClick}>
               <IonIcon icon={chevronDownOutline}></IonIcon>
             </IonButton>
@@ -481,11 +768,17 @@ const JournalCalendarRemade = () => {
                   ))}
                 </select>
               </label>
-              <button onClick={handleGo} className="go-button">
+              <button onClick={handleGo} className="goBtn">
                 Bestätigen
               </button>
             </div>
-          </IonPopover>
+          </IonPopover> */}
+          <IonButton onClick={() => handleGo("prev")} fill="clear">
+            <IonIcon icon={chevronUpOutline} />
+          </IonButton>
+          <IonButton onClick={() => handleGo("next")} fill="clear">
+            <IonIcon icon={chevronDownOutline} />
+          </IonButton>
         </div>
         <ul className="calendar-data">{monthData}</ul>
       </div>
@@ -505,10 +798,36 @@ const JournalCalendarRemade = () => {
 
     fetchSvg();
   }, [svg]);
+  useEffect(() => {
+    const newMoonIcon = async () => {
+      try {
+        const response = await fetch(newMoon);
+        const svgText = await response.text();
+        setNewMoonSvg(svgText);
+      } catch (error) {
+        console.error("Error loading SVG:", error);
+      }
+    };
+
+    newMoonIcon();
+  }, [newMoonSvg]);
+  useEffect(() => {
+    const fullMoonIcon = async () => {
+      try {
+        const response = await fetch(fullMoon);
+        const svgText = await response.text();
+        setFullMoonSvg(svgText);
+      } catch (error) {
+        console.error("Error loading SVG:", error);
+      }
+    };
+
+    fullMoonIcon();
+  }, [fullMoonSvg]);
 
   return (
     <IonPage className="JournalCalendarRemade">
-      <IonContent>
+      <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="end">
             <IonButton color="dark" onClick={() => history.push("/menu")}>
@@ -516,21 +835,28 @@ const JournalCalendarRemade = () => {
             </IonButton>
           </IonButtons>
         </IonToolbar>
+      </IonHeader>
+      <IonContent>
         <h2>[Das Zyklus Journal ist zur Zeit in Überarbeitung]</h2>
-        <p>Du erhältst eine E-Mail von uns, wenn das Journal wieder vollumfänglich verfügbar ist.</p>
+        <p>
+          Du erhältst eine E-Mail von uns, wenn das Journal wieder
+          vollumfänglich verfügbar ist.
+        </p>
         <div className="journalcalendar-main">
           <div className="calendar-container" onScroll={() => handleScroll()}>
+            {/* <div className="calendar-controls"></div> */}
             <div className="calendar-scrollable">
               {calendarMonths.map((monthData, mIndex) => (
-                <div
-                  id={`${months[mIndex]}`}
-                  key={monthData.key}
-                  className={`calendar-month ${
-                    currentdivInView === months[mIndex] ? "fadeIn" : "fadeOut"
-                  }`}
-                >
-                  {monthData}
-                </div>
+                <>
+                  <div
+                    id={`${months[mIndex]}`}
+                    key={monthData.key}
+                    className={`calendar-month ${currentdivInView == months[mIndex] ? "fadeIn" : "fadeOut"
+                      }`}
+                  >
+                    {monthData}
+                  </div>
+                </>
               ))}
             </div>
           </div>
@@ -541,8 +867,14 @@ const JournalCalendarRemade = () => {
                 <img src={menstruation} alt="" />
                 <p className="moon-text">Menstruation</p>
               </div>
-              <div className="new-moon bottom">
-                <img src={newMoon} alt="" />
+              <div
+                className="new-moon bottom"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <div
+                  style={{ stroke: "#EE5F64" }}
+                  dangerouslySetInnerHTML={{ __html: newMoonSvg }}
+                ></div>
                 <p className="moon-text">Neumond</p>
               </div>
             </div>
@@ -555,8 +887,14 @@ const JournalCalendarRemade = () => {
                 />
                 <p className="moon-text">Zervixschleim</p>
               </div>
-              <div className="full-moon bottom">
-                <img src={fullMoon} alt="" />
+              <div
+                className="full-moon bottom"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <div
+                  style={{ stroke: "#EE5F64", fill: "#EE5F64" }}
+                  dangerouslySetInnerHTML={{ __html: fullMoonSvg }}
+                ></div>
                 <p className="moon-text">Vollmond</p>
               </div>
             </div>

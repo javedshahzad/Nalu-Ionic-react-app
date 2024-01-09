@@ -5,11 +5,11 @@ import { isPlatform } from "@ionic/react";
 // Function to get the headers for the request
 const getHeaders = () => {
   const jwtToken = localStorage.getItem("jwtToken");
-  
+
   if (isPlatform("ios")) {
     // For Cordova, use quoted keys
     return {
-      "Authorization": `Bearer ${jwtToken}`,
+      Authorization: `Bearer ${jwtToken}`,
     };
   } else {
     // For other platforms, use unquoted keys

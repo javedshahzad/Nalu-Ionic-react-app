@@ -48,6 +48,8 @@ import apiService from "../../Services";
 import tokenService from "../../token";
 import { io } from "socket.io-client";
 import { groupsListAction } from "../../actions/groupsListAction";
+import authService from "../../authService";
+import groupImg from "../../assets/images/groupImage.png";
 
 const Mygroups: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -69,7 +71,7 @@ const Mygroups: React.FC = () => {
     if (!isPlatform("ios") && axiosCancelToken) {
       axiosCancelToken.cancel("Component unmounted");
     }
-  });  
+  });
 
   const token = tokenService.getToken();
   const socket = io("https://apidev.mynalu.com/", {
@@ -108,40 +110,61 @@ const Mygroups: React.FC = () => {
 
   const getEvents = async () => {
     setIsLoading(true);
-  
+
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
-  
+
     try {
       let response;
       if (isPlatform("ios")) {
         const cordovaResponse = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`, 
-          {}, 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`,
+          {},
           headers
         );
         response = JSON.parse(cordovaResponse.data);
       } else {
         const source = axios.CancelToken.source();
         axiosCancelToken = source;
-  
+
         const axiosResponse = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`, 
-          { 
-            headers, 
-            cancelToken: source.token 
+          `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`,
+          {
+            headers,
+            cancelToken: source.token,
           }
         );
         response = axiosResponse.data;
       }
       setEvents(response);
     } catch (error) {
-      console.error("Error fetching events:", error);
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      } else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      console.error("error", error);
     } finally {
       setIsLoading(false);
     }
-  };  
+  };
   const [showPopover, setShowPopover] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
@@ -214,8 +237,29 @@ const Mygroups: React.FC = () => {
           setSelectedUsers([]);
           setGroupName("");
         },
-        (err) => {
-          console.log("err from creating group", err);
+        (error) => {
+          if (isPlatform("ios")) {
+            if (error) {
+              const status = error.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+          else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
         }
       );
   };
@@ -236,7 +280,33 @@ const Mygroups: React.FC = () => {
       .then((data) => {
         setUsers(data);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => {
+        if (isPlatform("ios")) {
+          if (error) {
+            const status = error.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              // authService.logout();
+              // history.push("/onboarding");
+            }
+          }
+        }
+        else {
+          if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401 || status === 403 || status === 404) {
+              // Unauthorized, Forbidden, or Not Found
+              // authService.logout();
+              // history.push("/onboarding");
+            }
+          }
+        }
+
+
+        console.error(error);
+      });
   };
 
   const handleGroupClick = (groupId: any) => {
@@ -362,7 +432,7 @@ const Mygroups: React.FC = () => {
                   key={index}
                 >
                   <img
-                    src={group.groupImage}
+                    src={group?.groupImage || groupImg}
                     alt=""
                     className="profile-image my-auto"
                     style={{
@@ -418,10 +488,10 @@ const Mygroups: React.FC = () => {
                           event?.is_bookmarked
                             ? "assets/imgs/bookmark-blue.svg"
                             : event?.is_cancelled
-                            ? "assets/imgs/cross-icon.svg"
-                            : event?.is_registered
-                            ? checkmarkCircle
-                            : "assets/imgs/closed-letterr.svg"
+                              ? "assets/imgs/cross-icon.svg"
+                              : event?.is_registered
+                                ? checkmarkCircle
+                                : "assets/imgs/closed-letterr.svg"
                         }
                       />
                     </div>
