@@ -619,11 +619,6 @@ function JournalAdditionRemade() {
               ))}
             </div>
                       </div>*/}
-          <h2>[Das Zyklus Journal ist zur Zeit in Überarbeitung]</h2>
-          <p>
-            Du erhältst eine E-Mail von uns, wenn das Journal wieder
-            vollumfänglich verfügbar ist.
-          </p>
           <IonModal
             isOpen={modalOpen}
             className="modaaal"

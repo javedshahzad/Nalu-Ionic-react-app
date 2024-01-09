@@ -837,11 +837,6 @@ const JournalCalendarRemade = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <h2>[Das Zyklus Journal ist zur Zeit in Überarbeitung]</h2>
-        <p>
-          Du erhältst eine E-Mail von uns, wenn das Journal wieder
-          vollumfänglich verfügbar ist.
-        </p>
         <div className="journalcalendar-main">
           <div className="calendar-container" onScroll={() => handleScroll()}>
             {/* <div className="calendar-controls"></div> */}
@@ -902,7 +897,7 @@ const JournalCalendarRemade = () => {
 
           <div className="journal-cycle-wrapper">
             <div className="journal-cycle">
-              <h3>{icons2?.today?.label}</h3>
+              {/*<h3>{icons2?.today?.label}</h3>*/}
               <div className="day-time">
                 <span>{formatTodaysDate()}</span>
               </div>
