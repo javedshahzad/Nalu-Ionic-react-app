@@ -18,6 +18,7 @@ import {
   IonTitle,
   IonToolbar,
   isPlatform,
+  useIonToast,
 } from "@ionic/react";
 import {
   bookmarkOutline,
@@ -44,7 +45,7 @@ const Eventdetail: React.FC = () => {
   const [isLoaderLoading, setIsLoaderLoading] = useState(false);
 
   const [isDateSelected, setIsDateSelected] = useState(false);
-
+  const [present] = useIonToast();
   const location = useLocation();
   const history = useHistory();
   const data: any = location?.state;
@@ -130,8 +131,7 @@ const Eventdetail: React.FC = () => {
                 history.push("/onboarding");
               }
             }
-          }
-          else {
+          } else {
             if (error.response) {
               const status = error.response.status;
 
@@ -178,8 +178,7 @@ const Eventdetail: React.FC = () => {
               history.push("/onboarding");
             }
           }
-        }
-        else {
+        } else {
           if (error.response) {
             const status = error.response.status;
 
@@ -234,8 +233,7 @@ const Eventdetail: React.FC = () => {
               history.push("/onboarding");
             }
           }
-        }
-        else {
+        } else {
           if (error.response) {
             const status = error.response.status;
 
@@ -258,6 +256,7 @@ const Eventdetail: React.FC = () => {
 
   const handleIcons = (URL) => {
     setIsLoading(true);
+    let apiResponse;
     axios
       .post(URL, null, {
         headers: {
@@ -265,7 +264,7 @@ const Eventdetail: React.FC = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        apiResponse = response;
         if (response.data.message === "Updated successfully") {
           getEventByID(event_Id);
         }
@@ -281,8 +280,7 @@ const Eventdetail: React.FC = () => {
               history.push("/onboarding");
             }
           }
-        }
-        else {
+        } else {
           if (error.response) {
             const status = error.response.status;
 
@@ -295,7 +293,25 @@ const Eventdetail: React.FC = () => {
         }
 
         console.error(error);
+      })
+      .finally(() => {
         setIsLoading(false);
+        if (apiResponse && apiResponse.data) {
+          present({
+            message: `${apiResponse.data.message}`,
+            // color: "success",
+            duration: 2000,
+            position: "top",
+          });
+        } else {
+          // Handle the case where there is no response
+          present({
+            message: "An error occurred",
+            // color: "error",
+            duration: 2000,
+            position: "top",
+          });
+        }
       });
   };
 
@@ -492,7 +508,7 @@ const Eventdetail: React.FC = () => {
                                     fill="clear"
                                     color={
                                       event?.is_registered === false ||
-                                        event?.is_registered === null
+                                      event?.is_registered === null
                                         ? "dark"
                                         : ""
                                     }
@@ -519,7 +535,7 @@ const Eventdetail: React.FC = () => {
                                     fill="clear"
                                     color={
                                       event?.is_bookmarked === false ||
-                                        event?.is_bookmarked === null
+                                      event?.is_bookmarked === null
                                         ? "dark"
                                         : ""
                                     }
@@ -545,7 +561,7 @@ const Eventdetail: React.FC = () => {
                                     fill="clear"
                                     color={
                                       event?.is_cancelled === false ||
-                                        event?.is_cancelled === null
+                                      event?.is_cancelled === null
                                         ? "dark"
                                         : ""
                                     }

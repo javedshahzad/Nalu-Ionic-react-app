@@ -34,6 +34,8 @@ import MoonPhasesServce from "../../MoonPhasesService";
 import CustomCategoryApiService from "../../CustomCategoryService";
 import authService from "../../authService";
 import { isPlatform } from "@ionic/react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 const months = [
   "Januar",
@@ -80,12 +82,14 @@ const JournalCalendarRemade = () => {
 
   const history = useHistory(); // Use useHistory for navigation
 
+  const phases = useSelector((state: RootState) => state.phasesReducer);
+
   // const navigation = useIonRouter();
   // const toJounralAddition = () => {};
 
   const date: Date = new Date();
 
-  const moonColorData = icons2.entries;
+  const moonColorData = phases[1]?.entries;
 
   const curDate: string = date.toLocaleDateString();
 
@@ -106,8 +110,9 @@ const JournalCalendarRemade = () => {
     const tempMonthIndex = monthIndex + 1 + "";
     const tempDateIndex = dateIndex + "";
 
-    const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
-      }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+    const dateParam = `${year}-${
+      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
     url = `/journaladditionremade/${dateParam}`;
 
@@ -161,8 +166,7 @@ const JournalCalendarRemade = () => {
             history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
@@ -211,8 +215,7 @@ const JournalCalendarRemade = () => {
             history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
@@ -256,8 +259,11 @@ const JournalCalendarRemade = () => {
     let _x = `${_year}-${_month}-${_day}`;
 
     if (_month) {
-      const foundDate = Object.keys(moonColorData).find((obj) => obj === x);
+      let foundDate = null;
 
+      if (moonColorData) {
+        foundDate = Object.keys(moonColorData).find((obj) => obj === x);
+      }
       if (foundDate) {
         moonColorData[foundDate].entries.forEach((phase, index) => {
           if (
@@ -431,10 +437,10 @@ const JournalCalendarRemade = () => {
     return `${dayOfWeek}, ${dayOfMonth}. ${month}`;
   };
 
-  useIonViewWillEnter(() => {
-    getIcons();
-    getIcons2();
-  });
+  // useIonViewWillEnter(() => {
+  //   getIcons();
+  //   getIcons2();
+  // });
 
   const handleStartStop = () => {
     let body = {};
@@ -482,8 +488,7 @@ const JournalCalendarRemade = () => {
                 history.push("/onboarding");
               }
             }
-          }
-          else {
+          } else {
             if (error.response) {
               const status = error.response.status;
 
@@ -524,8 +529,7 @@ const JournalCalendarRemade = () => {
                 history.push("/onboarding");
               }
             }
-          }
-          else {
+          } else {
             if (error.response) {
               const status = error.response.status;
 
@@ -661,29 +665,33 @@ const JournalCalendarRemade = () => {
     for (let i = 1; i <= lastDateOfMonth; i++) {
       const isToday =
         i === new Date().getDate() &&
-          m === new Date().getMonth() &&
-          year === new Date().getFullYear()
+        m === new Date().getMonth() &&
+        year === new Date().getFullYear()
           ? "currentDay"
           : "";
 
       // Find the corresponding moon phase name for the current date
-      const moonPhase = moonPhaseIcon.find((item) => {
-        return (
-          item.date ===
-          year +
-          "-" +
-          (m + 1).toString().padStart(2, "0") +
-          "-" +
-          i.toString().padStart(2, "0")
-        );
-      });
+      let moonPhase = [];
+      if (phases && phases.length > 0) {
+        moonPhase = phases[0]?.find((item: any) => {
+          return (
+            item.date ===
+            year +
+              "-" +
+              (m + 1).toString().padStart(2, "0") +
+              "-" +
+              i.toString().padStart(2, "0")
+          );
+        });
+      }
 
       monthData.push(
         <li
           key={`currentDay-${i}`}
           id={`${i}/${m + 1}/${year}`}
-          className={`calendar-day ${isToday} ${activeIndex === i + 1 && activeMonthIndex === m ? "dayActive" : ""
-            }`}
+          className={`calendar-day ${isToday} ${
+            activeIndex === i + 1 && activeMonthIndex === m ? "dayActive" : ""
+          }`}
           onClick={() => handleOnClick(i, m)}
           style={getColors(year, m + 1, i)}
         >
@@ -846,8 +854,9 @@ const JournalCalendarRemade = () => {
                   <div
                     id={`${months[mIndex]}`}
                     key={monthData.key}
-                    className={`calendar-month ${currentdivInView == months[mIndex] ? "fadeIn" : "fadeOut"
-                      }`}
+                    className={`calendar-month ${
+                      currentdivInView == months[mIndex] ? "fadeIn" : "fadeOut"
+                    }`}
                   >
                     {monthData}
                   </div>

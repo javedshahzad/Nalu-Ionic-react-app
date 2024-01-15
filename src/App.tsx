@@ -4,6 +4,7 @@ import {
   IonRouterOutlet,
   useIonToast,
   setupIonicReact,
+  isPlatform,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 
@@ -60,7 +61,7 @@ import Pusher from "pusher-js";
 import { addNotification } from "./actions/notificationAction";
 import { useDispatch } from "react-redux";
 // import OneSignal from "onesignal-cordova-plugin";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { groupsListAction } from "./actions/groupsListAction";
 import tokenService from "./token";
 import { io } from "socket.io-client";
@@ -74,6 +75,9 @@ import JournalCalendarRemade from "./pages/Journalcalender/JournalCalendarRemade
 import UserAuthentication from "./auth/UserAuthentication";
 import Menu from "./pages/Menu/Menu";
 import Addcustomcategory from "./pages/Addcustomcategory/Addcustomcategory";
+import MoonPhasesService from "./MoonPhasesService";
+import authService from "./authService";
+import { getColors, getMoonIcons } from "./actions/journalAction";
 
 setupIonicReact({
   mode: "ios",
@@ -97,6 +101,7 @@ const App: React.FC = () => {
   // ***pusher*** //
 
   const [present] = useIonToast();
+  const [year, setYear] = useState(new Date().getFullYear());
   const presentToast = (notification: any) => {
     present({
       message: notification,
@@ -139,6 +144,109 @@ const App: React.FC = () => {
   // ***socket io*** //
 
   // ***socket io*** //
+
+  const history = useHistory();
+
+  const getIcons = async () => {
+    try {
+      const data = await MoonPhasesService.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
+      );
+
+      const newArray = [];
+
+      for (const date in data.moonphase) {
+        const dateObjects = data.moonphase[date];
+        for (const dateObject of dateObjects) {
+          const transformedObject = {
+            date: date,
+            phase_id: dateObject.phase_id,
+            phase_name: dateObject.phase_name,
+          };
+          newArray.push(transformedObject);
+        }
+      }
+
+      dispatch(getMoonIcons(newArray));
+    } catch (error) {
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      } else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      console.error(error);
+    }
+  };
+  const getMoonColors = async () => {
+    let month: any = new Date().getMonth() + 1;
+
+    if (parseInt(month) < 10) {
+      month = "0" + month;
+    }
+
+    let year = new Date().getFullYear();
+
+    let yearMonth = `${year}-${month}`;
+
+    try {
+      const data = await MoonPhasesService.get(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
+      );
+
+      const todayData = data["today"];
+
+      if (todayData) {
+        // setTodayPeriod(todayData.active_period.toString());
+      } else {
+        console.log("No data found for today");
+      }
+      dispatch(getColors(data));
+    } catch (error) {
+      if (isPlatform("ios")) {
+        if (error) {
+          const status = error.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      } else {
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
+          }
+        }
+      }
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getMoonColors();
+    getIcons();
+  }, []);
 
   return (
     <IonApp>
