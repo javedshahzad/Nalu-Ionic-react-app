@@ -148,51 +148,89 @@ const Eventdetail: React.FC = () => {
     }
   };
 
-  const handleDateChange = (event, date_event, registration_link) => {
+  const handleDateChange = async (event, date_event, registration_link) => {
     console.log(date_event);
     setIsLoaderLoading(true);
     const value = event.target.value;
-    axios
-      .get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/event/${date_event.event_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response.data);
-        setEvent(response.data);
+
+    if (isPlatform("ios")) {
+      const jwtToken = localStorage.getItem("jwtToken");
+      const headers = {
+        Authorization: `Bearer ${jwtToken}`,
+      };
+      // Use Cordova HTTP plugin for iOS
+      try {
+        const response = await HTTP.get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/event/${date_event.event_id}`,
+          {},
+          headers
+        );
+        const data = JSON.parse(response.data);
+        console.log(data);
+        setEvent(data);
         setIsDateSelected(true);
         setIsLoaderLoading(false);
-      })
-      .catch((error) => {
-        if (isPlatform("ios")) {
-          if (error) {
-            const status = error.status;
+      } catch (error) {
+        if (error) {
+          const status = error.status;
 
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
-            }
-          }
-        } else {
-          if (error.response) {
-            const status = error.response.status;
-
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
-            }
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
           }
         }
-
         console.error(error);
         setIsLoaderLoading(false);
-      });
+      } finally {
+        setIsLoaderLoading(false);
+      }
+
+    }
+    else {
+      axios
+        .get(
+          `https://app.mynalu.com/wp-json/nalu-app/v1/event/${date_event.event_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          setEvent(response.data);
+          setIsDateSelected(true);
+          setIsLoaderLoading(false);
+        })
+        .catch((error) => {
+          if (isPlatform("ios")) {
+            if (error) {
+              const status = error.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          } else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+
+          console.error(error);
+          setIsLoaderLoading(false);
+        });
+    }
+
 
     setSelectedDate(value);
     setDateError(
@@ -508,7 +546,7 @@ const Eventdetail: React.FC = () => {
                                     fill="clear"
                                     color={
                                       event?.is_registered === false ||
-                                      event?.is_registered === null
+                                        event?.is_registered === null
                                         ? "dark"
                                         : ""
                                     }
@@ -535,7 +573,7 @@ const Eventdetail: React.FC = () => {
                                     fill="clear"
                                     color={
                                       event?.is_bookmarked === false ||
-                                      event?.is_bookmarked === null
+                                        event?.is_bookmarked === null
                                         ? "dark"
                                         : ""
                                     }
@@ -561,7 +599,7 @@ const Eventdetail: React.FC = () => {
                                     fill="clear"
                                     color={
                                       event?.is_cancelled === false ||
-                                      event?.is_cancelled === null
+                                        event?.is_cancelled === null
                                         ? "dark"
                                         : ""
                                     }
