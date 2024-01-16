@@ -365,9 +365,9 @@ const Eventdetail: React.FC = () => {
         setIsLoading(false);
       } finally {
         setIsLoading(false);
-        if (apiResponse && apiResponse.data) {
+        if (apiResponse && apiResponse) {
           present({
-            message: `${apiResponse.data.message}`,
+            message: `${apiResponse.message}`,
             // color: "success",
             duration: 2000,
             position: "top",
