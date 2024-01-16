@@ -237,7 +237,7 @@ const Eventdetail: React.FC = () => {
       value.trim() === "" ? "Bitte wähle ein Datum, um fortzufahren." : ""
     );
   };
-  const handleDateChangeWebinar = (event, date_event, registration_link) => {
+  const handleDateChangeWebinar = async (event, date_event, registration_link) => {
     setIsLoaderLoading(true);
 
     const value = event.target.value;
@@ -246,93 +246,124 @@ const Eventdetail: React.FC = () => {
       "{schedule_id}",
       date_event.schedule_id
     );
-    axios
-      .get(updatedRegistrationLink, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
 
-        if (response.data === "Accepted") {
+    if (isPlatform("ios")) {
+      const jwtToken = localStorage.getItem("jwtToken");
+      const headers = {
+        Authorization: `Bearer ${jwtToken}`,
+      };
+      // Use Cordova HTTP plugin for iOS
+      try {
+        const response = await HTTP.get(
+          updatedRegistrationLink,
+          {},
+          headers
+        );
+        const data = JSON.parse(response.data);
+        console.log(data);
+        if (data === "Accepted") {
           setIsDateSelected(true);
         }
         setIsLoaderLoading(false);
-      })
-      .catch((error) => {
-        if (isPlatform("ios")) {
-          if (error) {
-            const status = error.status;
+      } catch (error) {
+        if (error) {
+          const status = error.status;
 
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
-            }
-          }
-        } else {
-          if (error.response) {
-            const status = error.response.status;
-
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
-            }
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
           }
         }
-
         console.error(error);
         setIsLoaderLoading(false);
-      });
+      } finally {
+        setIsLoaderLoading(false);
+      }
+
+    }
+    else {
+      axios
+        .get(updatedRegistrationLink, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+
+          if (response.data === "Accepted") {
+            setIsDateSelected(true);
+          }
+          setIsLoaderLoading(false);
+        })
+        .catch((error) => {
+          if (isPlatform("ios")) {
+            if (error) {
+              const status = error.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          } else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+
+          console.error(error);
+          setIsLoaderLoading(false);
+        });
+    }
     setSelectedDate(value);
     setDateError(
       value.trim() === "" ? "Bitte wähle ein Datum, um fortzufahren." : ""
     );
   };
 
-  const handleIcons = (URL) => {
+  const handleIcons = async (URL) => {
     setIsLoading(true);
     let apiResponse;
-    axios
-      .post(URL, null, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-        },
-      })
-      .then((response) => {
-        apiResponse = response;
-        if (response.data.message === "Updated successfully") {
+
+    if (isPlatform("ios")) {
+      const jwtToken = localStorage.getItem("jwtToken");
+      const headers = {
+        Authorization: `Bearer ${jwtToken}`,
+      };
+      // Use Cordova HTTP plugin for iOS
+      try {
+        const response = await HTTP.post(
+          URL,
+          {},
+          headers
+        );
+        apiResponse = JSON.parse(response.data);
+        if (apiResponse.message === "Updated successfully") {
           getEventByID(event_Id);
         }
-      })
-      .catch((error) => {
-        if (isPlatform("ios")) {
-          if (error) {
-            const status = error.status;
+        setIsLoading(false);
+      } catch (error) {
+        if (error) {
+          const status = error.status;
 
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
-            }
-          }
-        } else {
-          if (error.response) {
-            const status = error.response.status;
-
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
-            }
+          if (status === 401 || status === 403 || status === 404) {
+            // Unauthorized, Forbidden, or Not Found
+            authService.logout();
+            history.push("/onboarding");
           }
         }
-
         console.error(error);
-      })
-      .finally(() => {
+        setIsLoading(false);
+      } finally {
         setIsLoading(false);
         if (apiResponse && apiResponse.data) {
           present({
@@ -350,7 +381,67 @@ const Eventdetail: React.FC = () => {
             position: "top",
           });
         }
-      });
+      }
+
+    }
+    else {
+      axios
+        .post(URL, null, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
+        })
+        .then((response) => {
+          apiResponse = response;
+          if (response.data.message === "Updated successfully") {
+            getEventByID(event_Id);
+          }
+        })
+        .catch((error) => {
+          if (isPlatform("ios")) {
+            if (error) {
+              const status = error.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          } else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          }
+
+          console.error(error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+          if (apiResponse && apiResponse.data) {
+            present({
+              message: `${apiResponse.data.message}`,
+              // color: "success",
+              duration: 2000,
+              position: "top",
+            });
+          } else {
+            // Handle the case where there is no response
+            present({
+              message: "An error occurred",
+              // color: "error",
+              duration: 2000,
+              position: "top",
+            });
+          }
+        });
+    }
   };
 
   return (
