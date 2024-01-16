@@ -1020,37 +1020,70 @@ function JournalAdditionRemade() {
                     )}
                   </div>
 
-                  <div className="section">
-                    {entry.type === "textarea" && (
-                      <div>
-                        <div className="title flex al-center jc-between">
-                          <h3>{entry.label}</h3>
-                        </div>
-                        <div className="tags-holder">
-                          <div>
-                            {
-                              <div className="section last">
-                                <div className="the-form">
-                                  <div className="input-item">
-                                    <IonItem lines="none">
-                                      <IonInput
-                                        id={entry.key}
-                                        placeholder="Text eingeben"
-                                        value={entry.value || ""}
-                                        onIonChange={(event) =>
-                                          updateField(event.target.value, entry)
-                                        }
-                                      />
-                                    </IonItem>
+                  {isPremiumUser ? (
+                    <div className="section">
+                      {entry.type === "textarea" && (
+                        <div>
+                          <div className="title flex al-center jc-between">
+                            <h3>{entry.label}</h3>
+                          </div>
+                          <div className="tags-holder">
+                            <div>
+                              {
+                                <div className="section last">
+                                  <div className="the-form">
+                                    <div className="input-item">
+                                      <IonItem lines="none">
+                                        <IonInput
+                                          id={entry.key}
+                                          placeholder="Text eingeben"
+                                          value={entry.value || ""}
+                                          onIonChange={(event) =>
+                                            updateField(event.target.value, entry)
+                                          }
+                                        />
+                                      </IonItem>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            }
+                              }
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
+                      )}
+                    </div>) :
+                    (<div className="section">
+                      {entry.type === "textarea" && entry.key !== 'how_i_live' && (
+                        <div>
+                          <div className="title flex al-center jc-between">
+                            <h3>{entry.label}</h3>
+                          </div>
+                          <div className="tags-holder">
+                            <div>
+                              {
+                                <div className="section last">
+                                  <div className="the-form">
+                                    <div className="input-item">
+                                      <IonItem lines="none">
+                                        <IonInput
+                                          id={entry.key}
+                                          placeholder="Text eingeben"
+                                          value={entry.value || ""}
+                                          onIonChange={(event) =>
+                                            updateField(event.target.value, entry)
+                                          }
+                                        />
+                                      </IonItem>
+                                    </div>
+                                  </div>
+                                </div>
+                              }
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>)
+                  }
                   <div className="section">
                     {entry.type === "text" && (
                       <div>
