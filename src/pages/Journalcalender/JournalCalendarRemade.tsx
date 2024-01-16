@@ -89,7 +89,7 @@ const JournalCalendarRemade = () => {
 
   const date: Date = new Date();
 
-  const moonColorData = phases[1]?.entries;
+  const moonColorData = phases[1]?.entries || [];
 
   const curDate: string = date.toLocaleDateString();
 
@@ -671,9 +671,9 @@ const JournalCalendarRemade = () => {
           : "";
 
       // Find the corresponding moon phase name for the current date
-      let moonPhase = [];
-      if (phases && phases.length > 0) {
-        moonPhase = phases[0]?.find((item: any) => {
+      let moonPhase: any = [];
+      if (phases && Array.isArray(phases[0]) && phases[0].length > 0) {
+        moonPhase = phases[0].find((item) => {
           return (
             item.date ===
             year +
