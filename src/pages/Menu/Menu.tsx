@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   IonAvatar,
   IonBackButton,
@@ -21,6 +21,8 @@ import {
   useIonRouter,
   isPlatform,
   IonAlert,
+  IonSpinner,
+  useIonToast,
 } from "@ionic/react";
 
 import { useLocation } from "react-router-dom";
@@ -28,6 +30,11 @@ import {
   arrowBackOutline,
   trashBinOutline,
   logOutOutline,
+  arrowBack,
+  camera,
+  pencil,
+  checkmark,
+  close,
 } from "ionicons/icons";
 import "./Menu.scss";
 import { Browser } from "@capacitor/browser";
@@ -104,30 +111,30 @@ const Menu: React.FC = () => {
   };
 
   const appPages: AppPage[] = [
-    /*{
-      title: "Edit Profile",
-      url: "/page/Inbox",
-      Icon: 'assets/imgs/menu1.svg',
-      
-    },
-    {
-      title: "Preferences",
-      url: "/page/Outbox",
-      Icon: 'assets/imgs/menu2.svg',
-     
-    },
-    {
-      title: "Notifications",
-      url: "/page/Favorites",
-      Icon: 'assets/imgs/menu3.svg',
-     
-    },
-    {
-      title: "NALU beitreten",
-      url: "",
-      Icon: 'assets/imgs/menu4.svg',
-      onClick: () => history.push("/membership"),
-    },*/
+    // {
+    //   title: "Edit Profile",
+    //   url: "/profile",
+    //   Icon: 'assets/imgs/menu1.svg',
+
+    // },
+    // {
+    //   title: "Preferences",
+    //   url: "/page/Outbox",
+    //   Icon: 'assets/imgs/menu2.svg',
+
+    // },
+    // {
+    //   title: "Notifications",
+    //   url: "/page/Favorites",
+    //   Icon: 'assets/imgs/menu3.svg',
+
+    // },
+    // {
+    //   title: "NALU beitreten",
+    //   url: "",
+    //   Icon: 'assets/imgs/menu4.svg',
+    //   onClick: () => history.push("/membership"),
+    // },
     {
       title: "Notfallplan",
       url: "/tabs/tab3/resourcedetail/6999",
@@ -174,6 +181,266 @@ const Menu: React.FC = () => {
     menu?.close();
   };
 
+  const [avatar, setAvatar] = useState(null)
+  const [nickname, setNickname] = useState("")
+  const [nickname_, setNickname_] = useState("")
+  const [email, setEmail] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+
+
+  const [editname, SetEditNickName] = useState(false);
+
+
+
+
+
+
+  const [present] = useIonToast();
+
+
+  const getName = async () => {
+
+    let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?_fields=nickname`;
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+
+    try {
+      let response;
+      if (isPlatform("ios")) {
+        const cordovaResponse = await HTTP.get(URL, {}, headers);
+        response = JSON.parse(cordovaResponse.data);
+      } else {
+        const axiosResponse = await axios.get(URL, { headers });
+        response = axiosResponse.data;
+      }
+      console.log(response);
+      setNickname(response.nickname);
+
+    } catch (error) {
+      console.error("Error fetching course data:", error);
+
+    } finally {
+
+    }
+  };
+
+
+  const changeName = (event) => {
+    setNickname_(event.target.value)
+  }
+
+  const edit_name = () => {
+    SetEditNickName(true)
+    setNickname_(nickname)
+    present({
+      message: `If you are a NALU member the nickname you define here will be shown to other members when you interact in group chats.`,
+      color: "secondary",
+      duration: 3000,
+      position: "top",
+    });
+  }
+
+
+  const save_name = async () => {
+
+    setIsLoading(true);
+    let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?nickname=${nickname_}`;
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+
+    try {
+      let response;
+      if (isPlatform("ios")) {
+        const cordovaResponse = await HTTP.get(URL, {}, headers);
+        response = JSON.parse(cordovaResponse.data);
+      } else {
+        const axiosResponse = await axios.get(URL, { headers });
+        response = axiosResponse.data;
+      }
+      console.log(response);
+      setNickname(nickname_)
+      SetEditNickName(false)
+      present({
+        message: `Nickname updated successfully!`,
+        color: "success",
+        duration: 2000,
+        position: "top",
+      });
+      setIsLoading(false);
+    } catch (error) {
+
+      present({
+        message: `Error occurred ! ${error}`,
+        color: "danger",
+        duration: 2000,
+        position: "top",
+      });
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+
+  const getAvatar = async () => {
+
+    let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?_fields=avatar_urls`;
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+
+    try {
+      let response;
+      if (isPlatform("ios")) {
+        const cordovaResponse = await HTTP.get(URL, {}, headers);
+        response = JSON.parse(cordovaResponse.data);
+      } else {
+        const axiosResponse = await axios.get(URL, { headers });
+        response = axiosResponse.data;
+      }
+      console.log(response);
+      setAvatar(response.avatar_urls["24"]);
+    } catch (error) {
+      console.error("Error fetching course data:", error);
+    } finally {
+
+    }
+  };
+
+  const edit_avatar = () => {
+    present({
+      message: `If you are a NALU member your profile picture will be shown to other members when you interact in group chats`,
+      color: "secondary",
+      duration: 3000,
+      position: "top",
+    });
+    document.getElementById('avatar').click()
+  }
+
+  const uploadAvatar = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      if (file.size > 10 * 1024 * 1024) {
+        present({
+          message: `Error: File size should be less than 10MB.`,
+          color: "danger",
+          duration: 2000,
+          position: "top",
+        });
+        return;
+      }
+
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        present({
+          message: `Error: Only JPG, JPEG, PNG, or WebP files are allowed.`,
+          color: "danger",
+          duration: 2000,
+          position: "top",
+        });
+        return;
+      }
+
+      setIsLoading(true);
+      const reader: any = new FileReader();
+      reader.onload = async () => {
+        try {
+          let URL = `https://app.mynalu.com/wp-json/wp/v2/media`;
+          const headers = {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          };
+          let response;
+          if (isPlatform("ios")) {
+            const cordovaResponse = await HTTP.post(URL, {
+              file: reader.result.split(',')[1]
+            }, headers);
+            response = JSON.parse(cordovaResponse.data);
+          } else {
+            const axiosResponse = await axios.post(URL, {
+              file: reader.result.split(',')[1], // Remove the data URL prefix
+              // Add any additional parameters required by your WordPress API
+            }, { headers });
+            response = axiosResponse.data;
+          }
+
+
+          // Use the media ID from the response to update the user's avatar
+          const mediaId = response.id;
+          // Call your WordPress API to set the user's avatar using the mediaId
+          // Example: await axios.post('https://your-wordpress-site/wp-json/wp/v2/users/{userId}', { avatar: mediaId });
+
+          console.log(`Avatar updated with media ID: ${mediaId}`);
+          setAvatar(reader.result);
+          present({
+            message: `Profile Picture updated successfully!`,
+            color: "success",
+            duration: 2000,
+            position: "top",
+          });
+          setIsLoading(false);
+        } catch (error) {
+          console.error('Error uploading image to WordPress:', error);
+          present({
+            message: `Error: Unable to update profile picture.`,
+            color: "danger",
+            duration: 2000,
+            position: "top",
+          });
+          setIsLoading(false);
+        }
+      };
+
+      reader.readAsDataURL(file);
+    };
+
+  }
+
+
+
+  const getEmail = async () => {
+
+    let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?_fields=email`;
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    };
+
+    try {
+      let response;
+      if (isPlatform("ios")) {
+        const cordovaResponse = await HTTP.get(URL, {}, headers);
+        response = JSON.parse(cordovaResponse.data);
+      } else {
+        const axiosResponse = await axios.get(URL, { headers });
+        response = axiosResponse.data;
+      }
+      console.log(response);
+      setEmail(response.email);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching course data:", error);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    setIsLoading(true);
+    getAvatar()
+    getName()
+    getEmail()
+  }, [avatar])
+
+
+
+
+
+
+
+
+
   return (
     <IonPage className="Menu">
       <IonHeader className="ion-no-border">
@@ -187,22 +454,50 @@ const Menu: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="slide-menu">
-        {/*<div className="close-btn-holder ion-text-right">
-            <IonButton fill="clear" size="large" onClick={closeMenu} color="dark"> 
-              <IonIcon icon={arrowBack} />
-            </IonButton>
-        </div>
-        <div className="profile-holder ion-text-center">
-          <IonAvatar>
-            <img src="assets/imgs/avatar.png" alt="" />
-          </IonAvatar>
-          <div className="btnn ion-activatable ripple-parent flex al-center jc-center">
+
+        {isLoading ? (<div className='ion-text-center'>
+          <IonSpinner />
+        </div>) : (
+          <div className="profile-holder ion-text-center">
+            {isPremium ?
+              <>
+                <IonAvatar>
+                  {avatar ? (
+                    <img src={avatar} alt="" />
+                  ) : (
+                    <img src="/assets/imgs/avatar.png" alt="" />
+                  )}
+                </IonAvatar>
+                <div className="btnn ion-activatable ripple-parent flex al-center jc-center">
                   <IonRippleEffect />
-                  <IonIcon icon={camera} />
+                  <IonIcon icon={camera} onClick={edit_avatar} />
+                  <input type='file' accept="image/jpeg,image/jpg,image/png,image/webp" id='avatar' onChange={uploadAvatar} hidden />
+                </div>
+                {editname ?
+                  <div className='nick_name_field'>
+                    <input className='w-70 ion-text-center bg-transparent border-05' type='text' value={nickname_} onChange={changeName} />
+                    <div className='w-30'>
+                      <button type='button' className='bg-transparent text-black text-20px mr-2' onClick={save_name}>
+                        <IonIcon icon={checkmark} />
+                      </button>
+
+                      <button type='button' className='bg-transparent text-black text-20px' onClick={() => SetEditNickName(false)}>
+                        <IonIcon icon={close} />
+                      </button>
+                    </div>
+                  </div> : <h1> {nickname ? (
+                    <>{nickname}</>) : (<>User Nickname</>)}
+                    <IonIcon icon={pencil} className="edit_icon" onClick={edit_name} />
+
+                  </h1>}
+              </>
+              : <></>}
+            <h6>{email ? (
+              <>{email}</>) : (<>User Email</>)}
+            </h6>
           </div>
-          <h1>Angelina</h1>
-          <h6>example@gmail.com</h6>
-        </div>*/}
+        )}
+
         {!isPremium && (
           <IonMenuToggle autoHide={false} className="join-nalu">
             <IonItem button onClick={() => history.push("/membership")}>

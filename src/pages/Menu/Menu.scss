@@ -138,13 +138,50 @@
         bottom: 60px;
           height: 28px;
           position: absolute;
-          right: 30vw;
+          left: 50%;
           width: 28px;
 
           ion-icon
           {
             color: #EE5F64;
           }
+      }
+
+      .nick_name_field{
+        display: flex;
+        margin-top:10px;
+      }
+      .bg-transparent{
+        background-color: transparent;
+      }
+      .border-05{
+        border:0.5px solid gray;
+        border-radius:20px
+      }
+
+      .text-black{
+        color: black;
+      }
+      .w-30{
+        width: 30%;
+      }
+
+      .mr-2{
+        margin-right: 8px;
+      }
+      .text-20px{
+        font-size: 20px;
+      }
+      .w-70{
+        font-size: 20px;
+        margin-left:100px;
+        width:70%;
+      }
+     
+
+      .edit_icon{
+     
+        font-size: 20px;
       }
 
       h1

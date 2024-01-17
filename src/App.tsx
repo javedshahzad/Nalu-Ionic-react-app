@@ -261,6 +261,9 @@ const App: React.FC = () => {
           <Route exact path="/addcustomcategory">
             <Addcustomcategory />
           </Route>
+
+
+
           <Route exact path="/community">
             <PrivateRoute page={"community"}>
               <Community />
