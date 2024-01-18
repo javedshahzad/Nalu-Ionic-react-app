@@ -248,8 +248,7 @@ const Mygroups: React.FC = () => {
                 history.push("/onboarding");
               }
             }
-          }
-          else {
+          } else {
             if (error.response) {
               const status = error.response.status;
 
@@ -291,8 +290,7 @@ const Mygroups: React.FC = () => {
               // history.push("/onboarding");
             }
           }
-        }
-        else {
+        } else {
           if (error.response) {
             const status = error.response.status;
 
@@ -304,14 +302,13 @@ const Mygroups: React.FC = () => {
           }
         }
 
-
         console.error(error);
       });
   };
 
   const handleGroupClick = (groupId: any) => {
     history.push(`/groupchat/${groupId}`);
-    window.location.reload();
+    // window.location.reload();
   };
 
   const handleBrowseGroupsClick = () => {
@@ -347,9 +344,9 @@ const Mygroups: React.FC = () => {
         <>
           <IonHeader className="ion-no-border">
             <IonToolbar className="ion-no-border">
-              <IonButton slot="start" fill="clear" onClick={back}>
+              {/* <IonButton slot="start" fill="clear" onClick={back}>
                 <IonIcon icon={arrowBackOutline} className="backBtn" />
-              </IonButton>
+              </IonButton> */}
               <div className="top-row">
                 <h1 className="group-title">Community</h1>
               </div>
@@ -488,10 +485,10 @@ const Mygroups: React.FC = () => {
                           event?.is_bookmarked
                             ? "assets/imgs/bookmark-blue.svg"
                             : event?.is_cancelled
-                              ? "assets/imgs/cross-icon.svg"
-                              : event?.is_registered
-                                ? checkmarkCircle
-                                : "assets/imgs/closed-letterr.svg"
+                            ? "assets/imgs/cross-icon.svg"
+                            : event?.is_registered
+                            ? checkmarkCircle
+                            : "assets/imgs/closed-letterr.svg"
                         }
                       />
                     </div>

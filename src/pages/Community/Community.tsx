@@ -22,11 +22,11 @@ import {
 
 import "./Community.scss";
 import { useState } from "react";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import NotificationBell from "../../components/NotificationBell";
 
 const Community: React.FC = () => {
-  const { t} = useTranslation();  
+  const { t } = useTranslation();
 
   const itemList = [
     {
@@ -85,10 +85,8 @@ const Community: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton color="dark" text={""} defaultHref="/" />
           </IonButtons>
-          <IonTitle>
-          {t('community.browse_groups')}
-            </IonTitle>
-            {/*<IonButtons slot="end">
+          <IonTitle>{t("community.browse_groups")}</IonTitle>
+          {/*<IonButtons slot="end">
              
               <IonButton slot="end" fill="clear">
               <NotificationBell />

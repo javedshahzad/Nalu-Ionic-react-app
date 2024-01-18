@@ -41,7 +41,6 @@ import authService from "../../../authService";
 
 import { isPlatform } from "@ionic/react";
 
-
 const GroupChat: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
 
@@ -83,7 +82,7 @@ const GroupChat: React.FC = () => {
         conversation: groupId,
       });
 
-      socket.on("join", (data) => { });
+      socket.on("join", (data) => {});
 
       socket.emit("message-list", {
         page: 1,
@@ -206,8 +205,7 @@ const GroupChat: React.FC = () => {
               history.push("/onboarding");
             }
           }
-        }
-        else {
+        } else {
           if (error.response) {
             const status = error.response.status;
 
@@ -457,12 +455,22 @@ const GroupChat: React.FC = () => {
     <IonPage className="GroupChat">
       <IonHeader className="ion-no-border">
         <IonToolbar className="ion-no-border">
-          <IonIcon icon={arrowBackOutline} className="backBtn" onClick={back} />
-
-          <div className="top-row" onClick={openGroupInfo}>
-            {/* <img src={GroupImage} className="group-icon" />
-            <h1 className="group-title">{groupName}</h1> */}
+          {/* <IonIcon icon={arrowBackOutline} className="backBtn" onClick={back} /> */}
+          {/* <IonButton slot="start" fill="clear"> */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "left",
+              alignItems: "center",
+            }}
+          >
+            <IonBackButton></IonBackButton>
           </div>
+          {/* </IonButton> */}
+          {/* <div className="top-row" onClick={openGroupInfo}> */}
+          {/* <img src={GroupImage} className="group-icon" />
+            <h1 className="group-title">{groupName}</h1> */}
+          {/* </div> */}
 
           {/*<IonButton slot="end" fill="clear">
             <IonIcon icon={notificationsOutline} className="bell-icon" />

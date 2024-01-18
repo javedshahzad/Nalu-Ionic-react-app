@@ -185,9 +185,7 @@ const Eventdetail: React.FC = () => {
       } finally {
         setIsLoaderLoading(false);
       }
-
-    }
-    else {
+    } else {
       axios
         .get(
           `https://app.mynalu.com/wp-json/nalu-app/v1/event/${date_event.event_id}`,
@@ -231,13 +229,16 @@ const Eventdetail: React.FC = () => {
         });
     }
 
-
     setSelectedDate(value);
     setDateError(
       value.trim() === "" ? "Bitte wähle ein Datum, um fortzufahren." : ""
     );
   };
-  const handleDateChangeWebinar = async (event, date_event, registration_link) => {
+  const handleDateChangeWebinar = async (
+    event,
+    date_event,
+    registration_link
+  ) => {
     setIsLoaderLoading(true);
 
     const value = event.target.value;
@@ -254,11 +255,7 @@ const Eventdetail: React.FC = () => {
       };
       // Use Cordova HTTP plugin for iOS
       try {
-        const response = await HTTP.get(
-          updatedRegistrationLink,
-          {},
-          headers
-        );
+        const response = await HTTP.get(updatedRegistrationLink, {}, headers);
         const data = JSON.parse(response.data);
         console.log(data);
         if (data === "Accepted") {
@@ -280,9 +277,7 @@ const Eventdetail: React.FC = () => {
       } finally {
         setIsLoaderLoading(false);
       }
-
-    }
-    else {
+    } else {
       axios
         .get(updatedRegistrationLink, {
           headers: {
@@ -341,11 +336,7 @@ const Eventdetail: React.FC = () => {
       };
       // Use Cordova HTTP plugin for iOS
       try {
-        const response = await HTTP.post(
-          URL,
-          {},
-          headers
-        );
+        const response = await HTTP.post(URL, {}, headers);
         apiResponse = JSON.parse(response.data);
         if (apiResponse.message === "Updated successfully") {
           getEventByID(event_Id);
@@ -368,23 +359,21 @@ const Eventdetail: React.FC = () => {
         if (apiResponse && apiResponse) {
           present({
             message: `${apiResponse.message}`,
-            // color: "success",
-            duration: 2000,
+            color: "success",
+            duration: 3000,
             position: "top",
           });
         } else {
           // Handle the case where there is no response
           present({
             message: "An error occurred",
-            // color: "error",
-            duration: 2000,
+            color: "danger",
+            duration: 3000,
             position: "top",
           });
         }
       }
-
-    }
-    else {
+    } else {
       axios
         .post(URL, null, {
           headers: {
@@ -427,7 +416,7 @@ const Eventdetail: React.FC = () => {
           if (apiResponse && apiResponse.data) {
             present({
               message: `${apiResponse.data.message}`,
-              // color: "success",
+              color: "success",
               duration: 2000,
               position: "top",
             });
@@ -435,7 +424,7 @@ const Eventdetail: React.FC = () => {
             // Handle the case where there is no response
             present({
               message: "An error occurred",
-              // color: "error",
+              color: "danger",
               duration: 2000,
               position: "top",
             });
@@ -637,7 +626,7 @@ const Eventdetail: React.FC = () => {
                                     fill="clear"
                                     color={
                                       event?.is_registered === false ||
-                                        event?.is_registered === null
+                                      event?.is_registered === null
                                         ? "dark"
                                         : ""
                                     }
@@ -664,7 +653,7 @@ const Eventdetail: React.FC = () => {
                                     fill="clear"
                                     color={
                                       event?.is_bookmarked === false ||
-                                        event?.is_bookmarked === null
+                                      event?.is_bookmarked === null
                                         ? "dark"
                                         : ""
                                     }
@@ -690,7 +679,7 @@ const Eventdetail: React.FC = () => {
                                     fill="clear"
                                     color={
                                       event?.is_cancelled === false ||
-                                        event?.is_cancelled === null
+                                      event?.is_cancelled === null
                                         ? "dark"
                                         : ""
                                     }

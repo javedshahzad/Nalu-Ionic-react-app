@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   IonAvatar,
   IonBackButton,
@@ -48,13 +48,15 @@ async function openExternalLink(url: string) {
 }
 
 const openLink = async (url: string) => {
-  if (url.startsWith('https://app.mynalu.com') || url.startsWith('http://app.mynalu.com')) {
+  if (
+    url.startsWith("https://app.mynalu.com") ||
+    url.startsWith("http://app.mynalu.com")
+  ) {
     await Browser.open({ url: url });
   } else {
-    window.open(url, '_system');
+    window.open(url, "_system");
   }
 };
-
 
 interface AppPage {
   url: string;
@@ -70,21 +72,21 @@ const Menu: React.FC = () => {
 
   let isPremium = false; // Default to false
   try {
-    const roles = JSON.parse(localStorage.getItem('roles') || '{}'); // Parse the roles or default to an empty object
-    isPremium = Object.values(roles).includes('premium'); // Check if 'premium' is one of the roles
+    const roles = JSON.parse(localStorage.getItem("roles") || "{}"); // Parse the roles or default to an empty object
+    isPremium = Object.values(roles).includes("premium"); // Check if 'premium' is one of the roles
   } catch (e) {
-    console.error('Error parsing roles from localStorage:', e);
+    console.error("Error parsing roles from localStorage:", e);
   }
 
   const handleLogout = () => {
     localStorage.clear();
-    history.push('/onboarding');
+    history.push("/onboarding");
   };
 
   const handleAccountDeletion = async () => {
     setShowDeleteConfirm(false);
 
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem("jwtToken");
     if (token) {
       const headers = {
         Authorization: `Bearer ${token}`,
@@ -92,14 +94,22 @@ const Menu: React.FC = () => {
 
       try {
         if (isPlatform("ios")) {
-          await HTTP.post('https://app.mynalu.com/wp-json/nalu-app/v1/account-deletion', {}, headers);
+          await HTTP.post(
+            "https://app.mynalu.com/wp-json/nalu-app/v1/account-deletion",
+            {},
+            headers
+          );
         } else {
-          await axios.post('https://app.mynalu.com/wp-json/nalu-app/v1/account-deletion', {}, { headers });
+          await axios.post(
+            "https://app.mynalu.com/wp-json/nalu-app/v1/account-deletion",
+            {},
+            { headers }
+          );
         }
         setShowDeleteSuccess(true);
         handleLogout();
       } catch (error) {
-        console.error('Error deleting account:', error);
+        console.error("Error deleting account:", error);
         handleLogout();
       }
     }
@@ -181,25 +191,17 @@ const Menu: React.FC = () => {
     menu?.close();
   };
 
-  const [avatar, setAvatar] = useState(null)
-  const [nickname, setNickname] = useState("")
-  const [nickname_, setNickname_] = useState("")
-  const [email, setEmail] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-
+  const [avatar, setAvatar] = useState(null);
+  const [nickname, setNickname] = useState("");
+  const [nickname_, setNickname_] = useState("");
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const [editname, SetEditNickName] = useState(false);
 
-
-
-
-
-
   const [present] = useIonToast();
 
-
   const getName = async () => {
-
     let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?_fields=nickname`;
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -216,34 +218,28 @@ const Menu: React.FC = () => {
       }
       console.log(response);
       setNickname(response.nickname);
-
     } catch (error) {
       console.error("Error fetching course data:", error);
-
     } finally {
-
     }
   };
 
-
   const changeName = (event) => {
-    setNickname_(event.target.value)
-  }
+    setNickname_(event.target.value);
+  };
 
   const edit_name = () => {
-    SetEditNickName(true)
-    setNickname_(nickname)
+    SetEditNickName(true);
+    setNickname_(nickname);
     present({
       message: `If you are a NALU member the nickname you define here will be shown to other members when you interact in group chats.`,
-      color: "secondary",
-      duration: 3000,
+      color: "danger",
+      duration: 5000,
       position: "top",
     });
-  }
-
+  };
 
   const save_name = async () => {
-
     setIsLoading(true);
     let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?nickname=${nickname_}`;
     const headers = {
@@ -260,8 +256,8 @@ const Menu: React.FC = () => {
         response = axiosResponse.data;
       }
       console.log(response);
-      setNickname(nickname_)
-      SetEditNickName(false)
+      setNickname(nickname_);
+      SetEditNickName(false);
       present({
         message: `Nickname updated successfully!`,
         color: "success",
@@ -270,7 +266,6 @@ const Menu: React.FC = () => {
       });
       setIsLoading(false);
     } catch (error) {
-
       present({
         message: `Error occurred ! ${error}`,
         color: "danger",
@@ -281,11 +276,9 @@ const Menu: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }
-
+  };
 
   const getAvatar = async () => {
-
     let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?_fields=avatar_urls`;
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -305,7 +298,6 @@ const Menu: React.FC = () => {
     } catch (error) {
       console.error("Error fetching course data:", error);
     } finally {
-
     }
   };
 
@@ -316,8 +308,8 @@ const Menu: React.FC = () => {
       duration: 3000,
       position: "top",
     });
-    document.getElementById('avatar').click()
-  }
+    document.getElementById("avatar").click();
+  };
 
   const uploadAvatar = (event) => {
     const file = event.target.files[0];
@@ -333,7 +325,12 @@ const Menu: React.FC = () => {
         return;
       }
 
-      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      const allowedTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/webp",
+      ];
       if (!allowedTypes.includes(file.type)) {
         present({
           message: `Error: Only JPG, JPEG, PNG, or WebP files are allowed.`,
@@ -354,18 +351,25 @@ const Menu: React.FC = () => {
           };
           let response;
           if (isPlatform("ios")) {
-            const cordovaResponse = await HTTP.post(URL, {
-              file: reader.result.split(',')[1]
-            }, headers);
+            const cordovaResponse = await HTTP.post(
+              URL,
+              {
+                file: reader.result.split(",")[1],
+              },
+              headers
+            );
             response = JSON.parse(cordovaResponse.data);
           } else {
-            const axiosResponse = await axios.post(URL, {
-              file: reader.result.split(',')[1], // Remove the data URL prefix
-              // Add any additional parameters required by your WordPress API
-            }, { headers });
+            const axiosResponse = await axios.post(
+              URL,
+              {
+                file: reader.result.split(",")[1], // Remove the data URL prefix
+                // Add any additional parameters required by your WordPress API
+              },
+              { headers }
+            );
             response = axiosResponse.data;
           }
-
 
           // Use the media ID from the response to update the user's avatar
           const mediaId = response.id;
@@ -382,7 +386,7 @@ const Menu: React.FC = () => {
           });
           setIsLoading(false);
         } catch (error) {
-          console.error('Error uploading image to WordPress:', error);
+          console.error("Error uploading image to WordPress:", error);
           present({
             message: `Error: Unable to update profile picture.`,
             color: "danger",
@@ -394,14 +398,10 @@ const Menu: React.FC = () => {
       };
 
       reader.readAsDataURL(file);
-    };
-
-  }
-
-
+    }
+  };
 
   const getEmail = async () => {
-
     let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?_fields=email`;
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -428,18 +428,10 @@ const Menu: React.FC = () => {
   };
   useEffect(() => {
     setIsLoading(true);
-    getAvatar()
-    getName()
-    getEmail()
-  }, [avatar])
-
-
-
-
-
-
-
-
+    getAvatar();
+    getName();
+    getEmail();
+  }, [avatar]);
 
   return (
     <IonPage className="Menu">
@@ -454,12 +446,13 @@ const Menu: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="slide-menu">
-
-        {isLoading ? (<div className='ion-text-center'>
-          <IonSpinner />
-        </div>) : (
+        {isLoading ? (
+          <div className="ion-text-center">
+            <IonSpinner />
+          </div>
+        ) : (
           <div className="profile-holder ion-text-center">
-            {isPremium ?
+            {isPremium ? (
               <>
                 <IonAvatar>
                   {avatar ? (
@@ -471,37 +464,67 @@ const Menu: React.FC = () => {
                 <div className="btnn ion-activatable ripple-parent flex al-center jc-center">
                   <IonRippleEffect />
                   <IonIcon icon={camera} onClick={edit_avatar} />
-                  <input type='file' accept="image/jpeg,image/jpg,image/png,image/webp" id='avatar' onChange={uploadAvatar} hidden />
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/jpg,image/png,image/webp"
+                    id="avatar"
+                    onChange={uploadAvatar}
+                    hidden
+                  />
                 </div>
-                {editname ?
-                  <div className='nick_name_field'>
-                    <input className='w-70 ion-text-center bg-transparent border-05' type='text' value={nickname_} onChange={changeName} />
-                    <div className='w-30'>
-                      <button type='button' className='bg-transparent text-black text-20px mr-2' onClick={save_name}>
+                {editname ? (
+                  <div className="nick_name_field">
+                    <input
+                      className="w-70 ion-text-center bg-transparent border-05"
+                      type="text"
+                      value={nickname_}
+                      onChange={changeName}
+                    />
+                    <div className="w-30">
+                      <button
+                        type="button"
+                        className="bg-transparent text-black text-20px mr-2"
+                        onClick={save_name}
+                      >
                         <IonIcon icon={checkmark} />
                       </button>
 
-                      <button type='button' className='bg-transparent text-black text-20px' onClick={() => SetEditNickName(false)}>
+                      <button
+                        type="button"
+                        className="bg-transparent text-black text-20px"
+                        onClick={() => SetEditNickName(false)}
+                      >
                         <IonIcon icon={close} />
                       </button>
                     </div>
-                  </div> : <h1> {nickname ? (
-                    <>{nickname}</>) : (<>User Nickname</>)}
-                    <IonIcon icon={pencil} className="edit_icon" onClick={edit_name} />
-
-                  </h1>}
+                  </div>
+                ) : (
+                  <h1>
+                    {" "}
+                    {nickname ? <>{nickname}</> : <>User Nickname</>}
+                    <IonIcon
+                      icon={pencil}
+                      className="edit_icon"
+                      onClick={edit_name}
+                    />
+                  </h1>
+                )}
               </>
-              : <></>}
-            <h6>{email ? (
-              <>{email}</>) : (<>User Email</>)}
-            </h6>
+            ) : (
+              <></>
+            )}
+            <h6>{email ? <>{email}</> : <>User Email</>}</h6>
           </div>
         )}
 
         {!isPremium && (
           <IonMenuToggle autoHide={false} className="join-nalu">
             <IonItem button onClick={() => history.push("/membership")}>
-              <IonIcon aria-hidden="true" slot="start" src="assets/imgs/menu4.svg" />
+              <IonIcon
+                aria-hidden="true"
+                slot="start"
+                src="assets/imgs/menu4.svg"
+              />
               <IonLabel>NALU beitreten</IonLabel>
             </IonItem>
           </IonMenuToggle>
@@ -537,7 +560,7 @@ const Menu: React.FC = () => {
             );
           })}
         </IonList>
-        {isPlatform('ios') && (
+        {isPlatform("ios") && (
           <IonMenuToggle autoHide={false} className="delete-account">
             <IonItem button onClick={() => setShowDeleteConfirm(true)}>
               <IonIcon aria-hidden="true" slot="start" src={trashBinOutline} />
@@ -555,26 +578,30 @@ const Menu: React.FC = () => {
         <IonAlert
           isOpen={showDeleteConfirm}
           onDidDismiss={() => setShowDeleteConfirm(false)}
-          header={'Konto löschen'}
-          message={'Bist du dir sicher, dass du dein Konto löschen willst? Alle deine Daten werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'}
+          header={"Konto löschen"}
+          message={
+            "Bist du dir sicher, dass du dein Konto löschen willst? Alle deine Daten werden dauerhaft gelöscht und können nicht wiederhergestellt werden."
+          }
           buttons={[
             {
-              text: 'Nein',
-              role: 'cancel',
-              cssClass: 'secondary',
+              text: "Nein",
+              role: "cancel",
+              cssClass: "secondary",
             },
             {
-              text: 'Ja, löschen',
+              text: "Ja, löschen",
               handler: handleAccountDeletion,
             },
           ]}
         />
         <IonAlert
           isOpen={showDeleteSuccess}
-          onDidDismiss={() => history.push('/onboarding')}
-          header={'Kontolöschung eingeleitet'}
-          message={'Der Kontolöschungsprozess wurde erfolgreich eingeleitet und wird in den nächsten 2 Wochen abgeschlossen.'}
-          buttons={['OK']}
+          onDidDismiss={() => history.push("/onboarding")}
+          header={"Kontolöschung eingeleitet"}
+          message={
+            "Der Kontolöschungsprozess wurde erfolgreich eingeleitet und wird in den nächsten 2 Wochen abgeschlossen."
+          }
+          buttons={["OK"]}
         />
       </IonContent>
     </IonPage>
