@@ -34,8 +34,9 @@ import MoonPhasesServce from "../../MoonPhasesService";
 import CustomCategoryApiService from "../../CustomCategoryService";
 import authService from "../../authService";
 import { isPlatform } from "@ionic/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
+import { fetchColors, fetchMoonIcons } from "../../actions/apiActions";
 
 const months = [
   "Januar",
@@ -73,10 +74,14 @@ const JournalCalendarRemade = () => {
   const [icons2, setIcons2] = useState<any>([]);
   const [svg, setSvg] = useState("");
   const [newMoonSvg, setNewMoonSvg] = useState("");
+  const [colorsData, setColorsData] = useState([]);
+  const [iconsData, setIconsData] = useState<any>([]);
   const [fullMoonSvg, setFullMoonSvg] = useState("");
   const [currentMonthIndex, setCurrentMonthIndex] = useState(
     new Date().getMonth()
   );
+
+  const dispatch = useDispatch();
   const [currentDisplayedMonthIndex, setCurrentDisplayedMonthIndex] =
     useState(0);
 
@@ -84,12 +89,69 @@ const JournalCalendarRemade = () => {
 
   const phases = useSelector((state: RootState) => state.phasesReducer);
 
+  const moonColors = useSelector(
+    (state: any) => state.phasesReducer.moonColors
+  );
+
+  useEffect(() => {
+    moonColors
+      .then((result: any) => {
+        const entries = result;
+        setColorsData(entries);
+      })
+
+      .catch((error: any) => {
+        console.error("Error fetching moonColors", error);
+      });
+  }, [moonColors]);
+  const moonIcons = useSelector((state: any) => state.phasesReducer.moonIcons);
+  useEffect(() => {
+    moonIcons
+      .then((result: any) => {
+        const moonPhase = result;
+
+        const newArray = [];
+
+        for (const date in moonPhase.moonphase) {
+          const dateObjects = moonPhase.moonphase[date];
+          for (const dateObject of dateObjects) {
+            const transformedObject = {
+              date: date,
+              phase_id: dateObject.phase_id,
+              phase_name: dateObject.phase_name,
+            };
+            newArray.push(transformedObject);
+          }
+        }
+
+        setIconsData(newArray);
+      })
+
+      .catch((error: any) => {
+        console.error("Error fetching moonColors", error);
+      });
+  }, [moonIcons]);
+
+  useEffect(() => {
+    let month: any = new Date().getMonth() + 1;
+
+    if (parseInt(month) < 10) {
+      month = "0" + month;
+    }
+
+    let year = new Date().getFullYear();
+
+    let yearMonth = `${year}-${month}`;
+    dispatch<any>(fetchMoonIcons(year));
+    dispatch<any>(fetchColors(yearMonth));
+  }, []);
+
   // const navigation = useIonRouter();
   // const toJounralAddition = () => {};
 
   const date: Date = new Date();
 
-  const moonColorData = phases[1]?.entries || [];
+  const moonColorData = colorsData?.entries || [];
 
   const curDate: string = date.toLocaleDateString();
 
@@ -134,101 +196,101 @@ const JournalCalendarRemade = () => {
     }
   }, []);
 
-  const getIcons = async () => {
-    try {
-      const data = await MoonPhasesServce.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
-      );
+  // const getIcons = async () => {
+  //   try {
+  //     const data = await MoonPhasesServce.get(
+  //       `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
+  //     );
 
-      const newArray = [];
+  //     const newArray = [];
 
-      for (const date in data.moonphase) {
-        const dateObjects = data.moonphase[date];
-        for (const dateObject of dateObjects) {
-          const transformedObject = {
-            date: date,
-            phase_id: dateObject.phase_id,
-            phase_name: dateObject.phase_name,
-          };
-          newArray.push(transformedObject);
-        }
-      }
+  //     for (const date in data.moonphase) {
+  //       const dateObjects = data.moonphase[date];
+  //       for (const dateObject of dateObjects) {
+  //         const transformedObject = {
+  //           date: date,
+  //           phase_id: dateObject.phase_id,
+  //           phase_name: dateObject.phase_name,
+  //         };
+  //         newArray.push(transformedObject);
+  //       }
+  //     }
 
-      setMoonPhaseIcon(newArray);
-    } catch (error) {
-      if (isPlatform("ios")) {
-        if (error) {
-          const status = error.status;
+  //     setMoonPhaseIcon(newArray);
+  //   } catch (error) {
+  //     if (isPlatform("ios")) {
+  //       if (error) {
+  //         const status = error.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      } else {
-        if (error.response) {
-          const status = error.response.status;
+  //         if (status === 401 || status === 403 || status === 404) {
+  //           // Unauthorized, Forbidden, or Not Found
+  //           authService.logout();
+  //           history.push("/onboarding");
+  //         }
+  //       }
+  //     } else {
+  //       if (error.response) {
+  //         const status = error.response.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      }
-      console.error(error);
-    }
-  };
-  const getIcons2 = async () => {
-    let month: any = new Date().getMonth() + 1;
+  //         if (status === 401 || status === 403 || status === 404) {
+  //           // Unauthorized, Forbidden, or Not Found
+  //           authService.logout();
+  //           history.push("/onboarding");
+  //         }
+  //       }
+  //     }
+  //     console.error(error);
+  //   }
+  // };
+  // const getIcons2 = async () => {
+  //   let month: any = new Date().getMonth() + 1;
 
-    if (parseInt(month) < 10) {
-      month = "0" + month;
-    }
+  //   if (parseInt(month) < 10) {
+  //     month = "0" + month;
+  //   }
 
-    let year = new Date().getFullYear();
+  //   let year = new Date().getFullYear();
 
-    let yearMonth = `${year}-${month}`;
+  //   let yearMonth = `${year}-${month}`;
 
-    try {
-      const data = await MoonPhasesServce.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
-      );
+  //   try {
+  //     const data = await MoonPhasesServce.get(
+  //       `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
+  //     );
 
-      const todayData = data["today"];
+  //     const todayData = data["today"];
 
-      if (todayData) {
-        setTodayPeriod(todayData.active_period.toString());
-      } else {
-        console.log("No data found for today");
-      }
-      setIcons2(data);
-    } catch (error) {
-      if (isPlatform("ios")) {
-        if (error) {
-          const status = error.status;
+  //     if (todayData) {
+  //       setTodayPeriod(todayData.active_period.toString());
+  //     } else {
+  //       console.log("No data found for today");
+  //     }
+  //     setIcons2(data);
+  //   } catch (error) {
+  //     if (isPlatform("ios")) {
+  //       if (error) {
+  //         const status = error.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      } else {
-        if (error.response) {
-          const status = error.response.status;
+  //         if (status === 401 || status === 403 || status === 404) {
+  //           // Unauthorized, Forbidden, or Not Found
+  //           authService.logout();
+  //           history.push("/onboarding");
+  //         }
+  //       }
+  //     } else {
+  //       if (error.response) {
+  //         const status = error.response.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      }
-      console.error(error);
-    }
-  };
+  //         if (status === 401 || status === 403 || status === 404) {
+  //           // Unauthorized, Forbidden, or Not Found
+  //           authService.logout();
+  //           history.push("/onboarding");
+  //         }
+  //       }
+  //     }
+  //     console.error(error);
+  //   }
+  // };
 
   const getColors: any = (year, month, date) => {
     if (month < 10) {
@@ -257,7 +319,6 @@ const JournalCalendarRemade = () => {
     }
 
     let _x = `${_year}-${_month}-${_day}`;
-
     if (_month) {
       let foundDate = null;
 
@@ -672,8 +733,9 @@ const JournalCalendarRemade = () => {
 
       // Find the corresponding moon phase name for the current date
       let moonPhase: any = [];
-      if (phases && Array.isArray(phases[0]) && phases[0].length > 0) {
-        moonPhase = phases[0].find((item) => {
+      // console.log("iconsData", iconsData);
+      if (iconsData && Array.isArray(iconsData) && iconsData.length > 0) {
+        moonPhase = iconsData.find((item) => {
           return (
             item.date ===
             year +

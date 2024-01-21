@@ -77,7 +77,7 @@ import Menu from "./pages/Menu/Menu";
 import Addcustomcategory from "./pages/Addcustomcategory/Addcustomcategory";
 import MoonPhasesService from "./MoonPhasesService";
 import authService from "./authService";
-import { getColors, getMoonIcons } from "./actions/journalAction";
+import { fetchColors, fetchMoonIcons } from "./actions/apiActions";
 
 setupIonicReact({
   mode: "ios",
@@ -101,7 +101,6 @@ const App: React.FC = () => {
   // ***pusher*** //
 
   const [present] = useIonToast();
-  const [year, setYear] = useState(new Date().getFullYear());
   const presentToast = (notification: any) => {
     present({
       message: notification,
@@ -147,53 +146,7 @@ const App: React.FC = () => {
 
   const history = useHistory();
 
-  const getIcons = async () => {
-    try {
-      const data = await MoonPhasesService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
-      );
-
-      const newArray = [];
-
-      for (const date in data.moonphase) {
-        const dateObjects = data.moonphase[date];
-        for (const dateObject of dateObjects) {
-          const transformedObject = {
-            date: date,
-            phase_id: dateObject.phase_id,
-            phase_name: dateObject.phase_name,
-          };
-          newArray.push(transformedObject);
-        }
-      }
-
-      dispatch(getMoonIcons(newArray));
-    } catch (error) {
-      if (isPlatform("ios")) {
-        if (error) {
-          const status = error.status;
-
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      } else {
-        if (error.response) {
-          const status = error.response.status;
-
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      }
-      console.error(error);
-    }
-  };
-  const getMoonColors = async () => {
+  const getIconsAndColors = async () => {
     let month: any = new Date().getMonth() + 1;
 
     if (parseInt(month) < 10) {
@@ -205,47 +158,42 @@ const App: React.FC = () => {
     let yearMonth = `${year}-${month}`;
 
     try {
-      const data = await MoonPhasesService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
-      );
-
-      const todayData = data["today"];
-
-      if (todayData) {
-        // setTodayPeriod(todayData.active_period.toString());
-      } else {
-        console.log("No data found for today");
-      }
-      dispatch(getColors(data));
+      await dispatch<any>(fetchMoonIcons(year));
+      await dispatch<any>(fetchColors(yearMonth));
     } catch (error) {
-      if (isPlatform("ios")) {
-        if (error) {
-          const status = error.status;
-
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      } else {
-        if (error.response) {
-          const status = error.response.status;
-
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      }
-      console.error(error);
+      handleDispatchError(error);
     }
   };
 
+  const handleDispatchError = (error) => {
+    if (isPlatform("ios")) {
+      if (error) {
+        const status = error.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/onboarding");
+          return;
+        }
+      }
+    } else {
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401 || status === 403 || status === 404) {
+          // Unauthorized, Forbidden, or Not Found
+          authService.logout();
+          history.push("/onboarding");
+          return;
+        }
+      }
+    }
+    console.error(error);
+  };
+
   useEffect(() => {
-    getMoonColors();
-    getIcons();
+    getIconsAndColors();
   }, []);
 
   return (
@@ -261,8 +209,6 @@ const App: React.FC = () => {
           <Route exact path="/addcustomcategory">
             <Addcustomcategory />
           </Route>
-
-
 
           <Route exact path="/community">
             <PrivateRoute page={"community"}>

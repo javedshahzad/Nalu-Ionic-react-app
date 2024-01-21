@@ -48,10 +48,11 @@ import React from "react";
 import authService from "../../authService";
 import { clearJournal, journalAction } from "../../actions/journalAction";
 import { isPlatform } from "@ionic/react";
+import { fetchColors, fetchMoonIcons } from "../../actions/apiActions";
 
 function JournalAdditionRemade() {
   const { dateParam } = useParams<{ dateParam: string }>();
-
+  const dispatch = useDispatch();
   const [year, setYear] = useState(new Date().getFullYear());
   const [isLoading, setIsLoading] = useState(false);
   const [icons2, setIcons2] = useState([]);
@@ -61,9 +62,6 @@ function JournalAdditionRemade() {
   const moonColorData = icons2;
 
   const typeObj: any = useSelector((state: RootState) => state.journalReducer);
-
-  const dispatch = useDispatch();
-
   const roles = JSON.parse(localStorage.getItem("roles")) || {};
 
   const resultArray = Object.values(roles);
@@ -121,8 +119,7 @@ function JournalAdditionRemade() {
             history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
@@ -142,7 +139,7 @@ function JournalAdditionRemade() {
     getJournalEntries();
   }, []);
 
-  const [inputValues, setInputValues] = useState({});
+  // const [inputValues, setInputValues] = useState({});
 
   const history = useHistory();
 
@@ -226,100 +223,100 @@ function JournalAdditionRemade() {
     return inputDate.getFullYear() + "-" + month + "-" + date;
   }
 
-  const handleDateClick = (date) => {
-    const selectedDate = new Date(date.actualDate);
-    setClickedDate(formatDates(selectedDate));
-    setActiveDate(date.dayNo);
-    setActiveMonth(date.month);
-    setActiveYear(date.year);
+  // const handleDateClick = (date) => {
+  //   const selectedDate = new Date(date.actualDate);
+  //   setClickedDate(formatDates(selectedDate));
+  //   setActiveDate(date.dayNo);
+  //   setActiveMonth(date.month);
+  //   setActiveYear(date.year);
 
-    const selectedDateFormatted = formatDates(selectedDate);
-    const newUrl = `/journaladditionremade/${selectedDateFormatted}`;
-    window.location.href = newUrl;
+  //   const selectedDateFormatted = formatDates(selectedDate);
+  //   const newUrl = `/journaladditionremade/${selectedDateFormatted}`;
+  //   window.location.href = newUrl;
 
-    // history.push(newUrl)
-  };
+  //   // history.push(newUrl)
+  // };
 
-  const parentRef = useRef(null);
+  // const parentRef = useRef(null);
 
   let date = new Date(dateParam),
     y = date.getFullYear(),
     m = date.getMonth();
 
-  let firstDay = formatDates(new Date(y, m, 1));
-  let lastDay = formatDates(new Date(y, m + 1, 0));
+  // let firstDay = formatDates(new Date(y, m, 1));
+  // let lastDay = formatDates(new Date(y, m + 1, 0));
 
-  const [dateRange, setDateRange] = useState([firstDay, lastDay]);
+  // const [dateRange, setDateRange] = useState([firstDay, lastDay]);
   const [activeDate, setActiveDate] = useState(null);
   const [activeMonth, setActiveMonth] = useState(null);
   const [activeYear, setActiveYear] = useState(null);
   const [clickedDate, setClickedDate] = useState(
     formatDates(new Date(dateParam))
   );
-  const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
+  // const [moonPhaseIcon, setMoonPhaseIcon] = useState([]);
 
   const [journalDate, setJournalDate] = useState(null);
 
-  function weekdays(loopDate: any, loopEndDate: any, moonPhaseIcon: any) {
-    const today = formatDates(new Date());
+  // function weekdays(loopDate: any, loopEndDate: any, moonPhaseIcon: any) {
+  //   const today = formatDates(new Date());
 
-    let newWeekDays = [];
+  //   let newWeekDays = [];
 
-    while (loopDate <= loopEndDate) {
-      const matchingIcon = moonPhaseIcon.find(
-        (icon) => icon.date === formatDates(loopDate)
-      );
+  //   while (loopDate <= loopEndDate) {
+  //     const matchingIcon = moonPhaseIcon.find(
+  //       (icon) => icon.date === formatDates(loopDate)
+  //     );
 
-      newWeekDays.push({
-        fullDate: loopDate.toLocaleString("default", {
-          weekday: "short",
-        }),
-        dayNo: loopDate.getDate(),
-        actualDate: formatDates(loopDate),
-        isToday: formatDates(loopDate) === today,
-        isActive: false,
-        month: loopDate.getMonth(),
-        year: loopDate.getFullYear(),
-        icon: matchingIcon ? matchingIcon.phase_name : null, // Store the associated icon
-      });
+  //     newWeekDays.push({
+  //       fullDate: loopDate.toLocaleString("default", {
+  //         weekday: "short",
+  //       }),
+  //       dayNo: loopDate.getDate(),
+  //       actualDate: formatDates(loopDate),
+  //       isToday: formatDates(loopDate) === today,
+  //       isActive: false,
+  //       month: loopDate.getMonth(),
+  //       year: loopDate.getFullYear(),
+  //       icon: matchingIcon ? matchingIcon.phase_name : null, // Store the associated icon
+  //     });
 
-      let newDate = loopDate.setDate(loopDate.getDate() + 1);
-      loopDate = new Date(newDate);
-    }
+  //     let newDate = loopDate.setDate(loopDate.getDate() + 1);
+  //     loopDate = new Date(newDate);
+  //   }
 
-    return newWeekDays;
-  }
+  //   return newWeekDays;
+  // }
 
-  let days = weekdays(
-    new Date(dateRange[0]),
-    new Date(dateRange[1]),
-    moonPhaseIcon
-  );
+  // let days = weekdays(
+  //   new Date(dateRange[0]),
+  //   new Date(dateRange[1]),
+  //   moonPhaseIcon
+  // );
 
-  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  // const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const handleHorizontalScroll = () => {
-    let e = document.getElementById("day-heading");
+  // const handleHorizontalScroll = () => {
+  //   let e = document.getElementById("day-heading");
 
-    if (Math.ceil(e.scrollLeft) + e.clientWidth >= e.scrollWidth) {
-      let date = new Date(dateRange[1]);
-      let y = date.getFullYear(),
-        m = date.getMonth();
+  //   if (Math.ceil(e.scrollLeft) + e.clientWidth >= e.scrollWidth) {
+  //     let date = new Date(dateRange[1]);
+  //     let y = date.getFullYear(),
+  //       m = date.getMonth();
 
-      let lastDay = formatDates(new Date(y, m + 2, 0));
+  //     let lastDay = formatDates(new Date(y, m + 2, 0));
 
-      setDateRange([dateRange[0], lastDay]);
-    } else if (e.scrollLeft <= 0) {
-      let date = new Date(dateRange[0]);
-      date.setMonth(date.getMonth() - 1);
-      let y = date.getFullYear(),
-        m = date.getMonth();
+  //     setDateRange([dateRange[0], lastDay]);
+  //   } else if (e.scrollLeft <= 0) {
+  //     let date = new Date(dateRange[0]);
+  //     date.setMonth(date.getMonth() - 1);
+  //     let y = date.getFullYear(),
+  //       m = date.getMonth();
 
-      let firstDay = formatDates(new Date(y, m, 1));
+  //     let firstDay = formatDates(new Date(y, m, 1));
 
-      setDateRange([firstDay, dateRange[1]]);
-    }
-  };
+  //     setDateRange([firstDay, dateRange[1]]);
+  //   }
+  // };
 
   const updateField = (val: any, fields: any, isCheckbox = false) => {
     const updatedValue = isCheckbox ? (val ? 1 : 0) : val;
@@ -336,7 +333,16 @@ function JournalAdditionRemade() {
         ],
       }
     ).then(
-      (data) => { },
+      () => {
+        let month: any = new Date().getMonth() + 1;
+        if (parseInt(month) < 10) {
+          month = "0" + month;
+        }
+        let year = new Date().getFullYear();
+        let yearMonth = `${year}-${month}`;
+        dispatch<any>(fetchMoonIcons(year));
+        dispatch<any>(fetchColors(yearMonth));
+      },
       (error) => {
         if (isPlatform("ios")) {
           if (error) {
@@ -348,8 +354,7 @@ function JournalAdditionRemade() {
               history.push("/onboarding");
             }
           }
-        }
-        else {
+        } else {
           if (error.response) {
             const status = error.response.status;
 
@@ -366,112 +371,108 @@ function JournalAdditionRemade() {
     );
   };
 
-  const getIcons = async () => {
-    try {
-      const data = await MoonPhasesServce.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
-      );
+  // const getIcons = async () => {
+  //   try {
+  //     const data = await MoonPhasesServce.get(
+  //       `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
+  //     );
 
-      const newArray = [];
+  //     const newArray = [];
 
-      for (const date in data.moonphase) {
-        const dateObjects = data.moonphase[date];
-        for (const dateObject of dateObjects) {
-          const transformedObject = {
-            date: date,
-            phase_id: dateObject.phase_id,
-            phase_name: dateObject.phase_name,
-          };
-          newArray.push(transformedObject);
-        }
-      }
+  //     for (const date in data.moonphase) {
+  //       const dateObjects = data.moonphase[date];
+  //       for (const dateObject of dateObjects) {
+  //         const transformedObject = {
+  //           date: date,
+  //           phase_id: dateObject.phase_id,
+  //           phase_name: dateObject.phase_name,
+  //         };
+  //         newArray.push(transformedObject);
+  //       }
+  //     }
 
-      setMoonPhaseIcon(newArray);
-    } catch (error) {
-      if (isPlatform("ios")) {
-        if (error) {
-          const status = error.status;
+  //     setMoonPhaseIcon(newArray);
+  //   } catch (error) {
+  //     if (isPlatform("ios")) {
+  //       if (error) {
+  //         const status = error.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      }
-      else {
-        if (error.response) {
-          const status = error.response.status;
+  //         if (status === 401 || status === 403 || status === 404) {
+  //           // Unauthorized, Forbidden, or Not Found
+  //           authService.logout();
+  //           history.push("/onboarding");
+  //         }
+  //       }
+  //     } else {
+  //       if (error.response) {
+  //         const status = error.response.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      }
-      console.error(error);
-    }
-  };
+  //         if (status === 401 || status === 403 || status === 404) {
+  //           // Unauthorized, Forbidden, or Not Found
+  //           authService.logout();
+  //           history.push("/onboarding");
+  //         }
+  //       }
+  //     }
+  //     console.error(error);
+  //   }
+  // };
 
-  const getIcons2 = async () => {
-    let lang = "en";
-    let month: any = new Date(dateParam).getMonth() + 1;
+  // const getIcons2 = async () => {
+  //   let lang = "en";
+  //   let month: any = new Date(dateParam).getMonth() + 1;
 
-    if (parseInt(month) < 10) {
-      month = "0" + month;
-    }
+  //   if (parseInt(month) < 10) {
+  //     month = "0" + month;
+  //   }
 
-    let year = new Date().getFullYear();
+  //   let year = new Date().getFullYear();
 
-    let yearMonth = `${year}-${month}`;
-    try {
-      const data = await MoonPhasesServce.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
-      );
+  //   let yearMonth = `${year}-${month}`;
+  //   try {
+  //     const data = await MoonPhasesServce.get(
+  //       `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
+  //     );
 
-      const todayData = data["today"];
+  //     const todayData = data["today"];
 
-      if (todayData) {
-        setTodayPeriod(todayData.active_period.toString());
-      } else {
-        console.log("No data found for today");
-      }
+  //     if (todayData) {
+  //       setTodayPeriod(todayData.active_period.toString());
+  //     } else {
+  //       console.log("No data found for today");
+  //     }
 
-      setIcons2(data);
-    } catch (error) {
-      if (isPlatform("ios")) {
-        if (error) {
-          const status = error.status;
+  //     setIcons2(data);
+  //   } catch (error) {
+  //     if (isPlatform("ios")) {
+  //       if (error) {
+  //         const status = error.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      }
-      else {
-        if (error.response) {
-          const status = error.response.status;
+  //         if (status === 401 || status === 403 || status === 404) {
+  //           // Unauthorized, Forbidden, or Not Found
+  //           authService.logout();
+  //           history.push("/onboarding");
+  //         }
+  //       }
+  //     } else {
+  //       if (error.response) {
+  //         const status = error.response.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      }
-      console.error(error);
-    }
-  };
+  //         if (status === 401 || status === 403 || status === 404) {
+  //           // Unauthorized, Forbidden, or Not Found
+  //           authService.logout();
+  //           history.push("/onboarding");
+  //         }
+  //       }
+  //     }
+  //     console.error(error);
+  //   }
+  // };
 
   useEffect(() => {
-    console.log("Checking for reload flag...");
     const reloadFlag = localStorage.getItem("reloadPage");
 
     if (reloadFlag === "true") {
-      console.log("Reload flag found. Reloading page...");
       window.location.reload();
       localStorage.removeItem("reloadPage");
     } else {
@@ -479,57 +480,57 @@ function JournalAdditionRemade() {
     }
   }, []);
 
-  const getColors: any = (year, month, date) => {
-    month = parseInt(month + 1);
+  // const getColors: any = (year, month, date) => {
+  //   month = parseInt(month + 1);
 
-    if (month < 10) {
-      month = "0" + month;
-    }
-    if (date < 10) {
-      date = "0" + date;
-    }
+  //   if (month < 10) {
+  //     month = "0" + month;
+  //   }
+  //   if (date < 10) {
+  //     date = "0" + date;
+  //   }
 
-    let x = `${year}-${month}-${date}`;
+  //   let x = `${year}-${month}-${date}`;
 
-    const data = icons2;
+  //   const data = icons2;
 
-    let style: any = {};
+  //   let style: any = {};
 
-    let _day: any = new Date().getDate();
-    let _month: any = new Date().getMonth() + 1;
-    let _year = new Date().getFullYear();
+  //   let _day: any = new Date().getDate();
+  //   let _month: any = new Date().getMonth() + 1;
+  //   let _year = new Date().getFullYear();
 
-    if (_month < 10) {
-      _month = "0" + _month;
-    }
-    if (_day < 10) {
-      _day = "0" + _day;
-    }
+  //   if (_month < 10) {
+  //     _month = "0" + _month;
+  //   }
+  //   if (_day < 10) {
+  //     _day = "0" + _day;
+  //   }
 
-    let _x = `${_year}-${_month}-${_day}`;
+  //   let _x = `${_year}-${_month}-${_day}`;
 
-    Object.keys(moonColorData).map((obj) => {
-      if (obj === x && obj !== _x) {
-        moonColorData[obj].entries.map((phase) => {
-          if (phase.key === "period_bleeding" && parseInt(phase.value) > 0) {
-            style.backgroundColor = "#F0A6A9";
-            style.color = "white";
-          }
-          if (phase.key === "cervical_mucus" && parseInt(phase.value) > 0) {
-            style.backgroundColor = "#3684B3";
-            style.color = "white";
-          }
-        });
-      }
-    });
+  //   Object.keys(moonColorData).map((obj) => {
+  //     if (obj === x && obj !== _x) {
+  //       moonColorData[obj].entries.map((phase) => {
+  //         if (phase.key === "period_bleeding" && parseInt(phase.value) > 0) {
+  //           style.backgroundColor = "#F0A6A9";
+  //           style.color = "white";
+  //         }
+  //         if (phase.key === "cervical_mucus" && parseInt(phase.value) > 0) {
+  //           style.backgroundColor = "#3684B3";
+  //           style.color = "white";
+  //         }
+  //       });
+  //     }
+  //   });
 
-    return style;
-  };
+  //   return style;
+  // };
 
   useEffect(() => {
-    getIcons();
-    getIcons2();
-    getColors();
+    // getIcons();
+    // getIcons2();
+    // getColors();
   }, []);
 
   const [disableInput, setDisableInput] = useState(false);
@@ -728,7 +729,6 @@ function JournalAdditionRemade() {
                                         dualKnobs={false}
                                         ticks={true}
                                         snaps={true}
-
                                         min={0}
                                         max={10}
                                         value={field.value ? field.value : 0}
@@ -1039,7 +1039,10 @@ function JournalAdditionRemade() {
                                           placeholder="Text eingeben"
                                           value={entry.value || ""}
                                           onIonChange={(event) =>
-                                            updateField(event.target.value, entry)
+                                            updateField(
+                                              event.target.value,
+                                              entry
+                                            )
                                           }
                                         />
                                       </IonItem>
@@ -1051,39 +1054,44 @@ function JournalAdditionRemade() {
                           </div>
                         </div>
                       )}
-                    </div>) :
-                    (<div className="section">
-                      {entry.type === "textarea" && entry.key !== 'how_i_live' && (
-                        <div>
-                          <div className="title flex al-center jc-between">
-                            <h3>{entry.label}</h3>
-                          </div>
-                          <div className="tags-holder">
-                            <div>
-                              {
-                                <div className="section last">
-                                  <div className="the-form">
-                                    <div className="input-item">
-                                      <IonItem lines="none">
-                                        <IonInput
-                                          id={entry.key}
-                                          placeholder="Text eingeben"
-                                          value={entry.value || ""}
-                                          onIonChange={(event) =>
-                                            updateField(event.target.value, entry)
-                                          }
-                                        />
-                                      </IonItem>
+                    </div>
+                  ) : (
+                    <div className="section">
+                      {entry.type === "textarea" &&
+                        entry.key !== "how_i_live" && (
+                          <div>
+                            <div className="title flex al-center jc-between">
+                              <h3>{entry.label}</h3>
+                            </div>
+                            <div className="tags-holder">
+                              <div>
+                                {
+                                  <div className="section last">
+                                    <div className="the-form">
+                                      <div className="input-item">
+                                        <IonItem lines="none">
+                                          <IonInput
+                                            id={entry.key}
+                                            placeholder="Text eingeben"
+                                            value={entry.value || ""}
+                                            onIonChange={(event) =>
+                                              updateField(
+                                                event.target.value,
+                                                entry
+                                              )
+                                            }
+                                          />
+                                        </IonItem>
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              }
+                                }
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
-                    </div>)
-                  }
+                        )}
+                    </div>
+                  )}
                   <div className="section">
                     {entry.type === "text" && (
                       <div>
@@ -1144,7 +1152,6 @@ function JournalAdditionRemade() {
                                 dualKnobs={false}
                                 ticks={true}
                                 snaps={true}
-
                                 min={0}
                                 max={5}
                                 value={entry.value ? entry.value : 0}
@@ -1193,7 +1200,6 @@ function JournalAdditionRemade() {
                                 dualKnobs={false}
                                 ticks={true}
                                 snaps={true}
-
                                 min={0}
                                 max={12}
                                 value={entry.value ? entry.value : 0}
@@ -1250,7 +1256,6 @@ function JournalAdditionRemade() {
                                           dualKnobs={false}
                                           ticks={true}
                                           snaps={true}
-
                                           min={0}
                                           max={5}
                                           value={field.value ? field.value : 0}
@@ -1304,7 +1309,6 @@ function JournalAdditionRemade() {
                                           dualKnobs={false}
                                           ticks={true}
                                           snaps={true}
-
                                           min={0}
                                           max={10}
                                           value={field.value ? field.value : 0}

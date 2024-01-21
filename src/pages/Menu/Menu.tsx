@@ -447,8 +447,10 @@ const Menu: React.FC = () => {
       </IonHeader>
       <IonContent className="slide-menu">
         {isLoading ? (
-          <div className="ion-text-center">
-            <IonSpinner />
+          <div className="skeleton">
+            <div className="profileDiv"></div>
+            <div className="div1"></div>
+            <div className="div2"></div>
           </div>
         ) : (
           <div className="profile-holder ion-text-center">
@@ -499,8 +501,7 @@ const Menu: React.FC = () => {
                     </div>
                   </div>
                 ) : (
-                  <h1>
-                    {" "}
+                  <h1 className="menu-name">
                     {nickname ? <>{nickname}</> : <>User Nickname</>}
                     <IonIcon
                       icon={pencil}
@@ -513,7 +514,9 @@ const Menu: React.FC = () => {
             ) : (
               <></>
             )}
-            <h6>{email ? <>{email}</> : <>User Email</>}</h6>
+            <h6 className="menu-email">
+              {email ? <>{email}</> : <>User Email</>}
+            </h6>
           </div>
         )}
 

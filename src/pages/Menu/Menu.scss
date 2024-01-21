@@ -3,6 +3,56 @@
     --background: var(--ion-item-background, var(--ion-background-color, #fff));
   }
 
+  .menu-name {
+    font-size: 20px !important;
+  }
+  .menu-email {
+    font-size: 15px !important;
+  }
+
+  .skeleton {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    .profileDiv {
+      height: 85px;
+      margin: 0 auto;
+      width: 85px;
+      background-color: #ebb2b4;
+      border-radius: 9999px;
+      margin-bottom: 0.5rem;
+      animation: pulse-animation 1s infinite;
+    }
+    .div1 {
+      height: 20px;
+      background-color: #ebb2b4;
+      border-radius: 9999px;
+      width: 220px;
+      margin-bottom: 0.5rem;
+      animation: pulse-animation 1s infinite;
+    }
+
+    .div2 {
+      width: 150px;
+      height: 20px;
+      background-color: #ebb2b4;
+      border-radius: 9999px;
+      animation: pulse-animation 1s infinite;
+    }
+
+    @keyframes pulse-animation {
+      0%,
+      100% {
+        opacity: 0.8; /* Increased darkness */
+      }
+      50% {
+        opacity: 0.4; /* Increased darkness */
+      }
+    }
+  }
+
   ion-menu.md ion-content {
     --padding-start: 8px;
     --padding-end: 8px;
@@ -18,7 +68,8 @@
     margin-bottom: 30px;
   }
 
-  ion-menu.md ion-list-header, ion-menu.md ion-note {
+  ion-menu.md ion-list-header,
+  ion-menu.md ion-note {
     padding-left: 10px;
   }
 
@@ -111,19 +162,15 @@
 
   ion-item.selected {
     --color: var(--ion-color-primary);
-  } 
+  }
 
-
-  .slide-menu
-  {
-    .profile-holder
-    {
+  .slide-menu {
+    .profile-holder {
       padding-top: 20px;
       position: relative;
       width: 100%;
-      ion-avatar
-      {
-        border: 1px solid #EE5F64;
+      ion-avatar {
+        border: 1px solid #ee5f64;
         border-radius: 50%;
         --border-radius: 50%;
         height: 85px;
@@ -131,93 +178,83 @@
         width: 85px;
       }
 
-      .btnn
-      {
-        background: #FBFBFB;
+      .btnn {
+        background: #fbfbfb;
         border-radius: 50%;
         bottom: 60px;
-          height: 28px;
-          position: absolute;
-          left: 50%;
-          width: 28px;
+        height: 28px;
+        position: absolute;
+        left: 50%;
+        width: 28px;
 
-          ion-icon
-          {
-            color: #EE5F64;
-          }
+        ion-icon {
+          color: #ee5f64;
+        }
       }
 
-      .nick_name_field{
+      .nick_name_field {
         display: flex;
-        margin-top:10px;
+        margin-top: 10px;
       }
-      .bg-transparent{
+      .bg-transparent {
         background-color: transparent;
       }
-      .border-05{
-        border:0.5px solid gray;
-        border-radius:20px
+      .border-05 {
+        border: 0.5px solid gray;
+        border-radius: 20px;
       }
 
-      .text-black{
+      .text-black {
         color: black;
       }
-      .w-30{
+      .w-30 {
         width: 30%;
       }
 
-      .mr-2{
+      .mr-2 {
         margin-right: 8px;
       }
-      .text-20px{
+      .text-20px {
         font-size: 20px;
       }
-      .w-70{
+      .w-70 {
         font-size: 20px;
-        margin-left:100px;
-        width:70%;
+        margin-left: 100px;
+        width: 70%;
       }
-     
 
-      .edit_icon{
-     
+      .edit_icon {
         font-size: 20px;
       }
 
-      h1
-      {
-        color: #2D2D2D;
-        font-family: 'GBold';
+      h1 {
+        color: #2d2d2d;
+        font-family: "GBold";
         font-size: 28px;
         margin: 5px 0 0 0;
       }
 
-      h6
-      {
-        color: #2D2D2D;
+      h6 {
+        color: #2d2d2d;
         font-size: 22px;
         margin: 5px 0 0 0;
       }
     }
 
-    .delete-account, .join-nalu
-    {
+    .delete-account,
+    .join-nalu {
       padding-top: 20px;
-      ion-item
-      {
+      ion-item {
         --inner-border-width: 0;
 
-        ion-label
-        {
+        ion-label {
           font-size: 20px;
         }
       }
     }
 
-    .btnnn-holder
-    {
-      ion-button
-      {
+    .btnnn-holder {
+      ion-button {
         --color: white;
         font-size: 20px;
       }
