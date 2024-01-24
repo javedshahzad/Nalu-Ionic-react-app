@@ -290,7 +290,7 @@ const Menu: React.FC = () => {
         const axiosResponse = await axios.get(URL, { headers });
         response = axiosResponse.data;
       }
-      setAvatar(response.avatar_urls["24"]);
+      // setAvatar(response.avatar_urls["24"]);
     } catch (error) {
       console.error("Error fetching course data:", error);
     } finally {
@@ -353,7 +353,9 @@ const Menu: React.FC = () => {
         // reader.onload = async () => {
         try {
           const response = await apiService.post(URL, reader);
-          // setAvatar(reader.result); // assuming you want to set the avatar as a data URL
+          console.log("response>>", response);
+          const mediaURL = response.guid.rendered;
+          setAvatar(mediaURL); // assuming you want to set the avatar as a data URL
           present({
             message: `Profile Picture updated successfully!`,
             color: "success",
