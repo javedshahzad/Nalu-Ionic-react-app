@@ -42,6 +42,7 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 import { ArrowLeftIcon } from "@vidstack/react/icons";
+import apiService from "../../Services";
 
 async function openExternalLink(url: string) {
   await Browser.open({ url: url });
@@ -242,20 +243,16 @@ const Menu: React.FC = () => {
   const save_name = async () => {
     setIsLoading(true);
     let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?nickname=${nickname_}`;
-    const headers = {
-      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-    };
 
     try {
       let response;
       if (isPlatform("ios")) {
-        const cordovaResponse = await HTTP.get(URL, {}, headers);
+        const cordovaResponse = await apiService.put(URL, {});
         response = JSON.parse(cordovaResponse.data);
       } else {
-        const axiosResponse = await axios.get(URL, { headers });
+        const axiosResponse = await apiService.put(URL, {});
         response = axiosResponse.data;
       }
-      console.log(response);
       setNickname(nickname_);
       SetEditNickName(false);
       present({
@@ -293,7 +290,6 @@ const Menu: React.FC = () => {
         const axiosResponse = await axios.get(URL, { headers });
         response = axiosResponse.data;
       }
-      console.log(response);
       setAvatar(response.avatar_urls["24"]);
     } catch (error) {
       console.error("Error fetching course data:", error);
@@ -311,9 +307,6 @@ const Menu: React.FC = () => {
     document.getElementById("avatar").click();
   };
 
-
-
-
   const uploadAvatar = async (event) => {
     const file = event.target.files[0];
 
@@ -328,7 +321,12 @@ const Menu: React.FC = () => {
         return;
       }
 
-      const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+      const allowedTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/webp",
+      ];
       if (!allowedTypes.includes(file.type)) {
         present({
           message: `Error: Only JPG, JPEG, PNG, or WebP files are allowed.`,
@@ -340,58 +338,48 @@ const Menu: React.FC = () => {
       }
 
       setIsLoading(true);
-      console.log('file', file)
       try {
         const URL = `https://app.mynalu.com/wp-json/wp/v2/media`;
-        const headers = {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          'Content-Type': 'image/*',
-          'content-disposition': `attachment; filename=${file.name}`
-        };
+        const reader = new FormData();
 
-        const reader = new FileReader();
-        reader.onload = async () => {
-          try {
-            const binaryData = reader.result;
-            const response = await axios.post(
-              URL,
-              binaryData,
-              { headers }
-            );
+        reader.append("Content-Type", "image/*");
+        reader.append(
+          "content-disposition",
+          `attachment; filename=${file.name}`
+        );
+        reader.append("file", file);
+        reader.append("Content-Type", "image/*");
 
-            const mediaId = response.data.id;
-            // Call your WordPress API to set the user's avatar using the mediaId
-            // Example: await axios.post('https://your-wordpress-site/wp-json/wp/v2/users/{userId}', { avatar: mediaId });
+        // reader.onload = async () => {
+        try {
+          const response = await apiService.post(URL, reader);
+          // setAvatar(reader.result); // assuming you want to set the avatar as a data URL
+          present({
+            message: `Profile Picture updated successfully!`,
+            color: "success",
+            duration: 2000,
+            position: "top",
+          });
+          setIsLoading(false);
+        } catch (error) {
+          console.error("Error uploading image to WordPress:", error);
+          present({
+            message: `Error: Unable to update profile picture.`,
+            color: "danger",
+            duration: 2000,
+            position: "top",
+          });
+          setIsLoading(false);
+        }
+        // };
 
-            console.log(`Avatar updated with media ID: ${mediaId}`);
-            setAvatar(reader.result); // assuming you want to set the avatar as a data URL
-            present({
-              message: `Profile Picture updated successfully!`,
-              color: "success",
-              duration: 2000,
-              position: "top",
-            });
-            setIsLoading(false);
-          } catch (error) {
-            console.error("Error uploading image to WordPress:", error);
-            present({
-              message: `Error: Unable to update profile picture.`,
-              color: "danger",
-              duration: 2000,
-              position: "top",
-            });
-            setIsLoading(false);
-          }
-        };
-
-        reader.readAsDataURL(file);
+        // reader.readAsDataURL(file);
       } catch (error) {
         console.error("Error reading file:", error);
         setIsLoading(false);
       }
     }
   };
-
 
   const getEmail = async () => {
     let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?_fields=email`;
