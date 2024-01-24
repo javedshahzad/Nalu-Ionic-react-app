@@ -102,8 +102,7 @@ const Filtermodal: React.FC = () => {
               history.push("/onboarding");
             }
           }
-        }
-        else {
+        } else {
           if (error.response) {
             const status = error.response.status;
 
@@ -198,23 +197,25 @@ const Filtermodal: React.FC = () => {
         const headers = {
           Authorization: `Bearer ${jwtToken}`,
         };
-        HTTP.get("https://app.mynalu.com/wp-json/nalu-app/v1/ressources", {
-          params: {
-            category_name: activeLabelsString,
-            "authority.title": activeRecommendationsString,
-            upvotes_number_min: rangeValues.lower,
-            upvotes_number_max: rangeValues.upper
-          }
-        }, headers)
+        HTTP.get(
+          "https://app.mynalu.com/wp-json/nalu-app/v1/ressources",
+          {
+            params: {
+              category_name: activeLabelsString,
+              "authority.title": activeRecommendationsString,
+              upvotes_number_min: rangeValues.lower,
+              upvotes_number_max: rangeValues.upper,
+            },
+          },
+          headers
+        )
           .then((response) => {
             console.log(response);
 
-
-            history.push('/tabs/tab3/resourcesubcateggory', {
+            history.push("/tabs/tab3/resourcesubcateggory", {
               filteredData: response.data.ressources,
-              subCategory: response.data.sub_categories
-            })
-
+              subCategory: response.data.sub_categories,
+            });
           })
           .catch((error) => {
             if (error) {
@@ -229,26 +230,23 @@ const Filtermodal: React.FC = () => {
 
             console.error(error);
           });
-      }
-      else {
+      } else {
         axios
           .get("https://app.mynalu.com/wp-json/nalu-app/v1/ressources", {
             params: {
               category_name: activeLabelsString,
               "authority.title": activeRecommendationsString,
               upvotes_number_min: rangeValues.lower,
-              upvotes_number_max: rangeValues.upper
+              upvotes_number_max: rangeValues.upper,
             },
           })
           .then((response) => {
             console.log(response);
 
-
-            history.push('/tabs/tab3/resourcesubcateggory', {
+            history.push("/tabs/tab3/resourcesubcateggory", {
               filteredData: response.data.ressources,
-              subCategory: response.data.sub_categories
-            })
-
+              subCategory: response.data.sub_categories,
+            });
           })
           .catch((error) => {
             if (error.response) {
@@ -275,8 +273,7 @@ const Filtermodal: React.FC = () => {
             history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
@@ -317,7 +314,12 @@ const Filtermodal: React.FC = () => {
                 </IonButtons>
               </IonToolbar>
             </IonHeader>
-            <IonContent className="ion-padding-horizontal" fullscreen>
+            <IonContent
+              className={`ion-padding-horizontal ${
+                isPlatform("ios") ? "safe-padding" : ""
+              }`}
+              fullscreen
+            >
               <div className="main-title">
                 <h1>Filters</h1>
               </div>

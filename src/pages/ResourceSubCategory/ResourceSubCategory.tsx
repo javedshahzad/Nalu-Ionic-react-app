@@ -391,7 +391,12 @@ const ResourceSubCategory: React.FC = () => {
               </IonToolbar>
             </IonHeader>
 
-            <IonContent className="ion-padding" fullscreen>
+            <IonContent
+              className={`ion-padding ${
+                isPlatform("ios") ? "safe-padding" : ""
+              }`}
+              fullscreen
+            >
               <div className="Resources">
                 <div className="selector mtype">
                   <IonRadioGroup>

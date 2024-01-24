@@ -12,6 +12,7 @@ import {
   IonSearchbar,
   IonTitle,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 import {
   addCircle,
@@ -94,7 +95,10 @@ const Community: React.FC = () => {
           </IonButtons>*/}
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding" fullscreen>
+      <IonContent
+        className={`ion-padding ${isPlatform("ios") ? "safe-padding" : ""}`}
+        fullscreen
+      >
         <div className="search-holder">
           <IonSearchbar></IonSearchbar>
         </div>

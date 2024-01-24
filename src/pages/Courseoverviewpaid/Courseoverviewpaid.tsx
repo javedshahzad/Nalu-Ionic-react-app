@@ -33,8 +33,6 @@ import NotificationBell from "../../components/NotificationBell";
 import { useLocation } from "react-router-dom";
 import authService from "../../authService";
 
-
-
 const Courseoverviewpaid: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [courseData, setCourseData] = useState(null);
@@ -168,7 +166,12 @@ const Courseoverviewpaid: React.FC = () => {
                 </IonButtons>*/}
               </IonToolbar>
             </IonHeader>
-            <IonContent className="ion-padding-horizontal" fullscreen>
+            <IonContent
+              className={`ion-padding-horizontal ${
+                isPlatform("ios") ? "safe-padding" : ""
+              }`}
+              fullscreen
+            >
               <div className="the-list">
                 {courseData?.map((course) => (
                   <div key={course.id}>

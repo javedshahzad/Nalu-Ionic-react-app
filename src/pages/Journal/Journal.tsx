@@ -155,7 +155,6 @@ const Journal: React.FC = () => {
         console.log(response.data);
         setCategoriesOverview(response.data);
       } catch (error) {
-
         if (error.response) {
           const status = error.response.status;
 
@@ -286,8 +285,7 @@ const Journal: React.FC = () => {
             history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
@@ -590,7 +588,10 @@ const Journal: React.FC = () => {
                 </IonSegment>
               </IonToolbar>
             </IonHeader>
-            <IonContent fullscreen>
+            <IonContent
+              fullscreen
+              className={`${isPlatform("ios") ? "safe-padding" : ""}`}
+            >
               <IonModal
                 isOpen={modalOpen}
                 className="modaaal"
@@ -607,10 +608,11 @@ const Journal: React.FC = () => {
                           <IonItem
                             key={index}
                             lines="none"
-                            className={`img_div ${categoryID === item.id
-                              ? "selected"
-                              : "non_selected"
-                              }`}
+                            className={`img_div ${
+                              categoryID === item.id
+                                ? "selected"
+                                : "non_selected"
+                            }`}
                             onClick={() => getCategoryByID(item.id)}
                           >
                             <div>
@@ -792,7 +794,12 @@ const Journal: React.FC = () => {
                 </>
               ) : (
                 <div className="Resources">
-                  <IonContent className="ion-padding" fullscreen>
+                  <IonContent
+                    className={`ion-padding ${
+                      isPlatform("ios") ? "safe-padding" : ""
+                    }`}
+                    fullscreen
+                  >
                     <div className="selector mtype"></div>
                     <IonRadioGroup>
                       <IonItem

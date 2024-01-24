@@ -70,9 +70,11 @@ const Membership: React.FC = () => {
       setUserGoals(response.data.goals);
       setIsLoading(false);
     } catch (error) {
-      console.error('There has been a problem with fetching the user goals:', error);
+      console.error(
+        "There has been a problem with fetching the user goals:",
+        error
+      );
       if (isPlatform("ios")) {
-
         if (error) {
           const status = error.status;
 
@@ -82,8 +84,7 @@ const Membership: React.FC = () => {
             history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
@@ -151,14 +152,19 @@ const Membership: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding-horizontal" fullscreen>
+      <IonContent
+        className={`ion-padding-horizontal ${
+          isPlatform("ios") ? "safe-padding" : ""
+        }`}
+        fullscreen
+      >
         <div className="title ion-text-center">
           <h2>
             {userGoals.includes("endometriosis")
               ? "Mit NALU zu mehr Wohlbefinden bei Endometriose"
               : userGoals.includes("amenorrhea")
-                ? "Mit NALU deine Periode regulieren"
-                : "Mit NALU deinen Zyklus harmonisieren"}
+              ? "Mit NALU deine Periode regulieren"
+              : "Mit NALU deinen Zyklus harmonisieren"}
           </h2>
         </div>
         <div className="section sec1">
@@ -180,8 +186,8 @@ const Membership: React.FC = () => {
                   {userGoals.includes("endometriosis")
                     ? "Kursbestandteil Verstehe Endometriose"
                     : userGoals.includes("amenorrhea")
-                      ? "Kursbestandteil Verstehe deinen weiblichen Zyklus"
-                      : "Kursbestandteil Verstehe deinen weiblichen Zyklus"}
+                    ? "Kursbestandteil Verstehe deinen weiblichen Zyklus"
+                    : "Kursbestandteil Verstehe deinen weiblichen Zyklus"}
                 </h5>
               </IonCol>
               <IonCol size="2" className="ion-text-center">
@@ -219,8 +225,8 @@ const Membership: React.FC = () => {
                   {userGoals.includes("endometriosis")
                     ? "Kompletter NALU Endo Flow Online Kurs mit Übungen für mehr Wohlbefinden bei Endometriose"
                     : userGoals.includes("amenorrhea")
-                      ? "Kompletter NALU Zyklus Flow Online Kurs mit Übungen für eine regelmässige Periode"
-                      : "Kompletter NALU Zyklus Flow Online Kurs mit Übungen zur Harmonisierung des Zyklus"}
+                    ? "Kompletter NALU Zyklus Flow Online Kurs mit Übungen für eine regelmässige Periode"
+                    : "Kompletter NALU Zyklus Flow Online Kurs mit Übungen zur Harmonisierung des Zyklus"}
                 </h5>
               </IonCol>
               <IonCol size="2" className="ion-text-center">
@@ -236,8 +242,8 @@ const Membership: React.FC = () => {
                   {userGoals.includes("endometriosis")
                     ? "Monatliche Live Q&A Sessions (mit Ärzt:innen & zert. Coaches) während 1 Jahr"
                     : userGoals.includes("amenorrhea")
-                      ? "Monatliche Live Q&A Sessions während 1 Jahr"
-                      : "Monatliche Live Q&A Sessions während 1 Jahr"}
+                    ? "Monatliche Live Q&A Sessions während 1 Jahr"
+                    : "Monatliche Live Q&A Sessions während 1 Jahr"}
                 </h5>
               </IonCol>
               <IonCol size="2" className="ion-text-center">

@@ -17,6 +17,7 @@ import {
   IonHeader,
   IonBackButton,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 import "./GroupDetails.css";
 import { add } from "ionicons/icons";
@@ -104,7 +105,7 @@ const Conversation: React.FC = () => {
           </IonRow>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent className={`${isPlatform("ios") ? "safe-padding" : ""}`}>
         <IonRow>
           <IonCol size="12">
             <div className="w-full flex align-middle items-center justify-center">

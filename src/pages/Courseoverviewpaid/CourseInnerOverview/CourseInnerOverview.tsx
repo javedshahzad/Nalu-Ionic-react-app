@@ -88,7 +88,9 @@ const CourseInnerOverview: React.FC = () => {
 
   const getData = async (id, next_chapter) => {
     setIsLoading(true);
-    let URL = id ? `https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}` : next_chapter;
+    let URL = id
+      ? `https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`
+      : next_chapter;
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
@@ -170,7 +172,12 @@ const CourseInnerOverview: React.FC = () => {
                 </IonButtons>*/}
               </IonToolbar>
             </IonHeader>
-            <IonContent fullscreen className="ion-no-padding">
+            <IonContent
+              fullscreen
+              className={`ion-no-padding ${
+                isPlatform("ios") ? "safe-padding" : ""
+              }`}
+            >
               <div className="main_div">
                 {courseData?.video_url ? (
                   <div className="player-wrapper">

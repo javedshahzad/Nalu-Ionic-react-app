@@ -427,7 +427,9 @@ const Menu: React.FC = () => {
           <IonTitle>Menü</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="slide-menu">
+      <IonContent
+        className={`slide-menu ${isPlatform("ios") ? "safe-padding" : ""}`}
+      >
         {isLoading ? (
           <div className="skeleton">
             <div className="profileDiv"></div>

@@ -16,6 +16,7 @@ import {
   IonSearchbar,
   IonTextarea,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 import { add, filterOutline, optionsOutline } from "ionicons/icons";
 
@@ -119,7 +120,12 @@ const Journaladdition: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding-horizontal" fullscreen>
+      <IonContent
+        className={`ion-padding-horizontal ${
+          isPlatform("ios") ? "safe-padding" : ""
+        }`}
+        fullscreen
+      >
         <div>
           <Swiper
             freeMode={true}

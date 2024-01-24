@@ -16,6 +16,7 @@ import {
   IonSegmentButton,
   IonTitle,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 import {
   musicalNoteOutline,
@@ -95,7 +96,10 @@ const Coursechapter: React.FC = () => {
           </IonButtons>*/}
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent
+        fullscreen
+        className={`${isPlatform("ios") ? "safe-padding" : ""}`}
+      >
         <div className="seg-holder">
           <IonSegment
             onIonChange={(e) => segmentChanged(e)}
@@ -291,7 +295,7 @@ const Coursechapter: React.FC = () => {
               </div>
 
               <div className="play-list ion-padding-horizontal">
-                <IonItem lines="none" button  detail={false} >
+                <IonItem lines="none" button detail={false}>
                   <div className="thumb" slot="start">
                     <img src="assets/imgs/relax.png" alt="" />
                   </div>

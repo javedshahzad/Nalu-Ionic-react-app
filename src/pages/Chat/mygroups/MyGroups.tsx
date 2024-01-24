@@ -127,8 +127,7 @@ const MyGroups: React.FC = () => {
                 history.push("/onboarding");
               }
             }
-          }
-          else {
+          } else {
             if (error.response) {
               const status = error.response.status;
 
@@ -172,8 +171,7 @@ const MyGroups: React.FC = () => {
               // history.push("/onboarding");
             }
           }
-        }
-        else {
+        } else {
           if (error.response) {
             const status = error.response.status;
 
@@ -223,7 +221,10 @@ const MyGroups: React.FC = () => {
           </IonButton>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent
+        fullscreen
+        className={`${isPlatform("ios") ? "safe-padding" : ""}`}
+      >
         <IonButtons style={{ display: "flex", justifyContent: "end" }}>
           <IonButton fill="clear" id="open-modal" expand="block">
             <p className="addGrpLabel" style={{ marginRight: "5px" }}>
@@ -246,7 +247,9 @@ const MyGroups: React.FC = () => {
               </IonButtons>
             </IonToolbar>
           </IonHeader>
-          <IonContent className="ion-padding">
+          <IonContent
+            className={`ion-padding ${isPlatform("ios") ? "safe-padding" : ""}`}
+          >
             <div style={{ paddingLeft: "10px", paddingRight: "10px" }}>
               <input
                 style={{ padding: "20px" }}

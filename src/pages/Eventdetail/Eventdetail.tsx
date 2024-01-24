@@ -472,7 +472,10 @@ const Eventdetail: React.FC = () => {
                  </IonButtons>*/}
               </IonToolbar>
             </IonHeader>
-            <IonContent fullscreen>
+            <IonContent
+              fullscreen
+              className={`${isPlatform("ios") ? "safe-padding" : ""}`}
+            >
               <div className="top-img-holder ion-text-center">
                 <img src={event?.image_url} alt="" />
               </div>

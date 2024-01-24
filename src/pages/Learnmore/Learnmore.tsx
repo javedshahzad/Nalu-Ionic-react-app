@@ -202,7 +202,10 @@ const Learnmore: React.FC = () => {
 
   return (
     <IonPage className="learnmore">
-      <IonContent className="ion-padding" fullscreen>
+      <IonContent
+        className={`ion-padding ${isPlatform("ios") ? "safe-padding" : ""}`}
+        fullscreen
+      >
         <div className="title-holder ion-text-center">
           <h3>{event?.title}</h3>
         </div>

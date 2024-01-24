@@ -8,6 +8,7 @@ import {
   IonIcon,
   IonPage,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 
 import "./Journalcalender.scss";
@@ -48,7 +49,12 @@ const Journalcalender: React.FC = () => {
           </IonButton>
         </IonButtons>
       </IonToolbar>
-      <IonContent className="ion-padding-horizontal" fullscreen>
+      <IonContent
+        className={`ion-padding-horizontal ${
+          isPlatform("ios") ? "safe-padding" : ""
+        }`}
+        fullscreen
+      >
         <div className="calender-holder">
           <IonDatetime
             ref={datetime}

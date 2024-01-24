@@ -98,7 +98,10 @@ const Yourdata: React.FC = () => {
 
   return (
     <IonPage className="Yourdata">
-      <IonContent className="ion-padding" fullscreen>
+      <IonContent
+        className={`ion-padding ${isPlatform("ios") ? "safe-padding" : ""}`}
+        fullscreen
+      >
         <div className="title-holder ion-text-center">
           <h3>Deine Daten gehören dir</h3>
           <h6 className="ion-text-wrap">

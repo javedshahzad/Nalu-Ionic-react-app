@@ -557,6 +557,7 @@ function JournalAdditionRemade() {
         </IonToolbar>
       </IonHeader>
       <IonContent
+        className={`${isPlatform("ios") ? "safe-padding" : ""}`}
         onIonScrollStart={handleScrollStart}
         onIonScrollEnd={handleScrollEnd}
         scrollEvents={true}

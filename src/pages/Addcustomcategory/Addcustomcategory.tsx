@@ -103,7 +103,7 @@ const Addcustomcategory: React.FC = () => {
     modal.current?.dismiss();
   }
 
-  useEffect(() => { }, [customCategoryData]);
+  useEffect(() => {}, [customCategoryData]);
 
   const handleLabelClick = (data) => {
     setSelectedCategory(data);
@@ -295,7 +295,10 @@ const Addcustomcategory: React.FC = () => {
           <IonTitle>Kategorie hinzufügen</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding" fullscreen>
+      <IonContent
+        className={`ion-padding ${isPlatform("ios") ? "safe-padding" : ""}`}
+        fullscreen
+      >
         <div className="section">
           <div className="title flex al-center jc-between ion-padding-bottom">
             <h3>Name</h3>

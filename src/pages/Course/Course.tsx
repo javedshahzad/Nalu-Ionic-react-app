@@ -5,6 +5,7 @@ import {
   IonHeader,
   IonPage,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 import { checkmarkCircle } from "ionicons/icons";
 
@@ -20,9 +21,12 @@ const Course: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding-horizontal" fullscreen>
-       
-      </IonContent>
+      <IonContent
+        className={`ion-padding-horizontal ${
+          isPlatform("ios") ? "safe-padding" : ""
+        }`}
+        fullscreen
+      ></IonContent>
     </IonPage>
   );
 };

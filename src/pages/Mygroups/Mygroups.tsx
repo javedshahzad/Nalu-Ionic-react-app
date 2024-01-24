@@ -355,7 +355,10 @@ const Mygroups: React.FC = () => {
               </IonButton>
             </IonToolbar>
           </IonHeader>
-          <IonContent fullscreen>
+          <IonContent
+            fullscreen
+            className={`${isPlatform("ios") ? "safe-padding" : ""}`}
+          >
             {/*<IonButtons style={{ display: "flex", justifyContent: "end" }}>
           <IonButton fill="clear" id="open-modal" expand="block">
             <p className="addGrpLabel" style={{ marginRight: "5px" }}>

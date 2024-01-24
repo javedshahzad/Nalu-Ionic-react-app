@@ -35,7 +35,6 @@ import NotificationBell from "../../../components/NotificationBell";
 import authService from "../../../authService";
 import { isPlatform } from "@ionic/react";
 
-
 const GroupInfo: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
   const history = useHistory();
@@ -82,8 +81,7 @@ const GroupInfo: React.FC = () => {
               history.push("/onboarding");
             }
           }
-        }
-        else {
+        } else {
           if (error.response) {
             const status = error.response.status;
 
@@ -132,8 +130,7 @@ const GroupInfo: React.FC = () => {
               history.push("/onboarding");
             }
           }
-        }
-        else {
+        } else {
           if (error.response) {
             const status = error.response.status;
 
@@ -241,8 +238,7 @@ const GroupInfo: React.FC = () => {
                 history.push("/onboarding");
               }
             }
-          }
-          else {
+          } else {
             if (error.response) {
               const status = error.response.status;
 
@@ -286,8 +282,7 @@ const GroupInfo: React.FC = () => {
                 history.push("/onboarding");
               }
             }
-          }
-          else {
+          } else {
             if (error.response) {
               const status = error.response.status;
 
@@ -317,7 +312,7 @@ const GroupInfo: React.FC = () => {
           </IonButtons>*/}
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent className={`${isPlatform("ios") ? "safe-padding" : ""}`}>
         <IonRow>
           <IonCol size="12">
             <div className="w-full flex align-middle items-center justify-center">

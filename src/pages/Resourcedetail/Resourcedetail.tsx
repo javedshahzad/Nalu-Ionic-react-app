@@ -350,7 +350,11 @@ const Resourcedetail: React.FC = () => {
           </IonButtons>*/}
             </IonToolbar>
           </IonHeader>
-          <IonContent fullscreen ref={contentRef}>
+          <IonContent
+            className={`${isPlatform("ios") ? "safe-padding" : ""}`}
+            fullscreen
+            ref={contentRef}
+          >
             <div className="top-img-holder ion-text-center">
               {resourseData?.data?.featured_video ? (
                 <div className="player-wrapper">

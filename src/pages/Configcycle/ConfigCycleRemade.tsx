@@ -9,7 +9,7 @@ import {
   IonDatetime,
   isPlatform,
 } from "@ionic/react";
-import axios from 'axios';
+import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 import "./configcycleremade.scss";
 import { useState, useRef, useEffect } from "react";
@@ -54,14 +54,14 @@ function ConfigCycleRemade() {
   const [calendarDate, setCalendarDate] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmittingToLogin, setIsSubmittingToLogin] = useState(false);
-  const history = useHistory()
+  const history = useHistory();
 
   const navigation = useIonRouter();
 
   if (isPlatform("ios")) {
     useEffect(() => {
-      HTTP.setDataSerializer('json');
-      HTTP.setHeader('*', 'Content-Type', 'application/json');
+      HTTP.setDataSerializer("json");
+      HTTP.setHeader("*", "Content-Type", "application/json");
     }, []);
   }
 
@@ -77,14 +77,14 @@ function ConfigCycleRemade() {
       if (isPlatform("ios")) {
         // Use Cordova HTTP plugin for iOS
         await HTTP.put(
-          'https://app.mynalu.com/wp-json/nalu-app/v1/no-period',
+          "https://app.mynalu.com/wp-json/nalu-app/v1/no-period",
           {},
           headers
         );
       } else {
         // Use Axios for other platforms
         await axios.put(
-          'https://app.mynalu.com/wp-json/nalu-app/v1/no-period',
+          "https://app.mynalu.com/wp-json/nalu-app/v1/no-period",
           {},
           {
             headers: headers,
@@ -134,8 +134,9 @@ function ConfigCycleRemade() {
     const tempMonthIndex = monthIndex + 1 + "";
     const tempDateIndex = dateIndex + "";
 
-    const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
-      }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+    const dateParam = `${year}-${
+      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
     // url = `/journaladditionremade/${dateParam}`;
   };
@@ -165,7 +166,8 @@ function ConfigCycleRemade() {
     }
   };
 
-  {/*function isSectionVisible(sectionRef) {
+  {
+    /*function isSectionVisible(sectionRef) {
     const section = document.getElementById(sectionRef);
 
     if (section) {
@@ -186,7 +188,8 @@ function ConfigCycleRemade() {
     for (const month of months) {
       isSectionVisible(month);
     }
-  };*/}
+  };*/
+  }
 
   function isLeapYear(year) {
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
@@ -260,8 +263,9 @@ function ConfigCycleRemade() {
       ],
     };
 
-    const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
-      }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+    const dateParam = `${year}-${
+      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
     console.log("dateParam", dateParam);
     setIsSubmitting(true);
@@ -269,7 +273,7 @@ function ConfigCycleRemade() {
     try {
       const jwtToken = localStorage.getItem("jwtToken");
       const headers = {
-        'Authorization': `Bearer ${jwtToken}`,
+        Authorization: `Bearer ${jwtToken}`,
       };
 
       let response;
@@ -311,11 +315,9 @@ function ConfigCycleRemade() {
 
   return (
     <IonPage className="ConfigCycleRemade">
-      <IonContent>
+      <IonContent className={`${isPlatform("ios") ? "safe-padding" : ""}`}>
         <div className="configcycleMain">
-          <h1 className="configTextMain">
-            Konfiguriere dein Zyklusjournal
-          </h1>
+          <h1 className="configTextMain">Konfiguriere dein Zyklusjournal</h1>
           <h3 className="configTextSub">
             Wann war der letzte Tag deiner letzten Periode?
           </h3>
@@ -360,11 +362,17 @@ function ConfigCycleRemade() {
               fill="clear"
               disabled={isSubmittingToLogin}
             >
-              {isSubmittingToLogin ? <IonSpinner name="crescent" /> : "Ich weiss es nicht / Ich hatte nie eine"}
+              {isSubmittingToLogin ? (
+                <IonSpinner name="crescent" />
+              ) : (
+                "Ich weiss es nicht / Ich hatte nie eine"
+              )}
             </IonButton>
 
             <h3 className="configTextSubBottom">
-              Wenn du das Datum deiner letzten Periode nicht kennst oder nie eine hattest, wird dein Zyklus auf die Mondphasen abgestimmt, um dich mit dem zyklischen Lebensstil vertraut zu machen.
+              Wenn du das Datum deiner letzten Periode nicht kennst oder nie
+              eine hattest, wird dein Zyklus auf die Mondphasen abgestimmt, um
+              dich mit dem zyklischen Lebensstil vertraut zu machen.
             </h3>
           </div>
           <IonButton

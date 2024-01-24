@@ -12,6 +12,7 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 import {
   lockClosedOutline,
@@ -29,7 +30,7 @@ const Courseoverviewfree: React.FC = () => {
           <IonButton color={"dark"} fill="clear">
             <IonIcon icon={menuOutline} />
           </IonButton>
-         
+
           <IonButtons slot="end">
             <IonButton color="dark">
               <IonIcon icon={notificationsOutline} />
@@ -37,8 +38,13 @@ const Courseoverviewfree: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding-horizontal" fullscreen>
-      <div className="the-title ion-text-center">
+      <IonContent
+        className={`ion-padding-horizontal ${
+          isPlatform("ios") ? "safe-padding" : ""
+        }`}
+        fullscreen
+      >
+        <div className="the-title ion-text-center">
           <h3>Nalu Endo Flow</h3>
         </div>
 
@@ -89,22 +95,21 @@ const Courseoverviewfree: React.FC = () => {
                     <IonLabel>Chapter 2 Movement</IonLabel>
                   </IonItem>
                   <div className="third-list ion-padding-start" slot="content">
-                  <IonItem detail={false}>
-                  <IonLabel>Chapter 2.1 Cycle Based Movement</IonLabel>
-                  <IonIcon src="assets/imgs/icn-lock.svg" slot="end" />
-                </IonItem>
-                <IonItem detail={false}>
-                  <IonLabel>Chapter 2.2 Happiness Hormones</IonLabel>
-                  <IonIcon src="assets/imgs/icn-lock.svg" slot="end" />
-                </IonItem>
-                <IonItem detail={false}>
-                  <IonLabel>Chapter 2.3 Pelvic Floor Exercisees</IonLabel>
-                  <IonIcon src="assets/imgs/icn-lock.svg" slot="end" />
-                </IonItem>
+                    <IonItem detail={false}>
+                      <IonLabel>Chapter 2.1 Cycle Based Movement</IonLabel>
+                      <IonIcon src="assets/imgs/icn-lock.svg" slot="end" />
+                    </IonItem>
+                    <IonItem detail={false}>
+                      <IonLabel>Chapter 2.2 Happiness Hormones</IonLabel>
+                      <IonIcon src="assets/imgs/icn-lock.svg" slot="end" />
+                    </IonItem>
+                    <IonItem detail={false}>
+                      <IonLabel>Chapter 2.3 Pelvic Floor Exercisees</IonLabel>
+                      <IonIcon src="assets/imgs/icn-lock.svg" slot="end" />
+                    </IonItem>
                   </div>
                 </IonAccordion>
-              
-              
+
                 <IonAccordion value="sixthpointone">
                   <IonItem slot="header" lines="none">
                     <IonLabel> Chapter 3 Relaxation</IonLabel>
@@ -113,7 +118,6 @@ const Courseoverviewfree: React.FC = () => {
                     3rd level Content
                   </div>
                 </IonAccordion>
-               
               </div>
             </IonAccordion>
             <IonAccordion value="fifth">

@@ -7,6 +7,7 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 
 import "./Onboarding.scss";
@@ -15,13 +16,12 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
 import i18next from "i18next";
-import UserAuthentication from './../../auth/UserAuthentication';
+import UserAuthentication from "./../../auth/UserAuthentication";
 
 const Onboarding: React.FC = () => {
   const { t } = useTranslation();
   const history = useHistory();
-   const auth = UserAuthentication(); 
-  
+  const auth = UserAuthentication();
 
   const [date, setDate] = useState<string>(new Date().toISOString());
 
@@ -41,7 +41,12 @@ const Onboarding: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent className="onborading ion-padding" fullscreen>
+      <IonContent
+        className={`onborading ion-padding ${
+          isPlatform("ios") ? "safe-padding" : ""
+        }`}
+        fullscreen
+      >
         <div className="logo-holder ion-text-center">
           <img src="assets/imgs/logo.svg" alt="" />
         </div>

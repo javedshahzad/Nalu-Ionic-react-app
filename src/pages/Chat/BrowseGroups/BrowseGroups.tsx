@@ -12,6 +12,7 @@ import {
   IonList,
   IonButton,
   IonButtons,
+  isPlatform,
 } from "@ionic/react";
 import React, { useState } from "react";
 import {
@@ -72,7 +73,12 @@ const BrowseGroups: React.FC = () => {
           </IonHeader>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen className="browse-grps-ion-content">
+      <IonContent
+        fullscreen
+        className={`browse-grps-ion-content${
+          isPlatform("ios") ? "safe-padding" : ""
+        }`}
+      >
         {filteredGroups.map((group: any, index: any) => {
           const groupName = group.groupName || "";
           return (

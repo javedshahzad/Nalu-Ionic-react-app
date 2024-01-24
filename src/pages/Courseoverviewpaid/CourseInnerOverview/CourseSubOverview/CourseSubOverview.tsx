@@ -96,8 +96,7 @@ const CourseSubOverview: React.FC = () => {
                 history.push("/onboarding");
               }
             }
-          }
-          else {
+          } else {
             if (error.response) {
               const status = error.response.status;
 
@@ -133,7 +132,6 @@ const CourseSubOverview: React.FC = () => {
           setIsMarlLoading(false);
 
           if (isPlatform("ios")) {
-
             if (error) {
               const status = error.status;
 
@@ -143,8 +141,7 @@ const CourseSubOverview: React.FC = () => {
                 history.push("/onboarding");
               }
             }
-          }
-          else {
+          } else {
             if (error.response) {
               const status = error.response.status;
 
@@ -170,8 +167,7 @@ const CourseSubOverview: React.FC = () => {
             history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 
@@ -222,7 +218,10 @@ const CourseSubOverview: React.FC = () => {
                   </IonButtons>*/}
               </IonToolbar>
             </IonHeader>
-            <IonContent fullscreen>
+            <IonContent
+              fullscreen
+              className={`${isPlatform("ios") ? "safe-padding" : ""}`}
+            >
               <div className="main_div">
                 {courseData?.video_url ? (
                   <div className="player-wrapper">

@@ -64,7 +64,10 @@ const handleSubscribe = async () => {
 const Stayup: React.FC = () => {
   return (
     <IonPage className="Stayup">
-      <IonContent className="ion-padding" fullscreen>
+      <IonContent
+        className={`ion-padding ${isPlatform("ios") ? "safe-padding" : ""}`}
+        fullscreen
+      >
         <div className="title-holder ion-text-center ion-padding-top">
           <h3>Bleibe auf dem Laufenden</h3>
         </div>

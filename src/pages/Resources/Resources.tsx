@@ -533,7 +533,10 @@ const Resources: React.FC = () => {
                 </IonSegment>
               </IonToolbar>
             </IonHeader>
-            <IonContent fullscreen>
+            <IonContent
+              fullscreen
+              className={`${isPlatform("ios") ? "safe-padding" : ""}`}
+            >
               <IonModal
                 isOpen={modalOpen}
                 className="modaaal"
@@ -642,7 +645,12 @@ const Resources: React.FC = () => {
                 </>
               ) : (
                 <div className="Resources">
-                  <IonContent className="ion-padding" fullscreen>
+                  <IonContent
+                    className={`ion-padding ${
+                      isPlatform("ios") ? "safe-padding" : ""
+                    }`}
+                    fullscreen
+                  >
                     <div className="the-list">
                       {categoriesFavourites.map((card, index) => (
                         <div className="resource-card" key={index}>

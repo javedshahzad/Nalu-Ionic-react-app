@@ -906,7 +906,7 @@ const JournalCalendarRemade = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent className={`${isPlatform("ios") ? "safe-padding" : ""}`}>
         <div className="journalcalendar-main">
           <div className="calendar-container" onScroll={() => handleScroll()}>
             {/* <div className="calendar-controls"></div> */}

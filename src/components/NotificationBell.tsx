@@ -14,6 +14,7 @@ import {
   IonAvatar,
   IonImg,
   IonIcon,
+  isPlatform,
 } from "@ionic/react";
 import {
   notificationsOutline,
@@ -121,7 +122,9 @@ function NotificationBell() {
           </IonToolbar>
         </IonHeader>
 
-        <IonContent className="ion-padding">
+        <IonContent
+          className={`ion-padding ${isPlatform("ios") ? "safe-padding" : ""}`}
+        >
           <IonList>
             {notificationArray.map((notification: any, index: any) => (
               <IonItem
