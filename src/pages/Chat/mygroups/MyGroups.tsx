@@ -85,6 +85,17 @@ const MyGroups: React.FC = () => {
     setGroupName(e.target.value);
   };
 
+  const imgUrl = (params: string) => {
+    let url = "";
+    if (params.includes("//groupImages")) {
+      url = params.replace("//groupImages", "//public/groupImages");
+    } else {
+      url = params;
+      console.log("url", url);
+      return url;
+    }
+  };
+
   const newGroup = {
     id: String(Date.now()),
     name: groupName,
@@ -304,7 +315,7 @@ const MyGroups: React.FC = () => {
               className="browse-grp-items"
             >
               <img
-                src={group.groupImage}
+                src={imgUrl(group.groupImage)}
                 alt=""
                 className="profile-image my-auto"
                 style={{

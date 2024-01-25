@@ -326,6 +326,22 @@ const Mygroups: React.FC = () => {
     setSelectedUsers([]);
   }
 
+  const imgUrl = (params: string) => {
+    let url = "";
+    if (params.includes("//groupImages") || params.includes("public")) {
+      if (params.includes("public")) {
+        return url;
+      } else {
+        url = params.replace("//groupImages", "/public/groupImages");
+      }
+      console.log("url", url);
+    } else {
+      url = params;
+      console.log("url", url);
+    }
+    return url;
+  };
+
   return (
     <IonPage ref={page} className="Mygroups">
       {isLoading ? (
@@ -432,8 +448,7 @@ const Mygroups: React.FC = () => {
                   key={index}
                 >
                   <img
-                    src={group?.groupImage || groupImg}
-                    alt=""
+                    src={imgUrl(group.groupImage)}
                     className="profile-image my-auto"
                     style={{
                       marginRight: "10px",
