@@ -174,9 +174,8 @@ const CourseInnerOverview: React.FC = () => {
             </IonHeader>
             <IonContent
               fullscreen
-              className={`ion-no-padding ${
-                isPlatform("ios") ? "safe-padding" : ""
-              }`}
+              className={`ion-no-padding ${isPlatform("ios") ? "safe-padding" : ""
+                }`}
             >
               <div className="main_div">
                 {courseData?.video_url ? (
@@ -196,6 +195,7 @@ const CourseInnerOverview: React.FC = () => {
                 <div className="title">
                   <h3>{courseData?.title}</h3>
                 </div>
+
                 <IonGrid>
                   <IonRow>
                     <IonCol size="3">
@@ -228,6 +228,7 @@ const CourseInnerOverview: React.FC = () => {
                     </IonCol>
                   </IonRow>
                 </IonGrid>
+
                 <div
                   className="paragraph"
                   dangerouslySetInnerHTML={{ __html: courseData?.content }}
@@ -280,6 +281,7 @@ const CourseInnerOverview: React.FC = () => {
                   </div>
                 )}
               </div>
+
             </IonContent>
           </>
         )}

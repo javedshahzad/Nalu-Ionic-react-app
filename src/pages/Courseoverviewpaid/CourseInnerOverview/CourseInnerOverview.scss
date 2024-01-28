@@ -12,6 +12,8 @@
     --offset-bottom: 550px !important;
 
      .main_div{
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
          .title{
              display: flex;
              justify-content: flex-start;
@@ -52,7 +54,12 @@
                 font-weight: 500;
              }
          }
+         .card{
+          max-height: calc(55vh - 50px);
+          overflow-y: auto;
+         }
          .paragraph{
+        
              color:#636363;
              margin-left: 10px;
              margin-right: 10px;
