@@ -16,6 +16,7 @@ import {
   IonSelectOption,
   IonTextarea,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 import {
   addCircle,
