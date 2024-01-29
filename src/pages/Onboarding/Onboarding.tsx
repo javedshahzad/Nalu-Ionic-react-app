@@ -48,10 +48,10 @@ const Onboarding: React.FC = () => {
         fullscreen
       >
         <div className="logo-holder ion-text-center">
-          <img src="assets/imgs/logo.svg" alt="" />
+          <img src="assets/imgs/nalu.svg" alt="" />
         </div>
         <div className="img-holder ion-text-center">
-          <img src="assets/imgs/Zen Floaty Woman.gif" alt="" />
+          <img src="assets/imgs/nalu-key.png" alt="" />
         </div>
         <div className="content-holder ion-text-center">
           <h3 className="ion-text-wrap">{t("onboarding.description_1")}</h3>

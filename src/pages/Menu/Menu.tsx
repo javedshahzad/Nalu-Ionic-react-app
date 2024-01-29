@@ -430,6 +430,7 @@ const Menu: React.FC = () => {
       <IonContent
         className={`slide-menu ${isPlatform("ios") ? "safe-padding" : ""}`}
       >
+        {/*
         {isLoading ? (
           <div className="skeleton">
             <div className="profileDiv"></div>
@@ -503,6 +504,7 @@ const Menu: React.FC = () => {
             </h6>
           </div>
         )}
+        */}
 
         {!isPremium && (
           <IonMenuToggle autoHide={false} className="join-nalu">
