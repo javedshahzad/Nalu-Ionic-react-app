@@ -88,7 +88,6 @@ const JournalCalendarRemade = () => {
 
   const history = useHistory<any>(); // Use useHistory for navigation
 
-
   const location = useLocation();
 
   useEffect(() => {
@@ -96,27 +95,22 @@ const JournalCalendarRemade = () => {
     const queryParams = new URLSearchParams(location.search);
 
     // Get a specific query parameter value
-    const paramValue = queryParams.get('loading');
+    const paramValue = queryParams.get("loading");
 
     if (paramValue) {
-      setIsLoading(true)
+      setIsLoading(true);
 
       setTimeout(() => {
-        setIsLoading(false)
-        scrollingToView()
-      }, 3000)
+        setIsLoading(false);
+        scrollingToView();
+      }, 3000);
+    } else {
+      scrollingToView();
     }
-    else {
-      scrollingToView()
-    }
-
 
     // Log or use the query parameter value as needed
-    console.log('Your query parameter value:', paramValue);
+    console.log("Your query parameter value:", paramValue);
   }, [location.search]);
-
-
-
 
   const phases = useSelector((state: RootState) => state.phasesReducer);
 
@@ -172,12 +166,10 @@ const JournalCalendarRemade = () => {
 
     let year = new Date().getFullYear();
 
-    let yearMonth = `${year}-${month}`;
+    // let yearMonth = `${year}-${month}`;
     dispatch<any>(fetchMoonIcons(year));
-    dispatch<any>(fetchColors(yearMonth));
+    dispatch<any>(fetchColors(year));
   }, []);
-
-
 
   const date: Date = new Date();
 
@@ -202,17 +194,14 @@ const JournalCalendarRemade = () => {
     const tempMonthIndex = monthIndex + 1 + "";
     const tempDateIndex = dateIndex + "";
 
-    const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
-      }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+    const dateParam = `${year}-${
+      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
     url = `/journaladditionremade/${dateParam}`;
 
     history.push(url);
   };
-
-
-
-
 
   const scrollingToView = () => {
     const day = new Date().getDate();
@@ -222,22 +211,14 @@ const JournalCalendarRemade = () => {
     const full_date = day + "/" + (month + 1) + "/" + year;
     const isItToday = document.getElementById(full_date);
 
-
     if (isItToday) {
       setTimeout(() => {
         isItToday.scrollIntoView({ behavior: "smooth", block: "center" });
       }, 1000);
     }
-  }
+  };
 
   const [isLoading, setIsLoading] = useState(false);
-
-
-
-
-
-
-
 
   // const getIcons = async () => {
   //   try {
@@ -769,8 +750,8 @@ const JournalCalendarRemade = () => {
     for (let i = 1; i <= lastDateOfMonth; i++) {
       const isToday =
         i === new Date().getDate() &&
-          m === new Date().getMonth() &&
-          year === new Date().getFullYear()
+        m === new Date().getMonth() &&
+        year === new Date().getFullYear()
           ? "currentDay"
           : "";
 
@@ -782,10 +763,10 @@ const JournalCalendarRemade = () => {
           return (
             item.date ===
             year +
-            "-" +
-            (m + 1).toString().padStart(2, "0") +
-            "-" +
-            i.toString().padStart(2, "0")
+              "-" +
+              (m + 1).toString().padStart(2, "0") +
+              "-" +
+              i.toString().padStart(2, "0")
           );
         });
       }
@@ -794,8 +775,9 @@ const JournalCalendarRemade = () => {
         <li
           key={`currentDay-${i}`}
           id={`${i}/${m + 1}/${year}`}
-          className={`calendar-day ${isToday} ${activeIndex === i + 1 && activeMonthIndex === m ? "dayActive" : ""
-            }`}
+          className={`calendar-day ${isToday} ${
+            activeIndex === i + 1 && activeMonthIndex === m ? "dayActive" : ""
+          }`}
           onClick={() => handleOnClick(i, m)}
           style={getColors(year, m + 1, i)}
         >
@@ -949,8 +931,7 @@ const JournalCalendarRemade = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className={`${isPlatform("ios") ? "safe-padding" : ""}`}>
-        {isLoading ?
-
+        {isLoading ? (
           <div
             style={{
               display: "flex",
@@ -961,8 +942,8 @@ const JournalCalendarRemade = () => {
             }}
           >
             <IonSpinner name="crescent"></IonSpinner>
-
-          </div> :
+          </div>
+        ) : (
           <div className="journalcalendar-main">
             <div className="calendar-container" onScroll={() => handleScroll()}>
               {/* <div className="calendar-controls"></div> */}
@@ -972,8 +953,11 @@ const JournalCalendarRemade = () => {
                     <div
                       id={`${months[mIndex]}`}
                       key={monthData.key}
-                      className={`calendar-month ${currentdivInView == months[mIndex] ? "fadeIn" : "fadeOut"
-                        }`}
+                      className={`calendar-month ${
+                        currentdivInView == months[mIndex]
+                          ? "fadeIn"
+                          : "fadeOut"
+                      }`}
                     >
                       {monthData}
                     </div>
@@ -1038,8 +1022,7 @@ const JournalCalendarRemade = () => {
            )}
            </IonButton>*/}
           </div>
-        }
-
+        )}
       </IonContent>
     </IonPage>
   );

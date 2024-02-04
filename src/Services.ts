@@ -33,6 +33,15 @@ const apiService = {
     }
   },
 
+  postUrl: async (url: string, data: any, headers) => {
+    if (isPlatform("ios")) {
+      const response = await HTTP.post(url, data, headers);
+      return JSON.parse(response.data);
+    } else {
+      return (await axios.post(url, data, headers)).data;
+    }
+  },
+
   post: async (url: string, data: any) => {
     if (isPlatform("ios")) {
       const response = await HTTP.post(url, data, customCordovaHeaders);

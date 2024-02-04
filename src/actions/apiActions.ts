@@ -17,11 +17,11 @@ export const fetchMoonIcons = (year: any) => {
   };
 };
 
-export const fetchColors = (yearMonth: any) => {
+export const fetchColors = (year: any) => {
   return async (dispatch: any) => {
     try {
       const response = MoonPhasesService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${year}?lang=de`
       );
       dispatch(getColors(response));
     } catch (error) {
