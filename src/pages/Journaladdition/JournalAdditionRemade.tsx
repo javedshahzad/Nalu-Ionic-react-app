@@ -339,9 +339,9 @@ function JournalAdditionRemade() {
           month = "0" + month;
         }
         let year = new Date().getFullYear();
-        let yearMonth = `${year}-${month}`;
+        // let yearMonth = `${year}-${month}`;
         dispatch<any>(fetchMoonIcons(year));
-        dispatch<any>(fetchColors(yearMonth));
+        dispatch<any>(fetchColors(year));
       },
       (error) => {
         if (isPlatform("ios")) {
@@ -547,12 +547,19 @@ function JournalAdditionRemade() {
     setDisableInput(false);
   };
 
+  const goBack = () => {
+    history.push("/tabs/tab4?loading=true");
+  };
+
   return (
     <IonPage className="JournalAdditionRemade">
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton></IonBackButton>
+            {/* <IonBackButton></IonBackButton> */}
+            <IonButton onClick={goBack} fill="clear" color={"primary"}>
+              <IonIcon icon={arrowBackOutline} color={"primary"} />
+            </IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>

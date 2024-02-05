@@ -60,7 +60,7 @@ import ConfigCycleRemade from "./pages/Configcycle/ConfigCycleRemade";
 import Pusher from "pusher-js";
 import { addNotification } from "./actions/notificationAction";
 import { useDispatch } from "react-redux";
-// import OneSignal from "onesignal-cordova-plugin";
+import OneSignal from "onesignal-cordova-plugin";
 import React, { useEffect, useState } from "react";
 import { groupsListAction } from "./actions/groupsListAction";
 import tokenService from "./token";
@@ -86,7 +86,7 @@ setupIonicReact({
 // ***onesignal*** //
 
 function OneSignalInit() {
-  //OneSignal.initialize("0f10d9d5-8078-4eda-b52f-c616a5398d0b");
+  OneSignal.initialize("0f10d9d5-8078-4eda-b52f-c616a5398d0b");
 }
 
 // ***onesignal*** //
@@ -94,7 +94,7 @@ function OneSignalInit() {
 const App: React.FC = () => {
   // ***onesignal*** //
 
-  // OneSignalInit();
+  // OneSignalInit();s
 
   // ***onesignal*** //
 
@@ -155,11 +155,11 @@ const App: React.FC = () => {
 
     let year = new Date().getFullYear();
 
-    let yearMonth = `${year}-${month}`;
+    // let yearMonth = `${year}-${month}`;
 
     try {
       await dispatch<any>(fetchMoonIcons(year));
-      await dispatch<any>(fetchColors(yearMonth));
+      await dispatch<any>(fetchColors(year));
     } catch (error) {
       handleDispatchError(error);
     }

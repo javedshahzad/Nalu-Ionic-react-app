@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   IonAvatar,
-  IonBackButton,
   IonButton,
   IonButtons,
   IonContent,
@@ -217,7 +216,6 @@ const Menu: React.FC = () => {
         const axiosResponse = await axios.get(URL, { headers });
         response = axiosResponse.data;
       }
-      console.log(response);
       setNickname(response.nickname);
     } catch (error) {
       console.error("Error fetching course data:", error);
@@ -276,7 +274,9 @@ const Menu: React.FC = () => {
   };
 
   const getAvatar = async () => {
-    let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?_fields=avatar_urls`;
+    const userId = localStorage.getItem("userId");
+
+    let URL = `https://app.mynalu.com/wp-json/wp/v2/users/${userId}`;
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
@@ -290,7 +290,7 @@ const Menu: React.FC = () => {
         const axiosResponse = await axios.get(URL, { headers });
         response = axiosResponse.data;
       }
-      // setAvatar(response.avatar_urls["24"]);
+      setAvatar(response.avatar_urls["96"]);
     } catch (error) {
       console.error("Error fetching course data:", error);
     } finally {
@@ -339,7 +339,7 @@ const Menu: React.FC = () => {
 
       setIsLoading(true);
       try {
-        const URL = `https://app.mynalu.com/wp-json/wp/v2/media`;
+        const uploadURL = `https://app.mynalu.com/wp-json/wp/v2/media`;
         const reader = new FormData();
 
         reader.append("Content-Type", "image/*");
@@ -350,12 +350,53 @@ const Menu: React.FC = () => {
         reader.append("file", file);
         reader.append("Content-Type", "image/*");
 
-        // reader.onload = async () => {
         try {
-          const response = await apiService.post(URL, reader);
-          console.log("response>>", response);
-          const mediaURL = response.guid.rendered;
-          setAvatar(mediaURL); // assuming you want to set the avatar as a data URL
+          // Upload image to WordPress media
+          const uploadResponse = await apiService.post(uploadURL, reader);
+          const mediaId = uploadResponse.id;
+
+          // Call your second API to update user avatar
+          const updateAvatarURL = `https://app.mynalu.com/wp-json/wp/v2/users/${uploadResponse.author}/`;
+          const updateAvatarData = {
+            simple_local_avatar: {
+              media_id: mediaId,
+            },
+          };
+
+          const jwtToken = localStorage.getItem("jwtToken");
+
+          if (isPlatform("ios")) {
+            const customCordovaHeaders = {
+              Authorization: `Bearer ${jwtToken}`,
+              "Content-Type": "application/json",
+              // Cookie:
+              //   "woocommerce_multicurrency_forced_currency=INR; woocommerce_multicurrency_language=en",
+            };
+            const updateAvatarResponse = await apiService.postUrl(
+              updateAvatarURL,
+              updateAvatarData,
+              customCordovaHeaders
+            );
+            // setAvatar(updateAvatarResponse.link);
+          } else {
+            const customAxiosHeaders: any = {
+              headers: {
+                Authorization: `Bearer ${jwtToken}`,
+                "Content-Type": "application/json",
+                Cookie:
+                  "woocommerce_multicurrency_forced_currency=INR; woocommerce_multicurrency_language=en",
+              },
+            };
+
+            const updateAvatarResponse = await apiService.postUrl(
+              updateAvatarURL,
+              updateAvatarData,
+              customAxiosHeaders
+            );
+          }
+
+          const mediaURL = uploadResponse.guid.rendered;
+
           present({
             message: `Profile Picture updated successfully!`,
             color: "success",
@@ -364,7 +405,7 @@ const Menu: React.FC = () => {
           });
           setIsLoading(false);
         } catch (error) {
-          console.error("Error uploading image to WordPress:", error);
+          console.error("Error updating user avatar:", error);
           present({
             message: `Error: Unable to update profile picture.`,
             color: "danger",
@@ -373,9 +414,6 @@ const Menu: React.FC = () => {
           });
           setIsLoading(false);
         }
-        // };
-
-        // reader.readAsDataURL(file);
       } catch (error) {
         console.error("Error reading file:", error);
         setIsLoading(false);
@@ -398,7 +436,7 @@ const Menu: React.FC = () => {
         const axiosResponse = await axios.get(URL, { headers });
         response = axiosResponse.data;
       }
-      console.log(response);
+
       setEmail(response.email);
       setIsLoading(false);
     } catch (error) {
