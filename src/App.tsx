@@ -78,6 +78,7 @@ import Addcustomcategory from "./pages/Addcustomcategory/Addcustomcategory";
 import MoonPhasesService from "./MoonPhasesService";
 import authService from "./authService";
 import { fetchColors, fetchMoonIcons } from "./actions/apiActions";
+import { fetchAvatar } from "./actions/menuActions";
 
 setupIonicReact({
   mode: "ios",
@@ -146,6 +147,16 @@ const App: React.FC = () => {
 
   const history = useHistory();
 
+  const fetchMenuData = async () => {
+    const userId = localStorage.getItem("userId");
+    try {
+      await dispatch<any>(fetchAvatar(userId));
+      // await dispatch<any>(fetchColors(year));
+    } catch (error) {
+      // handleDispatchError(error);
+    }
+  };
+
   const getIconsAndColors = async () => {
     let month: any = new Date().getMonth() + 1;
 
@@ -194,6 +205,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     getIconsAndColors();
+    fetchMenuData();
   }, []);
 
   return (

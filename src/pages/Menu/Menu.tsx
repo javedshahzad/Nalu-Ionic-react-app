@@ -23,7 +23,7 @@ import {
   IonSpinner,
   useIonToast,
 } from "@ionic/react";
-
+import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import {
   arrowBackOutline,
@@ -42,6 +42,9 @@ import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 import { ArrowLeftIcon } from "@vidstack/react/icons";
 import apiService from "../../Services";
+import menuReducer from "../../reducers/menuReducer";
+import { useSelector } from "react-redux";
+import { fetchAvatar, getAvatar } from "../../actions/menuActions";
 
 async function openExternalLink(url: string) {
   await Browser.open({ url: url });
@@ -66,9 +69,21 @@ interface AppPage {
 }
 
 const Menu: React.FC = () => {
+  const userId = localStorage.getItem("userId");
+  const dispatch = useDispatch();
   const history = useHistory();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showDeleteSuccess, setShowDeleteSuccess] = useState(false);
+
+  const getMenuData = useSelector((state: any) => state.menuReducer.getAvatar);
+
+  useEffect(() => {
+    getMenuData.then((result: any) => {
+      setEmail(result?.email);
+      setNickname(result?.nickname);
+      setAvatar(result?.avatar_urls["96"]);
+    });
+  }, [getAvatar]);
 
   let isPremium = false; // Default to false
   try {
@@ -201,27 +216,27 @@ const Menu: React.FC = () => {
 
   const [present] = useIonToast();
 
-  const getName = async () => {
-    let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?_fields=nickname`;
-    const headers = {
-      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-    };
+  // const getName = async () => {
+  //   let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?_fields=nickname`;
+  //   const headers = {
+  //     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+  //   };
 
-    try {
-      let response;
-      if (isPlatform("ios")) {
-        const cordovaResponse = await HTTP.get(URL, {}, headers);
-        response = JSON.parse(cordovaResponse.data);
-      } else {
-        const axiosResponse = await axios.get(URL, { headers });
-        response = axiosResponse.data;
-      }
-      setNickname(response.nickname);
-    } catch (error) {
-      console.error("Error fetching course data:", error);
-    } finally {
-    }
-  };
+  //   try {
+  //     let response;
+  //     if (isPlatform("ios")) {
+  //       const cordovaResponse = await HTTP.get(URL, {}, headers);
+  //       response = JSON.parse(cordovaResponse.data);
+  //     } else {
+  //       const axiosResponse = await axios.get(URL, { headers });
+  //       response = axiosResponse.data;
+  //     }
+  //     setNickname(response.nickname);
+  //   } catch (error) {
+  //     console.error("Error fetching course data:", error);
+  //   } finally {
+  //   }
+  // };
 
   const changeName = (event) => {
     setNickname_(event.target.value);
@@ -243,7 +258,7 @@ const Menu: React.FC = () => {
     let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?nickname=${nickname_}`;
 
     try {
-      let response;
+      let response: any;
       if (isPlatform("ios")) {
         const cordovaResponse = await apiService.put(URL, {});
         response = JSON.parse(cordovaResponse.data);
@@ -251,6 +266,7 @@ const Menu: React.FC = () => {
         const axiosResponse = await apiService.put(URL, {});
         response = axiosResponse.data;
       }
+
       setNickname(nickname_);
       SetEditNickName(false);
       present({
@@ -273,29 +289,29 @@ const Menu: React.FC = () => {
     }
   };
 
-  const getAvatar = async () => {
-    const userId = localStorage.getItem("userId");
+  // const getAvatar = async () => {
+  //   const userId = localStorage.getItem("userId");
 
-    let URL = `https://app.mynalu.com/wp-json/wp/v2/users/${userId}`;
-    const headers = {
-      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-    };
+  //   let URL = `https://app.mynalu.com/wp-json/wp/v2/users/${userId}`;
+  //   const headers = {
+  //     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+  //   };
 
-    try {
-      let response;
-      if (isPlatform("ios")) {
-        const cordovaResponse = await HTTP.get(URL, {}, headers);
-        response = JSON.parse(cordovaResponse.data);
-      } else {
-        const axiosResponse = await axios.get(URL, { headers });
-        response = axiosResponse.data;
-      }
-      setAvatar(response.avatar_urls["96"]);
-    } catch (error) {
-      console.error("Error fetching course data:", error);
-    } finally {
-    }
-  };
+  //   try {
+  //     let response: any;
+  //     if (isPlatform("ios")) {
+  //       const cordovaResponse = await HTTP.get(URL, {}, headers);
+  //       response = JSON.parse(cordovaResponse.data);
+  //     } else {
+  //       const axiosResponse = await axios.get(URL, { headers });
+  //       response = axiosResponse.data;
+  //     }
+  //     setAvatar(response.avatar_urls["96"]);
+  //   } catch (error) {
+  //     console.error("Error fetching course data:", error);
+  //   } finally {
+  //   }
+  // };
 
   const edit_avatar = () => {
     present({
@@ -351,12 +367,10 @@ const Menu: React.FC = () => {
         reader.append("Content-Type", "image/*");
 
         try {
-          // Upload image to WordPress media
           const uploadResponse = await apiService.post(uploadURL, reader);
           const mediaId = uploadResponse.id;
 
-          // Call your second API to update user avatar
-          const updateAvatarURL = `https://app.mynalu.com/wp-json/wp/v2/users/${uploadResponse.author}/`;
+          const updateAvatarURL = `https://app.mynalu.com/wp-json/wp/v2/users/${uploadResponse.author}`;
           const updateAvatarData = {
             simple_local_avatar: {
               media_id: mediaId,
@@ -393,6 +407,7 @@ const Menu: React.FC = () => {
               updateAvatarData,
               customAxiosHeaders
             );
+            setAvatar(updateAvatarResponse.avatar_urls["96"]);
           }
 
           const mediaURL = uploadResponse.guid.rendered;
@@ -403,6 +418,7 @@ const Menu: React.FC = () => {
             duration: 2000,
             position: "top",
           });
+
           setIsLoading(false);
         } catch (error) {
           console.error("Error updating user avatar:", error);
@@ -421,37 +437,31 @@ const Menu: React.FC = () => {
     }
   };
 
-  const getEmail = async () => {
-    let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?_fields=email`;
-    const headers = {
-      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-    };
+  // const getEmail = async () => {
+  //   let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?_fields=email`;
+  //   const headers = {
+  //     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+  //   };
 
-    try {
-      let response;
-      if (isPlatform("ios")) {
-        const cordovaResponse = await HTTP.get(URL, {}, headers);
-        response = JSON.parse(cordovaResponse.data);
-      } else {
-        const axiosResponse = await axios.get(URL, { headers });
-        response = axiosResponse.data;
-      }
+  //   try {
+  //     let response;
+  //     if (isPlatform("ios")) {
+  //       const cordovaResponse = await HTTP.get(URL, {}, headers);
+  //       response = JSON.parse(cordovaResponse.data);
+  //     } else {
+  //       const axiosResponse = await axios.get(URL, { headers });
+  //       response = axiosResponse.data;
+  //     }
 
-      setEmail(response.email);
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error fetching course data:", error);
-      setIsLoading(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  useEffect(() => {
-    setIsLoading(true);
-    getAvatar();
-    getName();
-    getEmail();
-  }, [avatar]);
+  //     setEmail(response.email);
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     console.error("Error fetching course data:", error);
+  //     setIsLoading(false);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <IonPage className="Menu">
@@ -468,81 +478,79 @@ const Menu: React.FC = () => {
       <IonContent
         className={`slide-menu ${isPlatform("ios") ? "safe-padding" : ""}`}
       >
-        {/*
-        {isLoading ? (
+        {/* {isLoading ? (
           <div className="skeleton">
             <div className="profileDiv"></div>
             <div className="div1"></div>
             <div className="div2"></div>
           </div>
-        ) : (
-          <div className="profile-holder ion-text-center">
-            {isPremium ? (
-              <>
-                <IonAvatar>
-                  {avatar ? (
-                    <img src={avatar} alt="" />
-                  ) : (
-                    <img src="/assets/imgs/avatar.png" alt="" />
-                  )}
-                </IonAvatar>
-                <div className="btnn ion-activatable ripple-parent flex al-center jc-center">
-                  <IonRippleEffect />
-                  <IonIcon icon={camera} onClick={edit_avatar} />
-                  <input
-                    type="file"
-                    accept="image/jpeg,image/jpg,image/png,image/webp"
-                    id="avatar"
-                    onChange={uploadAvatar}
-                    hidden
-                  />
-                </div>
-                {editname ? (
-                  <div className="nick_name_field">
-                    <input
-                      className="w-70 ion-text-center bg-transparent border-05"
-                      type="text"
-                      value={nickname_}
-                      onChange={changeName}
-                    />
-                    <div className="w-30">
-                      <button
-                        type="button"
-                        className="bg-transparent text-black text-20px mr-2"
-                        onClick={save_name}
-                      >
-                        <IonIcon icon={checkmark} />
-                      </button>
-
-                      <button
-                        type="button"
-                        className="bg-transparent text-black text-20px"
-                        onClick={() => SetEditNickName(false)}
-                      >
-                        <IonIcon icon={close} />
-                      </button>
-                    </div>
-                  </div>
+        ) : ( */}
+        <div className="profile-holder ion-text-center">
+          {isPremium ? (
+            <>
+              <IonAvatar>
+                {avatar ? (
+                  <img src={avatar} alt="" />
                 ) : (
-                  <h1 className="menu-name">
-                    {nickname ? <>{nickname}</> : <>User Nickname</>}
-                    <IonIcon
-                      icon={pencil}
-                      className="edit_icon"
-                      onClick={edit_name}
-                    />
-                  </h1>
+                  <img src="/assets/imgs/avatar.png" alt="" />
                 )}
-              </>
-            ) : (
-              <></>
-            )}
-            <h6 className="menu-email">
-              {email ? <>{email}</> : <>User Email</>}
-            </h6>
-          </div>
-        )}
-        */}
+              </IonAvatar>
+              <div className="btnn ion-activatable ripple-parent flex al-center jc-center">
+                <IonRippleEffect />
+                <IonIcon icon={camera} onClick={edit_avatar} />
+                <input
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  id="avatar"
+                  onChange={uploadAvatar}
+                  hidden
+                />
+              </div>
+              {editname ? (
+                <div className="nick_name_field">
+                  <input
+                    className="w-70 ion-text-center bg-transparent border-05"
+                    type="text"
+                    value={nickname_}
+                    onChange={changeName}
+                  />
+                  <div className="w-30">
+                    <button
+                      type="button"
+                      className="bg-transparent text-black text-20px mr-2"
+                      onClick={save_name}
+                    >
+                      <IonIcon icon={checkmark} />
+                    </button>
+
+                    <button
+                      type="button"
+                      className="bg-transparent text-black text-20px"
+                      onClick={() => SetEditNickName(false)}
+                    >
+                      <IonIcon icon={close} />
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <h1 className="menu-name">
+                  {nickname ? <>{nickname}</> : <>User Nickname</>}
+                  <IonIcon
+                    icon={pencil}
+                    className="edit_icon"
+                    onClick={edit_name}
+                  />
+                </h1>
+              )}
+            </>
+          ) : (
+            <></>
+          )}
+          <h6 className="menu-email">
+            {email ? <>{email}</> : <>User Email</>}
+          </h6>
+        </div>
+        {/* )} */}
 
         {!isPremium && (
           <IonMenuToggle autoHide={false} className="join-nalu">
