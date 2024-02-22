@@ -62,12 +62,17 @@ import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 import { useLocation } from "react-router-dom";
 import { Player } from "./../../../components/videoPlayer/Player";
+import { fetchCourses } from "../../../actions/courseActions";
+import { useDispatch } from "react-redux";
 
 const CourseInnerOverview: React.FC = () => {
   const history = useHistory();
   const location = useLocation();
   const data: any = location?.state;
-  const [courseId, setCourseId] = useState(data?.course_id);
+
+  const courseId = data?.course_id;
+  const dispatch = useDispatch();
+  // const [courseId, setCourseId] = useState(data?.course_id);
 
   const [togglePlay, setTogglePlay] = useState("video");
   const [courseData, setCourseData] = useState(null);
@@ -76,6 +81,7 @@ const CourseInnerOverview: React.FC = () => {
 
   useEffect(() => {
     getData(courseId, null);
+    // dispatch here
   }, []);
 
   // const handleVideoClick = (value) => {
@@ -84,6 +90,7 @@ const CourseInnerOverview: React.FC = () => {
   const handleComplete = (id) => {
     // history.push(`/tabs/tab1/courseinneroverview/${id}`);
     getData(id, null);
+    // dispatch here
   };
 
   const getData = async (id, next_chapter) => {
@@ -100,11 +107,12 @@ const CourseInnerOverview: React.FC = () => {
       if (isPlatform("ios")) {
         const cordovaResponse = await HTTP.get(URL, {}, headers);
         response = JSON.parse(cordovaResponse.data);
+        dispatch<any>(fetchCourses());
       } else {
         const axiosResponse = await axios.get(URL, { headers });
         response = axiosResponse.data;
+        dispatch<any>(fetchCourses());
       }
-      console.log(response);
       setCourseData(response);
     } catch (error) {
       console.error("Error fetching course data:", error);
@@ -112,6 +120,7 @@ const CourseInnerOverview: React.FC = () => {
       setIsLoading(false);
     }
   };
+
   const markAsDone = async (course) => {
     setIsMarlLoading(true);
     const URL = course?.completion_link;
@@ -124,13 +133,14 @@ const CourseInnerOverview: React.FC = () => {
       if (isPlatform("ios")) {
         const cordovaResponse = await HTTP.post(URL, {}, headers);
         response = JSON.parse(cordovaResponse.data);
+        dispatch<any>(fetchCourses());
       } else {
         const axiosResponse = await axios.post(URL, null, { headers });
         response = axiosResponse.data;
       }
-      console.log(response);
       if (response.status === "success") {
         getData(null, course?.next_chapter);
+        // dispatch here
       }
     } catch (error) {
       console.error("Error marking course as done:", error);
@@ -174,8 +184,9 @@ const CourseInnerOverview: React.FC = () => {
             </IonHeader>
             <IonContent
               fullscreen
-              className={`ion-no-padding ${isPlatform("ios") ? "safe-padding" : ""
-                }`}
+              className={`ion-no-padding ${
+                isPlatform("ios") ? "safe-padding" : ""
+              }`}
             >
               <div className="main_div">
                 {courseData?.video_url ? (
@@ -281,7 +292,6 @@ const CourseInnerOverview: React.FC = () => {
                   </div>
                 )}
               </div>
-
             </IonContent>
           </>
         )}
