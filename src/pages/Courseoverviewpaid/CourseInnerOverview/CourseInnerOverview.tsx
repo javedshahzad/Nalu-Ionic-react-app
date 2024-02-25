@@ -107,11 +107,9 @@ const CourseInnerOverview: React.FC = () => {
       if (isPlatform("ios")) {
         const cordovaResponse = await HTTP.get(URL, {}, headers);
         response = JSON.parse(cordovaResponse.data);
-        dispatch<any>(fetchCourses());
       } else {
         const axiosResponse = await axios.get(URL, { headers });
         response = axiosResponse.data;
-        dispatch<any>(fetchCourses());
       }
       setCourseData(response);
     } catch (error) {
@@ -137,6 +135,7 @@ const CourseInnerOverview: React.FC = () => {
       } else {
         const axiosResponse = await axios.post(URL, null, { headers });
         response = axiosResponse.data;
+        dispatch<any>(fetchCourses());
       }
       if (response.status === "success") {
         getData(null, course?.next_chapter);

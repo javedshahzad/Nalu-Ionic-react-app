@@ -79,7 +79,7 @@ import MoonPhasesService from "./MoonPhasesService";
 import authService from "./authService";
 import { fetchColors, fetchMoonIcons } from "./actions/apiActions";
 import { fetchAvatar } from "./actions/menuActions";
-import { fetchCourses } from "./actions/courseActions";
+import { fetchCourses, fetchCoursesInner } from "./actions/courseActions";
 
 setupIonicReact({
   mode: "ios",

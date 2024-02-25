@@ -28,8 +28,9 @@ export const fetchCoursesInner = (id: any) => {
       const response = apiService.get(
         `https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`
       );
+      console.log("<<<<first>>>>", response);
       dispatch(getCoursesInner(response));
-      dispatch(fetchCourses());
+      // dispatch(fetchCourses());
     } catch (error) {
       console.error("Error fetching data:", error);
     }
