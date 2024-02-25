@@ -1,7 +1,6 @@
 import {
   IonAccordion,
   IonAccordionGroup,
-  IonBackButton,
   IonButton,
   IonButtons,
   IonContent,
@@ -12,28 +11,17 @@ import {
   IonPage,
   IonProgressBar,
   IonSpinner,
-  IonTitle,
   IonToolbar,
-  useIonViewDidLeave,
   isPlatform,
 } from "@ionic/react";
-import {
-  chevronForwardOutline,
-  menuOutline,
-  notificationsOutline,
-} from "ionicons/icons";
+import { menuOutline } from "ionicons/icons";
 
 import "./Courseoverviewpaid.scss";
-import axios from "axios";
-import { HTTP } from "@awesome-cordova-plugins/http";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
-import NotificationBell from "../../components/NotificationBell";
 import { useLocation } from "react-router-dom";
-import authService from "../../authService";
 import { useSelector } from "react-redux";
-import { fetchCoursesInner } from "../../actions/courseActions";
 
 const Courseoverviewpaid: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -76,8 +64,8 @@ const Courseoverviewpaid: React.FC = () => {
 
   let isPremium = false; // Default to false
   try {
-    const roles = JSON.parse(localStorage.getItem("roles") || "{}"); // Parse the roles or default to an empty object
-    isPremium = Object.values(roles).includes("premium"); // Check if 'premium' is one of the roles
+    const roles = JSON.parse(localStorage.getItem("roles") || "{}");
+    isPremium = Object.values(roles).includes("premium");
   } catch (e) {
     console.error("Error parsing roles from localStorage:", e);
   }

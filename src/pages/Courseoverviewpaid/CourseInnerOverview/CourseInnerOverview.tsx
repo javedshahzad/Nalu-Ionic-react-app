@@ -81,16 +81,15 @@ const CourseInnerOverview: React.FC = () => {
 
   useEffect(() => {
     getData(courseId, null);
-    // dispatch here
   }, []);
 
   // const handleVideoClick = (value) => {
   //   setTogglePlay(value);
   // };
+
   const handleComplete = (id) => {
     // history.push(`/tabs/tab1/courseinneroverview/${id}`);
     getData(id, null);
-    // dispatch here
   };
 
   const getData = async (id, next_chapter) => {
@@ -139,7 +138,6 @@ const CourseInnerOverview: React.FC = () => {
       }
       if (response.status === "success") {
         getData(null, course?.next_chapter);
-        // dispatch here
       }
     } catch (error) {
       console.error("Error marking course as done:", error);

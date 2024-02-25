@@ -44,8 +44,6 @@ import { isPlatform } from "@ionic/react";
 const GroupChat: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
 
-  // console.log("group Id", groupId);
-
   const [grpMessage, setgrpMessage] = useState([]);
   const [sendMsgObject, setSendMsgObject] = useState(null);
   const [groupName, setGroupName] = useState("");
@@ -64,8 +62,6 @@ const GroupChat: React.FC = () => {
     left: 0,
     top: 0,
   });
-
-  console.log("grpmes>>>", grpMessage);
 
   const history = useHistory();
 
@@ -94,7 +90,6 @@ const GroupChat: React.FC = () => {
       setInitialLoading(true);
 
       socket.on("message-list", (data) => {
-        // console.log("data", data);
         if (data.results.length > 0) {
           // setgrpMessage(data.results);
           const invertedArray = data.results.reverse();
@@ -191,7 +186,6 @@ const GroupChat: React.FC = () => {
       .get(`https://apidev.mynalu.com/v1/conversation/get/${groupId}`)
       .then((data) => {
         setGroupName(data.data.groupName);
-        // console.log("groupName", data);
         setGroupImage(data.data.groupImage);
       })
       .catch((error) => {
@@ -221,8 +215,84 @@ const GroupChat: React.FC = () => {
       });
   };
 
+  // const fcmtoken: any = localStorage.getItem("fcmtoken");
+
+  const [users, setUsers] = useState(null);
+  // const getAllUsers = async () => {
+  //   try {
+
+  //     const response = await fetch('https://chatt-4c79eea14771.herokuapp.com/api/get-all-users/', {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       },
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error('Getting Users failed');
+  //     }
+
+  //     // Clear any previous errors
+
+  //     // If login successful, you can handle the response accordingly
+  //     const data = await response.json();
+  //     setUsers(data);
+
+  //   } catch (error) {
+
+  //     console.error('Getting Users failed error:', error);
+  //   }
+  // }
+
+  // const findObjectById = (objects: any, idToMatch: any) => {
+  //   for (let i = 0; i < objects.length; i++) {
+  //     if (objects[i]._id !== idToMatch) {
+  //       return objects[i];
+  //     }
+  //   }
+  //   return null; // If no object with different ID is found
+  // };
+
+  useEffect(() => {
+    // getAllUsers()
+  }, []);
+
+  // const sendNotification = async (data: any) => {
+  //   try {
+  //     apiService.post(
+  //       `https://apidev.mynalu.com/v1/fcm/send-notification`,
+  //       data
+  //     );
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
   const handleSendMessage = () => {
     if (newMessage !== "") {
+      // const user_id = localStorage.getItem("userId");
+      // const idToMatch = user_id;
+
+      // const result = findObjectById(users, idToMatch);
+
+      // socket.emit("send-message", {
+      //   user: user,
+      //   conversation: groupId,
+      //   message: `<p>${newMessage}</p>`,
+      //   type: "message",
+      // });
+
+      // if (result && result.length > 0) {
+      //   result.map((obj: any) => {
+      //     const messageData: any = {
+      //       author: obj?.name,
+      //       message: newMessage,
+      //       to: obj?.token,
+      //     };
+      //     sendNotification(messageData);
+      //   });
+      // }
+
       socket.emit("send-message", {
         user: user,
         conversation: groupId,
@@ -257,7 +327,6 @@ const GroupChat: React.FC = () => {
         conversation: groupId,
       });
 
-      console.log("nameArr", nameArray);
       socket.emit("send-message", {
         user: user,
         conversation: groupId,
@@ -343,11 +412,8 @@ const GroupChat: React.FC = () => {
 
   useEffect(() => {
     if (sendMsgObject) {
-      // console.log("sendmsg>>", sendMsgObject);
       const aa = [...grpMessage];
       aa.push(sendMsgObject);
-
-      // console.log("aa>>", aa);
       setgrpMessage(aa);
       setSendMsgObject(null);
     }
