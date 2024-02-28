@@ -21,11 +21,13 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
 import { useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchChapter } from "../../actions/courseActions";
 
 const Courseoverviewpaid: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [courseData, setCourseData] = useState(null);
+  const [currentChapterId, setCurrentChapterId] = useState(null);
 
   const history = useHistory();
   const location = useLocation();
@@ -135,11 +137,24 @@ const Courseoverviewpaid: React.FC = () => {
   //   }
   // };
 
-  const navigateToCourseInner = (id) => {
-    history.push("/tabs/tab1/courseinneroverview", {
-      course_id: id,
-    });
+  const dispatch = useDispatch();
+
+  // let currentChapterId = null;
+
+  const navigateToCourseInner = (id: any) => {
+    // Check if the clicked chapter is different from the current chapter
+    if (id !== currentChapterId) {
+      history.push("/tabs/tab1/courseinneroverview", {
+        course_id: id,
+      });
+      setCurrentChapterId(id);
+
+      dispatch<any>(fetchChapter(id));
+    } else {
+      history.push("/tabs/tab1/courseinneroverview");
+    }
   };
+
   return (
     <>
       <IonPage className="Courseoverviewpaid">

@@ -62,8 +62,12 @@ import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 import { useLocation } from "react-router-dom";
 import { Player } from "./../../../components/videoPlayer/Player";
-import { fetchCourses } from "../../../actions/courseActions";
-import { useDispatch } from "react-redux";
+import {
+  fetchChapter,
+  fetchCourses,
+  fetchNextChapter,
+} from "../../../actions/courseActions";
+import { useDispatch, useSelector } from "react-redux";
 
 const CourseInnerOverview: React.FC = () => {
   const history = useHistory();
@@ -78,10 +82,28 @@ const CourseInnerOverview: React.FC = () => {
   const [courseData, setCourseData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [ismarkLoading, setIsMarlLoading] = useState(false);
+  const getChapter = useSelector(
+    (state: any) => state.courseReducer.getChapter
+  );
+  const nextChapUrl = useSelector(
+    (state: any) => state.courseReducer.getNextChapter
+  );
 
   useEffect(() => {
-    getData(courseId, null);
+    setIsLoading(true);
+
+    getChapter.then((result: any) => {
+      const data = result;
+      setCourseData(data);
+      setIsLoading(false);
+    });
   }, []);
+  useEffect(() => {
+    nextChapUrl.then((result: any) => {
+      const data = result;
+      setCourseData(data);
+    });
+  }, [dispatch]);
 
   // const handleVideoClick = (value) => {
   //   setTogglePlay(value);
@@ -89,33 +111,7 @@ const CourseInnerOverview: React.FC = () => {
 
   const handleComplete = (id) => {
     // history.push(`/tabs/tab1/courseinneroverview/${id}`);
-    getData(id, null);
-  };
-
-  const getData = async (id, next_chapter) => {
-    setIsLoading(true);
-    let URL = id
-      ? `https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`
-      : next_chapter;
-    const headers = {
-      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-    };
-
-    try {
-      let response;
-      if (isPlatform("ios")) {
-        const cordovaResponse = await HTTP.get(URL, {}, headers);
-        response = JSON.parse(cordovaResponse.data);
-      } else {
-        const axiosResponse = await axios.get(URL, { headers });
-        response = axiosResponse.data;
-      }
-      setCourseData(response);
-    } catch (error) {
-      console.error("Error fetching course data:", error);
-    } finally {
-      setIsLoading(false);
-    }
+    // getData(id, null);
   };
 
   const markAsDone = async (course) => {
@@ -131,13 +127,19 @@ const CourseInnerOverview: React.FC = () => {
         const cordovaResponse = await HTTP.post(URL, {}, headers);
         response = JSON.parse(cordovaResponse.data);
         dispatch<any>(fetchCourses());
+        nextChapUrl.then((response: any) => {
+          setCourseData(response);
+        });
       } else {
         const axiosResponse = await axios.post(URL, null, { headers });
         response = axiosResponse.data;
         dispatch<any>(fetchCourses());
       }
       if (response.status === "success") {
-        getData(null, course?.next_chapter);
+        // getData(null, course?.next_chapter);
+        nextChapUrl.then((response: any) => {
+          setCourseData(response);
+        });
       }
     } catch (error) {
       console.error("Error marking course as done:", error);
@@ -195,6 +197,9 @@ const CourseInnerOverview: React.FC = () => {
                       className="react-player"
                       controls={true}
                       playsinline={true}
+                      onPlay={() =>
+                        dispatch<any>(fetchNextChapter(courseData.next_chapter))
+                      }
                     />
                   </div>
                 ) : (
