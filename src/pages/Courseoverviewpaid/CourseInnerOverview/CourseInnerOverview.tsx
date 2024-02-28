@@ -81,6 +81,7 @@ const CourseInnerOverview: React.FC = () => {
   const [togglePlay, setTogglePlay] = useState("video");
   const [courseData, setCourseData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [videoPlayed, setVideoPlayed] = useState(false);
   const [ismarkLoading, setIsMarlLoading] = useState(false);
   const getChapter = useSelector(
     (state: any) => state.courseReducer.getChapter
@@ -88,6 +89,11 @@ const CourseInnerOverview: React.FC = () => {
   const nextChapUrl = useSelector(
     (state: any) => state.courseReducer.getNextChapter
   );
+
+  const handleVideoPlay = () => {
+    dispatch<any>(fetchNextChapter(courseData.next_chapter));
+    setVideoPlayed(true);
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -129,6 +135,7 @@ const CourseInnerOverview: React.FC = () => {
         dispatch<any>(fetchCourses());
         nextChapUrl.then((response: any) => {
           setCourseData(response);
+          setVideoPlayed(false);
         });
       } else {
         const axiosResponse = await axios.post(URL, null, { headers });
@@ -139,6 +146,7 @@ const CourseInnerOverview: React.FC = () => {
         // getData(null, course?.next_chapter);
         nextChapUrl.then((response: any) => {
           setCourseData(response);
+          setVideoPlayed(false);
         });
       }
     } catch (error) {
@@ -197,9 +205,7 @@ const CourseInnerOverview: React.FC = () => {
                       className="react-player"
                       controls={true}
                       playsinline={true}
-                      onPlay={() =>
-                        dispatch<any>(fetchNextChapter(courseData.next_chapter))
-                      }
+                      onPlay={handleVideoPlay}
                     />
                   </div>
                 ) : (
@@ -275,8 +281,10 @@ const CourseInnerOverview: React.FC = () => {
                 </IonGrid>
                 {!courseData?.completed && (
                   <div
-                    className={`mark-done-button`}
-                    onClick={() => markAsDone(courseData)}
+                    className={`mark-done-button ${
+                      videoPlayed ? "" : "disabled"
+                    }`}
+                    onClick={() => videoPlayed && markAsDone(courseData)}
                   >
                     {ismarkLoading ? (
                       <IonSpinner
