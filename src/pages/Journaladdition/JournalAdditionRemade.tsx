@@ -100,10 +100,6 @@ function JournalAdditionRemade() {
         // console.log("dynamic", dynamicStates);
         dispatch(clearJournal());
         dispatch(journalAction(dynamicStates));
-
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 10000);
       }
 
       setIsLoading(false);

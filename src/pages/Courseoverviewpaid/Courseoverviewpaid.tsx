@@ -141,17 +141,19 @@ const Courseoverviewpaid: React.FC = () => {
 
   // let currentChapterId = null;
 
-  const navigateToCourseInner = (id: any) => {
-    // Check if the clicked chapter is different from the current chapter
-    if (id !== currentChapterId) {
-      history.push("/tabs/tab1/courseinneroverview", {
-        course_id: id,
-      });
-      setCurrentChapterId(id);
+  const navigateToCourseInner = async (id: any) => {
+    setCurrentChapterId(id);
 
-      dispatch<any>(fetchChapter(id));
-    } else {
-      history.push("/tabs/tab1/courseinneroverview");
+    try {
+      if (id === currentChapterId) {
+        history.push("/tabs/tab1/courseinneroverview");
+      } else {
+        await dispatch<any>(fetchChapter(id));
+        history.push("/tabs/tab1/courseinneroverview");
+      }
+    } catch (error) {
+      console.error("Error navigating to course inner:", error);
+    } finally {
     }
   };
 

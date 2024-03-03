@@ -96,20 +96,35 @@ const CourseInnerOverview: React.FC = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const result = await getChapter;
+        setCourseData(result);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setIsLoading(false);
+      }
+    };
 
-    getChapter.then((result: any) => {
-      const data = result;
-      setCourseData(data);
-      setIsLoading(false);
-    });
+    fetchData();
   }, []);
+
   useEffect(() => {
-    nextChapUrl.then((result: any) => {
-      const data = result;
-      setCourseData(data);
-    });
-  }, [dispatch]);
+    const fetchData = async () => {
+      if (nextChapUrl && nextChapUrl.length > 0) {
+        try {
+          const result = await nextChapUrl;
+          setCourseData(result);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [dispatch, nextChapUrl]);
 
   // const handleVideoClick = (value) => {
   //   setTogglePlay(value);
@@ -281,10 +296,8 @@ const CourseInnerOverview: React.FC = () => {
                 </IonGrid>
                 {!courseData?.completed && (
                   <div
-                    className={`mark-done-button ${
-                      videoPlayed ? "" : "disabled"
-                    }`}
-                    onClick={() => videoPlayed && markAsDone(courseData)}
+                    className={`mark-done-button`}
+                    onClick={() => markAsDone(courseData)}
                   >
                     {ismarkLoading ? (
                       <IonSpinner

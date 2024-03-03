@@ -120,20 +120,24 @@ const JournalCalendarRemade = () => {
   );
 
   useEffect(() => {
-    moonColors
-      .then((result: any) => {
-        const entries = result;
-        setColorsData(entries);
-      })
-
-      .catch((error: any) => {
+    const fetchMoonColors = async () => {
+      try {
+        const result = await moonColors;
+        setColorsData(result);
+      } catch (error) {
         console.error("Error fetching moonColors", error);
-      });
+      }
+    };
+
+    fetchMoonColors();
   }, [moonColors]);
+
   const moonIcons = useSelector((state: any) => state.phasesReducer.moonIcons);
+
   useEffect(() => {
-    moonIcons
-      .then((result: any) => {
+    const fetchMoonIcons = async () => {
+      try {
+        const result = await moonIcons;
         const moonPhase = result;
 
         const newArray = [];
@@ -151,11 +155,12 @@ const JournalCalendarRemade = () => {
         }
 
         setIconsData(newArray);
-      })
+      } catch (error) {
+        console.error("Error fetching moonIcons", error);
+      }
+    };
 
-      .catch((error: any) => {
-        console.error("Error fetching moonColors", error);
-      });
+    fetchMoonIcons();
   }, [moonIcons]);
 
   useEffect(() => {
@@ -173,7 +178,7 @@ const JournalCalendarRemade = () => {
   }, []);
 
   const navigation = useIonRouter();
-  const toJounralAddition = () => { };
+  const toJounralAddition = () => {};
 
   const date: Date = new Date();
 
@@ -198,8 +203,9 @@ const JournalCalendarRemade = () => {
     const tempMonthIndex = monthIndex + 1 + "";
     const tempDateIndex = dateIndex + "";
 
-    const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
-      }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+    const dateParam = `${year}-${
+      +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+    }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
     // const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
     //   }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
@@ -208,7 +214,6 @@ const JournalCalendarRemade = () => {
 
     history.push(url);
   };
-
 
   useEffect(() => {
     //const scrollingToView = () => {
@@ -224,9 +229,7 @@ const JournalCalendarRemade = () => {
         isItToday.scrollIntoView({ behavior: "smooth", block: "center" });
       }, 1000);
     }
-
   }, []);
-
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -709,7 +712,6 @@ const JournalCalendarRemade = () => {
         rect.top <= window.innerHeight * 0.4 &&
         rect.bottom >= 0.2 * window.innerHeight
       ) {
-
         setCurrentDivInView(sectionRef);
         setCurrentMonthIndex(index);
         setCurrentDisplayedMonthIndex(index);
@@ -761,8 +763,8 @@ const JournalCalendarRemade = () => {
     for (let i = 1; i <= lastDateOfMonth; i++) {
       const isToday =
         i === new Date().getDate() &&
-          m === new Date().getMonth() &&
-          year === new Date().getFullYear()
+        m === new Date().getMonth() &&
+        year === new Date().getFullYear()
           ? "currentDay"
           : "";
 
@@ -774,10 +776,10 @@ const JournalCalendarRemade = () => {
           return (
             item.date ===
             year +
-            "-" +
-            (m + 1).toString().padStart(2, "0") +
-            "-" +
-            i.toString().padStart(2, "0")
+              "-" +
+              (m + 1).toString().padStart(2, "0") +
+              "-" +
+              i.toString().padStart(2, "0")
           );
         });
       }
@@ -786,8 +788,9 @@ const JournalCalendarRemade = () => {
         <li
           key={`currentDay-${i}`}
           id={`${i}/${m + 1}/${year}`}
-          className={`calendar-day ${isToday} ${activeIndex === i + 1 && activeMonthIndex === m ? "dayActive" : ""
-            }`}
+          className={`calendar-day ${isToday} ${
+            activeIndex === i + 1 && activeMonthIndex === m ? "dayActive" : ""
+          }`}
           onClick={() => handleOnClick(i, m)}
           style={getColors(year, m + 1, i)}
         >
@@ -950,8 +953,9 @@ const JournalCalendarRemade = () => {
                   <div
                     id={`${months[mIndex]}`}
                     key={monthData.key}
-                    className={`calendar-month ${currentdivInView == months[mIndex] ? "fadeIn" : "fadeOut"
-                      }`}
+                    className={`calendar-month ${
+                      currentdivInView == months[mIndex] ? "fadeIn" : "fadeOut"
+                    }`}
                   >
                     {monthData} {months[mIndex]}
                   </div>
@@ -1048,11 +1052,15 @@ const JournalCalendarRemade = () => {
                 />
                 <p className="moon-text">Zervixschleim</p>
               </div> */}
-              <div
-                style={{ stroke: "#EE5F64", fill: "#EE5F64" }}
-                dangerouslySetInnerHTML={{ __html: fullMoonSvg }}
-              ></div>
-              <p className="moon-text">Vollmond</p>
+              <div className="fullmoonOutter">
+                <div
+                  style={{ stroke: "#EE5F64", fill: "#EE5F64" }}
+                  dangerouslySetInnerHTML={{ __html: fullMoonSvg }}
+                ></div>
+                <p className="moon-text" style={{ fontSize: 14 }}>
+                  Vollmond
+                </p>
+              </div>
               {/*   className="full-moon bottom"
                 style={{ display: "flex", alignItems: "center" }}
               >
@@ -1068,7 +1076,6 @@ const JournalCalendarRemade = () => {
 
         <div className="journal-cycle-wrapper">
           <div className="journal-cycle">
-
             <div className="day-time">
               <span>{formatTodaysDate()}</span>
               {/* <div className="journal-cycle-wrapper">
@@ -1080,8 +1087,6 @@ const JournalCalendarRemade = () => {
             </div>
           </div>
 
-
-
           {/*<IonButton className="period-btn" onClick={handleStartStop}>
             {todayPeriod == "false" ? (
               <IonLabel>Beginn der Periode</IonLabel>
@@ -1090,7 +1095,6 @@ const JournalCalendarRemade = () => {
             )}
             </IonButton>*/}
         </div>
-
       </IonContent>
     </IonPage>
   );
