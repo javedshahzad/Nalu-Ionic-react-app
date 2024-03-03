@@ -547,19 +547,19 @@ function JournalAdditionRemade() {
     setDisableInput(false);
   };
 
-  const goBack = () => {
-    history.push("/tabs/tab4?loading=true");
-  };
+  // const goBack = () => {
+  //   history.push("/tabs/tab4?loading=true");
+  // };
 
   return (
     <IonPage className="JournalAdditionRemade">
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
-            {/* <IonBackButton></IonBackButton> */}
-            <IonButton onClick={goBack} fill="clear" color={"primary"}>
+            <IonBackButton></IonBackButton>
+            {/*  <IonButton onClick={goBack} fill="clear" color={"primary"}>
               <IonIcon icon={arrowBackOutline} color={"primary"} />
-            </IonButton>
+            </IonButton> */}
           </IonButtons>
         </IonToolbar>
       </IonHeader>

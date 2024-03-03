@@ -80,13 +80,13 @@ import authService from "./authService";
 import { fetchColors, fetchMoonIcons } from "./actions/apiActions";
 import { fetchAvatar } from "./actions/menuActions";
 import { fetchCourses, fetchCoursesInner } from "./actions/courseActions";
-import {
-  ActionPerformed,
-  PushNotificationSchema,
-  PushNotifications,
-  Token,
-} from "@capacitor/push-notifications";
-import { Toast } from "@capacitor/toast";
+// import {
+//   ActionPerformed,
+//   PushNotificationSchema,
+//   PushNotifications,
+//   Token,
+// } from "@capacitor/push-notifications";
+// import { Toast } from "@capacitor/toast";
 
 setupIonicReact({
   mode: "ios",
@@ -224,81 +224,81 @@ const App: React.FC = () => {
 
   // fcm configuration
 
-  useEffect(() => {
-    PushNotifications.requestPermissions().then(
-      (result: any) => {
-        if (result.receive === "granted") {
-          PushNotifications.register();
+  // useEffect(() => {
+  //   PushNotifications.requestPermissions().then(
+  //     (result: any) => {
+  //       if (result.receive === "granted") {
+  //         PushNotifications.register();
 
-          addListener();
-        }
-        if (result.receive === "denied") {
-          showToast("Push Notification permission denied");
-        } else {
-          // Show some error
-        }
-      },
-      (err) => {
-        console.log("err result", err);
-      }
-    );
-  }, []);
+  //         addListener();
+  //       }
+  //       if (result.receive === "denied") {
+  //         showToast("Push Notification permission denied");
+  //       } else {
+  //         // Show some error
+  //       }
+  //     },
+  //     (err) => {
+  //       console.log("err result", err);
+  //     }
+  //   );
+  // }, []);
 
-  const addListener = () => {
-    PushNotifications.addListener("registration", (token: Token) => {
-      console.log("resgisted successfully!", token);
-      localStorage.setItem("fcmtoken", token.value);
+  // const addListener = () => {
+  //   PushNotifications.addListener("registration", (token: Token) => {
+  //     console.log("resgisted successfully!", token);
+  //     localStorage.setItem("fcmtoken", token.value);
 
-      //  showToast("Push registration success");
-      // Push Notifications registered successfully.
-      // Send token details to API to keep in DB.
-    });
+  //     //  showToast("Push registration success");
+  //     // Push Notifications registered successfully.
+  //     // Send token details to API to keep in DB.
+  //   });
 
-    PushNotifications.addListener("registrationError", (error: any) => {
-      alert("Error on registration: " + JSON.stringify(error));
+  //   PushNotifications.addListener("registrationError", (error: any) => {
+  //     alert("Error on registration: " + JSON.stringify(error));
 
-      // Handle push notification registration error here.
-    });
+  //     // Handle push notification registration error here.
+  //   });
 
-    PushNotifications.addListener(
-      "pushNotificationReceived",
-      (notification: PushNotificationSchema) => {
-        setnotifications((notifications) => [
-          ...notifications,
-          {
-            id: notification.id,
-            title: notification.title,
-            body: notification.body,
-            type: "foreground",
-          },
-        ]);
+  //   PushNotifications.addListener(
+  //     "pushNotificationReceived",
+  //     (notification: PushNotificationSchema) => {
+  //       setnotifications((notifications) => [
+  //         ...notifications,
+  //         {
+  //           id: notification.id,
+  //           title: notification.title,
+  //           body: notification.body,
+  //           type: "foreground",
+  //         },
+  //       ]);
 
-        // Show the notification payload if the app is open on the device.
-      }
-    );
+  //       // Show the notification payload if the app is open on the device.
+  //     }
+  //   );
 
-    PushNotifications.addListener(
-      "pushNotificationActionPerformed",
-      (notification: ActionPerformed) => {
-        setnotifications((notifications) => [
-          ...notifications,
-          {
-            id: notification.notification.data.id,
-            title: notification.notification.data.title,
-            body: notification.notification.data.body,
-            type: "action",
-          },
-        ]);
-        // Implement the needed action to take when user tap on a notification.
-      }
-    );
-  };
+  //   PushNotifications.addListener(
+  //     "pushNotificationActionPerformed",
+  //     (notification: ActionPerformed) => {
+  //       setnotifications((notifications) => [
+  //         ...notifications,
+  //         {
+  //           id: notification.notification.data.id,
+  //           title: notification.notification.data.title,
+  //           body: notification.notification.data.body,
+  //           type: "action",
+  //         },
+  //       ]);
+  //       // Implement the needed action to take when user tap on a notification.
+  //     }
+  //   );
+  // };
 
-  const showToast = async (msg: string) => {
-    await Toast.show({
-      text: msg,
-    });
-  };
+  // const showToast = async (msg: string) => {
+  //   await Toast.show({
+  //     text: msg,
+  //   });
+  // };
 
   return (
     <IonApp>
