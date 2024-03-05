@@ -246,7 +246,7 @@ const Menu: React.FC = () => {
     SetEditNickName(true);
     setNickname_(nickname);
     present({
-      message: `If you are a NALU member the nickname you define here will be shown to other members when you interact in group chats.`,
+      message: `Wenn du ein NALU-Mitglied bist, wird der Name, den du hier definierst, den anderen Mitgliedern angezeigt, wenn du in Gruppenchats interagierst.`,
       color: "danger",
       duration: 5000,
       position: "top",
@@ -270,7 +270,7 @@ const Menu: React.FC = () => {
       setNickname(nickname_);
       SetEditNickName(false);
       present({
-        message: `Nickname updated successfully!`,
+        message: `Name erfolgreich aktualisiert!`,
         color: "success",
         duration: 2000,
         position: "top",
@@ -278,7 +278,7 @@ const Menu: React.FC = () => {
       setIsLoading(false);
     } catch (error) {
       present({
-        message: `Error occurred ! ${error}`,
+        message: `Ein Fehler ist aufgetreten ${error}. Bitte wende dich an support@mynalu.com.`,
         color: "danger",
         duration: 2000,
         position: "top",
@@ -315,7 +315,7 @@ const Menu: React.FC = () => {
 
   const edit_avatar = () => {
     present({
-      message: `If you are a NALU member your profile picture will be shown to other members when you interact in group chats`,
+      message: `Wenn du NALU-Mitglied bist, wird dein Profilbild anderen Mitgliedern angezeigt, wenn du in Gruppenchats interagierst.`,
       color: "secondary",
       duration: 3000,
       position: "top",
@@ -329,7 +329,7 @@ const Menu: React.FC = () => {
     if (file) {
       if (file.size > 10 * 1024 * 1024) {
         present({
-          message: `Error: File size should be less than 10MB.`,
+          message: `Fehler: Die Dateigrösse muss weniger als 10MB betragen.`,
           color: "danger",
           duration: 2000,
           position: "top",
@@ -345,7 +345,7 @@ const Menu: React.FC = () => {
       ];
       if (!allowedTypes.includes(file.type)) {
         present({
-          message: `Error: Only JPG, JPEG, PNG, or WebP files are allowed.`,
+          message: `Fehler: Es sind nur JPG-, JPEG-, PNG- oder WebP-Dateien zulässig.`,
           color: "danger",
           duration: 2000,
           position: "top",
@@ -413,7 +413,7 @@ const Menu: React.FC = () => {
           const mediaURL = uploadResponse.guid.rendered;
 
           present({
-            message: `Profile Picture updated successfully!`,
+            message: `Profilbild erfolgreich aktualisiert!`,
             color: "success",
             duration: 2000,
             position: "top",
@@ -423,7 +423,7 @@ const Menu: React.FC = () => {
         } catch (error) {
           console.error("Error updating user avatar:", error);
           present({
-            message: `Error: Unable to update profile picture.`,
+            message: `Fehler: Das Profilbild konnte nicht aktualisiert werden. Bitte wende dich an support@mynalu.com.`,
             color: "danger",
             duration: 2000,
             position: "top",
