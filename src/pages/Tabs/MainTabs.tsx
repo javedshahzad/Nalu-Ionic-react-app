@@ -29,6 +29,20 @@ import { useHistory } from "react-router-dom";
 interface MainTabsProps { }
 
 const MainTabs: React.FC<MainTabsProps> = () => {
+  const [isPremium, setIsPremium] = useState(false); // State to keep track of premium status
+
+  useEffect(() => {
+    // Check for premium user roles on component mount
+    let isPremium = false; // Default to false
+    try {
+      const roles = JSON.parse(localStorage.getItem("roles") || "{}"); // Parse the roles or default to an empty object
+      isPremium = Object.values(roles).includes("premium"); // Check if 'premium' is one of the roles
+    } catch (e) {
+      console.error("Error parsing roles from localStorage:", e);
+    }
+    setIsPremium(isPremium); // Update state with the premium status
+  }, []);
+
   const history = useHistory();
   const [activeTab, setActiveTab] = useState("tab1")
   const location = useLocation();
@@ -206,19 +220,21 @@ const MainTabs: React.FC<MainTabsProps> = () => {
 
 
         </IonTabButton>
-        <IonTabButton tab="tab5" href="/tabs/tab5">
-          <IonIcon
-            src="assets/imgs/tabicns/tab5.svg"
-            className="tab-icon-inactive"
-            id="inactive"
-          />
-          <IonIcon
-            src="assets/imgs/tabicns/tab5.svg"
-            className="tab-icon-active"
-            id="active"
-          />
-          <IonLabel>Chat</IonLabel>
-        </IonTabButton>
+        {isPremium && (
+          <IonTabButton tab="tab5" href="/tabs/tab5">
+            <IonIcon
+              src="assets/imgs/tabicns/tab5.svg"
+              className="tab-icon-inactive"
+              id="inactive"
+            />
+            <IonIcon
+              src="assets/imgs/tabicns/tab5.svg"
+              className="tab-icon-active"
+              id="active"
+            />
+            <IonLabel>Chat</IonLabel>
+          </IonTabButton>
+        )}
       </IonTabBar>
     </IonTabs>
   );
