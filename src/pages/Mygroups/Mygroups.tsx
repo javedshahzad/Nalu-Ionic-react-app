@@ -440,7 +440,7 @@ const Mygroups: React.FC = () => {
           </IonButton>
         </IonModal>*/}
 
-            <ul className="browsed-grps">
+            {/*<ul className="browsed-grps">
               {groups.map((group: any, index: any) => (
                 <li
                   onClick={() => handleGroupClick(group._id)}
@@ -461,7 +461,7 @@ const Mygroups: React.FC = () => {
                   <IonLabel>{group.groupName}</IonLabel>
                 </li>
               ))}
-            </ul>
+            </ul>*/}
 
             {/*<IonButton
           fill="clear"

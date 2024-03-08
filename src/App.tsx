@@ -40,6 +40,7 @@ import Searchmodal from "./pages/modals/Search/Searchmodal";
 import Filtermodal from "./pages/modals/Filter/Filtermodal";
 // import Chat from "./pages/Chat/Chat";
 import Mygroups from "./pages/Mygroups/Mygroups";
+import ChatFrame from "./pages/Chat/iFrame/ChatFrame";
 import Coursechapter from "./pages/Coursechapter/Coursechapter";
 import Courseoverviewfree from "./pages/Courseoverviewfree/Courseoverviewfree";
 import Courseoverviewpaid from "./pages/Courseoverviewpaid/Courseoverviewpaid";
@@ -279,6 +280,11 @@ const App: React.FC = () => {
           <Route exact path="/mygroups">
             <PrivateRoute page={"mygroups"}>
               <Mygroups />
+            </PrivateRoute>
+          </Route>
+          <Route exact path="/chat">
+            <PrivateRoute page={"chat"}>
+              <ChatFrame />
             </PrivateRoute>
           </Route>
           {/* <Route exact path="/mychatgroups">

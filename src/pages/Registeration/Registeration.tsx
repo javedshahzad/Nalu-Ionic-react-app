@@ -101,18 +101,25 @@ const Registeration: React.FC = () => {
                 naluApiResponseData.success
               ) {
                 const tokens = naluApiResponseData.data.tokens;
-
+            
                 // Make sure that the tokens property exists in the response
                 if (tokens && tokens.access && tokens.refresh) {
                   const { access, refresh } = tokens;
-
-                  // Save additional data, including _id, in localStorage
+                  const wsToken = naluApiResponseData.data.wsToken;
+                  const chatUser = naluApiResponseData.data.user;
+            
+                  // Chat Backend Tokens
                   localStorage.setItem("accessToken", access.token);
                   localStorage.setItem("refreshToken", refresh.token);
-                  localStorage.setItem(
-                    "chatApiUserId",
-                    naluApiResponseData.data.user._id
-                  );
+                  localStorage.setItem("chatApiUserId", chatUser._id);
+            
+                  // Chat iFrame Tokens
+                  localStorage.setItem("chatToken", access.token); // This is the same as accessToken, stored under a new key
+                  localStorage.setItem("chatWsToken", wsToken);
+                  
+                  // Chat iFrame User Information
+                  const chatUserString = JSON.stringify(chatUser);
+                  localStorage.setItem("chatUser", chatUserString);
                 } else {
                   console.log("Invalid tokens structure in Chat API response");
                 }
@@ -122,9 +129,9 @@ const Registeration: React.FC = () => {
             } catch (chatApiError) {
               console.error("Chat API login error:", chatApiError);
             }
-
+            
             // Navigation
-            history.push("/yourdata");
+            history.push("/yourdata");            
           }
           setIsLoading(false);
         } else {
@@ -160,24 +167,31 @@ const Registeration: React.FC = () => {
                   password: receivedPassword,
                 }
               );
-
+            
               if (
                 naluApiResponse.status === 200 &&
                 naluApiResponse.data.success
               ) {
                 const tokens = naluApiResponse.data.data.tokens;
-
+            
                 // Make sure that the tokens property exists in the response
                 if (tokens && tokens.access && tokens.refresh) {
                   const { access, refresh } = tokens;
-
-                  // Save additional data, including _id, in localStorage
+                  const wsToken = naluApiResponse.data.data.wsToken;
+                  const chatUser = naluApiResponse.data.data.user;
+            
+                  // Chat Backend Tokens
                   localStorage.setItem("accessToken", access.token);
                   localStorage.setItem("refreshToken", refresh.token);
-                  localStorage.setItem(
-                    "chatApiUserId",
-                    naluApiResponse.data.data.user._id
-                  );
+                  localStorage.setItem("chatApiUserId", chatUser._id);
+            
+                  // Chat iFrame Tokens
+                  localStorage.setItem("chatToken", access.token); // This is the same as accessToken, stored under a new key
+                  localStorage.setItem("chatWsToken", wsToken);
+                  
+                  // Chat iFrame User Information
+                  const chatUserString = JSON.stringify(chatUser);
+                  localStorage.setItem("chatUser", chatUserString);
                 } else {
                   console.log("Invalid tokens structure in Chat API response");
                 }
@@ -187,9 +201,9 @@ const Registeration: React.FC = () => {
             } catch (chatApiError) {
               console.error("Chat API login error:", chatApiError);
             }
-
+            
             // Navigation
-            history.push("/yourdata");
+            history.push("/yourdata");            
           }
 
           setIsLoading(false);
