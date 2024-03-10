@@ -34,7 +34,7 @@ const Login: React.FC = () => {
   const history = useHistory();
   const { t } = useTranslation();
 
-  const apiHost = "https://app.mynalu.com/wp-json";
+  const apiHost = "https://staging.app.mynalu.com/wp-json";
 
   const handlePasswordChange = (event) => {
     const value = event.target.value;
@@ -93,7 +93,7 @@ const Login: React.FC = () => {
     try {
       if (isPlatform("ios")) {
         const response = await HTTP.post(
-          `https://app.mynalu.com/wp-json/jwt-auth/v1/token`,
+          `https://staging.app.mynalu.com/wp-json/jwt-auth/v1/token`,
           {
             username: email,
             password: password,
@@ -150,7 +150,7 @@ const Login: React.FC = () => {
       } else {
         // WordPress API login
         const response = await axios.post(
-          `https://app.mynalu.com/wp-json/jwt-auth/v1/token`,
+          `https://staging.app.mynalu.com/wp-json/jwt-auth/v1/token`,
           {
             username: email,
             password: password,
@@ -297,7 +297,7 @@ const Login: React.FC = () => {
 
         <div className="btn forgot-password rectangle al-center jc-center">
           <a
-            href="https://app.mynalu.com/login/?action=forgot_password"
+            href="https://staging.app.mynalu.com/login/?action=forgot_password"
             target="_system"
           >
             <h5>Passwort vergessen</h5>

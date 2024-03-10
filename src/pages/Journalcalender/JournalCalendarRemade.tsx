@@ -236,7 +236,7 @@ const JournalCalendarRemade = () => {
   // const getIcons = async () => {
   //   try {
   //     const data = await MoonPhasesServce.get(
-  //       `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
+  //       `https://staging.app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
   //     );
 
   //     const newArray = [];
@@ -292,7 +292,7 @@ const JournalCalendarRemade = () => {
 
   //   try {
   //     const data = await MoonPhasesServce.get(
-  //       `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
+  //       `https://staging.app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
   //     );
 
   //     const todayData = data["today"];
@@ -569,7 +569,7 @@ const JournalCalendarRemade = () => {
         ],
       };
       CustomCategoryApiService.post(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${curDate}`,
+        `https://staging.app.mynalu.com/wp-json/nalu-app/v1/journal/${curDate}`,
         body
       ).then(
         (data) => {
@@ -611,7 +611,7 @@ const JournalCalendarRemade = () => {
       };
 
       CustomCategoryApiService.post(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${curDate}`,
+        `https://staging.app.mynalu.com/wp-json/nalu-app/v1/journal/${curDate}`,
         body
       ).then(
         (data) => {

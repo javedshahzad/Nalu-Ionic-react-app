@@ -57,7 +57,7 @@ const Yourdata: React.FC = () => {
       Authorization: `Bearer ${token}`,
     };
     const url =
-      "https://app.mynalu.com/wp-json/nalu-app/v1/consent?type=privacy_policy,terms_conditions&set=true";
+      "https://staging.app.mynalu.com/wp-json/nalu-app/v1/consent?type=privacy_policy,terms_conditions&set=true";
 
     try {
       let response;
@@ -114,7 +114,7 @@ const Yourdata: React.FC = () => {
           <IonItem lines="none">
             <IonLabel>
               Ich akzeptiere die{" "}
-              <a href="https://app.mynalu.com/datenschutzerklaerung/">
+              <a href="https://staging.app.mynalu.com/datenschutzerklaerung/">
                 Datenschutzbestimmungen
               </a>
             </IonLabel>
@@ -131,7 +131,7 @@ const Yourdata: React.FC = () => {
           <IonItem lines="none">
             <IonLabel className="ion-text-wrap">
               Ich akzeptiere die{" "}
-              <a href="https://app.mynalu.com/datenschutzerklaerung/">
+              <a href="https://staging.app.mynalu.com/datenschutzerklaerung/">
                 Allgemeinen Geschäftsbedingungen
               </a>
             </IonLabel>

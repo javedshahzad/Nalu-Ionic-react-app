@@ -22,7 +22,7 @@ export const fetchCourses = () => {
   return async (dispatch: any) => {
     try {
       const response = apiService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`
+        `https://staging.app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`
       );
       dispatch(getCourses(response));
     } catch (error) {
@@ -34,7 +34,7 @@ export const fetchChapter = (id: any) => {
   return async (dispatch: any) => {
     try {
       const response = apiService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`
+        `https://staging.app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`
       );
       dispatch(getChapter(response));
     } catch (error) {

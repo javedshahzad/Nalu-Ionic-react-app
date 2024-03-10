@@ -51,7 +51,8 @@ const Membership: React.FC = () => {
     setIsLoading(true);
     try {
       let response;
-      const url = "https://app.mynalu.com/wp-json/nalu-app/v1/user-goal";
+      const url =
+        "https://staging.app.mynalu.com/wp-json/nalu-app/v1/user-goal";
       const headers = {
         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
       };

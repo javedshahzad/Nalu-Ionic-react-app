@@ -100,7 +100,7 @@ const GroupInfo: React.FC = () => {
   const GetAllUsers = (keyword?: any) => {
     apiService
       .get(
-        `https://app.mynalu.com/wp-json/wp/v2/users?per_page=20&page=1&search=`
+        `https://staging.app.mynalu.com/wp-json/wp/v2/users?per_page=20&page=1&search=`
       )
       .then((data) => {
         console.log("users", data);

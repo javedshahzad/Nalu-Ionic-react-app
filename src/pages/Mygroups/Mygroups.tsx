@@ -119,7 +119,7 @@ const Mygroups: React.FC = () => {
       let response;
       if (isPlatform("ios")) {
         const cordovaResponse = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`,
+          `https://staging.app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`,
           {},
           headers
         );
@@ -129,7 +129,7 @@ const Mygroups: React.FC = () => {
         axiosCancelToken = source;
 
         const axiosResponse = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`,
+          `https://staging.app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`,
           {
             headers,
             cancelToken: source.token,
@@ -274,7 +274,7 @@ const Mygroups: React.FC = () => {
   const GetAllUsers = (keyword?: any) => {
     apiService
       .get(
-        `https://app.mynalu.com/wp-json/wp/v2/users?per_page=20&page=1&search=`
+        `https://staging.app.mynalu.com/wp-json/wp/v2/users?per_page=20&page=1&search=`
       )
       .then((data) => {
         setUsers(data);

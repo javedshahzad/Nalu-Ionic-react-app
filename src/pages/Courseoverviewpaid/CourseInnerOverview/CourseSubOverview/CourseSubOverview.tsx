@@ -78,7 +78,9 @@ const CourseSubOverview: React.FC = () => {
     setIsLoading(true);
     try {
       axios
-        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`)
+        .get(
+          `https://staging.app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`
+        )
         .then((response) => {
           console.log(response.data);
           setCourseData(response.data);

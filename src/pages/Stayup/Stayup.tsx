@@ -22,7 +22,7 @@ const handleSubscribe = async () => {
     Authorization: `Bearer ${token}`,
   };
   const url =
-    "https://app.mynalu.com/wp-json/nalu-app/v1/mailster-subscribe?status=1&lists=34,27";
+    "https://staging.app.mynalu.com/wp-json/nalu-app/v1/mailster-subscribe?status=1&lists=34,27";
 
   try {
     let response;

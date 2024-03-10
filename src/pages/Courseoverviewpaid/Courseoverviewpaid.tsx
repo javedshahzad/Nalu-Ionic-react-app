@@ -83,7 +83,7 @@ const Courseoverviewpaid: React.FC = () => {
   //   if (isPlatform("ios")) {
   //     // Use Cordova HTTP plugin for iOS
   //     HTTP.get(
-  //       `https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`,
+  //       `https://staging.app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`,
   //       {},
   //       headers
   //     )
@@ -112,7 +112,7 @@ const Courseoverviewpaid: React.FC = () => {
   //     axiosCancelToken = source;
 
   //     axios
-  //       .get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`, {
+  //       .get(`https://staging.app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`, {
   //         headers: headers,
   //         cancelToken: source.token,
   //       })

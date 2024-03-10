@@ -56,7 +56,9 @@ const Filtermodal: React.FC = () => {
     setIsLoading(true);
 
     apiService
-      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/filter-values?lang=de`)
+      .get(
+        `https://staging.app.mynalu.com/wp-json/nalu-app/v1/filter-values?lang=de`
+      )
       .then((response) => {
         console.log(response.data);
         setFilterValues(response.data);
@@ -198,7 +200,7 @@ const Filtermodal: React.FC = () => {
           Authorization: `Bearer ${jwtToken}`,
         };
         HTTP.get(
-          "https://app.mynalu.com/wp-json/nalu-app/v1/ressources",
+          "https://staging.app.mynalu.com/wp-json/nalu-app/v1/ressources",
           {
             params: {
               category_name: activeLabelsString,
@@ -232,14 +234,17 @@ const Filtermodal: React.FC = () => {
           });
       } else {
         axios
-          .get("https://app.mynalu.com/wp-json/nalu-app/v1/ressources", {
-            params: {
-              category_name: activeLabelsString,
-              "authority.title": activeRecommendationsString,
-              upvotes_number_min: rangeValues.lower,
-              upvotes_number_max: rangeValues.upper,
-            },
-          })
+          .get(
+            "https://staging.app.mynalu.com/wp-json/nalu-app/v1/ressources",
+            {
+              params: {
+                category_name: activeLabelsString,
+                "authority.title": activeRecommendationsString,
+                upvotes_number_min: rangeValues.lower,
+                upvotes_number_max: rangeValues.upper,
+              },
+            }
+          )
           .then((response) => {
             console.log(response);
 

@@ -12,9 +12,11 @@ import {
 } from "@ionic/react";
 import axios from "axios";
 import "./Registeration.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { HTTP } from "@awesome-cordova-plugins/http";
+import { useDispatch } from "react-redux";
+import { fetchCourses } from "../../actions/courseActions";
 const Registeration: React.FC = () => {
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
@@ -46,6 +48,8 @@ const Registeration: React.FC = () => {
     );
   };
 
+  const dispatch = useDispatch();
+
   const isFormValid = firstName && email && !firstNameError && !emailError;
 
   const userGoal = localStorage.getItem("selectedGoal") || "harmony";
@@ -61,7 +65,7 @@ const Registeration: React.FC = () => {
       try {
         if (isPlatform("ios")) {
           const response = await HTTP.post(
-            `https://app.mynalu.com/wp-json/nalu-app/v1/add-freemium-user?email=${email}&first_name=${firstName}&goal=${userGoal}`,
+            `https://staging.app.mynalu.com/wp-json/nalu-app/v1/add-freemium-user?email=${email}&first_name=${firstName}&goal=${userGoal}`,
             {},
             {}
           );
@@ -130,7 +134,7 @@ const Registeration: React.FC = () => {
         } else {
           // WordPress API Registration
           const response = await axios.post(
-            `https://app.mynalu.com/wp-json/nalu-app/v1/add-freemium-user?email=${email}&first_name=${firstName}&goal=${userGoal}`
+            `https://staging.app.mynalu.com/wp-json/nalu-app/v1/add-freemium-user?email=${email}&first_name=${firstName}&goal=${userGoal}`
           );
 
           console.log("Response:", response);
@@ -244,6 +248,12 @@ const Registeration: React.FC = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (token.length > 0) {
+      dispatch<any>(fetchCourses());
+    }
+  }, [token.length > 0]);
 
   return (
     <IonPage className="Registeration">

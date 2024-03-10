@@ -50,6 +50,14 @@ import { clearJournal, journalAction } from "../../actions/journalAction";
 import { isPlatform } from "@ionic/react";
 import { fetchColors, fetchMoonIcons } from "../../actions/apiActions";
 
+const getCurrentDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 function JournalAdditionRemade() {
   const { dateParam } = useParams<{ dateParam: string }>();
   const dispatch = useDispatch();
@@ -74,20 +82,47 @@ function JournalAdditionRemade() {
     }
   }, [isPremiumUser]);
 
-  let isPremium = false; // Default to false
-  try {
-    const roles = JSON.parse(localStorage.getItem("roles") || "{}"); // Parse the roles or default to an empty object
-    isPremium = Object.values(roles).includes("premium"); // Check if 'premium' is one of the roles
-  } catch (e) {
-    console.error("Error parsing roles from localStorage:", e);
-  }
+  useEffect(() => {});
+
+  const fetchJournalEntries = useSelector(
+    (state: any) => state.journalEntriesReducer.getJournalEntries
+  );
+
+  useEffect(() => {
+    const fetchEntries = async () => {
+      try {
+        const result = await fetchJournalEntries;
+
+        if (result.entries.length > 0) {
+          const types = [
+            ...new Set(result.entries.map((item: any) => item.type)),
+          ];
+
+          let dynamicStates: any = [];
+
+          dynamicStates = result.entries;
+
+          dispatch(clearJournal());
+          dispatch(journalAction(dynamicStates));
+        }
+      } catch (error) {
+        console.error("Error fetching moonColors", error);
+      }
+    };
+
+    if (dateParam === getCurrentDate()) {
+      fetchEntries();
+    } else {
+      getJournalEntries();
+    }
+  }, [dateParam]);
 
   const getJournalEntries = async () => {
     try {
       setIsLoading(true);
 
       const data = await JournalAdditionApiService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`
+        `https://staging.app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`
       );
 
       if (data.entries.length > 0) {
@@ -131,9 +166,17 @@ function JournalAdditionRemade() {
     }
   };
 
-  useEffect(() => {
-    getJournalEntries();
-  }, []);
+  let isPremium = false; // Default to false
+  try {
+    const roles = JSON.parse(localStorage.getItem("roles") || "{}"); // Parse the roles or default to an empty object
+    isPremium = Object.values(roles).includes("premium"); // Check if 'premium' is one of the roles
+  } catch (e) {
+    console.error("Error parsing roles from localStorage:", e);
+  }
+
+  // useEffect(() => {
+  //   getJournalEntries();
+  // }, []);
 
   // const [inputValues, setInputValues] = useState({});
 
@@ -319,7 +362,7 @@ function JournalAdditionRemade() {
     fields.value = updatedValue;
 
     CustomCategoryApiService.post(
-      `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`,
+      `https://staging.app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`,
       {
         entries: [
           {
@@ -370,7 +413,7 @@ function JournalAdditionRemade() {
   // const getIcons = async () => {
   //   try {
   //     const data = await MoonPhasesServce.get(
-  //       `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
+  //       `https://staging.app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
   //     );
 
   //     const newArray = [];
@@ -427,7 +470,7 @@ function JournalAdditionRemade() {
   //   let yearMonth = `${year}-${month}`;
   //   try {
   //     const data = await MoonPhasesServce.get(
-  //       `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
+  //       `https://staging.app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
   //     );
 
   //     const todayData = data["today"];

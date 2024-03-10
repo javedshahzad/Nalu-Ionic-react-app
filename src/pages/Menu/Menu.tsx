@@ -52,7 +52,7 @@ async function openExternalLink(url: string) {
 
 const openLink = async (url: string) => {
   if (
-    url.startsWith("https://app.mynalu.com") ||
+    url.startsWith("https://staging.app.mynalu.com") ||
     url.startsWith("http://app.mynalu.com")
   ) {
     await Browser.open({ url: url });
@@ -110,13 +110,13 @@ const Menu: React.FC = () => {
       try {
         if (isPlatform("ios")) {
           await HTTP.post(
-            "https://app.mynalu.com/wp-json/nalu-app/v1/account-deletion",
+            "https://staging.app.mynalu.com/wp-json/nalu-app/v1/account-deletion",
             {},
             headers
           );
         } else {
           await axios.post(
-            "https://app.mynalu.com/wp-json/nalu-app/v1/account-deletion",
+            "https://staging.app.mynalu.com/wp-json/nalu-app/v1/account-deletion",
             {},
             { headers }
           );
@@ -169,18 +169,18 @@ const Menu: React.FC = () => {
     },
     {
       title: "Quellen",
-      url: "https://app.mynalu.com/quellen/",
+      url: "https://staging.app.mynalu.com/quellen/",
       Icon: "assets/imgs/menu6.svg",
     },
 
     {
       title: "Datenschutzerklärung",
-      url: "https://app.mynalu.com/datenschutzerklaerung/",
+      url: "https://staging.app.mynalu.com/datenschutzerklaerung/",
       Icon: "assets/imgs/menu7.svg",
     },
     {
       title: "Impressum",
-      url: "https://app.mynalu.com/impressum/",
+      url: "https://staging.app.mynalu.com/impressum/",
       Icon: "assets/imgs/menu8.svg",
     },
     {
@@ -217,7 +217,7 @@ const Menu: React.FC = () => {
   const [present] = useIonToast();
 
   // const getName = async () => {
-  //   let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?_fields=nickname`;
+  //   let URL = `https://staging.app.mynalu.com/wp-json/wp/v2/users/me?_fields=nickname`;
   //   const headers = {
   //     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
   //   };
@@ -255,7 +255,7 @@ const Menu: React.FC = () => {
 
   const save_name = async () => {
     setIsLoading(true);
-    let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?nickname=${nickname_}`;
+    let URL = `https://staging.app.mynalu.com/wp-json/wp/v2/users/me?nickname=${nickname_}`;
 
     try {
       let response: any;
@@ -292,7 +292,7 @@ const Menu: React.FC = () => {
   // const getAvatar = async () => {
   //   const userId = localStorage.getItem("userId");
 
-  //   let URL = `https://app.mynalu.com/wp-json/wp/v2/users/${userId}`;
+  //   let URL = `https://staging.app.mynalu.com/wp-json/wp/v2/users/${userId}`;
   //   const headers = {
   //     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
   //   };
@@ -355,7 +355,7 @@ const Menu: React.FC = () => {
 
       setIsLoading(true);
       try {
-        const uploadURL = `https://app.mynalu.com/wp-json/wp/v2/media`;
+        const uploadURL = `https://staging.app.mynalu.com/wp-json/wp/v2/media`;
         const reader = new FormData();
 
         reader.append("Content-Type", "image/*");
@@ -370,7 +370,7 @@ const Menu: React.FC = () => {
           const uploadResponse = await apiService.post(uploadURL, reader);
           const mediaId = uploadResponse.id;
 
-          const updateAvatarURL = `https://app.mynalu.com/wp-json/wp/v2/users/${uploadResponse.author}`;
+          const updateAvatarURL = `https://staging.app.mynalu.com/wp-json/wp/v2/users/${uploadResponse.author}`;
           const updateAvatarData = {
             simple_local_avatar: {
               media_id: mediaId,
@@ -438,7 +438,7 @@ const Menu: React.FC = () => {
   };
 
   // const getEmail = async () => {
-  //   let URL = `https://app.mynalu.com/wp-json/wp/v2/users/me?_fields=email`;
+  //   let URL = `https://staging.app.mynalu.com/wp-json/wp/v2/users/me?_fields=email`;
   //   const headers = {
   //     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
   //   };

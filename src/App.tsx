@@ -79,7 +79,8 @@ import MoonPhasesService from "./MoonPhasesService";
 import authService from "./authService";
 import { fetchColors, fetchMoonIcons } from "./actions/apiActions";
 import { fetchAvatar } from "./actions/menuActions";
-import { fetchCourses, fetchCoursesInner } from "./actions/courseActions";
+import { fetchCourses } from "./actions/courseActions";
+import { fetchJournalEntries } from "./actions/journalEntriesAction";
 // import {
 //   ActionPerformed,
 //   PushNotificationSchema,
@@ -218,9 +219,30 @@ const App: React.FC = () => {
     fetchMenuData();
   }, []);
 
+  // const currentDate = new Date();
+  // const currentYear = currentDate.getFullYear();
+  // const currentMonth = currentDate.getMonth() + 1;
+  // const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+
+  // const dates = [];
+  // for (let day = 1; day <= daysInMonth; day++) {
+  //   const formattedDate = `${currentYear}-${currentMonth
+  //     .toString()
+  //     .padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+  //   dates.push(formattedDate);
+  // }
+
+  // console.log(">>>", dates);
+
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+
   useEffect(() => {
     dispatch<any>(fetchCourses());
-  });
+    dispatch<any>(fetchJournalEntries(`${year}-${month}-${day}`));
+  }, []);
 
   // fcm configuration
 

@@ -72,7 +72,7 @@ const Eventdetail: React.FC = () => {
     if (isPlatform("ios")) {
       // Use Cordova HTTP plugin for iOS
       HTTP.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
+        `https://staging.app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
         {},
         headers
       )
@@ -103,7 +103,7 @@ const Eventdetail: React.FC = () => {
 
       axios
         .get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
+          `https://staging.app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
           {
             headers: headers,
             cancelToken: source.token,
@@ -161,7 +161,7 @@ const Eventdetail: React.FC = () => {
       // Use Cordova HTTP plugin for iOS
       try {
         const response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/event/${date_event.event_id}`,
+          `https://staging.app.mynalu.com/wp-json/nalu-app/v1/event/${date_event.event_id}`,
           {},
           headers
         );
@@ -188,7 +188,7 @@ const Eventdetail: React.FC = () => {
     } else {
       axios
         .get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/event/${date_event.event_id}`,
+          `https://staging.app.mynalu.com/wp-json/nalu-app/v1/event/${date_event.event_id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,

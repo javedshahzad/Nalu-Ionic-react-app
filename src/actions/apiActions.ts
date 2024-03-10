@@ -8,7 +8,7 @@ export const fetchMoonIcons = (year: any) => {
   return async (dispatch: any) => {
     try {
       const response = MoonPhasesService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
+        `https://staging.app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
       );
       dispatch(getMoonIcons(response));
     } catch (error) {
@@ -21,7 +21,7 @@ export const fetchColors = (year: any) => {
   return async (dispatch: any) => {
     try {
       const response = MoonPhasesService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${year}?lang=de`
+        `https://staging.app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${year}?lang=de`
       );
       dispatch(getColors(response));
     } catch (error) {

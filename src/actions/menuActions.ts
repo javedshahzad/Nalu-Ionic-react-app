@@ -10,7 +10,7 @@ export const fetchAvatar = (userId: any) => {
   return async (dispatch: any) => {
     try {
       const response = apiService.get(
-        `https://app.mynalu.com/wp-json/wp/v2/users/${userId}`
+        `https://staging.app.mynalu.com/wp-json/wp/v2/users/${userId}`
       );
       dispatch(getAvatar(response));
     } catch (error) {
