@@ -3,15 +3,23 @@ import { HTTP } from "@awesome-cordova-plugins/http";
 import { isPlatform } from "@ionic/react";
 
 const jwtToken = localStorage.getItem("jwtToken");
-
+const accessToken = localStorage.getItem("accessToken");
 const customAxiosHeaders: any = {
   headers: {
     Authorization: `Bearer ${jwtToken}`,
   },
 };
+const customAxiosHeaders2: any = {
+  headers: {
+    Authorization: `Bearer ${accessToken}`,
+  },
+};
 
 const customCordovaHeaders = {
   Authorization: `Bearer ${jwtToken}`,
+};
+const customCordovaHeaders2 = {
+  Authorization: `Bearer ${accessToken}`,
 };
 
 const apiService = {
@@ -21,6 +29,14 @@ const apiService = {
       return JSON.parse(response.data);
     } else {
       return (await axios.get(url, customAxiosHeaders)).data;
+    }
+  },
+  get2: async (url: string) => {
+    if (isPlatform("ios")) {
+      const response = await HTTP.get(url, {}, customCordovaHeaders2);
+      return JSON.parse(response.data);
+    } else {
+      return (await axios.get(url, customAxiosHeaders2)).data;
     }
   },
   getWithParam: async (url: string, param: any) => {
@@ -57,6 +73,15 @@ const apiService = {
       return JSON.parse(response.data);
     } else {
       return (await axios.put(url, data, customAxiosHeaders)).data;
+    }
+  },
+
+  put2: async (url: string, data: any) => {
+    if (isPlatform("ios")) {
+      const response = await HTTP.put(url, data, customCordovaHeaders2);
+      return JSON.parse(response.data);
+    } else {
+      return (await axios.put(url, data, customAxiosHeaders2)).data;
     }
   },
 

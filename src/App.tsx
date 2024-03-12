@@ -60,7 +60,7 @@ import ConfigCycleRemade from "./pages/Configcycle/ConfigCycleRemade";
 import Pusher from "pusher-js";
 import { addNotification } from "./actions/notificationAction";
 import { useDispatch } from "react-redux";
-import OneSignal from "onesignal-cordova-plugin";
+// import OneSignal from "onesignal-cordova-plugin";
 import React, { useEffect, useState } from "react";
 import { groupsListAction } from "./actions/groupsListAction";
 import tokenService from "./token";
@@ -81,12 +81,13 @@ import { fetchColors, fetchMoonIcons } from "./actions/apiActions";
 import { fetchAvatar } from "./actions/menuActions";
 import { fetchCourses } from "./actions/courseActions";
 import { fetchJournalEntries } from "./actions/journalEntriesAction";
-// import {
-//   ActionPerformed,
-//   PushNotificationSchema,
-//   PushNotifications,
-//   Token,
-// } from "@capacitor/push-notifications";
+import {
+  ActionPerformed,
+  PushNotificationSchema,
+  PushNotifications,
+  Token,
+} from "@capacitor/push-notifications";
+import apiService from "./Services";
 // import { Toast } from "@capacitor/toast";
 
 setupIonicReact({
@@ -95,9 +96,9 @@ setupIonicReact({
 
 // ***onesignal*** //
 
-function OneSignalInit() {
-  OneSignal.initialize("0f10d9d5-8078-4eda-b52f-c616a5398d0b");
-}
+// function OneSignalInit() {
+//   OneSignal.initialize("0f10d9d5-8078-4eda-b52f-c616a5398d0b");
+// }
 
 // ***onesignal*** //
 
@@ -246,75 +247,98 @@ const App: React.FC = () => {
 
   // fcm configuration
 
-  // useEffect(() => {
-  //   PushNotifications.requestPermissions().then(
-  //     (result: any) => {
-  //       if (result.receive === "granted") {
-  //         PushNotifications.register();
+  useEffect(() => {
+    PushNotifications.requestPermissions().then(
+      (result: any) => {
+        if (result.receive === "granted") {
+          PushNotifications.register();
 
-  //         addListener();
-  //       }
-  //       if (result.receive === "denied") {
-  //         showToast("Push Notification permission denied");
-  //       } else {
-  //         // Show some error
-  //       }
-  //     },
-  //     (err) => {
-  //       console.log("err result", err);
-  //     }
-  //   );
-  // }, []);
+          addListener();
+        }
+        if (result.receive === "denied") {
+          //  showToast("Push Notification permission denied");
+        } else {
+          // Show some error
+        }
+      },
+      (err) => {
+        console.log("err result", err);
+      }
+    );
+  }, []);
 
-  // const addListener = () => {
-  //   PushNotifications.addListener("registration", (token: Token) => {
-  //     console.log("resgisted successfully!", token);
-  //     localStorage.setItem("fcmtoken", token.value);
+  const addListener = () => {
+    PushNotifications.addListener("registration", (token: Token) => {
+      console.log("resgisted successfully!", token);
+      localStorage.setItem("fcmtoken", token.value);
 
-  //     //  showToast("Push registration success");
-  //     // Push Notifications registered successfully.
-  //     // Send token details to API to keep in DB.
-  //   });
+      let chatApiUserId = localStorage.getItem('chatApiUserId')
+      if (chatApiUserId) {
+        update_fcm_token(chatApiUserId, token.value)
+      }
 
-  //   PushNotifications.addListener("registrationError", (error: any) => {
-  //     alert("Error on registration: " + JSON.stringify(error));
+      //  showToast("Push registration success");
+      // Push Notifications registered successfully.
+      // Send token details to API to keep in DB.
+    });
 
-  //     // Handle push notification registration error here.
-  //   });
+    PushNotifications.addListener("registrationError", (error: any) => {
+      alert("Error on registration: " + JSON.stringify(error));
 
-  //   PushNotifications.addListener(
-  //     "pushNotificationReceived",
-  //     (notification: PushNotificationSchema) => {
-  //       setnotifications((notifications) => [
-  //         ...notifications,
-  //         {
-  //           id: notification.id,
-  //           title: notification.title,
-  //           body: notification.body,
-  //           type: "foreground",
-  //         },
-  //       ]);
+      // Handle push notification registration error here.
+    });
 
-  //       // Show the notification payload if the app is open on the device.
-  //     }
-  //   );
+    PushNotifications.addListener(
+      "pushNotificationReceived",
+      (notification: PushNotificationSchema) => {
+        setnotifications((notifications) => [
+          ...notifications,
+          {
+            id: notification.id,
+            title: notification.title,
+            body: notification.body,
+            type: "foreground",
+          },
+        ]);
 
-  //   PushNotifications.addListener(
-  //     "pushNotificationActionPerformed",
-  //     (notification: ActionPerformed) => {
-  //       setnotifications((notifications) => [
-  //         ...notifications,
-  //         {
-  //           id: notification.notification.data.id,
-  //           title: notification.notification.data.title,
-  //           body: notification.notification.data.body,
-  //           type: "action",
-  //         },
-  //       ]);
-  //       // Implement the needed action to take when user tap on a notification.
-  //     }
-  //   );
-  // };
+        // Show the notification payload if the app is open on the device.
+      }
+    );
+
+    PushNotifications.addListener(
+      "pushNotificationActionPerformed",
+      (notification: ActionPerformed) => {
+        setnotifications((notifications) => [
+          ...notifications,
+          {
+            id: notification.notification.data.id,
+            title: notification.notification.data.title,
+            body: notification.notification.data.body,
+            type: "action",
+          },
+        ]);
+        // Implement the needed action to take when user tap on a notification.
+      }
+    );
+  };
+
+
+  const update_fcm_token = async (data: any, token) => {
+    console.log('idhr aya ', token)
+    let obj = {
+      "newToken": token
+    }
+    let url = 'https://apidev.mynalu.com/v1'
+    //let url = 'http://localhost:7001/v1'
+    try {
+      apiService.put2(
+        `${url}/user/update-token/${data}`,
+        obj
+      );
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   // const showToast = async (msg: string) => {
   //   await Toast.show({
