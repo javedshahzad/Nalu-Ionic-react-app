@@ -34,6 +34,7 @@ import {
   pencil,
   checkmark,
   close,
+  closeOutline,
 } from "ionicons/icons";
 import "./Menu.scss";
 import { Browser } from "@capacitor/browser";
@@ -469,7 +470,7 @@ const Menu: React.FC = () => {
         <IonToolbar>
           <IonButtons slot="start">
             <IonButton color="dark" onClick={backHandler}>
-              <IonIcon icon={arrowBackOutline}></IonIcon>
+              <IonIcon icon={closeOutline}></IonIcon>
             </IonButton>
           </IonButtons>
           <IonTitle>Menü</IonTitle>
