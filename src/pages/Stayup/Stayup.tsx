@@ -14,6 +14,9 @@ import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 import authService from "../../authService";
 import { useHistory } from "react-router-dom";
+import { fetchCourses } from "../../actions/courseActions";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 const handleSubscribe = async () => {
   const token = localStorage.getItem("jwtToken");
@@ -22,7 +25,7 @@ const handleSubscribe = async () => {
     Authorization: `Bearer ${token}`,
   };
   const url =
-    "https://staging.app.mynalu.com/wp-json/nalu-app/v1/mailster-subscribe?status=1&lists=34,27";
+    "https://app.mynalu.com/wp-json/nalu-app/v1/mailster-subscribe?status=1&lists=34,27";
 
   try {
     let response;
@@ -62,6 +65,15 @@ const handleSubscribe = async () => {
 };
 
 const Stayup: React.FC = () => {
+  const dispatch = useDispatch();
+
+  const token = localStorage.getItem("jwtToken");
+
+  useEffect(() => {
+    if (token) {
+      dispatch<any>(fetchCourses());
+    }
+  }, []);
   return (
     <IonPage className="Stayup">
       <IonContent

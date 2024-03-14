@@ -12,11 +12,9 @@ import {
 } from "@ionic/react";
 import axios from "axios";
 import "./Registeration.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { HTTP } from "@awesome-cordova-plugins/http";
-import { useDispatch } from "react-redux";
-import { fetchCourses } from "../../actions/courseActions";
 const Registeration: React.FC = () => {
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
@@ -47,8 +45,6 @@ const Registeration: React.FC = () => {
         : ""
     );
   };
-
-  const dispatch = useDispatch();
 
   const isFormValid = firstName && email && !firstNameError && !emailError;
 
@@ -248,12 +244,6 @@ const Registeration: React.FC = () => {
       }
     }
   };
-
-  useEffect(() => {
-    if (token.length > 0) {
-      dispatch<any>(fetchCourses());
-    }
-  }, [token.length > 0]);
 
   return (
     <IonPage className="Registeration">
