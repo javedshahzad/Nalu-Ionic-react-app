@@ -49,6 +49,7 @@ import authService from "../../authService";
 import { clearJournal, journalAction } from "../../actions/journalAction";
 import { isPlatform } from "@ionic/react";
 import { fetchColors, fetchMoonIcons } from "../../actions/apiActions";
+import apiService from "../../Services";
 
 const getCurrentDate = () => {
   const today = new Date();
@@ -82,7 +83,7 @@ function JournalAdditionRemade() {
     }
   }, [isPremiumUser]);
 
-  useEffect(() => {});
+  useEffect(() => { });
 
   const fetchJournalEntries = useSelector(
     (state: any) => state.journalEntriesReducer.getJournalEntries
@@ -361,7 +362,7 @@ function JournalAdditionRemade() {
     const updatedValue = isCheckbox ? (val ? 1 : 0) : val;
     fields.value = updatedValue;
 
-    CustomCategoryApiService.post(
+    apiService.post(
       `https://staging.app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`,
       {
         entries: [
