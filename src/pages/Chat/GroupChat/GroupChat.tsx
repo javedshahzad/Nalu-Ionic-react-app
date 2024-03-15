@@ -48,6 +48,7 @@ const GroupChat: React.FC = () => {
   const [sendMsgObject, setSendMsgObject] = useState(null);
   const [groupName, setGroupName] = useState("");
   const [GroupImage, setGroupImage] = useState("");
+  const [participants, setParticipants] = useState([]);
   const [sendloading, setSendLoading] = useState(false);
   const [chatLoading, setChatLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true); // New state variable
@@ -182,11 +183,14 @@ const GroupChat: React.FC = () => {
   };
 
   const getGroupInfo = () => {
+    let url = "https://apidev.mynalu.com";
+    // let url = 'http://localhost:7001'
     apiService
-      .get(`https://apidev.mynalu.com/v1/conversation/get/${groupId}`)
+      .get2(`${url}/v1/conversation/get/${groupId}`)
       .then((data) => {
         setGroupName(data.data.groupName);
         setGroupImage(data.data.groupImage);
+        setParticipants(data.data.participants);
       })
       .catch((error) => {
         if (isPlatform("ios")) {
@@ -244,54 +248,31 @@ const GroupChat: React.FC = () => {
   //   }
   // }
 
-  // const findObjectById = (objects: any, idToMatch: any) => {
-  //   for (let i = 0; i < objects.length; i++) {
-  //     if (objects[i]._id !== idToMatch) {
-  //       return objects[i];
-  //     }
-  //   }
-  //   return null; // If no object with different ID is found
-  // };
+  const removeObjectById = (objects: any[], idToRemove: any) => {
+    return objects.filter((obj) => obj._id !== idToRemove);
+  };
 
   useEffect(() => {
     // getAllUsers()
   }, []);
 
-  // const sendNotification = async (data: any) => {
-  //   try {
-  //     apiService.post(
-  //       `https://apidev.mynalu.com/v1/fcm/send-notification`,
-  //       data
-  //     );
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
+  const sendNotification = (data: any) => {
+    console.log("idhr aya");
+    let url = "https://apidev.mynalu.com";
+    // let url = 'http://localhost:7001'
+    try {
+      apiService.post(`${url}/v1/fcm/send-notification`, data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const handleSendMessage = () => {
     if (newMessage !== "") {
-      // const user_id = localStorage.getItem("userId");
-      // const idToMatch = user_id;
+      const user_id = localStorage.getItem("chatApiUserId");
+      const idToMatch = user_id;
 
-      // const result = findObjectById(users, idToMatch);
-
-      // socket.emit("send-message", {
-      //   user: user,
-      //   conversation: groupId,
-      //   message: `<p>${newMessage}</p>`,
-      //   type: "message",
-      // });
-
-      // if (result && result.length > 0) {
-      //   result.map((obj: any) => {
-      //     const messageData: any = {
-      //       author: obj?.name,
-      //       message: newMessage,
-      //       to: obj?.token,
-      //     };
-      //     sendNotification(messageData);
-      //   });
-      // }
+      const result = removeObjectById(participants, idToMatch);
 
       socket.emit("send-message", {
         user: user,
@@ -299,6 +280,20 @@ const GroupChat: React.FC = () => {
         message: `<p>${newMessage}</p>`,
         type: "message",
       });
+
+      console.log("result =>>>>", result);
+      if (result && result.length > 0) {
+        result.map((obj: any) => {
+          if (obj.token) {
+            const messageData: any = {
+              author: obj?.name,
+              message: newMessage,
+              to: obj?.token,
+            };
+            sendNotification(messageData);
+          }
+        });
+      }
 
       setSendLoading(true);
 

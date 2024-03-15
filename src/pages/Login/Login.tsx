@@ -12,13 +12,19 @@ import {
 } from "@ionic/react";
 
 import "./Login.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { navigate } from "ionicons/icons";
 import { useHistory } from "react-router";
 import { useTranslation } from "react-i18next";
 import { HTTP } from "@awesome-cordova-plugins/http";
-
+import {
+  ActionPerformed,
+  PushNotificationSchema,
+  PushNotifications,
+  Token,
+} from "@capacitor/push-notifications";
+import apiService from "../../Services";
 const Login: React.FC = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -30,6 +36,8 @@ const Login: React.FC = () => {
   const [passwordTouched, setPasswordTouched] = useState(false);
   const [emailRegexx, setEmailRegex] = useState(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const nullEntry: any[] = [];
+  const [notifications, setnotifications] = useState(nullEntry);
 
   const history = useHistory();
   const { t } = useTranslation();
@@ -93,7 +101,7 @@ const Login: React.FC = () => {
     try {
       if (isPlatform("ios")) {
         const response = await HTTP.post(
-          `https://app.mynalu.com/wp-json/jwt-auth/v1/token`,
+          `https://staging.app.mynalu.com/wp-json/jwt-auth/v1/token`,
           {
             username: email,
             password: password,
@@ -116,9 +124,11 @@ const Login: React.FC = () => {
         }
 
         // Chat API login
+        let url = "https://staging.app.mynalu.com";
+        //  let url = 'http://localhost:7001'
         try {
           const naluApiResponse = await HTTP.post(
-            "https://apidev.mynalu.com/v1/user/login",
+            `${url}/v1/user/login`,
             {
               email: email,
               password: password,
@@ -136,6 +146,11 @@ const Login: React.FC = () => {
               "chatApiUserId",
               naluApiResponseData.data.user._id
             );
+
+            let fcmtoken = localStorage.getItem("fcmtoken");
+            if (naluApiResponseData.data.user._id) {
+              update_fcm_token(naluApiResponseData.data.user._id, fcmtoken);
+            }
           } else {
             // Do not show an error message for Chat API login failure
             console.log("Chat API login failed");
@@ -150,7 +165,7 @@ const Login: React.FC = () => {
       } else {
         // WordPress API login
         const response = await axios.post(
-          `https://app.mynalu.com/wp-json/jwt-auth/v1/token`,
+          `https://staging.app.mynalu.com/wp-json/jwt-auth/v1/token`,
           {
             username: email,
             password: password,
@@ -190,6 +205,11 @@ const Login: React.FC = () => {
               "chatApiUserId",
               naluApiResponse.data.data.user._id
             );
+
+            let fcmtoken = localStorage.getItem("fcmtoken");
+            if (naluApiResponse.data.data.user._id) {
+              update_fcm_token(naluApiResponse.data.data.user._id, fcmtoken);
+            }
           } else {
             // Do not show an error message for Chat API login failure
             console.log("Chat API login failed");
@@ -209,6 +229,90 @@ const Login: React.FC = () => {
     }
 
     setIsSubmitting(false);
+  };
+
+  useEffect(() => {
+    PushNotifications.requestPermissions().then(
+      (result: any) => {
+        if (result.receive === "granted") {
+          PushNotifications.register();
+
+          addListener();
+        }
+        if (result.receive === "denied") {
+          //  showToast("Push Notification permission denied");
+        } else {
+          // Show some error
+        }
+      },
+      (err) => {
+        console.log("err result", err);
+      }
+    );
+  }, []);
+
+  const addListener = () => {
+    PushNotifications.addListener("registration", (token: Token) => {
+      console.log("resgisted successfully!", token);
+      localStorage.setItem("fcmtoken", token.value);
+
+      //  showToast("Push registration success");
+      // Push Notifications registered successfully.
+      // Send token details to API to keep in DB.
+    });
+
+    PushNotifications.addListener("registrationError", (error: any) => {
+      alert("Error on registration: " + JSON.stringify(error));
+
+      // Handle push notification registration error here.
+    });
+
+    PushNotifications.addListener(
+      "pushNotificationReceived",
+      (notification: PushNotificationSchema) => {
+        setnotifications((notifications) => [
+          ...notifications,
+          {
+            id: notification.id,
+            title: notification.title,
+            body: notification.body,
+            type: "foreground",
+          },
+        ]);
+
+        // Show the notification payload if the app is open on the device.
+      }
+    );
+
+    PushNotifications.addListener(
+      "pushNotificationActionPerformed",
+      (notification: ActionPerformed) => {
+        setnotifications((notifications) => [
+          ...notifications,
+          {
+            id: notification.notification.data.id,
+            title: notification.notification.data.title,
+            body: notification.notification.data.body,
+            type: "action",
+          },
+        ]);
+        // Implement the needed action to take when user tap on a notification.
+      }
+    );
+  };
+
+  const update_fcm_token = async (data: any, token) => {
+    console.log("idhr aya 2", token);
+    let obj = {
+      newToken: token,
+    };
+    let url = "https://apidev.mynalu.com/v1";
+    //let url = 'http://localhost:7001/v1'
+    try {
+      apiService.put2(`${url}/user/update-token/${data}`, obj);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   return (
@@ -297,7 +401,7 @@ const Login: React.FC = () => {
 
         <div className="btn forgot-password rectangle al-center jc-center">
           <a
-            href="https://app.mynalu.com/login/?action=forgot_password"
+            href="https://staging.app.mynalu.com/login/?action=forgot_password"
             target="_system"
           >
             <h5>Passwort vergessen</h5>
