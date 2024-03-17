@@ -203,35 +203,35 @@ function ConfigCycleRemade() {
     let lastDateOfMonth = new Date(year, m + 1, 0).getDate();
     const lastDateOfPrevMonth = new Date(year, m, 0).getDate();
 
-    const getIcons = async () => {
-      try {
-        const data = await MoonPhasesServce.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
-        );
+    // const getIcons = async () => {
+    //   try {
+    //     const data = await MoonPhasesServce.get(
+    //       `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
+    //     );
 
-        const newArray = [];
+    //     const newArray = [];
 
-        for (const date in data.moonphase) {
-          const dateObjects = data.moonphase[date];
-          for (const dateObject of dateObjects) {
-            const transformedObject = {
-              date: date,
-              phase_id: dateObject.phase_id,
-              phase_name: dateObject.phase_name,
-            };
-            newArray.push(transformedObject);
-          }
-        }
+    //     for (const date in data.moonphase) {
+    //       const dateObjects = data.moonphase[date];
+    //       for (const dateObject of dateObjects) {
+    //         const transformedObject = {
+    //           date: date,
+    //           phase_id: dateObject.phase_id,
+    //           phase_name: dateObject.phase_name,
+    //         };
+    //         newArray.push(transformedObject);
+    //       }
+    //     }
 
-        setMoonPhaseIcon(newArray);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    //     setMoonPhaseIcon(newArray);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // };
 
-    useEffect(() => {
-      getIcons();
-    }, []);
+    // useEffect(() => {
+    //   getIcons();
+    // }, []);
 
     useEffect(() => {
       const day = new Date().getDate();

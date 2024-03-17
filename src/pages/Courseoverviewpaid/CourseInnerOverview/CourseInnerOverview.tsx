@@ -131,7 +131,7 @@ const CourseInnerOverview: React.FC = () => {
   // };
 
   const handleComplete = (id) => {
-    // history.push(`/tabs/tab1/courseinneroverview/${id}`);
+    history.push(`/tabs/tab1/courseinneroverview/${id}`);
     // getData(id, null);
   };
 
