@@ -66,7 +66,7 @@ import { groupsListAction } from "./actions/groupsListAction";
 import tokenService from "./token";
 import { io } from "socket.io-client";
 import BrowseGroups from "./pages/Chat/BrowseGroups/BrowseGroups";
-import GroupChat from "./pages/Chat/GroupChat/GroupChat";
+// import GroupChat from "./pages/Chat/GroupChat/GroupChat";
 import GroupDetails from "./pages/Chat/GroupDetails/GroupDetails";
 import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
 import MyChatGroups from "./pages/Chat/mygroups/MyGroups";
@@ -88,6 +88,7 @@ import {
   Token,
 } from "@capacitor/push-notifications";
 import apiService from "./Services";
+import { fetchEvents } from "./actions/eventsAction";
 // import { Toast } from "@capacitor/toast";
 
 setupIonicReact({
@@ -243,6 +244,7 @@ const App: React.FC = () => {
   useEffect(() => {
     dispatch<any>(fetchCourses());
     dispatch<any>(fetchJournalEntries(`${year}-${month}-${day}`));
+    dispatch<any>(fetchEvents());
   }, []);
 
   // fcm configuration
@@ -272,9 +274,9 @@ const App: React.FC = () => {
       console.log("resgisted successfully!", token);
       localStorage.setItem("fcmtoken", token.value);
 
-      let chatApiUserId = localStorage.getItem('chatApiUserId')
+      let chatApiUserId = localStorage.getItem("chatApiUserId");
       if (chatApiUserId) {
-        update_fcm_token(chatApiUserId, token.value)
+        update_fcm_token(chatApiUserId, token.value);
       }
 
       //  showToast("Push registration success");
@@ -322,19 +324,15 @@ const App: React.FC = () => {
     );
   };
 
-
   const update_fcm_token = async (data: any, token) => {
-    console.log('idhr aya ', token)
+    console.log("idhr aya ", token);
     let obj = {
-      "newToken": token
-    }
-    let url = 'https://apidev.mynalu.com/v1'
+      newToken: token,
+    };
+    let url = "https://apidev.mynalu.com/v1";
     //let url = 'http://localhost:7001/v1'
     try {
-      apiService.put2(
-        `${url}/user/update-token/${data}`,
-        obj
-      );
+      apiService.put2(`${url}/user/update-token/${data}`, obj);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -490,9 +488,9 @@ const App: React.FC = () => {
           <Route exact path="/">
             <Redirect to="/onboarding" />
           </Route>
-          <Route exact path="/groupchat/:groupId">
+          {/* <Route exact path="/groupchat/:groupId">
             <GroupChat />
-          </Route>
+          </Route> */}
           <Route exact path="/mygroups">
             <Mygroups />
           </Route>

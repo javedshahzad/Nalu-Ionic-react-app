@@ -48,7 +48,7 @@ const GroupChat: React.FC = () => {
   const [sendMsgObject, setSendMsgObject] = useState(null);
   const [groupName, setGroupName] = useState("");
   const [GroupImage, setGroupImage] = useState("");
-  const [participants, setParticipants] = useState([])
+  const [participants, setParticipants] = useState([]);
   const [sendloading, setSendLoading] = useState(false);
   const [chatLoading, setChatLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true); // New state variable
@@ -79,7 +79,7 @@ const GroupChat: React.FC = () => {
         conversation: groupId,
       });
 
-      socket.on("join", (data) => { });
+      socket.on("join", (data) => {});
 
       socket.emit("message-list", {
         page: 1,
@@ -183,14 +183,14 @@ const GroupChat: React.FC = () => {
   };
 
   const getGroupInfo = () => {
-    let url = 'https://apidev.mynalu.com'
+    let url = "https://apidev.mynalu.com";
     // let url = 'http://localhost:7001'
     apiService
       .get2(`${url}/v1/conversation/get/${groupId}`)
       .then((data) => {
         setGroupName(data.data.groupName);
         setGroupImage(data.data.groupImage);
-        setParticipants(data.data.participants)
+        setParticipants(data.data.participants);
       })
       .catch((error) => {
         if (isPlatform("ios")) {
@@ -249,22 +249,19 @@ const GroupChat: React.FC = () => {
   // }
 
   const removeObjectById = (objects: any[], idToRemove: any) => {
-    return objects.filter(obj => obj._id !== idToRemove);
-  }
+    return objects.filter((obj) => obj._id !== idToRemove);
+  };
 
   useEffect(() => {
     // getAllUsers()
   }, []);
 
   const sendNotification = (data: any) => {
-    console.log('idhr aya')
-    let url = 'https://apidev.mynalu.com'
+    console.log("idhr aya");
+    let url = "https://apidev.mynalu.com";
     // let url = 'http://localhost:7001'
     try {
-      apiService.post(
-        `${url}/v1/fcm/send-notification`,
-        data
-      );
+      apiService.post(`${url}/v1/fcm/send-notification`, data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -284,7 +281,7 @@ const GroupChat: React.FC = () => {
         type: "message",
       });
 
-      console.log('result =>>>>', result)
+      console.log("result =>>>>", result);
       if (result && result.length > 0) {
         result.map((obj: any) => {
           if (obj.token) {
@@ -295,11 +292,8 @@ const GroupChat: React.FC = () => {
             };
             sendNotification(messageData);
           }
-
         });
       }
-
-
 
       setSendLoading(true);
 
