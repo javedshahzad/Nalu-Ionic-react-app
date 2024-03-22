@@ -89,6 +89,11 @@ import {
 } from "@capacitor/push-notifications";
 import apiService from "./Services";
 import { fetchEvents } from "./actions/eventsAction";
+import {
+  fetchResourcesFavourite,
+  fetchResourcesOverview,
+  fetchResourcesRecommendation,
+} from "./actions/resourcesAction";
 // import { Toast } from "@capacitor/toast";
 
 setupIonicReact({
@@ -245,6 +250,9 @@ const App: React.FC = () => {
     dispatch<any>(fetchCourses());
     dispatch<any>(fetchJournalEntries(`${year}-${month}-${day}`));
     dispatch<any>(fetchEvents());
+    dispatch<any>(fetchResourcesOverview());
+    dispatch<any>(fetchResourcesFavourite());
+    dispatch<any>(fetchResourcesRecommendation());
   }, []);
 
   // fcm configuration

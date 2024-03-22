@@ -10,6 +10,7 @@ import menuReducer from "../reducers/menuReducer";
 import courseReducer from "../reducers/courseReducer";
 import eventsReducer from "../reducers/eventsReducer";
 import journalEntriesReducer from "../reducers/journalEntriesReducer";
+import resourcesReducer from "../reducers/resourcesReducer";
 
 export interface RootState {
   users: ReturnType<typeof userReducer>;
@@ -21,6 +22,7 @@ export interface RootState {
   eventsReducer: ReturnType<typeof eventsReducer>;
   courseReducer: ReturnType<typeof courseReducer>;
   journalEntriesReducer: ReturnType<typeof journalEntriesReducer>;
+  resourcesReducer: ReturnType<typeof resourcesReducer>;
 }
 
 const rootReducer = combineReducers({
@@ -33,6 +35,7 @@ const rootReducer = combineReducers({
   eventsReducer: eventsReducer,
   courseReducer: courseReducer,
   journalEntriesReducer: journalEntriesReducer,
+  resourcesReducer: resourcesReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

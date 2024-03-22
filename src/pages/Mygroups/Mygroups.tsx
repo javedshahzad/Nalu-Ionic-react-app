@@ -173,7 +173,6 @@ const Mygroups: React.FC = () => {
     (state: any) => state.eventsReducer.getEvents
   );
 
-  console.log("fetchEvents", fetchEvents);
   const [groupsList, setGroupsList] = useState([]);
 
   const modal = useRef<HTMLIonModalElement>(null);
@@ -207,7 +206,7 @@ const Mygroups: React.FC = () => {
       })
 
       .catch((error: any) => {
-        console.error("Error fetching courses", error);
+        console.error("Error fetching events", error);
       });
   }, [fetchEvents]);
 
