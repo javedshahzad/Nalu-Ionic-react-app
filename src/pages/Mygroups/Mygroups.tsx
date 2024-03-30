@@ -58,14 +58,14 @@ const Mygroups: React.FC = () => {
   const history = useHistory();
   let axiosCancelToken;
 
-  useEffect(() => {
-    getEvents();
-    return () => {
-      if (axiosCancelToken) {
-        axiosCancelToken.cancel("Component unmounted");
-      }
-    };
-  }, []);
+  // useEffect(() => {
+  //   getEvents();
+  //   return () => {
+  //     if (axiosCancelToken) {
+  //       axiosCancelToken.cancel("Component unmounted");
+  //     }
+  //   };
+  // }, []);
 
   useIonViewDidLeave(() => {
     if (!isPlatform("ios") && axiosCancelToken) {
@@ -74,29 +74,29 @@ const Mygroups: React.FC = () => {
   });
 
   const token = tokenService.getToken();
-  const socket = io("https://apidev.mynalu.com/", {
-    query: {
-      token,
-    },
-  });
+  // const socket = io("https://apidev.mynalu.com/", {
+  //   query: {
+  //     token,
+  //   },
+  // });
 
-  useIonViewWillEnter(() => {
-    if (localStorage.getItem("refreshToken")) {
-      socket.emit("my-group-list", {
-        search: "",
-        page: 1,
-        limit: 10,
-        user: localStorage.getItem("chatApiUserId"),
-      });
-    }
-    if (localStorage.getItem("refreshToken")) {
-      socket.on("my-group-list", (data: any) => {
-        if (data.results && data.results.length > 0) {
-          dispatchFunction(data.results);
-        }
-      });
-    }
-  });
+  // useIonViewWillEnter(() => {
+  //   if (localStorage.getItem("refreshToken")) {
+  //     socket.emit("my-group-list", {
+  //       search: "",
+  //       page: 1,
+  //       limit: 10,
+  //       user: localStorage.getItem("chatApiUserId"),
+  //     });
+  //   }
+  //   if (localStorage.getItem("refreshToken")) {
+  //     socket.on("my-group-list", (data: any) => {
+  //       if (data.results && data.results.length > 0) {
+  //         dispatchFunction(data.results);
+  //       }
+  //     });
+  //   }
+  // });
 
   const dispatchFunction = (param: any) => {
     dispatch(groupsListAction(param));
@@ -108,67 +108,70 @@ const Mygroups: React.FC = () => {
     });
   };
 
-  const getEvents = async () => {
-    setIsLoading(true);
+  // const getEvents = async () => {
+  //   setIsLoading(true);
 
-    const headers = {
-      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-    };
+  //   const headers = {
+  //     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+  //   };
 
-    try {
-      let response;
-      if (isPlatform("ios")) {
-        const cordovaResponse = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`,
-          {},
-          headers
-        );
-        response = JSON.parse(cordovaResponse.data);
-      } else {
-        const source = axios.CancelToken.source();
-        axiosCancelToken = source;
+  //   try {
+  //     let response;
+  //     if (isPlatform("ios")) {
+  //       const cordovaResponse = await HTTP.get(
+  //         `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`,
+  //         {},
+  //         headers
+  //       );
+  //       response = JSON.parse(cordovaResponse.data);
+  //     } else {
+  //       const source = axios.CancelToken.source();
+  //       axiosCancelToken = source;
 
-        const axiosResponse = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`,
-          {
-            headers,
-            cancelToken: source.token,
-          }
-        );
-        response = axiosResponse.data;
-      }
-      setEvents(response);
-    } catch (error) {
-      if (isPlatform("ios")) {
-        if (error) {
-          const status = error.status;
+  //       const axiosResponse = await axios.get(
+  //         `https://app.mynalu.com/wp-json/nalu-app/v1/events?lang=de`,
+  //         {
+  //           headers,
+  //           cancelToken: source.token,
+  //         }
+  //       );
+  //       response = axiosResponse.data;
+  //     }
+  //     setEvents(response);
+  //   } catch (error) {
+  //     if (isPlatform("ios")) {
+  //       if (error) {
+  //         const status = error.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      } else {
-        if (error.response) {
-          const status = error.response.status;
+  //         if (status === 401 || status === 403 || status === 404) {
+  //           // Unauthorized, Forbidden, or Not Found
+  //           authService.logout();
+  //           history.push("/onboarding");
+  //         }
+  //       }
+  //     } else {
+  //       if (error.response) {
+  //         const status = error.response.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      }
-      console.error("error", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //         if (status === 401 || status === 403 || status === 404) {
+  //           // Unauthorized, Forbidden, or Not Found
+  //           authService.logout();
+  //           history.push("/onboarding");
+  //         }
+  //       }
+  //     }
+  //     console.error("error", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
   const [showPopover, setShowPopover] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
+  const fetchEvents = useSelector(
+    (state: any) => state.eventsReducer.getEvents
+  );
 
   const [groupsList, setGroupsList] = useState([]);
 
@@ -192,6 +195,20 @@ const Mygroups: React.FC = () => {
   const back = () => {
     history.goBack();
   };
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchEvents
+      .then((result: any) => {
+        const data = result;
+        setEvents(data);
+        setIsLoading(false);
+      })
+
+      .catch((error: any) => {
+        console.error("Error fetching events", error);
+      });
+  }, [fetchEvents]);
 
   const [users, setUsers] = useState<any[]>([]);
 
@@ -439,8 +456,8 @@ const Mygroups: React.FC = () => {
             Create Group
           </IonButton>
         </IonModal>*/}
-
-            <ul className="browsed-grps">
+            {/* socket commented out */}
+            {/* <ul className="browsed-grps">
               {groups.map((group: any, index: any) => (
                 <li
                   onClick={() => handleGroupClick(group._id)}
@@ -461,8 +478,7 @@ const Mygroups: React.FC = () => {
                   <IonLabel>{group.groupName}</IonLabel>
                 </li>
               ))}
-            </ul>
-
+            </ul> */}
             {/*<IonButton
           fill="clear"
           onClick={handleBrowseGroupsClick}

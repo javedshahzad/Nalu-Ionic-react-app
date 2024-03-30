@@ -22,6 +22,8 @@ import { ca } from "@vidstack/react/dist/types/vidstack-react";
 import moment from "moment";
 import authService from "../../authService";
 import { useHistory } from "react-router";
+import { fetchCourses } from "../../actions/courseActions";
+import { useDispatch } from "react-redux";
 
 const months = [
   "Januar",
@@ -55,9 +57,9 @@ function ConfigCycleRemade() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmittingToLogin, setIsSubmittingToLogin] = useState(false);
   const history = useHistory();
-
+  const dispatch = useDispatch();
   const navigation = useIonRouter();
-
+  const jwtToken = localStorage.getItem("jwtToken");
   if (isPlatform("ios")) {
     useEffect(() => {
       HTTP.setDataSerializer("json");
@@ -67,8 +69,6 @@ function ConfigCycleRemade() {
 
   const toLogin = async () => {
     setIsSubmittingToLogin(true);
-
-    const jwtToken = localStorage.getItem("jwtToken");
     const headers = {
       Authorization: `Bearer ${jwtToken}`,
     };
@@ -249,6 +249,14 @@ function ConfigCycleRemade() {
       }
     }, []);
   }
+
+  useEffect(() => {
+    (async () => {
+      if (jwtToken && jwtToken.length > 0) {
+        await dispatch<any>(fetchCourses());
+      }
+    })();
+  }, []);
 
   const goToLearnMore = async () => {
     const tempMonthIndex = activeMonthIndex + 1 + "";

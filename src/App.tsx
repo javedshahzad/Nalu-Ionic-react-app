@@ -66,7 +66,7 @@ import { groupsListAction } from "./actions/groupsListAction";
 import tokenService from "./token";
 import { io } from "socket.io-client";
 import BrowseGroups from "./pages/Chat/BrowseGroups/BrowseGroups";
-import GroupChat from "./pages/Chat/GroupChat/GroupChat";
+// import GroupChat from "./pages/Chat/GroupChat/GroupChat";
 import GroupDetails from "./pages/Chat/GroupDetails/GroupDetails";
 import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
 import MyChatGroups from "./pages/Chat/mygroups/MyGroups";
@@ -88,6 +88,12 @@ import {
   Token,
 } from "@capacitor/push-notifications";
 import apiService from "./Services";
+import { fetchEvents } from "./actions/eventsAction";
+import {
+  fetchResourcesFavourite,
+  fetchResourcesOverview,
+  fetchResourcesRecommendation,
+} from "./actions/resourcesAction";
 // import { Toast } from "@capacitor/toast";
 
 setupIonicReact({
@@ -243,6 +249,10 @@ const App: React.FC = () => {
   useEffect(() => {
     dispatch<any>(fetchCourses());
     dispatch<any>(fetchJournalEntries(`${year}-${month}-${day}`));
+    dispatch<any>(fetchEvents());
+    dispatch<any>(fetchResourcesOverview());
+    dispatch<any>(fetchResourcesFavourite());
+    dispatch<any>(fetchResourcesRecommendation());
   }, []);
 
   // fcm configuration
@@ -486,9 +496,9 @@ const App: React.FC = () => {
           <Route exact path="/">
             <Redirect to="/onboarding" />
           </Route>
-          <Route exact path="/groupchat/:groupId">
+          {/* <Route exact path="/groupchat/:groupId">
             <GroupChat />
-          </Route>
+          </Route> */}
           <Route exact path="/mygroups">
             <Mygroups />
           </Route>

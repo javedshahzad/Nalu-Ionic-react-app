@@ -74,7 +74,6 @@ const Stayup: React.FC = () => {
       dispatch<any>(fetchCourses());
     }
   }, []);
-
   return (
     <IonPage className="Stayup">
       <IonContent
