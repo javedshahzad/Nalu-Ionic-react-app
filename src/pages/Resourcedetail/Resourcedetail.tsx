@@ -34,6 +34,12 @@ import React, { useRef, useEffect } from "react";
 import { Browser } from "@capacitor/browser";
 import { useParams } from "react-router-dom";
 import authService from "../../authService";
+import {
+  fetchResourcesFavourite,
+  fetchResourcesOverview,
+  fetchResourcesRecommendation,
+} from "../../actions/resourcesAction";
+import { useDispatch } from "react-redux";
 
 const Resourcedetail: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +51,7 @@ const Resourcedetail: React.FC = () => {
 
   let num: any = 0;
 
-  console.log("params", params);
+  const dispatch = useDispatch();
   // const dataParam = new URLSearchParams(location.search).get('data');
   // const data = dataParam ? JSON.parse(decodeURIComponent(dataParam)) : null;
 
@@ -74,7 +80,7 @@ const Resourcedetail: React.FC = () => {
         );
         responseData = axiosResponse.data; // Axios encapsulates response in a .data property
       }
-      console.log(responseData);
+
       setResourceData({ data: responseData }); // Normalize the structure
     } catch (error) {
       if (isPlatform("ios")) {
@@ -120,11 +126,16 @@ const Resourcedetail: React.FC = () => {
       if (isPlatform("ios")) {
         response = await HTTP.post(URL, {}, headers);
         response = JSON.parse(response.data);
+        dispatch<any>(fetchResourcesOverview());
+        dispatch<any>(fetchResourcesFavourite());
+        dispatch<any>(fetchResourcesRecommendation());
       } else {
         response = await axios.post(URL, {}, { headers });
         response = response.data;
       }
-      console.log(response);
+      dispatch<any>(fetchResourcesOverview());
+      dispatch<any>(fetchResourcesFavourite());
+      dispatch<any>(fetchResourcesRecommendation());
       getResourceDetailsByID();
     } catch (error) {
       if (isPlatform("ios")) {
@@ -164,11 +175,17 @@ const Resourcedetail: React.FC = () => {
       if (isPlatform("ios")) {
         response = await HTTP.post(URL, {}, headers);
         response = JSON.parse(response.data);
+        dispatch<any>(fetchResourcesOverview());
+        dispatch<any>(fetchResourcesFavourite());
+        dispatch<any>(fetchResourcesRecommendation());
       } else {
         response = await axios.post(URL, {}, { headers });
         response = response.data;
       }
-      console.log(response);
+
+      dispatch<any>(fetchResourcesOverview());
+      dispatch<any>(fetchResourcesFavourite());
+      dispatch<any>(fetchResourcesRecommendation());
       getResourceDetailsByID();
     } catch (error) {
       if (isPlatform("ios")) {
@@ -208,11 +225,16 @@ const Resourcedetail: React.FC = () => {
       if (isPlatform("ios")) {
         response = await HTTP.post(URL, {}, headers);
         response = JSON.parse(response.data);
+        dispatch<any>(fetchResourcesOverview());
+        dispatch<any>(fetchResourcesFavourite());
+        dispatch<any>(fetchResourcesRecommendation());
       } else {
         response = await axios.post(URL, {}, { headers });
         response = response.data;
       }
-      console.log(response);
+      dispatch<any>(fetchResourcesOverview());
+      dispatch<any>(fetchResourcesFavourite());
+      dispatch<any>(fetchResourcesRecommendation());
       getResourceDetailsByID();
     } catch (error) {
       if (isPlatform("ios")) {

@@ -90,10 +90,10 @@ const CourseInnerOverview: React.FC = () => {
     (state: any) => state.courseReducer.getNextChapter
   );
 
-  const handleVideoPlay = () => {
-    dispatch<any>(fetchNextChapter(courseData.next_chapter));
-    setVideoPlayed(true);
-  };
+  // const handleVideoPlay = () => {
+  //   dispatch<any>(fetchNextChapter(courseData?.next_chapter));
+  //   setVideoPlayed(true);
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,6 +101,7 @@ const CourseInnerOverview: React.FC = () => {
         setIsLoading(true);
         const result = await getChapter;
         setCourseData(result);
+
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -113,7 +114,15 @@ const CourseInnerOverview: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (nextChapUrl && nextChapUrl.length > 0) {
+      await dispatch<any>(fetchNextChapter(courseData?.next_chapter));
+    };
+
+    fetchData();
+  }, [courseData]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (nextChapUrl && nextChapUrl?.length > 0) {
         try {
           const result = await nextChapUrl;
           setCourseData(result);
@@ -136,6 +145,10 @@ const CourseInnerOverview: React.FC = () => {
   };
 
   const markAsDone = async (course) => {
+    nextChapUrl.then((response: any) => {
+      setCourseData(response);
+      setVideoPlayed(false);
+    });
     setIsMarlLoading(true);
     const URL = course?.completion_link;
     const headers = {
@@ -148,21 +161,12 @@ const CourseInnerOverview: React.FC = () => {
         const cordovaResponse = await HTTP.post(URL, {}, headers);
         response = JSON.parse(cordovaResponse.data);
         dispatch<any>(fetchCourses());
-        nextChapUrl.then((response: any) => {
-          setCourseData(response);
-          setVideoPlayed(false);
-        });
       } else {
         const axiosResponse = await axios.post(URL, null, { headers });
         response = axiosResponse.data;
         dispatch<any>(fetchCourses());
       }
       if (response.status === "success") {
-        // getData(null, course?.next_chapter);
-        nextChapUrl.then((response: any) => {
-          setCourseData(response);
-          setVideoPlayed(false);
-        });
       }
     } catch (error) {
       console.error("Error marking course as done:", error);
@@ -220,7 +224,6 @@ const CourseInnerOverview: React.FC = () => {
                       className="react-player"
                       controls={true}
                       playsinline={true}
-                      onPlay={handleVideoPlay}
                     />
                   </div>
                 ) : (
@@ -299,19 +302,7 @@ const CourseInnerOverview: React.FC = () => {
                     className={`mark-done-button`}
                     onClick={() => markAsDone(courseData)}
                   >
-                    {ismarkLoading ? (
-                      <IonSpinner
-                        class="mark_loading_spinner"
-                        name="crescent"
-                        style={{
-                          color: "white",
-                          width: "30px",
-                          height: "30px",
-                        }}
-                      />
-                    ) : (
-                      <p style={{ color: "white" }}>Abschliessen</p>
-                    )}
+                    <p style={{ color: "white" }}>Abschliessen</p>
                   </div>
                 )}
               </div>
