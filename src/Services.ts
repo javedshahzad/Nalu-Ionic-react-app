@@ -61,7 +61,7 @@ const apiService = {
   post: async (url: string, data: any) => {
     if (isPlatform("ios")) {
       const response = await HTTP.post(url, data, customCordovaHeaders);
-      console.log("response", response.data);
+
       return JSON.parse(response.data);
     } else {
       return (await axios.post(url, data, customAxiosHeaders)).data;

@@ -58,7 +58,6 @@ const Filtermodal: React.FC = () => {
     apiService
       .get(`https://app.mynalu.com/wp-json/nalu-app/v1/filter-values?lang=de`)
       .then((response) => {
-        console.log(response.data);
         setFilterValues(response.data);
         type CategoryObject = {
           name: string;
@@ -76,7 +75,7 @@ const Filtermodal: React.FC = () => {
         setmediaItems(categoryArray);
 
         const names = getFullNames(response.data.authorities);
-        console.log(names);
+
         setrecommendedItems(names);
 
         setAPIRangeValues({
@@ -210,8 +209,6 @@ const Filtermodal: React.FC = () => {
           headers
         )
           .then((response) => {
-            console.log(response);
-
             history.push("/tabs/tab3/resourcesubcateggory", {
               filteredData: response.data.ressources,
               subCategory: response.data.sub_categories,
@@ -241,8 +238,6 @@ const Filtermodal: React.FC = () => {
             },
           })
           .then((response) => {
-            console.log(response);
-
             history.push("/tabs/tab3/resourcesubcateggory", {
               filteredData: response.data.ressources,
               subCategory: response.data.sub_categories,

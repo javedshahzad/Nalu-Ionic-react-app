@@ -353,7 +353,6 @@ const Resources: React.FC = () => {
         response = await axios.post(URL, {}, { headers });
         response = response.data;
       }
-      console.log(response);
       if (
         response.message === "Upvote handled successfully" ||
         response.message === "Downvote removed successfully" ||
@@ -401,7 +400,7 @@ const Resources: React.FC = () => {
         response = await axios.post(URL, {}, { headers });
         response = response.data;
       }
-      console.log(response);
+
       if (
         response.message === "Downvote removed successfully" ||
         response.message === "Downvote added successfully" ||
@@ -450,7 +449,7 @@ const Resources: React.FC = () => {
         response = await axios.post(URL, {}, { headers });
         response = response.data;
       }
-      console.log(response);
+
       if (
         response.message === "Post removed from favourites successfully" ||
         response.message === "Post added to favourites successfully"
@@ -494,8 +493,6 @@ const Resources: React.FC = () => {
       axios
         .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`)
         .then((response) => {
-          console.log(response.data);
-
           history.push("/tabs/tab3/resourcedetail", {
             data: response.data,
           });

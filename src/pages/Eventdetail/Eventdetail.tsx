@@ -78,7 +78,7 @@ const Eventdetail: React.FC = () => {
       )
         .then((response) => {
           const data = JSON.parse(response.data);
-          console.log(data);
+
           setEvent(data);
           setIsLoading(false);
         })
@@ -110,7 +110,6 @@ const Eventdetail: React.FC = () => {
           }
         )
         .then((response) => {
-          console.log(response.data);
           setEvent(response.data);
           setIsLoading(false);
         })
@@ -149,7 +148,6 @@ const Eventdetail: React.FC = () => {
   };
 
   const handleDateChange = async (event, date_event, registration_link) => {
-    console.log(date_event);
     setIsLoaderLoading(true);
     const value = event.target.value;
 
@@ -166,7 +164,7 @@ const Eventdetail: React.FC = () => {
           headers
         );
         const data = JSON.parse(response.data);
-        console.log(data);
+
         setEvent(data);
         setIsDateSelected(true);
         setIsLoaderLoading(false);
@@ -196,7 +194,6 @@ const Eventdetail: React.FC = () => {
           }
         )
         .then((response) => {
-          console.log(response.data);
           setEvent(response.data);
           setIsDateSelected(true);
           setIsLoaderLoading(false);
@@ -257,7 +254,7 @@ const Eventdetail: React.FC = () => {
       try {
         const response = await HTTP.get(updatedRegistrationLink, {}, headers);
         const data = JSON.parse(response.data);
-        console.log(data);
+
         if (data === "Accepted") {
           setIsDateSelected(true);
         }
@@ -285,8 +282,6 @@ const Eventdetail: React.FC = () => {
           },
         })
         .then((response) => {
-          console.log(response.data);
-
           if (response.data === "Accepted") {
             setIsDateSelected(true);
           }

@@ -129,7 +129,7 @@ const Journal: React.FC = () => {
           headers
         );
         const data = JSON.parse(response.data);
-        console.log(data);
+
         setCategoriesOverview(data);
       } catch (error) {
         if (error) {
@@ -152,7 +152,7 @@ const Journal: React.FC = () => {
           `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
           { headers }
         );
-        console.log(response.data);
+
         setCategoriesOverview(response.data);
       } catch (error) {
         if (error.response) {
@@ -192,7 +192,7 @@ const Journal: React.FC = () => {
           { headers }
         );
       }
-      console.log(response);
+
       setCategoriesFavourites(response.ressources);
     } catch (error) {
       if (error) {
@@ -231,7 +231,7 @@ const Journal: React.FC = () => {
           { headers }
         );
       }
-      console.log(response);
+
       setRecommendations(response.ressources);
     } catch (error) {
       if (error) {
@@ -272,7 +272,7 @@ const Journal: React.FC = () => {
           }
         );
       }
-      console.log(response);
+
       setFiltered(response.data);
     } catch (error) {
       if (isPlatform("ios")) {
@@ -323,7 +323,6 @@ const Journal: React.FC = () => {
       } else {
         response = await axios.post(URL, {}, { headers });
       }
-      console.log(response.data);
 
       // Refresh categories and recommendations based on the response
       if (response.data.message === "Upvote added successfully") {
@@ -380,7 +379,6 @@ const Journal: React.FC = () => {
       } else {
         response = await axios.post(URL, {}, { headers });
       }
-      console.log(response.data);
 
       // Refresh categories and recommendations based on the response
       if (response.data.message === "Downvote removed successfully") {
@@ -435,7 +433,6 @@ const Journal: React.FC = () => {
       } else {
         response = await axios.post(URL, {}, { headers });
       }
-      console.log(response.data);
 
       // Refresh the favourites based on the response
       getCategoriesFavourites();
@@ -503,7 +500,6 @@ const Journal: React.FC = () => {
         response = axiosResponse.data;
       }
 
-      console.log(response);
       history.push("/tabs/tab3/resourcedetail", {
         data: response,
       });

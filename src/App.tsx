@@ -279,7 +279,6 @@ const App: React.FC = () => {
 
   const addListener = () => {
     PushNotifications.addListener("registration", (token: Token) => {
-      console.log("resgisted successfully!", token);
       localStorage.setItem("fcmtoken", token.value);
 
       let chatApiUserId = localStorage.getItem("chatApiUserId");
@@ -333,7 +332,6 @@ const App: React.FC = () => {
   };
 
   const update_fcm_token = async (data: any, token) => {
-    console.log("idhr aya ", token);
     let obj = {
       newToken: token,
     };

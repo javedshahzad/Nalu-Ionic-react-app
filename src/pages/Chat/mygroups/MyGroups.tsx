@@ -91,7 +91,7 @@ const MyGroups: React.FC = () => {
       url = params.replace("//groupImages", "//public/groupImages");
     } else {
       url = params;
-      console.log("url", url);
+
       return url;
     }
   };

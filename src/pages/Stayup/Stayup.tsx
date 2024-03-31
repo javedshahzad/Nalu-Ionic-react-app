@@ -36,8 +36,6 @@ const handleSubscribe = async () => {
       const axiosResponse = await axios.post(url, {}, { headers });
       response = axiosResponse.data;
     }
-
-    console.log("Subscription successful:", response);
   } catch (error) {
     if (isPlatform("ios")) {
       if (error) {

@@ -213,7 +213,7 @@ const ResourceSubCategory: React.FC = () => {
       const data = categoryIds.filter((val) => {
         return val !== id;
       });
-      console.log(data);
+
       if (data.length === 0) {
         getParentCategoryByID(resource_sub_id);
       }
@@ -344,7 +344,7 @@ const ResourceSubCategory: React.FC = () => {
         );
         response = response.data;
       }
-      console.log(response);
+
       history.push("/tabs/tab3/resourcedetail", { data: response });
     } catch (error) {
       console.error("Error fetching resource details by ID:", error);

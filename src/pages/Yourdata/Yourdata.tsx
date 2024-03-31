@@ -68,8 +68,6 @@ const Yourdata: React.FC = () => {
         const axiosResponse = await axios.put(url, {}, { headers });
         response = axiosResponse.data;
       }
-
-      console.log("Consent updated successfully!", response);
     } catch (error) {
       if (isPlatform("ios")) {
         if (error) {

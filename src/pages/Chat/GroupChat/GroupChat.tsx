@@ -257,7 +257,6 @@ const GroupChat: React.FC = () => {
   }, []);
 
   const sendNotification = (data: any) => {
-    console.log("idhr aya");
     let url = "https://apidev.mynalu.com";
     // let url = 'http://localhost:7001'
     try {
@@ -281,7 +280,6 @@ const GroupChat: React.FC = () => {
         type: "message",
       });
 
-      console.log("result =>>>>", result);
       if (result && result.length > 0) {
         result.map((obj: any) => {
           if (obj.token) {

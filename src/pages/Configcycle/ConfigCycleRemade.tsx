@@ -275,7 +275,6 @@ function ConfigCycleRemade() {
       +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
     }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
-    console.log("dateParam", dateParam);
     setIsSubmitting(true);
 
     try {
@@ -304,7 +303,6 @@ function ConfigCycleRemade() {
         );
       }
 
-      console.log("data from custom category api", response);
       navigation.push("/learnmore");
     } catch (error) {
       if (error) {

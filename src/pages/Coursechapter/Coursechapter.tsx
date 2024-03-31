@@ -78,7 +78,6 @@ const Coursechapter: React.FC = () => {
     setActiveSegment("Video");
   }, []);
   const segmentChanged = (e: any) => {
-    console.log(activeSegment);
     setActiveSegment(e.detail.value);
   };
   return (

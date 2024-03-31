@@ -253,7 +253,6 @@ const Login: React.FC = () => {
 
   const addListener = () => {
     PushNotifications.addListener("registration", (token: Token) => {
-      console.log("resgisted successfully!", token);
       localStorage.setItem("fcmtoken", token.value);
 
       //  showToast("Push registration success");
@@ -302,7 +301,6 @@ const Login: React.FC = () => {
   };
 
   const update_fcm_token = async (data: any, token) => {
-    console.log("idhr aya 2", token);
     let obj = {
       newToken: token,
     };
