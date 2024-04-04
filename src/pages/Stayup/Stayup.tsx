@@ -14,6 +14,9 @@ import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 import authService from "../../authService";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { fetchCourses } from "../../actions/courseActions";
 
 const handleSubscribe = async () => {
   const token = localStorage.getItem("jwtToken");
@@ -33,8 +36,6 @@ const handleSubscribe = async () => {
       const axiosResponse = await axios.post(url, {}, { headers });
       response = axiosResponse.data;
     }
-
-    console.log("Subscription successful:", response);
   } catch (error) {
     if (isPlatform("ios")) {
       if (error) {
@@ -62,6 +63,15 @@ const handleSubscribe = async () => {
 };
 
 const Stayup: React.FC = () => {
+  const dispatch = useDispatch();
+
+  const token = localStorage.getItem("jwtToken");
+
+  useEffect(() => {
+    if (token) {
+      dispatch<any>(fetchCourses());
+    }
+  }, []);
   return (
     <IonPage className="Stayup">
       <IonContent

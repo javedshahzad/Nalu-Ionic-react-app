@@ -60,7 +60,6 @@ const CourseSubOverview: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [ismarkLoading, setIsMarlLoading] = useState(false);
   const data: any = useParams();
-  console.log("ID from route:", data);
 
   useEffect(() => {
     getData(data.id);
@@ -74,13 +73,11 @@ const CourseSubOverview: React.FC = () => {
   };
 
   const getData = (id) => {
-    console.log;
     setIsLoading(true);
     try {
       axios
         .get(`https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`)
         .then((response) => {
-          console.log(response.data);
           setCourseData(response.data);
           setIsLoading(false);
         })
@@ -121,7 +118,6 @@ const CourseSubOverview: React.FC = () => {
       axios
         .post(URL)
         .then((response) => {
-          console.log(response.data);
           // setCourseData(response.data);
           if ((response.data.status = "success")) {
             history.push(`/tabs/tab1/courseinneroverview`);

@@ -86,31 +86,32 @@ const JournalCalendarRemade = () => {
   const [currentDisplayedMonthIndex, setCurrentDisplayedMonthIndex] =
     useState(0);
 
-  const history = useHistory<any>(); // Use useHistory for navigation
+  const history = useHistory(); // Use useHistory for navigation
+  //const history = useHistory<any>(); // Use useHistory for navigation
 
-  const location = useLocation();
+  // const location = useLocation();
 
-  useEffect(() => {
-    // Access the query parameters from location.search
-    const queryParams = new URLSearchParams(location.search);
+  // useEffect(() => {
+  //   // Access the query parameters from location.search
+  //   const queryParams = new URLSearchParams(location.search);
 
-    // Get a specific query parameter value
-    const paramValue = queryParams.get("loading");
+  //   // Get a specific query parameter value
+  //   const paramValue = queryParams.get("loading");
 
-    if (paramValue) {
-      setIsLoading(true);
+  //   if (paramValue) {
+  //     setIsLoading(true);
 
-      setTimeout(() => {
-        setIsLoading(false);
-        scrollingToView();
-      }, 3000);
-    } else {
-      scrollingToView();
-    }
+  //     setTimeout(() => {
+  //       setIsLoading(false);
+  //       scrollingToView();
+  //     }, 3000);
+  //   } else {
+  //     scrollingToView();
+  //   }
 
-    // Log or use the query parameter value as needed
-    console.log("Your query parameter value:", paramValue);
-  }, [location.search]);
+  //   // Log or use the query parameter value as needed
+  //   console.log("Your query parameter value:", paramValue);
+  // }, [location.search]);
 
   const phases = useSelector((state: RootState) => state.phasesReducer);
 
@@ -119,20 +120,24 @@ const JournalCalendarRemade = () => {
   );
 
   useEffect(() => {
-    moonColors
-      .then((result: any) => {
-        const entries = result;
-        setColorsData(entries);
-      })
-
-      .catch((error: any) => {
+    const fetchMoonColors = async () => {
+      try {
+        const result = await moonColors;
+        setColorsData(result);
+      } catch (error) {
         console.error("Error fetching moonColors", error);
-      });
+      }
+    };
+
+    fetchMoonColors();
   }, [moonColors]);
+
   const moonIcons = useSelector((state: any) => state.phasesReducer.moonIcons);
+
   useEffect(() => {
-    moonIcons
-      .then((result: any) => {
+    const fetchMoonIcons = async () => {
+      try {
+        const result = await moonIcons;
         const moonPhase = result;
 
         const newArray = [];
@@ -150,11 +155,12 @@ const JournalCalendarRemade = () => {
         }
 
         setIconsData(newArray);
-      })
+      } catch (error) {
+        console.error("Error fetching moonIcons", error);
+      }
+    };
 
-      .catch((error: any) => {
-        console.error("Error fetching moonColors", error);
-      });
+    fetchMoonIcons();
   }, [moonIcons]);
 
   useEffect(() => {
@@ -170,6 +176,9 @@ const JournalCalendarRemade = () => {
     dispatch<any>(fetchMoonIcons(year));
     dispatch<any>(fetchColors(year));
   }, []);
+
+  const navigation = useIonRouter();
+  const toJounralAddition = () => {};
 
   const date: Date = new Date();
 
@@ -198,12 +207,16 @@ const JournalCalendarRemade = () => {
       +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
     }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
+    // const dateParam = `${year}-${+tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
+    //   }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
+
     url = `/journaladditionremade/${dateParam}`;
 
     history.push(url);
   };
 
-  const scrollingToView = () => {
+  useEffect(() => {
+    //const scrollingToView = () => {
     const day = new Date().getDate();
     const month = new Date().getMonth();
     const year = new Date().getFullYear();
@@ -216,7 +229,7 @@ const JournalCalendarRemade = () => {
         isItToday.scrollIntoView({ behavior: "smooth", block: "center" });
       }, 1000);
     }
-  };
+  }, []);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -931,7 +944,41 @@ const JournalCalendarRemade = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className={`${isPlatform("ios") ? "safe-padding" : ""}`}>
-        {isLoading ? (
+        <div className="journalcalendar-main">
+          <div className="calendar-container" onScroll={() => handleScroll()}>
+            {/* <div className="calendar-controls"></div> */}
+            <div className="calendar-scrollable">
+              {calendarMonths.map((monthData, mIndex) => (
+                <>
+                  <div
+                    id={`${months[mIndex]}`}
+                    key={monthData.key}
+                    className={`calendar-month ${
+                      currentdivInView == months[mIndex] ? "fadeIn" : "fadeOut"
+                    }`}
+                  >
+                    {monthData} {months[mIndex]}
+                  </div>
+                </>
+              ))}
+            </div>
+          </div>
+          <div className="moon-phases">
+            <div className="period-group">
+              <div className="full-moon">
+                <img src={menstruation} alt="" />
+                <p className="moon-text">Menstruation</p>
+              </div>
+              <div
+                className="new-moon bottom"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <div
+                  style={{ stroke: "#EE5F64" }}
+                  dangerouslySetInnerHTML={{ __html: newMoonSvg }}
+                ></div>
+                <p className="moon-text">Neumond</p>
+                {/* {isLoading ? (
           <div
             style={{
               display: "flex",
@@ -946,83 +993,108 @@ const JournalCalendarRemade = () => {
         ) : (
           <div className="journalcalendar-main">
             <div className="calendar-container" onScroll={() => handleScroll()}>
-              {/* <div className="calendar-controls"></div> */}
+           
               <div className="calendar-scrollable">
                 {calendarMonths.map((monthData, mIndex) => (
                   <>
                     <div
                       id={`${months[mIndex]}`}
                       key={monthData.key}
-                      className={`calendar-month ${
-                        currentdivInView == months[mIndex]
-                          ? "fadeIn"
-                          : "fadeOut"
-                      }`}
+                      className={`calendar-month ${currentdivInView == months[mIndex]
+                        ? "fadeIn"
+                        : "fadeOut"
+                        }`}
                     >
                       {monthData}
                     </div>
                   </>
-                ))}
+                ))}*/}
               </div>
             </div>
 
-            <div className="moon-phases">
-              <div className="period-group">
-                <div className="full-moon">
-                  <img src={menstruation} alt="" />
-                  <p className="moon-text">Menstruation</p>
-                </div>
+            <div className="moon-group">
+              <div className="full-moon">
+                {/* <div className="moon-phases">
+            <div className="period-group">
+              <div className="full-moon">
+                <img src={menstruation} alt="" />
+                <p className="moon-text">Menstruation</p>
+              </div> */}
+
                 <div
-                  className="new-moon bottom"
-                  style={{ display: "flex", alignItems: "center" }}
-                >
-                  <div
-                    style={{ stroke: "#EE5F64" }}
-                    dangerouslySetInnerHTML={{ __html: newMoonSvg }}
-                  ></div>
-                  <p className="moon-text">Neumond</p>
-                </div>
-              </div>
-              <div className="moon-group">
-                <div className="full-moon">
-                  <div
-                    className="svgIconss"
-                    dangerouslySetInnerHTML={{ __html: svg }}
-                    id="cervical"
-                  />
-                  <p className="moon-text">Zervixschleim</p>
-                </div>
+                  className="svgIconss"
+                  dangerouslySetInnerHTML={{ __html: svg }}
+                  id="cervical"
+                />
+                <p className="moon-text">Zervixschleim</p>
+                {/* <div
+                className="new-moon bottom"
+                style={{ display: "flex", alignItems: "center" }}
+              >
                 <div
-                  className="full-moon bottom"
-                  style={{ display: "flex", alignItems: "center" }}
-                >
-                  <div
-                    style={{ stroke: "#EE5F64", fill: "#EE5F64" }}
-                    dangerouslySetInnerHTML={{ __html: fullMoonSvg }}
-                  ></div>
-                  <p className="moon-text">Vollmond</p>
-                </div>
+                  style={{ stroke: "#EE5F64" }}
+                  dangerouslySetInnerHTML={{ __html: newMoonSvg }}
+                ></div>
+                <p className="moon-text">Neumond</p>
+              </div> */}
               </div>
-            </div>
+              <div
+                className="full-moon bottom"
+                style={{ display: "flex", alignItems: "center" }}
+              ></div>
 
-            <div className="journal-cycle-wrapper">
-              <div className="journal-cycle">
-                {/*<h3>{icons2?.today?.label}</h3>*/}
-                <div className="day-time">
-                  <span>{formatTodaysDate()}</span>
-                </div>
+              {/* <div className="moon-group">
+              <div className="full-moon">
+                <div
+                  className="svgIconss"
+                  dangerouslySetInnerHTML={{ __html: svg }}
+                  id="cervical"
+                />
+                <p className="moon-text">Zervixschleim</p>
+              </div> */}
+              <div className="fullmoonOutter">
+                <div
+                  style={{ stroke: "#EE5F64", fill: "#EE5F64" }}
+                  dangerouslySetInnerHTML={{ __html: fullMoonSvg }}
+                ></div>
+                <p className="moon-text" style={{ fontSize: 14 }}>
+                  Vollmond
+                </p>
               </div>
+              {/*   className="full-moon bottom"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <div
+                  style={{ stroke: "#EE5F64", fill: "#EE5F64" }}
+                  dangerouslySetInnerHTML={{ __html: fullMoonSvg }}
+                ></div>
+                <p className="moon-text">Vollmond</p>
+              </div>  */}
             </div>
-
-            {/*<IonButton className="period-btn" onClick={handleStartStop}>
-           {todayPeriod == "false" ? (
-             <IonLabel>Beginn der Periode</IonLabel>
-           ) : (
-             <IonLabel>Ende der Periode</IonLabel>
-           )}
-           </IonButton>*/}
           </div>
-        )}
+        </div>
+
+        <div className="journal-cycle-wrapper">
+          <div className="journal-cycle">
+            <div className="day-time">
+              <span>{formatTodaysDate()}</span>
+              {/* <div className="journal-cycle-wrapper">
+            <div className="journal-cycle">
+             
+              <div className="day-time">
+                <span>{formatTodaysDate()}</span>
+              </div> */}
+            </div>
+          </div>
+
+          {/*<IonButton className="period-btn" onClick={handleStartStop}>
+            {todayPeriod == "false" ? (
+              <IonLabel>Beginn der Periode</IonLabel>
+            ) : (
+              <IonLabel>Ende der Periode</IonLabel>
+            )}
+            </IonButton>*/}
+        </div>
       </IonContent>
     </IonPage>
   );

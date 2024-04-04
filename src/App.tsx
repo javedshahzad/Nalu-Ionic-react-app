@@ -60,13 +60,13 @@ import ConfigCycleRemade from "./pages/Configcycle/ConfigCycleRemade";
 import Pusher from "pusher-js";
 import { addNotification } from "./actions/notificationAction";
 import { useDispatch } from "react-redux";
-import OneSignal from "onesignal-cordova-plugin";
+// import OneSignal from "onesignal-cordova-plugin";
 import React, { useEffect, useState } from "react";
 import { groupsListAction } from "./actions/groupsListAction";
 import tokenService from "./token";
 import { io } from "socket.io-client";
 import BrowseGroups from "./pages/Chat/BrowseGroups/BrowseGroups";
-import GroupChat from "./pages/Chat/GroupChat/GroupChat";
+// import GroupChat from "./pages/Chat/GroupChat/GroupChat";
 import GroupDetails from "./pages/Chat/GroupDetails/GroupDetails";
 import GroupInfo from "./pages/Chat/GroupInfo/GroupInfo";
 import MyChatGroups from "./pages/Chat/mygroups/MyGroups";
@@ -78,6 +78,23 @@ import Addcustomcategory from "./pages/Addcustomcategory/Addcustomcategory";
 import MoonPhasesService from "./MoonPhasesService";
 import authService from "./authService";
 import { fetchColors, fetchMoonIcons } from "./actions/apiActions";
+import { fetchAvatar } from "./actions/menuActions";
+import { fetchCourses } from "./actions/courseActions";
+import { fetchJournalEntries } from "./actions/journalEntriesAction";
+import {
+  ActionPerformed,
+  PushNotificationSchema,
+  PushNotifications,
+  Token,
+} from "@capacitor/push-notifications";
+import apiService from "./Services";
+import { fetchEvents } from "./actions/eventsAction";
+import {
+  fetchResourcesFavourite,
+  fetchResourcesOverview,
+  fetchResourcesRecommendation,
+} from "./actions/resourcesAction";
+// import { Toast } from "@capacitor/toast";
 
 setupIonicReact({
   mode: "ios",
@@ -85,13 +102,15 @@ setupIonicReact({
 
 // ***onesignal*** //
 
-function OneSignalInit() {
-  OneSignal.initialize("0f10d9d5-8078-4eda-b52f-c616a5398d0b");
-}
+// function OneSignalInit() {
+//   OneSignal.initialize("0f10d9d5-8078-4eda-b52f-c616a5398d0b");
+// }
 
 // ***onesignal*** //
 
 const App: React.FC = () => {
+  const nullEntry: any[] = [];
+  const [notifications, setnotifications] = useState(nullEntry);
   // ***onesignal*** //
 
   // OneSignalInit();s
@@ -146,6 +165,16 @@ const App: React.FC = () => {
 
   const history = useHistory();
 
+  const fetchMenuData = async () => {
+    const userId = localStorage.getItem("userId");
+    try {
+      await dispatch<any>(fetchAvatar(userId));
+      // await dispatch<any>(fetchColors(year));
+    } catch (error) {
+      // handleDispatchError(error);
+    }
+  };
+
   const getIconsAndColors = async () => {
     let month: any = new Date().getMonth() + 1;
 
@@ -194,7 +223,132 @@ const App: React.FC = () => {
 
   useEffect(() => {
     getIconsAndColors();
+    fetchMenuData();
   }, []);
+
+  // const currentDate = new Date();
+  // const currentYear = currentDate.getFullYear();
+  // const currentMonth = currentDate.getMonth() + 1;
+  // const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+
+  // const dates = [];
+  // for (let day = 1; day <= daysInMonth; day++) {
+  //   const formattedDate = `${currentYear}-${currentMonth
+  //     .toString()
+  //     .padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+  //   dates.push(formattedDate);
+  // }
+
+  // console.log(">>>", dates);
+
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+
+  useEffect(() => {
+    dispatch<any>(fetchCourses());
+    dispatch<any>(fetchJournalEntries(`${year}-${month}-${day}`));
+    dispatch<any>(fetchEvents());
+    dispatch<any>(fetchResourcesOverview());
+    dispatch<any>(fetchResourcesFavourite());
+    dispatch<any>(fetchResourcesRecommendation());
+  }, []);
+
+  // fcm configuration
+
+  useEffect(() => {
+    PushNotifications.requestPermissions().then(
+      (result: any) => {
+        if (result.receive === "granted") {
+          PushNotifications.register();
+
+          addListener();
+        }
+        if (result.receive === "denied") {
+          //  showToast("Push Notification permission denied");
+        } else {
+          // Show some error
+        }
+      },
+      (err) => {
+        console.log("err result", err);
+      }
+    );
+  }, []);
+
+  const addListener = () => {
+    PushNotifications.addListener("registration", (token: Token) => {
+      localStorage.setItem("fcmtoken", token.value);
+
+      let chatApiUserId = localStorage.getItem("chatApiUserId");
+      if (chatApiUserId) {
+        update_fcm_token(chatApiUserId, token.value);
+      }
+
+      //  showToast("Push registration success");
+      // Push Notifications registered successfully.
+      // Send token details to API to keep in DB.
+    });
+
+    PushNotifications.addListener("registrationError", (error: any) => {
+      alert("Error on registration: " + JSON.stringify(error));
+
+      // Handle push notification registration error here.
+    });
+
+    PushNotifications.addListener(
+      "pushNotificationReceived",
+      (notification: PushNotificationSchema) => {
+        setnotifications((notifications) => [
+          ...notifications,
+          {
+            id: notification.id,
+            title: notification.title,
+            body: notification.body,
+            type: "foreground",
+          },
+        ]);
+
+        // Show the notification payload if the app is open on the device.
+      }
+    );
+
+    PushNotifications.addListener(
+      "pushNotificationActionPerformed",
+      (notification: ActionPerformed) => {
+        setnotifications((notifications) => [
+          ...notifications,
+          {
+            id: notification.notification.data.id,
+            title: notification.notification.data.title,
+            body: notification.notification.data.body,
+            type: "action",
+          },
+        ]);
+        // Implement the needed action to take when user tap on a notification.
+      }
+    );
+  };
+
+  const update_fcm_token = async (data: any, token) => {
+    let obj = {
+      newToken: token,
+    };
+    let url = "https://apidev.mynalu.com/v1";
+    //let url = 'http://localhost:7001/v1'
+    try {
+      apiService.put2(`${url}/user/update-token/${data}`, obj);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  // const showToast = async (msg: string) => {
+  //   await Toast.show({
+  //     text: msg,
+  //   });
+  // };
 
   return (
     <IonApp>
@@ -340,9 +494,9 @@ const App: React.FC = () => {
           <Route exact path="/">
             <Redirect to="/onboarding" />
           </Route>
-          <Route exact path="/groupchat/:groupId">
+          {/* <Route exact path="/groupchat/:groupId">
             <GroupChat />
-          </Route>
+          </Route> */}
           <Route exact path="/mygroups">
             <Mygroups />
           </Route>

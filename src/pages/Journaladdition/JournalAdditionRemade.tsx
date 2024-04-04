@@ -49,6 +49,15 @@ import authService from "../../authService";
 import { clearJournal, journalAction } from "../../actions/journalAction";
 import { isPlatform } from "@ionic/react";
 import { fetchColors, fetchMoonIcons } from "../../actions/apiActions";
+import apiService from "../../Services";
+
+const getCurrentDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
 
 function JournalAdditionRemade() {
   const { dateParam } = useParams<{ dateParam: string }>();
@@ -74,13 +83,40 @@ function JournalAdditionRemade() {
     }
   }, [isPremiumUser]);
 
-  let isPremium = false; // Default to false
-  try {
-    const roles = JSON.parse(localStorage.getItem("roles") || "{}"); // Parse the roles or default to an empty object
-    isPremium = Object.values(roles).includes("premium"); // Check if 'premium' is one of the roles
-  } catch (e) {
-    console.error("Error parsing roles from localStorage:", e);
-  }
+  useEffect(() => {});
+
+  const fetchJournalEntries = useSelector(
+    (state: any) => state.journalEntriesReducer.getJournalEntries
+  );
+
+  useEffect(() => {
+    const fetchEntries = async () => {
+      try {
+        const result = await fetchJournalEntries;
+
+        if (result.entries.length > 0) {
+          const types = [
+            ...new Set(result.entries.map((item: any) => item.type)),
+          ];
+
+          let dynamicStates: any = [];
+
+          dynamicStates = result.entries;
+
+          dispatch(clearJournal());
+          dispatch(journalAction(dynamicStates));
+        }
+      } catch (error) {
+        console.error("Error fetching moonColors", error);
+      }
+    };
+
+    if (dateParam === getCurrentDate()) {
+      fetchEntries();
+    } else {
+      getJournalEntries();
+    }
+  }, [dateParam]);
 
   const getJournalEntries = async () => {
     try {
@@ -100,10 +136,6 @@ function JournalAdditionRemade() {
         // console.log("dynamic", dynamicStates);
         dispatch(clearJournal());
         dispatch(journalAction(dynamicStates));
-
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 10000);
       }
 
       setIsLoading(false);
@@ -135,9 +167,17 @@ function JournalAdditionRemade() {
     }
   };
 
-  useEffect(() => {
-    getJournalEntries();
-  }, []);
+  let isPremium = false; // Default to false
+  try {
+    const roles = JSON.parse(localStorage.getItem("roles") || "{}"); // Parse the roles or default to an empty object
+    isPremium = Object.values(roles).includes("premium"); // Check if 'premium' is one of the roles
+  } catch (e) {
+    console.error("Error parsing roles from localStorage:", e);
+  }
+
+  // useEffect(() => {
+  //   getJournalEntries();
+  // }, []);
 
   // const [inputValues, setInputValues] = useState({});
 
@@ -322,53 +362,55 @@ function JournalAdditionRemade() {
     const updatedValue = isCheckbox ? (val ? 1 : 0) : val;
     fields.value = updatedValue;
 
-    CustomCategoryApiService.post(
-      `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`,
-      {
-        entries: [
-          {
-            key: fields.key,
-            value: updatedValue,
-          },
-        ],
-      }
-    ).then(
-      () => {
-        let month: any = new Date().getMonth() + 1;
-        if (parseInt(month) < 10) {
-          month = "0" + month;
+    apiService
+      .post(
+        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`,
+        {
+          entries: [
+            {
+              key: fields.key,
+              value: updatedValue,
+            },
+          ],
         }
-        let year = new Date().getFullYear();
-        // let yearMonth = `${year}-${month}`;
-        dispatch<any>(fetchMoonIcons(year));
-        dispatch<any>(fetchColors(year));
-      },
-      (error) => {
-        if (isPlatform("ios")) {
-          if (error) {
-            const status = error.status;
+      )
+      .then(
+        () => {
+          let month: any = new Date().getMonth() + 1;
+          if (parseInt(month) < 10) {
+            month = "0" + month;
+          }
+          let year = new Date().getFullYear();
+          // let yearMonth = `${year}-${month}`;
+          dispatch<any>(fetchMoonIcons(year));
+          dispatch<any>(fetchColors(year));
+        },
+        (error) => {
+          if (isPlatform("ios")) {
+            if (error) {
+              const status = error.status;
 
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
+            }
+          } else {
+            if (error.response) {
+              const status = error.response.status;
+
+              if (status === 401 || status === 403 || status === 404) {
+                // Unauthorized, Forbidden, or Not Found
+                authService.logout();
+                history.push("/onboarding");
+              }
             }
           }
-        } else {
-          if (error.response) {
-            const status = error.response.status;
 
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
-            }
-          }
+          console.error(error);
         }
-
-        console.error(error);
-      }
-    );
+      );
   };
 
   // const getIcons = async () => {
@@ -547,19 +589,19 @@ function JournalAdditionRemade() {
     setDisableInput(false);
   };
 
-  const goBack = () => {
-    history.push("/tabs/tab4?loading=true");
-  };
+  // const goBack = () => {
+  //   history.push("/tabs/tab4?loading=true");
+  // };
 
   return (
     <IonPage className="JournalAdditionRemade">
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
-            {/* <IonBackButton></IonBackButton> */}
-            <IonButton onClick={goBack} fill="clear" color={"primary"}>
+            <IonBackButton></IonBackButton>
+            {/*  <IonButton onClick={goBack} fill="clear" color={"primary"}>
               <IonIcon icon={arrowBackOutline} color={"primary"} />
-            </IonButton>
+            </IonButton> */}
           </IonButtons>
         </IonToolbar>
       </IonHeader>

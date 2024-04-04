@@ -1,7 +1,6 @@
 import {
   IonAccordion,
   IonAccordionGroup,
-  IonBackButton,
   IonButton,
   IonButtons,
   IonContent,
@@ -12,30 +11,23 @@ import {
   IonPage,
   IonProgressBar,
   IonSpinner,
-  IonTitle,
   IonToolbar,
-  useIonViewDidLeave,
   isPlatform,
 } from "@ionic/react";
-import {
-  chevronForwardOutline,
-  menuOutline,
-  notificationsOutline,
-} from "ionicons/icons";
+import { menuOutline } from "ionicons/icons";
 
 import "./Courseoverviewpaid.scss";
-import axios from "axios";
-import { HTTP } from "@awesome-cordova-plugins/http";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
-import NotificationBell from "../../components/NotificationBell";
 import { useLocation } from "react-router-dom";
-import authService from "../../authService";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchChapter } from "../../actions/courseActions";
 
 const Courseoverviewpaid: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [courseData, setCourseData] = useState(null);
+  const [currentChapterId, setCurrentChapterId] = useState(null);
 
   const history = useHistory();
   const location = useLocation();
@@ -43,7 +35,7 @@ const Courseoverviewpaid: React.FC = () => {
   let axiosCancelToken;
 
   useEffect(() => {
-    getData();
+    // getData();
 
     return () => {
       if (axiosCancelToken) {
@@ -53,87 +45,118 @@ const Courseoverviewpaid: React.FC = () => {
   }, [location.pathname]);
 
   const roles = JSON.parse(localStorage.getItem("roles")) || {};
+
+  const fetchCourses = useSelector(
+    (state: any) => state.courseReducer.getCourses
+  );
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchCourses
+      .then((result: any) => {
+        const data = result;
+        setCourseData(data);
+        setIsLoading(false);
+      })
+
+      .catch((error: any) => {
+        console.error("Error fetching courses", error);
+      });
+  }, [fetchCourses]);
+
   let isPremium = false; // Default to false
   try {
-    const roles = JSON.parse(localStorage.getItem("roles") || "{}"); // Parse the roles or default to an empty object
-    isPremium = Object.values(roles).includes("premium"); // Check if 'premium' is one of the roles
+    const roles = JSON.parse(localStorage.getItem("roles") || "{}");
+    isPremium = Object.values(roles).includes("premium");
   } catch (e) {
     console.error("Error parsing roles from localStorage:", e);
   }
 
-  const getData = () => {
-    setIsLoading(true);
+  // const getData = () => {
+  //   setIsLoading(true);
 
-    const jwtToken = localStorage.getItem("jwtToken");
-    const headers = {
-      Authorization: `Bearer ${jwtToken}`,
-    };
+  //   const jwtToken = localStorage.getItem("jwtToken");
+  //   const headers = {
+  //     Authorization: `Bearer ${jwtToken}`,
+  //   };
 
-    if (isPlatform("ios")) {
-      // Use Cordova HTTP plugin for iOS
-      HTTP.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`,
-        {},
-        headers
-      )
-        .then((response) => {
-          const data = JSON.parse(response.data);
-          console.log(data);
-          setCourseData(data);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          if (error) {
-            const status = error.status;
+  //   if (isPlatform("ios")) {
+  //     // Use Cordova HTTP plugin for iOS
+  //     HTTP.get(
+  //       `https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`,
+  //       {},
+  //       headers
+  //     )
+  //       .then((response) => {
+  //         const data = JSON.parse(response.data);
+  //           setCourseData(data);
+  //         setIsLoading(false);
+  //       })
+  //       .catch((error) => {
+  //         if (error) {
+  //           const status = error.status;
 
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
-            }
-          }
+  //           if (status === 401 || status === 403 || status === 404) {
+  //             // Unauthorized, Forbidden, or Not Found
+  //             authService.logout();
+  //             history.push("/onboarding");
+  //           }
+  //         }
 
-          console.error(error);
-          setIsLoading(false);
-        });
-    } else {
-      // Use Axios for other platforms
-      const source = axios.CancelToken.source();
-      axiosCancelToken = source;
+  //         console.error(error);
+  //         setIsLoading(false);
+  //       });
+  //   } else {
+  //     // Use Axios for other platforms
+  //     const source = axios.CancelToken.source();
+  //     axiosCancelToken = source;
 
-      axios
-        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`, {
-          headers: headers,
-          cancelToken: source.token,
-        })
-        .then((response) => {
-          console.log(response.data);
-          setCourseData(response.data);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          if (error.response) {
-            const status = error.response.status;
+  //     axios
+  //       .get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`, {
+  //         headers: headers,
+  //         cancelToken: source.token,
+  //       })
+  //       .then((response) => {
+  //       //   setCourseData(response.data);
+  //         setIsLoading(false);
+  //       })
+  //       .catch((error) => {
+  //         if (error.response) {
+  //           const status = error.response.status;
 
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
-            }
-          }
+  //           if (status === 401 || status === 403 || status === 404) {
+  //             // Unauthorized, Forbidden, or Not Found
+  //             authService.logout();
+  //             history.push("/onboarding");
+  //           }
+  //         }
 
-          console.error(error);
-          setIsLoading(false);
-        });
+  //         console.error(error);
+  //         setIsLoading(false);
+  //       });
+  //   }
+  // };
+
+  const dispatch = useDispatch();
+
+  // let currentChapterId = null;
+
+  const navigateToCourseInner = async (id: any) => {
+    setCurrentChapterId(id);
+
+    try {
+      if (id === currentChapterId) {
+        history.push("/tabs/tab1/courseinneroverview");
+      } else {
+        await dispatch<any>(fetchChapter(id));
+        history.push("/tabs/tab1/courseinneroverview");
+      }
+    } catch (error) {
+      console.error("Error navigating to course inner:", error);
+    } finally {
     }
   };
 
-  const navigateToCourseInner = (id) => {
-    console.log(id);
-    history.push("/tabs/tab1/courseinneroverview", {
-      course_id: id,
-    });
-  };
   return (
     <>
       <IonPage className="Courseoverviewpaid">

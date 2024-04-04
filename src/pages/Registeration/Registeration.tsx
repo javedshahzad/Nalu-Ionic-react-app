@@ -66,8 +66,7 @@ const Registeration: React.FC = () => {
             {}
           );
           const responseData = JSON.parse(response.data);
-          console.log("Response:", response);
-          console.log(responseData);
+
           if (response.status === 200) {
             const {
               token: receivedToken,
@@ -94,7 +93,7 @@ const Registeration: React.FC = () => {
                 },
                 {}
               );
-              console.log(naluApiResponse);
+
               var naluApiResponseData = JSON.parse(naluApiResponse.data);
               if (
                 naluApiResponse.status === 200 &&
@@ -132,8 +131,6 @@ const Registeration: React.FC = () => {
           const response = await axios.post(
             `https://app.mynalu.com/wp-json/nalu-app/v1/add-freemium-user?email=${email}&first_name=${firstName}&goal=${userGoal}`
           );
-
-          console.log("Response:", response);
 
           if (response.status === 200) {
             const {

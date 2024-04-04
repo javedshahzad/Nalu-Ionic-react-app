@@ -22,6 +22,8 @@ import { ca } from "@vidstack/react/dist/types/vidstack-react";
 import moment from "moment";
 import authService from "../../authService";
 import { useHistory } from "react-router";
+import { fetchCourses } from "../../actions/courseActions";
+import { useDispatch } from "react-redux";
 
 const months = [
   "Januar",
@@ -55,9 +57,9 @@ function ConfigCycleRemade() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmittingToLogin, setIsSubmittingToLogin] = useState(false);
   const history = useHistory();
-
+  const dispatch = useDispatch();
   const navigation = useIonRouter();
-
+  const jwtToken = localStorage.getItem("jwtToken");
   if (isPlatform("ios")) {
     useEffect(() => {
       HTTP.setDataSerializer("json");
@@ -67,8 +69,6 @@ function ConfigCycleRemade() {
 
   const toLogin = async () => {
     setIsSubmittingToLogin(true);
-
-    const jwtToken = localStorage.getItem("jwtToken");
     const headers = {
       Authorization: `Bearer ${jwtToken}`,
     };
@@ -203,35 +203,35 @@ function ConfigCycleRemade() {
     let lastDateOfMonth = new Date(year, m + 1, 0).getDate();
     const lastDateOfPrevMonth = new Date(year, m, 0).getDate();
 
-    const getIcons = async () => {
-      try {
-        const data = await MoonPhasesServce.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
-        );
+    // const getIcons = async () => {
+    //   try {
+    //     const data = await MoonPhasesServce.get(
+    //       `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
+    //     );
 
-        const newArray = [];
+    //     const newArray = [];
 
-        for (const date in data.moonphase) {
-          const dateObjects = data.moonphase[date];
-          for (const dateObject of dateObjects) {
-            const transformedObject = {
-              date: date,
-              phase_id: dateObject.phase_id,
-              phase_name: dateObject.phase_name,
-            };
-            newArray.push(transformedObject);
-          }
-        }
+    //     for (const date in data.moonphase) {
+    //       const dateObjects = data.moonphase[date];
+    //       for (const dateObject of dateObjects) {
+    //         const transformedObject = {
+    //           date: date,
+    //           phase_id: dateObject.phase_id,
+    //           phase_name: dateObject.phase_name,
+    //         };
+    //         newArray.push(transformedObject);
+    //       }
+    //     }
 
-        setMoonPhaseIcon(newArray);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    //     setMoonPhaseIcon(newArray);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // };
 
-    useEffect(() => {
-      getIcons();
-    }, []);
+    // useEffect(() => {
+    //   getIcons();
+    // }, []);
 
     useEffect(() => {
       const day = new Date().getDate();
@@ -250,6 +250,14 @@ function ConfigCycleRemade() {
     }, []);
   }
 
+  useEffect(() => {
+    (async () => {
+      if (jwtToken && jwtToken.length > 0) {
+        await dispatch<any>(fetchCourses());
+      }
+    })();
+  }, []);
+
   const goToLearnMore = async () => {
     const tempMonthIndex = activeMonthIndex + 1 + "";
     const tempDateIndex = activeIndex + "";
@@ -267,7 +275,6 @@ function ConfigCycleRemade() {
       +tempMonthIndex < 10 ? "0" + tempMonthIndex : tempMonthIndex
     }-${+tempDateIndex < 10 ? "0" + tempDateIndex : tempDateIndex}`;
 
-    console.log("dateParam", dateParam);
     setIsSubmitting(true);
 
     try {
@@ -296,7 +303,6 @@ function ConfigCycleRemade() {
         );
       }
 
-      console.log("data from custom category api", response);
       navigation.push("/learnmore");
     } catch (error) {
       if (error) {

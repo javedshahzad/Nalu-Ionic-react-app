@@ -29,23 +29,25 @@ interface MainTabsProps { }
 
 const MainTabs: React.FC<MainTabsProps> = () => {
   const history = useHistory();
-  const [activeTab, setActiveTab] = useState("tab1")
-  const location = useLocation();
+  // const [activeTab, setActiveTab] = useState("tab1")
+  // const location = useLocation();
   const tabChanged = (e: any) => {
-    const activeTab_ = e.detail.tab;
-  };
+    const activeTab = e.detail.tab;
+    // const activeTab_ = e.detail.tab;
+    // };
 
-  const navigateToTab4WithoutParams = () => {
+    // const navigateToTab4WithoutParams = () => {
     // Use history.replace to navigate to 'tabs/tab4' without query parameters
-    history.replace('/tabs/tab4');
+    //  history.replace('/tabs/tab4');
   };
 
   return (
-    <IonTabs onIonTabsDidChange={(e) => {
-      setActiveTab(e.detail.tab)
-      // history.replace('tabs/tab4?loading=true','tabs/tab4')
-      tabChanged(e)
-    }}>
+    <IonTabs onIonTabsDidChange={(e) => tabChanged(e)}>
+      {/*   <IonTabs onIonTabsDidChange={(e) => {
+     setActiveTab(e.detail.tab)
+     history.replace('tabs/tab4?loading=true','tabs/tab4')
+     tabChanged(e)
+    }}>  */}
       <IonRouterOutlet>
         <Redirect exact path="/tabs" to="/tabs/tab1" />
 
@@ -56,7 +58,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
               <JournalCalendarRemade />
             </PrivateRoute>
           )}
-
+          exact={true}
         />
 
         <Route
@@ -171,7 +173,19 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           />
           <IonLabel>Ressourcen</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="tab4" onClick={() => navigateToTab4WithoutParams()}>
+        <IonTabButton tab="tab4" href="/tabs/tab4">
+          <IonIcon
+            src="assets/imgs/tabicns/tab1.svg"
+            className="tab-icon-inactive"
+            id="inactive"
+          />
+          <IonIcon
+            src="assets/imgs/tabicns/tab1a.svg"
+            className="tab-icon-active"
+            id="active"
+          />
+          <IonLabel>Journal</IonLabel>
+          {/* <IonTabButton tab="tab4" onClick={() => navigateToTab4WithoutParams()}>
           {activeTab === 'tab4' ? (
             <>
               <IonIcon
@@ -190,7 +204,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
               />
               <IonLabel>Journal</IonLabel>
             </>
-          )}
+          )} */}
 
 
 

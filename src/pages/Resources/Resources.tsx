@@ -44,6 +44,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import image_not_found from "../../Images/image-not-found.png";
 import authService from "../../authService";
+import { useSelector } from "react-redux";
 
 const Resources: React.FC = () => {
   const [activeSegment, setActiveSegment] = useState<string>("overview");
@@ -77,19 +78,19 @@ const Resources: React.FC = () => {
   }, [0]);
 
   const Data = () => {
-    getCategoriesOverview();
-    getRecommendations();
+    // getCategoriesOverview();
+    // getRecommendations();
     setActiveSegment("overview");
   };
 
   const segmentChanged = (e: any) => {
     setActiveSegment(e.detail.value);
     if (e.detail.value === "overview") {
-      getCategoriesOverview();
-      getRecommendations();
+      // getCategoriesOverview();
+      // getRecommendations();
       localStorage.removeItem("DATA");
     } else {
-      setIsLoading(true);
+      // setIsLoading(true);
       getCategoriesFavourites();
       setIsFilterSelected(false);
       setCategoryID("");
@@ -99,58 +100,110 @@ const Resources: React.FC = () => {
   const handleModalClose = () => {
     setModalOpen(false);
   };
-  const getCategoriesOverview = async () => {
+
+  const fetchResourcesOverview = useSelector(
+    (state: any) => state.resourcesReducer.getResourcesOverview
+  );
+  // const fetchResourcesFavourite = useSelector(
+  //   (state: any) => state.resourcesReducer.getResourcesFavourite
+  // );
+  const fetchResourcesRecommendation = useSelector(
+    (state: any) => state.resourcesReducer.getResourcesRecommendation
+  );
+
+  useEffect(() => {
     setIsLoading(true);
-    const headers = {
-      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-    };
+    fetchResourcesOverview
+      .then((result: any) => {
+        const data = result;
+        setCategoriesOverview(data);
+        setIsLoading(false);
+      })
 
-    try {
-      let response;
-      if (isPlatform("ios")) {
-        response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
-          {},
-          headers
-        );
-        response = JSON.parse(response.data);
-      } else {
-        const source = axios.CancelToken.source();
-        axiosCancelToken_1 = source;
-        response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
-          { headers, cancelToken: source.token }
-        );
-        response = response.data;
-      }
-      setCategoriesOverview(response);
-    } catch (error) {
-      if (isPlatform("ios")) {
-        if (error) {
-          const status = error.status;
+      .catch((error: any) => {
+        console.error("Error fetching resources overview", error);
+      });
+  }, [fetchResourcesOverview]);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   fetchResourcesFavourite
+  //     .then((result: any) => {
+  //       const data = result;
+  //       setCategoriesFavourites(data);
+  //       setIsLoading(false);
+  //     })
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      } else {
-        if (error.response) {
-          const status = error.response.status;
+  //     .catch((error: any) => {
+  //       console.error("Error fetching courses", error);
+  //     });
+  // }, [fetchResourcesFavourite]);
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      }
-      console.error("error", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  useEffect(() => {
+    setIsLoading(true);
+    fetchResourcesRecommendation
+      .then((result: any) => {
+        const data = result;
+        setRecommendations(data?.ressources);
+        setIsLoading(false);
+      })
+
+      .catch((error: any) => {
+        console.error("Error fetching courses", error);
+      });
+  }, [fetchResourcesRecommendation]);
+
+  // const getCategoriesOverview = async () => {
+  //   setIsLoading(true);
+  //   const headers = {
+  //     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+  //   };
+
+  //   try {
+  //     let response;
+  //     if (isPlatform("ios")) {
+  //       response = await HTTP.get(
+  //         `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
+  //         {},
+  //         headers
+  //       );
+  //       response = JSON.parse(response.data);
+  //     } else {
+  //       const source = axios.CancelToken.source();
+  //       axiosCancelToken_1 = source;
+  //       response = await axios.get(
+  //         `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
+  //         { headers, cancelToken: source.token }
+  //       );
+  //       response = response.data;
+  //     }
+  //     setCategoriesOverview(response);
+  //   } catch (error) {
+  //     if (isPlatform("ios")) {
+  //       if (error) {
+  //         const status = error.status;
+
+  //         if (status === 401 || status === 403 || status === 404) {
+  //           // Unauthorized, Forbidden, or Not Found
+  //           authService.logout();
+  //           history.push("/onboarding");
+  //         }
+  //       }
+  //     } else {
+  //       if (error.response) {
+  //         const status = error.response.status;
+
+  //         if (status === 401 || status === 403 || status === 404) {
+  //           // Unauthorized, Forbidden, or Not Found
+  //           authService.logout();
+  //           history.push("/onboarding");
+  //         }
+  //       }
+  //     }
+  //     console.error("error", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
   const getCategoriesFavourites = async () => {
     setIsLoading(true);
     const headers = {
@@ -203,58 +256,58 @@ const Resources: React.FC = () => {
       setIsLoading(false);
     }
   };
-  const getRecommendations = async () => {
-    setIsLoading(true);
-    const headers = {
-      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-    };
+  // const getRecommendations = async () => {
+  //   setIsLoading(true);
+  //   const headers = {
+  //     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+  //   };
 
-    try {
-      let response;
-      if (isPlatform("ios")) {
-        response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
-          {},
-          headers
-        );
-        response = JSON.parse(response.data);
-      } else {
-        const source = axios.CancelToken.source();
-        axiosCancelToken_2 = source;
-        response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
-          { headers, cancelToken: source.token }
-        );
-        response = response.data;
-      }
-      setRecommendations(response.ressources);
-    } catch (error) {
-      if (isPlatform("ios")) {
-        if (error) {
-          const status = error.status;
+  //   try {
+  //     let response;
+  //     if (isPlatform("ios")) {
+  //       response = await HTTP.get(
+  //         `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
+  //         {},
+  //         headers
+  //       );
+  //       response = JSON.parse(response.data);
+  //     } else {
+  //       const source = axios.CancelToken.source();
+  //       axiosCancelToken_2 = source;
+  //       response = await axios.get(
+  //         `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
+  //         { headers, cancelToken: source.token }
+  //       );
+  //       response = response.data;
+  //     }
+  //     setRecommendations(response.ressources);
+  //   } catch (error) {
+  //     if (isPlatform("ios")) {
+  //       if (error) {
+  //         const status = error.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      } else {
-        if (error.response) {
-          const status = error.response.status;
+  //         if (status === 401 || status === 403 || status === 404) {
+  //           // Unauthorized, Forbidden, or Not Found
+  //           authService.logout();
+  //           history.push("/onboarding");
+  //         }
+  //       }
+  //     } else {
+  //       if (error.response) {
+  //         const status = error.response.status;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-      }
-      console.error("error", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //         if (status === 401 || status === 403 || status === 404) {
+  //           // Unauthorized, Forbidden, or Not Found
+  //           authService.logout();
+  //           history.push("/onboarding");
+  //         }
+  //       }
+  //     }
+  //     console.error("error", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
   const getParentCategoryByID = (resource_sub_id) => {
     history.push(`/tabs/tab3/resourcesubcateggory/${resource_sub_id}`);
 
@@ -300,7 +353,6 @@ const Resources: React.FC = () => {
         response = await axios.post(URL, {}, { headers });
         response = response.data;
       }
-      console.log(response);
       if (
         response.message === "Upvote handled successfully" ||
         response.message === "Downvote removed successfully" ||
@@ -348,7 +400,7 @@ const Resources: React.FC = () => {
         response = await axios.post(URL, {}, { headers });
         response = response.data;
       }
-      console.log(response);
+
       if (
         response.message === "Downvote removed successfully" ||
         response.message === "Downvote added successfully" ||
@@ -397,7 +449,7 @@ const Resources: React.FC = () => {
         response = await axios.post(URL, {}, { headers });
         response = response.data;
       }
-      console.log(response);
+
       if (
         response.message === "Post removed from favourites successfully" ||
         response.message === "Post added to favourites successfully"
@@ -441,8 +493,6 @@ const Resources: React.FC = () => {
       axios
         .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`)
         .then((response) => {
-          console.log(response.data);
-
           history.push("/tabs/tab3/resourcedetail", {
             data: response.data,
           });

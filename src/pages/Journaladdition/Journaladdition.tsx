@@ -133,7 +133,6 @@ const Journaladdition: React.FC = () => {
             centeredSlides={false}
             slidesPerView={7}
             onSlideChange={(swiper) => {
-              console.log("slide change");
               setWeekOffset(swiper.activeIndex); // Update week offset based on active slide
             }}
             onSwiper={(swiper) => console.log(swiper)}

@@ -239,8 +239,6 @@ const Addcustomcategory: React.FC = () => {
         );
       }
 
-      console.log(response.data);
-
       // If the API call is successful, handle the rest of the logic, such as updating the Redux store
       const newCategory = {
         label: customName,

@@ -152,7 +152,7 @@ const Learnmore: React.FC = () => {
           );
           response = axiosResponse.data;
         }
-        console.log(response);
+
         // Handle successful registration (e.g., navigate to a success page or show a message)
       } catch (error) {
         if (isPlatform("ios")) {

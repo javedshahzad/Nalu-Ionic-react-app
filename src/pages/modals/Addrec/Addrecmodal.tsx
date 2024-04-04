@@ -66,16 +66,12 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
 
     try {
       apiService
-        .post(
-          "https://app.mynalu.com/wp-json/nalu-app/v1/recommendation",
-          {
-            category: selectedCategory,
-            name: title,
-            description: note,
-          }
-        )
+        .post("https://app.mynalu.com/wp-json/nalu-app/v1/recommendation", {
+          category: selectedCategory,
+          name: title,
+          description: note,
+        })
         .then((response) => {
-          console.log(response.data);
           if (response.data.message === "Email sent successfully") {
             onClose(
               "Your recommendation was successfully shared. A representative from the NALU team will carefully check your recommendation before publishing it within the app"
@@ -93,8 +89,7 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
                 history.push("/onboarding");
               }
             }
-          }
-          else {
+          } else {
             if (error.response) {
               const status = error.response.status;
 
@@ -119,8 +114,7 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
             history.push("/onboarding");
           }
         }
-      }
-      else {
+      } else {
         if (error.response) {
           const status = error.response.status;
 

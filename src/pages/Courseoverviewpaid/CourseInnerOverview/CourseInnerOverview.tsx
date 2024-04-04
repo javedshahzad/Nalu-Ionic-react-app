@@ -62,57 +62,93 @@ import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 import { useLocation } from "react-router-dom";
 import { Player } from "./../../../components/videoPlayer/Player";
+import {
+  fetchChapter,
+  fetchCourses,
+  fetchNextChapter,
+} from "../../../actions/courseActions";
+import { useDispatch, useSelector } from "react-redux";
 
 const CourseInnerOverview: React.FC = () => {
   const history = useHistory();
   const location = useLocation();
   const data: any = location?.state;
-  const [courseId, setCourseId] = useState(data?.course_id);
+
+  const courseId = data?.course_id;
+  const dispatch = useDispatch();
+  // const [courseId, setCourseId] = useState(data?.course_id);
 
   const [togglePlay, setTogglePlay] = useState("video");
   const [courseData, setCourseData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [videoPlayed, setVideoPlayed] = useState(false);
   const [ismarkLoading, setIsMarlLoading] = useState(false);
+  const getChapter = useSelector(
+    (state: any) => state.courseReducer.getChapter
+  );
+  const nextChapUrl = useSelector(
+    (state: any) => state.courseReducer.getNextChapter
+  );
+
+  // const handleVideoPlay = () => {
+  //   dispatch<any>(fetchNextChapter(courseData?.next_chapter));
+  //   setVideoPlayed(true);
+  // };
 
   useEffect(() => {
-    getData(courseId, null);
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const result = await getChapter;
+        setCourseData(result);
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await dispatch<any>(fetchNextChapter(courseData?.next_chapter));
+    };
+
+    fetchData();
+  }, [courseData]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (nextChapUrl && nextChapUrl?.length > 0) {
+        try {
+          const result = await nextChapUrl;
+          setCourseData(result);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [dispatch, nextChapUrl]);
 
   // const handleVideoClick = (value) => {
   //   setTogglePlay(value);
   // };
+
   const handleComplete = (id) => {
-    // history.push(`/tabs/tab1/courseinneroverview/${id}`);
-    getData(id, null);
+    history.push(`/tabs/tab1/courseinneroverview/${id}`);
+    // getData(id, null);
   };
 
-  const getData = async (id, next_chapter) => {
-    setIsLoading(true);
-    let URL = id
-      ? `https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`
-      : next_chapter;
-    const headers = {
-      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-    };
-
-    try {
-      let response;
-      if (isPlatform("ios")) {
-        const cordovaResponse = await HTTP.get(URL, {}, headers);
-        response = JSON.parse(cordovaResponse.data);
-      } else {
-        const axiosResponse = await axios.get(URL, { headers });
-        response = axiosResponse.data;
-      }
-      console.log(response);
-      setCourseData(response);
-    } catch (error) {
-      console.error("Error fetching course data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const markAsDone = async (course) => {
+    nextChapUrl.then((response: any) => {
+      setCourseData(response);
+      setVideoPlayed(false);
+    });
     setIsMarlLoading(true);
     const URL = course?.completion_link;
     const headers = {
@@ -124,13 +160,13 @@ const CourseInnerOverview: React.FC = () => {
       if (isPlatform("ios")) {
         const cordovaResponse = await HTTP.post(URL, {}, headers);
         response = JSON.parse(cordovaResponse.data);
+        dispatch<any>(fetchCourses());
       } else {
         const axiosResponse = await axios.post(URL, null, { headers });
         response = axiosResponse.data;
+        dispatch<any>(fetchCourses());
       }
-      console.log(response);
       if (response.status === "success") {
-        getData(null, course?.next_chapter);
       }
     } catch (error) {
       console.error("Error marking course as done:", error);
@@ -174,8 +210,9 @@ const CourseInnerOverview: React.FC = () => {
             </IonHeader>
             <IonContent
               fullscreen
-              className={`ion-no-padding ${isPlatform("ios") ? "safe-padding" : ""
-                }`}
+              className={`ion-no-padding ${
+                isPlatform("ios") ? "safe-padding" : ""
+              }`}
             >
               <div className="main_div">
                 {courseData?.video_url ? (
@@ -265,23 +302,10 @@ const CourseInnerOverview: React.FC = () => {
                     className={`mark-done-button`}
                     onClick={() => markAsDone(courseData)}
                   >
-                    {ismarkLoading ? (
-                      <IonSpinner
-                        class="mark_loading_spinner"
-                        name="crescent"
-                        style={{
-                          color: "white",
-                          width: "30px",
-                          height: "30px",
-                        }}
-                      />
-                    ) : (
-                      <p style={{ color: "white" }}>Abschliessen</p>
-                    )}
+                    <p style={{ color: "white" }}>Abschliessen</p>
                   </div>
                 )}
               </div>
-
             </IonContent>
           </>
         )}
