@@ -16,6 +16,7 @@ import Resources from "../Resources/Resources";
 import Journal from "../Journal/Journal";
 import Courseoverviewpaid from "../Courseoverviewpaid/Courseoverviewpaid";
 import Mygroups from "../Mygroups/Mygroups";
+import ChatFrame from "../Chat/iFrame/ChatFrame";
 import Journalcalender from "../Journalcalender/Journalcalender";
 import CourseInnerOverview from "../Courseoverviewpaid/CourseInnerOverview/CourseInnerOverview";
 import CourseSubOverview from "../Courseoverviewpaid/CourseInnerOverview/CourseSubOverview/CourseSubOverview";
@@ -28,6 +29,20 @@ import { useHistory } from "react-router-dom";
 interface MainTabsProps { }
 
 const MainTabs: React.FC<MainTabsProps> = () => {
+  const [isPremium, setIsPremium] = useState(false); // State to keep track of premium status
+
+  useEffect(() => {
+    // Check for premium user roles on component mount
+    let isPremium = false; // Default to false
+    try {
+      const roles = JSON.parse(localStorage.getItem("roles") || "{}"); // Parse the roles or default to an empty object
+      isPremium = Object.values(roles).includes("premium"); // Check if 'premium' is one of the roles
+    } catch (e) {
+      console.error("Error parsing roles from localStorage:", e);
+    }
+    setIsPremium(isPremium); // Update state with the premium status
+  }, []);
+
   const history = useHistory();
   // const [activeTab, setActiveTab] = useState("tab1")
   // const location = useLocation();
@@ -131,6 +146,16 @@ const MainTabs: React.FC<MainTabsProps> = () => {
             </PrivateRoute>
           )}
         />
+
+        <Route
+          path="/tabs/tab5"
+          render={() => (
+            <PrivateRoute page={"ChatFrame"}>
+              <ChatFrame />
+            </PrivateRoute>
+          )}
+          exact={true}
+        />
       </IonRouterOutlet>
 
       <IonTabBar slot="bottom" className="ion-no-border">
@@ -158,7 +183,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
             className="tab-icon-active"
             id="active"
           />
-          <IonLabel>Community</IonLabel>
+          <IonLabel>Live Calls</IonLabel>
         </IonTabButton>
         <IonTabButton tab="tab3" href="/tabs/tab3">
           <IonIcon
@@ -209,6 +234,21 @@ const MainTabs: React.FC<MainTabsProps> = () => {
 
 
         </IonTabButton>
+        {isPremium && (
+          <IonTabButton tab="tab5" href="/tabs/tab5">
+            <IonIcon
+              src="assets/imgs/tabicns/tab5.svg"
+              className="tab-icon-inactive"
+              id="inactive"
+            />
+            <IonIcon
+              src="assets/imgs/tabicns/tab5.svg"
+              className="tab-icon-active"
+              id="active"
+            />
+            <IonLabel>Chat</IonLabel>
+          </IonTabButton>
+        )}
       </IonTabBar>
     </IonTabs>
   );

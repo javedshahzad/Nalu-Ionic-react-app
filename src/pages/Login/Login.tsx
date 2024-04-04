@@ -138,14 +138,21 @@ const Login: React.FC = () => {
           const naluApiResponseData = JSON.parse(naluApiResponse.data);
           if (naluApiResponse.status === 200 && naluApiResponseData.success) {
             const { access, refresh, user } = naluApiResponseData.data.tokens;
-            // Save additional data, including _id, in localStorage
+            const wsToken = naluApiResponseData.data.wsToken;
+            const chatUser = naluApiResponseData.data.user;
+        
+            // Chat Backend Tokens
             localStorage.setItem("accessToken", access.token);
             localStorage.setItem("refreshToken", refresh.token);
-
-            localStorage.setItem(
-              "chatApiUserId",
-              naluApiResponseData.data.user._id
-            );
+            localStorage.setItem("chatApiUserId", user._id);
+        
+            // Chat iFrame Tokens
+            localStorage.setItem("chatToken", access.token); // This is the same as accessToken, stored under a new key
+            localStorage.setItem("chatWsToken", wsToken);
+            
+            // Chat iFrame User Information
+            const chatUserString = JSON.stringify(chatUser);
+            localStorage.setItem("chatUser", chatUserString);
 
             let fcmtoken = localStorage.getItem("fcmtoken");
             if (naluApiResponseData.data.user._id) {
@@ -159,7 +166,7 @@ const Login: React.FC = () => {
           // Handle any errors with the Chat API login here
           console.error("Chat API login error:", chatApiError);
         }
-
+        
         // Navigation
         history.push("/tabs/tab1");
       } else {
@@ -185,7 +192,7 @@ const Login: React.FC = () => {
           return;
         }
 
-        // Chat API login
+       // Chat API login
         try {
           const naluApiResponse = await axios.post(
             "https://apidev.mynalu.com/v1/user/login",
@@ -196,15 +203,22 @@ const Login: React.FC = () => {
           );
 
           if (naluApiResponse.status === 200 && naluApiResponse.data.success) {
-            const { access, refresh, user } = naluApiResponse.data.data.tokens;
-            // Save additional data, including _id, in localStorage
+            const { access, refresh } = naluApiResponse.data.data.tokens;
+            const wsToken = naluApiResponse.data.data.wsToken;
+            const chatUser = naluApiResponse.data.data.user;
+
+            // Chat Backend Tokens
             localStorage.setItem("accessToken", access.token);
             localStorage.setItem("refreshToken", refresh.token);
+            localStorage.setItem("chatApiUserId", chatUser._id);
 
-            localStorage.setItem(
-              "chatApiUserId",
-              naluApiResponse.data.data.user._id
-            );
+            // Chat iFrame Tokens
+            localStorage.setItem("chatToken", access.token); // This is the same as accessToken, stored under a new key
+            localStorage.setItem("chatWsToken", wsToken);
+            
+            // Chat iFrame User Information
+            const chatUserString = JSON.stringify(chatUser);
+            localStorage.setItem("chatUser", chatUserString);
 
             let fcmtoken = localStorage.getItem("fcmtoken");
             if (naluApiResponse.data.data.user._id) {
