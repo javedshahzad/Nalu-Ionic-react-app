@@ -58,7 +58,6 @@ import "./i18n";
 // import { Suspense } from "react";
 import ResourceSubCategory from "./pages/ResourceSubCategory/ResourceSubCategory";
 import ConfigCycleRemade from "./pages/Configcycle/ConfigCycleRemade";
-import Pusher from "pusher-js";
 import { addNotification } from "./actions/notificationAction";
 import { useDispatch } from "react-redux";
 // import OneSignal from "onesignal-cordova-plugin";
@@ -82,12 +81,6 @@ import { fetchColors, fetchMoonIcons } from "./actions/apiActions";
 import { fetchAvatar } from "./actions/menuActions";
 import { fetchCourses } from "./actions/courseActions";
 import { fetchJournalEntries } from "./actions/journalEntriesAction";
-import {
-  ActionPerformed,
-  PushNotificationSchema,
-  PushNotifications,
-  Token,
-} from "@capacitor/push-notifications";
 import apiService from "./Services";
 import { fetchEvents } from "./actions/eventsAction";
 import {
@@ -95,7 +88,6 @@ import {
   fetchResourcesOverview,
   fetchResourcesRecommendation,
 } from "./actions/resourcesAction";
-// import { Toast } from "@capacitor/toast";
 
 setupIonicReact({
   mode: "ios",
@@ -129,18 +121,6 @@ const App: React.FC = () => {
     });
   };
   const dispatch = useDispatch();
-  const pusher = new Pusher("eac7e44a867cbabf54df", {
-    cluster: "us3",
-  });
-
-  const channel = pusher.subscribe("vote-channel");
-
-  // Listen for an event
-  channel.bind("vote", (data: any) => {
-    dispatch(addNotification(data));
-    presentToast(data.body.title);
-  });
-
   // ***Matomo*** ///
   useEffect(() => {
     // Create the Matomo script tag
@@ -256,94 +236,6 @@ const App: React.FC = () => {
     dispatch<any>(fetchResourcesRecommendation());
   }, []);
 
-  // fcm configuration
-
-  useEffect(() => {
-    PushNotifications.requestPermissions().then(
-      (result: any) => {
-        if (result.receive === "granted") {
-          PushNotifications.register();
-
-          addListener();
-        }
-        if (result.receive === "denied") {
-          //  showToast("Push Notification permission denied");
-        } else {
-          // Show some error
-        }
-      },
-      (err) => {
-        console.log("err result", err);
-      }
-    );
-  }, []);
-
-  const addListener = () => {
-    PushNotifications.addListener("registration", (token: Token) => {
-      localStorage.setItem("fcmtoken", token.value);
-
-      let chatApiUserId = localStorage.getItem("chatApiUserId");
-      if (chatApiUserId) {
-        update_fcm_token(chatApiUserId, token.value);
-      }
-
-      //  showToast("Push registration success");
-      // Push Notifications registered successfully.
-      // Send token details to API to keep in DB.
-    });
-
-    PushNotifications.addListener("registrationError", (error: any) => {
-      alert("Error on registration: " + JSON.stringify(error));
-
-      // Handle push notification registration error here.
-    });
-
-    PushNotifications.addListener(
-      "pushNotificationReceived",
-      (notification: PushNotificationSchema) => {
-        setnotifications((notifications) => [
-          ...notifications,
-          {
-            id: notification.id,
-            title: notification.title,
-            body: notification.body,
-            type: "foreground",
-          },
-        ]);
-
-        // Show the notification payload if the app is open on the device.
-      }
-    );
-
-    PushNotifications.addListener(
-      "pushNotificationActionPerformed",
-      (notification: ActionPerformed) => {
-        setnotifications((notifications) => [
-          ...notifications,
-          {
-            id: notification.notification.data.id,
-            title: notification.notification.data.title,
-            body: notification.notification.data.body,
-            type: "action",
-          },
-        ]);
-        // Implement the needed action to take when user tap on a notification.
-      }
-    );
-  };
-
-  const update_fcm_token = async (data: any, token) => {
-    let obj = {
-      newToken: token,
-    };
-    let url = "https://apidev.mynalu.com/v1";
-    //let url = 'http://localhost:7001/v1'
-    try {
-      apiService.put2(`${url}/user/update-token/${data}`, obj);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
 
   // const showToast = async (msg: string) => {
   //   await Toast.show({
