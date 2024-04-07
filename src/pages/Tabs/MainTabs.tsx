@@ -26,7 +26,8 @@ import Resourcedetail from "./../Resourcedetail/Resourcedetail";
 import PrivateRoute from "../../auth/PrivateRoute";
 import JournalCalendarRemade from "../Journalcalender/JournalCalendarRemade";
 import { useHistory } from "react-router-dom";
-interface MainTabsProps { }
+import { chatbubbleEllipses, chatbubbleEllipsesOutline } from "ionicons/icons";
+interface MainTabsProps {}
 
 const MainTabs: React.FC<MainTabsProps> = () => {
   const [isPremium, setIsPremium] = useState(false); // State to keep track of premium status
@@ -230,21 +231,18 @@ const MainTabs: React.FC<MainTabsProps> = () => {
               <IonLabel>Journal</IonLabel>
             </>
           )} */}
-
-
-
         </IonTabButton>
         {isPremium && (
           <IonTabButton tab="tab5" href="/tabs/tab5">
             <IonIcon
-              src="assets/imgs/tabicns/tab5.svg"
-              className="tab-icon-inactive"
-              id="inactive"
-            />
-            <IonIcon
-              src="assets/imgs/tabicns/tab5.svg"
+              icon={chatbubbleEllipses}
               className="tab-icon-active"
               id="active"
+            />
+            <IonIcon
+              className="tab-icon-inactive"
+              id="inactive"
+              icon={chatbubbleEllipsesOutline}
             />
             <IonLabel>Chat</IonLabel>
           </IonTabButton>
