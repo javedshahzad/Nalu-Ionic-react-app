@@ -124,7 +124,7 @@ const Login: React.FC = () => {
         }
 
         // Chat API login
-        let url = "https://app.mynalu.com";
+        let url = "https://apidev.mynalu.com";
         //  let url = 'http://localhost:7001'
         try {
           const naluApiResponse = await HTTP.post(
