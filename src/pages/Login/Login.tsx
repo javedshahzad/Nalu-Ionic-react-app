@@ -18,12 +18,6 @@ import { navigate } from "ionicons/icons";
 import { useHistory } from "react-router";
 import { useTranslation } from "react-i18next";
 import { HTTP } from "@awesome-cordova-plugins/http";
-import {
-  ActionPerformed,
-  PushNotificationSchema,
-  PushNotifications,
-  Token,
-} from "@capacitor/push-notifications";
 import apiService from "../../Services";
 const Login: React.FC = () => {
   const [password, setPassword] = useState("");
@@ -138,14 +132,21 @@ const Login: React.FC = () => {
           const naluApiResponseData = JSON.parse(naluApiResponse.data);
           if (naluApiResponse.status === 200 && naluApiResponseData.success) {
             const { access, refresh, user } = naluApiResponseData.data.tokens;
-            // Save additional data, including _id, in localStorage
+            const wsToken = naluApiResponseData.data.wsToken;
+            const chatUser = naluApiResponseData.data.user;
+
+            // Chat Backend Tokens
             localStorage.setItem("accessToken", access.token);
             localStorage.setItem("refreshToken", refresh.token);
+            localStorage.setItem("chatApiUserId", user._id);
 
-            localStorage.setItem(
-              "chatApiUserId",
-              naluApiResponseData.data.user._id
-            );
+            // Chat iFrame Tokens
+            localStorage.setItem("chatToken", access.token); // This is the same as accessToken, stored under a new key
+            localStorage.setItem("chatWsToken", wsToken);
+
+            // Chat iFrame User Information
+            const chatUserString = JSON.stringify(chatUser);
+            localStorage.setItem("chatUser", chatUserString);
 
             let fcmtoken = localStorage.getItem("fcmtoken");
             if (naluApiResponseData.data.user._id) {
@@ -196,15 +197,22 @@ const Login: React.FC = () => {
           );
 
           if (naluApiResponse.status === 200 && naluApiResponse.data.success) {
-            const { access, refresh, user } = naluApiResponse.data.data.tokens;
-            // Save additional data, including _id, in localStorage
+            const { access, refresh } = naluApiResponse.data.data.tokens;
+            const wsToken = naluApiResponse.data.data.wsToken;
+            const chatUser = naluApiResponse.data.data.user;
+
+            // Chat Backend Tokens
             localStorage.setItem("accessToken", access.token);
             localStorage.setItem("refreshToken", refresh.token);
+            localStorage.setItem("chatApiUserId", chatUser._id);
 
-            localStorage.setItem(
-              "chatApiUserId",
-              naluApiResponse.data.data.user._id
-            );
+            // Chat iFrame Tokens
+            localStorage.setItem("chatToken", access.token); // This is the same as accessToken, stored under a new key
+            localStorage.setItem("chatWsToken", wsToken);
+
+            // Chat iFrame User Information
+            const chatUserString = JSON.stringify(chatUser);
+            localStorage.setItem("chatUser", chatUserString);
 
             let fcmtoken = localStorage.getItem("fcmtoken");
             if (naluApiResponse.data.data.user._id) {
@@ -229,75 +237,6 @@ const Login: React.FC = () => {
     }
 
     setIsSubmitting(false);
-  };
-
-  useEffect(() => {
-    PushNotifications.requestPermissions().then(
-      (result: any) => {
-        if (result.receive === "granted") {
-          PushNotifications.register();
-
-          addListener();
-        }
-        if (result.receive === "denied") {
-          //  showToast("Push Notification permission denied");
-        } else {
-          // Show some error
-        }
-      },
-      (err) => {
-        console.log("err result", err);
-      }
-    );
-  }, []);
-
-  const addListener = () => {
-    PushNotifications.addListener("registration", (token: Token) => {
-      localStorage.setItem("fcmtoken", token.value);
-
-      //  showToast("Push registration success");
-      // Push Notifications registered successfully.
-      // Send token details to API to keep in DB.
-    });
-
-    PushNotifications.addListener("registrationError", (error: any) => {
-      alert("Error on registration: " + JSON.stringify(error));
-
-      // Handle push notification registration error here.
-    });
-
-    PushNotifications.addListener(
-      "pushNotificationReceived",
-      (notification: PushNotificationSchema) => {
-        setnotifications((notifications) => [
-          ...notifications,
-          {
-            id: notification.id,
-            title: notification.title,
-            body: notification.body,
-            type: "foreground",
-          },
-        ]);
-
-        // Show the notification payload if the app is open on the device.
-      }
-    );
-
-    PushNotifications.addListener(
-      "pushNotificationActionPerformed",
-      (notification: ActionPerformed) => {
-        setnotifications((notifications) => [
-          ...notifications,
-          {
-            id: notification.notification.data.id,
-            title: notification.notification.data.title,
-            body: notification.notification.data.body,
-            type: "action",
-          },
-        ]);
-        // Implement the needed action to take when user tap on a notification.
-      }
-    );
   };
 
   const update_fcm_token = async (data: any, token) => {
