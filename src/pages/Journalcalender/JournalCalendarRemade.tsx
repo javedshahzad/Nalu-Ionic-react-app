@@ -66,6 +66,7 @@ const JournalCalendarRemade = () => {
   const [currentdivInView, setCurrentDivInView] = useState(
     new Date().getMonth().toString()
   );
+  const BASE_URL = process.env.BASE_URL;
   const [activeIndex, setActiveIndex] = useState(new Date().getDate());
   const [activeMonthIndex, setActiveMonthIndex] = useState(
     new Date().getMonth()
@@ -236,7 +237,7 @@ const JournalCalendarRemade = () => {
   // const getIcons = async () => {
   //   try {
   //     const data = await MoonPhasesServce.get(
-  //       `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
+  //       `${BASE_URL}/wp-json/nalu-app/v1/moon/${year}`
   //     );
 
   //     const newArray = [];
@@ -292,7 +293,7 @@ const JournalCalendarRemade = () => {
 
   //   try {
   //     const data = await MoonPhasesServce.get(
-  //       `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
+  //       `${BASE_URL}/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
   //     );
 
   //     const todayData = data["today"];
@@ -569,7 +570,7 @@ const JournalCalendarRemade = () => {
         ],
       };
       CustomCategoryApiService.post(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${curDate}`,
+        `${BASE_URL}/wp-json/nalu-app/v1/journal/${curDate}`,
         body
       ).then(
         (data) => {
@@ -611,7 +612,7 @@ const JournalCalendarRemade = () => {
       };
 
       CustomCategoryApiService.post(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${curDate}`,
+        `${BASE_URL}/wp-json/nalu-app/v1/journal/${curDate}`,
         body
       ).then(
         (data) => {

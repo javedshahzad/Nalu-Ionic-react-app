@@ -57,6 +57,7 @@ const Resources: React.FC = () => {
   const [filtered, setFiltered] = useState([]);
   const [categoryID, setCategoryID] = useState("");
 
+  const BASE_URL = process.env.BASE_URL;
   const history = useHistory();
   const router = useIonRouter();
 
@@ -162,7 +163,7 @@ const Resources: React.FC = () => {
   //     let response;
   //     if (isPlatform("ios")) {
   //       response = await HTTP.get(
-  //         `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
+  //         `${BASE_URL}/wp-json/nalu-app/v1/parent-categories`,
   //         {},
   //         headers
   //       );
@@ -171,7 +172,7 @@ const Resources: React.FC = () => {
   //       const source = axios.CancelToken.source();
   //       axiosCancelToken_1 = source;
   //       response = await axios.get(
-  //         `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
+  //         `${BASE_URL}/wp-json/nalu-app/v1/parent-categories`,
   //         { headers, cancelToken: source.token }
   //       );
   //       response = response.data;
@@ -214,7 +215,7 @@ const Resources: React.FC = () => {
       let response;
       if (isPlatform("ios")) {
         response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
+          `${BASE_URL}/wp-json/nalu-app/v1/ressources?favourite=true`,
           {},
           headers
         );
@@ -223,7 +224,7 @@ const Resources: React.FC = () => {
         const source = axios.CancelToken.source();
         axiosCancelToken_3 = source;
         response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
+          `${BASE_URL}/wp-json/nalu-app/v1/ressources?favourite=true`,
           { headers, cancelToken: source.token }
         );
         response = response.data;
@@ -266,7 +267,7 @@ const Resources: React.FC = () => {
   //     let response;
   //     if (isPlatform("ios")) {
   //       response = await HTTP.get(
-  //         `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
+  //         `${BASE_URL}/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
   //         {},
   //         headers
   //       );
@@ -275,7 +276,7 @@ const Resources: React.FC = () => {
   //       const source = axios.CancelToken.source();
   //       axiosCancelToken_2 = source;
   //       response = await axios.get(
-  //         `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
+  //         `${BASE_URL}/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
   //         { headers, cancelToken: source.token }
   //       );
   //       response = response.data;
@@ -315,7 +316,7 @@ const Resources: React.FC = () => {
     // setCategoryID(id);
 
     // axios
-    //   .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources`, {
+    //   .get(`${BASE_URL}/wp-json/nalu-app/v1/ressources`, {
     //     headers: {
     //       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     //     },
@@ -339,7 +340,7 @@ const Resources: React.FC = () => {
     //   });
   };
   const handleUpvote = async (is_upvoted, id, is_downvoted) => {
-    let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=${!is_upvoted}`;
+    let URL = `${BASE_URL}/wp-json/nalu-app/v1/upvote?id=${id}&status=${!is_upvoted}`;
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
@@ -386,7 +387,7 @@ const Resources: React.FC = () => {
     }
   };
   const handleDownvote = async (is_upvoted, id, is_downvoted) => {
-    let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=${!is_downvoted}`;
+    let URL = `${BASE_URL}/wp-json/nalu-app/v1/downvote?id=${id}&status=${!is_downvoted}`;
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
@@ -435,7 +436,7 @@ const Resources: React.FC = () => {
     }
   };
   const handleSave = async (favourite, id) => {
-    let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=${!favourite}`;
+    let URL = `${BASE_URL}/wp-json/nalu-app/v1/favourites?id=${id}&status=${!favourite}`;
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     };
@@ -491,7 +492,7 @@ const Resources: React.FC = () => {
 
     try {
       axios
-        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`)
+        .get(`${BASE_URL}/wp-json/nalu-app/v1/ressources/${id}`)
         .then((response) => {
           history.push("/tabs/tab3/resourcedetail", {
             data: response.data,

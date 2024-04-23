@@ -6,11 +6,13 @@ export const getJournalEntries = (data: any) => ({
   payload: data,
 });
 
+const BASE_URL = process.env.BASE_URL;
+
 export const fetchJournalEntries = (dateParam: any) => {
   return async (dispatch: any) => {
     try {
       const response = apiService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`
+        `${BASE_URL}/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`
       );
       dispatch(getJournalEntries(response));
     } catch (error) {

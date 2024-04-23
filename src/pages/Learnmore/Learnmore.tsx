@@ -42,17 +42,19 @@ const Learnmore: React.FC = () => {
   const [selectedScheduleId, setSelectedScheduleId] = useState(null);
   const history = useHistory();
 
+  const BASE_URL = process.env.BASE_URL;
+
   useEffect(() => {
     setLoading(true);
     const selectedGoal = localStorage.getItem("selectedGoal");
 
-    let url = "https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/2095";
+    let url = `${BASE_URL}/wp-json/nalu-app/v1/everwebinar/2095`;
     if (selectedGoal === "endometriosis") {
-      url = "https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/7967";
+      url = `${BASE_URL}/wp-json/nalu-app/v1/everwebinar/7967`;
     } else if (selectedGoal === "amenorrhea") {
-      url = "https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/7966";
+      url = `${BASE_URL}/wp-json/nalu-app/v1/everwebinar/7966`;
     } else if (selectedGoal === "harmony") {
-      url = "https://app.mynalu.com/wp-json/nalu-app/v1/everwebinar/2095";
+      url = `${BASE_URL}/wp-json/nalu-app/v1/everwebinar/2095`;
     }
 
     const headers = {

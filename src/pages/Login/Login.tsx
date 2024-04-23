@@ -38,11 +38,11 @@ const Login: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const nullEntry: any[] = [];
   const [notifications, setnotifications] = useState(nullEntry);
-
+  const BASE_URL = process.env.BASE_URL;
   const history = useHistory();
   const { t } = useTranslation();
 
-  const apiHost = "https://app.mynalu.com/wp-json";
+  const apiHost = `${BASE_URL}/wp-json`;
 
   const handlePasswordChange = (event) => {
     const value = event.target.value;
@@ -101,7 +101,7 @@ const Login: React.FC = () => {
     try {
       if (isPlatform("ios")) {
         const response = await HTTP.post(
-          `https://app.mynalu.com/wp-json/jwt-auth/v1/token`,
+          `${BASE_URL}/wp-json/jwt-auth/v1/token`,
           {
             username: email,
             password: password,
@@ -124,11 +124,11 @@ const Login: React.FC = () => {
         }
 
         // Chat API login
-        let url = "https://app.mynalu.com";
+        let url = BASE_URL;
         //  let url = 'http://localhost:7001'
         try {
           const naluApiResponse = await HTTP.post(
-            `${url}/v1/user/login`,
+            `${BASE_URL}/v1/user/login`,
             {
               email: email,
               password: password,
@@ -165,7 +165,7 @@ const Login: React.FC = () => {
       } else {
         // WordPress API login
         const response = await axios.post(
-          `https://app.mynalu.com/wp-json/jwt-auth/v1/token`,
+          `${BASE_URL}/wp-json/jwt-auth/v1/token`,
           {
             username: email,
             password: password,
@@ -399,7 +399,7 @@ const Login: React.FC = () => {
 
         <div className="btn forgot-password rectangle al-center jc-center">
           <a
-            href="https://app.mynalu.com/login/?action=forgot_password"
+            href={`${BASE_URL}/login/?action=forgot_password`}
             target="_system"
           >
             <h5>Passwort vergessen</h5>

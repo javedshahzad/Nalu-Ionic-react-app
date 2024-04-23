@@ -67,7 +67,7 @@ function JournalAdditionRemade() {
   const [icons2, setIcons2] = useState([]);
   const [todayPeriod, setTodayPeriod] = useState("false");
   const [isPremiumUser, setIsPremiumUser] = useState(false);
-
+  const BASE_URL = process.env.BASE_URL;
   const moonColorData = icons2;
 
   const typeObj: any = useSelector((state: RootState) => state.journalReducer);
@@ -123,7 +123,7 @@ function JournalAdditionRemade() {
       setIsLoading(true);
 
       const data = await JournalAdditionApiService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`
+        `${BASE_URL}/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`
       );
 
       if (data.entries.length > 0) {
@@ -363,17 +363,14 @@ function JournalAdditionRemade() {
     fields.value = updatedValue;
 
     apiService
-      .post(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`,
-        {
-          entries: [
-            {
-              key: fields.key,
-              value: updatedValue,
-            },
-          ],
-        }
-      )
+      .post(`${BASE_URL}/wp-json/nalu-app/v1/journal/${dateParam}?lang=de`, {
+        entries: [
+          {
+            key: fields.key,
+            value: updatedValue,
+          },
+        ],
+      })
       .then(
         () => {
           let month: any = new Date().getMonth() + 1;
@@ -416,7 +413,7 @@ function JournalAdditionRemade() {
   // const getIcons = async () => {
   //   try {
   //     const data = await MoonPhasesServce.get(
-  //       `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
+  //       `${BASE_URL}/wp-json/nalu-app/v1/moon/${year}`
   //     );
 
   //     const newArray = [];
@@ -473,7 +470,7 @@ function JournalAdditionRemade() {
   //   let yearMonth = `${year}-${month}`;
   //   try {
   //     const data = await MoonPhasesServce.get(
-  //       `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
+  //       `${BASE_URL}/wp-json/nalu-app/v1/journal-overview/${yearMonth}?lang=de`
   //     );
 
   //     const todayData = data["today"];

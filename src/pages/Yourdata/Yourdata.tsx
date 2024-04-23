@@ -25,6 +25,7 @@ const Yourdata: React.FC = () => {
   const [privacyPolicyError, setPrivacyPolicyError] = useState("");
   const [termsConditionsError, setTermsConditionsError] = useState("");
 
+  const BASE_URL = process.env.BASE_URL;
   const history = useHistory();
 
   const handlePrivacyPolicyToggle = () => {
@@ -56,8 +57,7 @@ const Yourdata: React.FC = () => {
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-    const url =
-      "https://app.mynalu.com/wp-json/nalu-app/v1/consent?type=privacy_policy,terms_conditions&set=true";
+    const url = `${BASE_URL}/wp-json/nalu-app/v1/consent?type=privacy_policy,terms_conditions&set=true`;
 
     try {
       let response;
@@ -112,7 +112,7 @@ const Yourdata: React.FC = () => {
           <IonItem lines="none">
             <IonLabel>
               Ich akzeptiere die{" "}
-              <a href="https://app.mynalu.com/datenschutzerklaerung/">
+              <a href={`${BASE_URL}/datenschutzerklaerung/`}>
                 Datenschutzbestimmungen
               </a>
             </IonLabel>
@@ -129,7 +129,7 @@ const Yourdata: React.FC = () => {
           <IonItem lines="none">
             <IonLabel className="ion-text-wrap">
               Ich akzeptiere die{" "}
-              <a href="https://app.mynalu.com/datenschutzerklaerung/">
+              <a href={`${BASE_URL}/datenschutzerklaerung/`}>
                 Allgemeinen Geschäftsbedingungen
               </a>
             </IonLabel>

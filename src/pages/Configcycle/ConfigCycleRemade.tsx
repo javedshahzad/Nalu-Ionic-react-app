@@ -67,6 +67,8 @@ function ConfigCycleRemade() {
     }, []);
   }
 
+  const BASE_URL = process.env.BASE_URL;
+
   const toLogin = async () => {
     setIsSubmittingToLogin(true);
     const headers = {
@@ -77,14 +79,14 @@ function ConfigCycleRemade() {
       if (isPlatform("ios")) {
         // Use Cordova HTTP plugin for iOS
         await HTTP.put(
-          "https://app.mynalu.com/wp-json/nalu-app/v1/no-period",
+          `${BASE_URL}/wp-json/nalu-app/v1/no-period`,
           {},
           headers
         );
       } else {
         // Use Axios for other platforms
         await axios.put(
-          "https://app.mynalu.com/wp-json/nalu-app/v1/no-period",
+          `${BASE_URL}/wp-json/nalu-app/v1/no-period`,
           {},
           {
             headers: headers,
@@ -206,7 +208,7 @@ function ConfigCycleRemade() {
     // const getIcons = async () => {
     //   try {
     //     const data = await MoonPhasesServce.get(
-    //       `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
+    //       `${BASE_URL}/wp-json/nalu-app/v1/moon/${year}`
     //     );
 
     //     const newArray = [];
@@ -287,7 +289,7 @@ function ConfigCycleRemade() {
       if (isPlatform("ios")) {
         // Use Cordova HTTP plugin for iOS
         response = await HTTP.post(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${calendarDate}`,
+          `${BASE_URL}/wp-json/nalu-app/v1/journal/${calendarDate}`,
           data,
           headers
         );
@@ -295,7 +297,7 @@ function ConfigCycleRemade() {
       } else {
         // Use Axios for other platforms
         response = await axios.post(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/journal/${calendarDate}`,
+          `${BASE_URL}/wp-json/nalu-app/v1/journal/${calendarDate}`,
           data,
           {
             headers: headers,

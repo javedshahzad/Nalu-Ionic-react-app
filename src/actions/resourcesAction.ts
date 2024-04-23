@@ -18,11 +18,13 @@ export const getResourcesRecommendation = (data: any) => ({
   payload: data,
 });
 
+const BASE_URL = process.env.BASE_URL;
+
 export const fetchResourcesOverview = () => {
   return async (dispatch: any) => {
     try {
       const response = apiService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`
+        `${BASE_URL}/wp-json/nalu-app/v1/parent-categories`
       );
       dispatch(getResourcesOverView(response));
     } catch (error) {
@@ -35,7 +37,7 @@ export const fetchResourcesFavourite = () => {
   return async (dispatch: any) => {
     try {
       const response = apiService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`
+        `${BASE_URL}/wp-json/nalu-app/v1/ressources?favourite=true`
       );
       dispatch(getResourcesFavourite(response));
     } catch (error) {
@@ -48,7 +50,7 @@ export const fetchResourcesRecommendation = () => {
   return async (dispatch: any) => {
     try {
       const response = apiService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`
+        `${BASE_URL}/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`
       );
       dispatch(getResourcesRecommendation(response));
     } catch (error) {

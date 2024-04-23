@@ -22,12 +22,17 @@ import { useEffect } from "react";
 import { useHistory } from "react-router";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchChapter } from "../../actions/courseActions";
+import {
+  fetchChapter,
+  fetchNextChapter,
+  fetchProgressNextChap,
+} from "../../actions/courseActions";
 
 const Courseoverviewpaid: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [courseData, setCourseData] = useState(null);
   const [currentChapterId, setCurrentChapterId] = useState(null);
+  const [misc, setMisc] = useState([]);
 
   const history = useHistory();
   const location = useLocation();
@@ -49,6 +54,12 @@ const Courseoverviewpaid: React.FC = () => {
   const fetchCourses = useSelector(
     (state: any) => state.courseReducer.getCourses
   );
+  const fetchNextChapProgress = useSelector(
+    (state: any) => state.courseReducer.getProgressNextChap
+  );
+  const fetchNextChap = useSelector(
+    (state: any) => state.courseReducer.getChapter
+  );
 
   useEffect(() => {
     setIsLoading(true);
@@ -58,11 +69,33 @@ const Courseoverviewpaid: React.FC = () => {
         setCourseData(data);
         setIsLoading(false);
       })
-
       .catch((error: any) => {
         console.error("Error fetching courses", error);
       });
   }, [fetchCourses]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await fetchNextChap;
+        console.log("result", result);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [courseData]);
+
+  useEffect(() => {
+    if (courseData && courseData.length > 0) {
+      courseData.map((data, index) => {
+        const urls = misc[index]?.next_chapter_link;
+        dispatch<any>(fetchNextChapter(urls));
+      });
+    }
+  }, [courseData]);
 
   let isPremium = false; // Default to false
   try {
@@ -83,7 +116,7 @@ const Courseoverviewpaid: React.FC = () => {
   //   if (isPlatform("ios")) {
   //     // Use Cordova HTTP plugin for iOS
   //     HTTP.get(
-  //       `https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`,
+  //       `${BASE_URL}/wp-json/nalu-app/v1/courses?lang=de`,
   //       {},
   //       headers
   //     )
@@ -112,7 +145,7 @@ const Courseoverviewpaid: React.FC = () => {
   //     axiosCancelToken = source;
 
   //     axios
-  //       .get(`https://app.mynalu.com/wp-json/nalu-app/v1/courses?lang=de`, {
+  //       .get(`${BASE_URL}/wp-json/nalu-app/v1/courses?lang=de`, {
   //         headers: headers,
   //         cancelToken: source.token,
   //       })
@@ -147,7 +180,11 @@ const Courseoverviewpaid: React.FC = () => {
     try {
       if (id === currentChapterId) {
         history.push("/tabs/tab1/courseinneroverview");
-      } else {
+      }
+      // else if(){
+
+      // }
+      else {
         await dispatch<any>(fetchChapter(id));
         history.push("/tabs/tab1/courseinneroverview");
       }
@@ -156,6 +193,16 @@ const Courseoverviewpaid: React.FC = () => {
     } finally {
     }
   };
+
+  const fetchData = async () => {
+    const result = await fetchNextChapProgress;
+    const data = await result;
+    setMisc(data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [misc, dispatch, fetchNextChapProgress]);
 
   return (
     <>
@@ -196,7 +243,7 @@ const Courseoverviewpaid: React.FC = () => {
               fullscreen
             >
               <div className="the-list">
-                {courseData?.map((course) => (
+                {courseData?.map((course, index) => (
                   <div key={course.id}>
                     <div className="the-title">
                       <h3>{course.title}</h3>
@@ -211,33 +258,36 @@ const Courseoverviewpaid: React.FC = () => {
                         </IonButton>
                       </div>
                     )}
-                    {course?.progress && (
+
+                    {misc[index] && (
                       <div className="progress-holder">
                         <p>Fortschritt</p>
                         <div className="flex al-center jc-between">
                           <IonProgressBar
-                            value={course.progress / 100}
+                            value={misc[index]?.progress / 100}
                           ></IonProgressBar>
-                          <h6>{course.progress}%</h6>
+                          <h6>{misc[index]?.progress}%</h6>
                         </div>
                       </div>
                     )}
-                    {course?.next_chapter?.title && (
+                    {misc[index]?.next_chapter_title && (
                       <div
                         className="resume-holder"
                         onClick={() => {
                           if (
-                            !course.next_chapter.protected ||
-                            course.next_chapter.preview ||
+                            !misc[index]?.protected ||
+                            misc[index]?.preview ||
                             isPremium
                           ) {
-                            navigateToCourseInner(course.next_chapter.id);
+                            navigateToCourseInner(misc[index]?.next_chapter_id);
+
+                            console.log("index", index);
                           }
                         }}
                       >
                         <h3>Kurs fortsetzen</h3>
                         <IonItem button detail lines="none">
-                          <IonLabel>{course?.next_chapter?.title}</IonLabel>
+                          <IonLabel>{misc[index]?.next_chapter_title}</IonLabel>
                         </IonItem>
                       </div>
                     )}

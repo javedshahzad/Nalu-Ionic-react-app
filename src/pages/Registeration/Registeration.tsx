@@ -25,6 +25,7 @@ const Registeration: React.FC = () => {
   const [password, setPassword] = useState("");
   const [userId, setUserId] = useState("");
 
+  const BASE_URL = process.env.BASE_URL;
   const handleFirstNameChange = (event) => {
     const value = event.target.value;
     setFirstName(value);
@@ -61,7 +62,7 @@ const Registeration: React.FC = () => {
       try {
         if (isPlatform("ios")) {
           const response = await HTTP.post(
-            `https://app.mynalu.com/wp-json/nalu-app/v1/add-freemium-user?email=${email}&first_name=${firstName}&goal=${userGoal}`,
+            `${BASE_URL}/wp-json/nalu-app/v1/add-freemium-user?email=${email}&first_name=${firstName}&goal=${userGoal}`,
             {},
             {}
           );
@@ -129,7 +130,7 @@ const Registeration: React.FC = () => {
         } else {
           // WordPress API Registration
           const response = await axios.post(
-            `https://app.mynalu.com/wp-json/nalu-app/v1/add-freemium-user?email=${email}&first_name=${firstName}&goal=${userGoal}`
+            `${BASE_URL}/wp-json/nalu-app/v1/add-freemium-user?email=${email}&first_name=${firstName}&goal=${userGoal}`
           );
 
           if (response.status === 200) {

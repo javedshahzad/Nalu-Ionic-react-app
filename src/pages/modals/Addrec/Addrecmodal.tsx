@@ -31,6 +31,7 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
   const [selectedCategory, setselectedCategory] = useState("");
   const [categoryError, setcategoryError] = useState("");
 
+  const BASE_URL = process.env.BASE_URL;
   const [title, setTitle] = useState("");
   const [titleError, setTitleError] = useState("");
 
@@ -66,7 +67,7 @@ const Addrecmodal: React.FC<{ onClose?: any }> = ({ onClose }) => {
 
     try {
       apiService
-        .post("https://app.mynalu.com/wp-json/nalu-app/v1/recommendation", {
+        .post(`${BASE_URL}/wp-json/nalu-app/v1/recommendation`, {
           category: selectedCategory,
           name: title,
           description: note,

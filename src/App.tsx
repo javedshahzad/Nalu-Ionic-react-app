@@ -59,7 +59,7 @@ import ResourceSubCategory from "./pages/ResourceSubCategory/ResourceSubCategory
 import ConfigCycleRemade from "./pages/Configcycle/ConfigCycleRemade";
 import Pusher from "pusher-js";
 import { addNotification } from "./actions/notificationAction";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import OneSignal from "onesignal-cordova-plugin";
 import React, { useEffect, useState } from "react";
 import { groupsListAction } from "./actions/groupsListAction";
@@ -79,7 +79,7 @@ import MoonPhasesService from "./MoonPhasesService";
 import authService from "./authService";
 import { fetchColors, fetchMoonIcons } from "./actions/apiActions";
 import { fetchAvatar } from "./actions/menuActions";
-import { fetchCourses } from "./actions/courseActions";
+import { fetchCourses, fetchProgressNextChap } from "./actions/courseActions";
 import { fetchJournalEntries } from "./actions/journalEntriesAction";
 import {
   ActionPerformed,
@@ -88,7 +88,7 @@ import {
   Token,
 } from "@capacitor/push-notifications";
 import apiService from "./Services";
-import { fetchEvents } from "./actions/eventsAction";
+import { fetchEventDetail, fetchEvents } from "./actions/eventsAction";
 import {
   fetchResourcesFavourite,
   fetchResourcesOverview,
@@ -131,8 +131,15 @@ const App: React.FC = () => {
   const pusher = new Pusher("eac7e44a867cbabf54df", {
     cluster: "us3",
   });
-
+  const [events, setEvents] = useState([]);
   const channel = pusher.subscribe("vote-channel");
+
+  const fetchEventsData = useSelector(
+    (state: any) => state.eventsReducer.getEvents
+  );
+  const eventsDetailData = useSelector(
+    (state: any) => state.eventsReducer.getEventDetails
+  );
 
   // Listen for an event
   channel.bind("vote", (data: any) => {
@@ -253,6 +260,7 @@ const App: React.FC = () => {
     dispatch<any>(fetchResourcesOverview());
     dispatch<any>(fetchResourcesFavourite());
     dispatch<any>(fetchResourcesRecommendation());
+    dispatch<any>(fetchProgressNextChap());
   }, []);
 
   // fcm configuration
@@ -343,6 +351,37 @@ const App: React.FC = () => {
       console.error("Error fetching data:", error);
     }
   };
+
+  // useEffect(() => {
+  //   fetchEventsData()
+  //     .then(async (result: any) => {
+  //       const data = await result;
+  //       setEvents(data);
+  //     })
+  //     .catch((error: any) => {
+  //       console.error("Error fetching events", error);
+  //     });
+  // }, [fetchEventsData]);
+
+  // useEffect(() => {
+  //   if (events && events.length > 0) {
+  //     events.forEach((event) => {
+  //       const { id } = event;
+  //       dispatch<any>(fetchEventDetail(id));
+  //     });
+  //   }
+  // }, [events]);
+
+  // useEffect(() => {
+  //   // Assuming eventsDetailData is a promise, not a result
+  //   eventsDetailData
+  //     .then((data: any) => {
+  //       console.log("data", data);
+  //     })
+  //     .catch((error: any) => {
+  //       console.error("Error fetching event detail data", error);
+  //     });
+  // }, [eventsDetailData]);
 
   // const showToast = async (msg: string) => {
   //   await Toast.show({

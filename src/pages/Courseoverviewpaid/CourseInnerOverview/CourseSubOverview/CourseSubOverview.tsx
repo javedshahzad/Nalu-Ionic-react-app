@@ -72,11 +72,13 @@ const CourseSubOverview: React.FC = () => {
     getData(id);
   };
 
+  const BASE_URL = process.env.BASE_URL;
+
   const getData = (id) => {
     setIsLoading(true);
     try {
       axios
-        .get(`https://app.mynalu.com/wp-json/nalu-app/v1/course-step/${id}`)
+        .get(`${BASE_URL}/wp-json/nalu-app/v1/course-step/${id}`)
         .then((response) => {
           setCourseData(response.data);
           setIsLoading(false);

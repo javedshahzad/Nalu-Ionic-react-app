@@ -102,7 +102,6 @@ const Community: React.FC = () => {
         <div className="search-holder">
           <IonSearchbar></IonSearchbar>
         </div>
-
         {/* <div className="the-list">
           <IonItem lines="none" detail={false} routerLink="/chat">
             <IonAvatar className="flex al-center jc-center" slot="start">

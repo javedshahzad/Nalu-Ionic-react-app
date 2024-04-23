@@ -4,11 +4,13 @@ import axios from "axios";
 import { RootState } from "../store/store"; // Update this import with the correct path to your RootState
 import MoonPhasesService from "../MoonPhasesService";
 
+const BASE_URL = process.env.BASE_URL;
+
 export const fetchMoonIcons = (year: any) => {
   return async (dispatch: any) => {
     try {
       const response = MoonPhasesService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/moon/${year}`
+        `${BASE_URL}/wp-json/nalu-app/v1/moon/${year}`
       );
       dispatch(getMoonIcons(response));
     } catch (error) {
@@ -21,7 +23,7 @@ export const fetchColors = (year: any) => {
   return async (dispatch: any) => {
     try {
       const response = MoonPhasesService.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/journal-overview/${year}?lang=de`
+        `${BASE_URL}/wp-json/nalu-app/v1/journal-overview/${year}?lang=de`
       );
       dispatch(getColors(response));
     } catch (error) {

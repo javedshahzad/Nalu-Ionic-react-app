@@ -35,12 +35,13 @@ import { useHistory, useLocation } from "react-router-dom";
 import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 import authService from "../../authService";
+import { useSelector } from "react-redux";
 
 const Eventdetail: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [event, setEvent] = useState(null);
   const [dateError, setDateError] = useState("");
-
+  const BASE_URL = process.env.BASE_URL;
   const [isLoading, setIsLoading] = useState(false);
   const [isLoaderLoading, setIsLoaderLoading] = useState(false);
 
@@ -50,10 +51,15 @@ const Eventdetail: React.FC = () => {
   const history = useHistory();
   const data: any = location?.state;
   const [event_Id, setEventId] = useState(data?.event_id);
+
+  const eventsDetailData = useSelector(
+    (state: any) => state.eventsReducer.eventDetails
+  );
   let axiosCancelToken;
 
   useEffect(() => {
-    getEventByID(event_Id);
+    // getEventByID(event_Id);
+
     return () => {
       if (axiosCancelToken) {
         axiosCancelToken.cancel("Component unmounted");
@@ -61,6 +67,21 @@ const Eventdetail: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const clickedEvent = eventsDetailData[event_Id];
+        clickedEvent.then((res) => {
+          setEvent(res);
+          console.log("clickedEvent", res);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, [eventsDetailData, event_Id]);
   const getEventByID = (event_id) => {
     setIsLoading(true);
 
@@ -72,7 +93,7 @@ const Eventdetail: React.FC = () => {
     if (isPlatform("ios")) {
       // Use Cordova HTTP plugin for iOS
       HTTP.get(
-        `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
+        `${BASE_URL}/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
         {},
         headers
       )
@@ -102,13 +123,10 @@ const Eventdetail: React.FC = () => {
       axiosCancelToken = source;
 
       axios
-        .get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
-          {
-            headers: headers,
-            cancelToken: source.token,
-          }
-        )
+        .get(`${BASE_URL}/wp-json/nalu-app/v1/event/${event_id}?lang=de`, {
+          headers: headers,
+          cancelToken: source.token,
+        })
         .then((response) => {
           setEvent(response.data);
           setIsLoading(false);
@@ -159,7 +177,7 @@ const Eventdetail: React.FC = () => {
       // Use Cordova HTTP plugin for iOS
       try {
         const response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/event/${date_event.event_id}`,
+          `${BASE_URL}/wp-json/nalu-app/v1/event/${date_event.event_id}`,
           {},
           headers
         );
@@ -185,14 +203,11 @@ const Eventdetail: React.FC = () => {
       }
     } else {
       axios
-        .get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/event/${date_event.event_id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-            },
-          }
-        )
+        .get(`${BASE_URL}/wp-json/nalu-app/v1/event/${date_event.event_id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
+        })
         .then((response) => {
           setEvent(response.data);
           setIsDateSelected(true);

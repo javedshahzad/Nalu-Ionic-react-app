@@ -6,11 +6,13 @@ export const getAvatar = (data: any) => ({
   payload: data,
 });
 
+const BASE_URL = process.env.BASE_URL;
+
 export const fetchAvatar = (userId: any) => {
   return async (dispatch: any) => {
     try {
       const response = apiService.get(
-        `https://app.mynalu.com/wp-json/wp/v2/users/${userId}`
+        `${BASE_URL}/wp-json/wp/v2/users/${userId}`
       );
       dispatch(getAvatar(response));
     } catch (error) {

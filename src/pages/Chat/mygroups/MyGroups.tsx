@@ -58,7 +58,7 @@ const MyGroups: React.FC = () => {
   const sortedGroups = [...groups].sort((a, b) => b.timestamp - a.timestamp);
 
   const recentGroups = sortedGroups.slice(0, 2);
-
+  const BASE_URL = process.env.BASE_URL;
   const wp_token = tokenService.getWPToken();
 
   useEffect(() => {
@@ -165,9 +165,7 @@ const MyGroups: React.FC = () => {
   };
   const GetAllUsers = (keyword?: any) => {
     apiService
-      .get(
-        `https://app.mynalu.com/wp-json/wp/v2/users?per_page=20&page=1&search=`
-      )
+      .get(`${BASE_URL}/wp-json/wp/v2/users?per_page=20&page=1&search=`)
       .then((data) => {
         setUsers(data);
       })

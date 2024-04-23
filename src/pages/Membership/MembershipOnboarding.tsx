@@ -34,7 +34,7 @@ const Membership: React.FC = () => {
   const [userGoals, setUserGoals] = useState<string[]>([]);
   const [isDiscountActive, setIsDiscountActive] = useState(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
+  const BASE_URL = process.env.BASE_URL;
   const history = useHistory();
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const Membership: React.FC = () => {
     setIsLoading(true);
     try {
       let response;
-      const url = "https://app.mynalu.com/wp-json/nalu-app/v1/user-goal";
+      const url = `${BASE_URL}/wp-json/nalu-app/v1/user-goal`;
       const headers = {
         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
       };

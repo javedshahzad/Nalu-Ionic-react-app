@@ -66,6 +66,7 @@ import {
   fetchChapter,
   fetchCourses,
   fetchNextChapter,
+  fetchProgressNextChap,
 } from "../../../actions/courseActions";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -160,11 +161,13 @@ const CourseInnerOverview: React.FC = () => {
       if (isPlatform("ios")) {
         const cordovaResponse = await HTTP.post(URL, {}, headers);
         response = JSON.parse(cordovaResponse.data);
-        dispatch<any>(fetchCourses());
+        // dispatch<any>(fetchCourses());
+        dispatch<any>(fetchProgressNextChap());
       } else {
         const axiosResponse = await axios.post(URL, null, { headers });
         response = axiosResponse.data;
-        dispatch<any>(fetchCourses());
+        // dispatch<any>(fetchCourses());
+        dispatch<any>(fetchProgressNextChap());
       }
       if (response.status === "success") {
       }

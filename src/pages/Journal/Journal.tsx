@@ -61,7 +61,7 @@ const Journal: React.FC = () => {
   const [recommendations, setRecommendations] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [categoryID, setCategoryID] = useState("");
-
+  const BASE_URL = process.env.BASE_URL;
   const history = useHistory();
   const location = useLocation();
   const dataReceivedAsString = new URLSearchParams(location.search).get("data");
@@ -124,7 +124,7 @@ const Journal: React.FC = () => {
       // Use Cordova HTTP plugin for iOS
       try {
         const response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
+          `${BASE_URL}/wp-json/nalu-app/v1/parent-categories`,
           {},
           headers
         );
@@ -149,7 +149,7 @@ const Journal: React.FC = () => {
       // Use Axios for other platforms
       try {
         const response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/parent-categories`,
+          `${BASE_URL}/wp-json/nalu-app/v1/parent-categories`,
           { headers }
         );
 
@@ -181,14 +181,14 @@ const Journal: React.FC = () => {
       let response;
       if (isPlatform("ios")) {
         response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
+          `${BASE_URL}/wp-json/nalu-app/v1/ressources?favourite=true`,
           {},
           headers
         );
         response = JSON.parse(response.data);
       } else {
         response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?favourite=true`,
+          `${BASE_URL}/wp-json/nalu-app/v1/ressources?favourite=true`,
           { headers }
         );
       }
@@ -220,14 +220,14 @@ const Journal: React.FC = () => {
       let response;
       if (isPlatform("ios")) {
         response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
+          `${BASE_URL}/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
           {},
           headers
         );
         response = JSON.parse(response.data);
       } else {
         response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
+          `${BASE_URL}/wp-json/nalu-app/v1/ressources?featured=true&per_page=4`,
           { headers }
         );
       }
@@ -258,14 +258,14 @@ const Journal: React.FC = () => {
       let response;
       if (isPlatform("ios")) {
         response = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
+          `${BASE_URL}/wp-json/nalu-app/v1/ressources`,
           { category_id: id },
           headers
         );
         response = JSON.parse(response.data);
       } else {
         response = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources`,
+          `${BASE_URL}/wp-json/nalu-app/v1/ressources`,
           {
             params: { category_id: id },
             headers,
@@ -304,11 +304,11 @@ const Journal: React.FC = () => {
   const handleUpvote = async (is_upvoted, id, is_downvoted) => {
     let URL;
     if (is_upvoted) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false`;
+      URL = `${BASE_URL}/wp-json/nalu-app/v1/upvote?id=${id}&status=false`;
     } else if (!is_upvoted && !is_downvoted) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
+      URL = `${BASE_URL}/wp-json/nalu-app/v1/upvote?id=${id}&status=true`;
     } else if (!is_upvoted && is_downvoted) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
+      URL = `${BASE_URL}/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
     }
 
     const headers = {
@@ -360,11 +360,11 @@ const Journal: React.FC = () => {
   const handleDownvote = async (is_upvoted, id, is_downvoted) => {
     let URL;
     if (!is_downvoted && !is_upvoted) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=true`;
+      URL = `${BASE_URL}/wp-json/nalu-app/v1/downvote?id=${id}&status=true`;
     } else if (!is_downvoted && is_upvoted) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=false`;
+      URL = `${BASE_URL}/wp-json/nalu-app/v1/upvote?id=${id}&status=false`;
     } else if (is_downvoted) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
+      URL = `${BASE_URL}/wp-json/nalu-app/v1/downvote?id=${id}&status=false`;
     }
 
     const headers = {
@@ -416,9 +416,9 @@ const Journal: React.FC = () => {
   const handleSave = async (fav, id) => {
     let URL;
     if (fav) {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=false`;
+      URL = `${BASE_URL}/wp-json/nalu-app/v1/favourites?id=${id}&status=false`;
     } else {
-      URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=true`;
+      URL = `${BASE_URL}/wp-json/nalu-app/v1/favourites?id=${id}&status=true`;
     }
 
     const headers = {
@@ -486,7 +486,7 @@ const Journal: React.FC = () => {
       if (isPlatform("ios")) {
         // Use Cordova HTTP plugin for iOS
         const cordovaResponse = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`,
+          `${BASE_URL}/wp-json/nalu-app/v1/ressources/${id}`,
           {},
           headers
         );
@@ -494,7 +494,7 @@ const Journal: React.FC = () => {
       } else {
         // Use Axios for other platforms
         const axiosResponse = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`,
+          `${BASE_URL}/wp-json/nalu-app/v1/ressources/${id}`,
           { headers }
         );
         response = axiosResponse.data;

@@ -47,6 +47,7 @@ const Resourcedetail: React.FC = () => {
   const history = useHistory();
   const params: any = useParams();
 
+  const BASE_URL = process.env.BASE_URL;
   const data = location.state;
 
   let num: any = 0;
@@ -68,14 +69,14 @@ const Resourcedetail: React.FC = () => {
       let responseData;
       if (isPlatform("ios")) {
         const cordovaResponse = await HTTP.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${params.id}`,
+          `${BASE_URL}/wp-json/nalu-app/v1/ressources/${params.id}`,
           {},
           headers
         );
         responseData = JSON.parse(cordovaResponse.data); // Assuming the Cordova plugin returns the response directly
       } else {
         const axiosResponse = await axios.get(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${params.id}`,
+          `${BASE_URL}/wp-json/nalu-app/v1/ressources/${params.id}`,
           { headers }
         );
         responseData = axiosResponse.data; // Axios encapsulates response in a .data property
@@ -115,7 +116,7 @@ const Resourcedetail: React.FC = () => {
   }, []);
 
   const handleUpvote = async (is_upvoted, id, is_downvoted) => {
-    let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/upvote?id=${id}&status=${!is_upvoted}`;
+    let URL = `${BASE_URL}/wp-json/nalu-app/v1/upvote?id=${id}&status=${!is_upvoted}`;
 
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -164,7 +165,7 @@ const Resourcedetail: React.FC = () => {
   };
 
   const handleDownvote = async (is_upvoted, id, is_downvoted) => {
-    let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/downvote?id=${id}&status=${!is_downvoted}`;
+    let URL = `${BASE_URL}/wp-json/nalu-app/v1/downvote?id=${id}&status=${!is_downvoted}`;
 
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -214,7 +215,7 @@ const Resourcedetail: React.FC = () => {
   };
 
   const handleSave = async (favourite, id) => {
-    let URL = `https://app.mynalu.com/wp-json/nalu-app/v1/favourites?id=${id}&status=${!favourite}`;
+    let URL = `${BASE_URL}/wp-json/nalu-app/v1/favourites?id=${id}&status=${!favourite}`;
 
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -264,7 +265,7 @@ const Resourcedetail: React.FC = () => {
   // const getResourceDetailsByID = (id) => {
   //   try {
   //     axios
-  //       .get(`https://app.mynalu.com/wp-json/nalu-app/v1/ressources/${id}`, {
+  //       .get(`${BASE_URL}/wp-json/nalu-app/v1/ressources/${id}`, {
   //         headers: {
   //           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
   //         },

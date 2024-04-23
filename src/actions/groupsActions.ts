@@ -4,3 +4,7 @@ export const createGroupAction = (groupData: any) => {
     payload: groupData,
   };
 };
+export const initialState = {
+  getEvents: [],
+  eventDetails: {},
+};

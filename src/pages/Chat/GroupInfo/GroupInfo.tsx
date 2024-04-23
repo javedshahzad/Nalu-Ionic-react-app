@@ -39,6 +39,7 @@ const GroupInfo: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
   const history = useHistory();
 
+  const BASE_URL = process.env.BASE_URL;
   const token = tokenService.getToken();
   const wp_token = tokenService.getWPToken();
 
@@ -98,9 +99,7 @@ const GroupInfo: React.FC = () => {
 
   const GetAllUsers = (keyword?: any) => {
     apiService
-      .get(
-        `https://app.mynalu.com/wp-json/wp/v2/users?per_page=20&page=1&search=`
-      )
+      .get(`${BASE_URL}/wp-json/wp/v2/users?per_page=20&page=1&search=`)
       .then((data) => {
         const usersObjArr = [];
         data.map((user) => {

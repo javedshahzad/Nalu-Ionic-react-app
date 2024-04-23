@@ -82,7 +82,7 @@ const Addcustomcategory: React.FC = () => {
 
   const modal = useRef<HTMLIonModalElement>(null);
   const fieldModal = useRef<HTMLIonModalElement>(null);
-
+  const BASE_URL = process.env.BASE_URL;
   function confirm() {
     const newCategory: any = {
       label: customName,
@@ -221,7 +221,7 @@ const Addcustomcategory: React.FC = () => {
       if (isPlatform("ios")) {
         // Use Cordova HTTP plugin for iOS
         response = await HTTP.post(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/add-custom-field`,
+          `BASE_URL/wp-json/nalu-app/v1/add-custom-field`,
           data,
           { Authorization: `Bearer ${jwtToken}` }
         );
@@ -229,7 +229,7 @@ const Addcustomcategory: React.FC = () => {
       } else {
         // Use Axios for other platforms
         response = await axios.post(
-          `https://app.mynalu.com/wp-json/nalu-app/v1/add-custom-field`,
+          `BASE_URL/wp-json/nalu-app/v1/add-custom-field`,
           data,
           {
             headers: {
@@ -365,7 +365,9 @@ const Addcustomcategory: React.FC = () => {
               </IonCol>
               <IonCol id="imgg" size="6">
                 <IonItem lines="none" className="customType">
-                  <img src="https://app.mynalu.com/wp-content/uploads/2023/10/sample-journal-icon.svg" />
+                  <img
+                    src={`${BASE_URL}/wp-content/uploads/2023/10/sample-journal-icon.svg`}
+                  />
                   <IonLabel className="ion-text-center">
                     Deine Kategorie
                   </IonLabel>
@@ -388,10 +390,12 @@ const Addcustomcategory: React.FC = () => {
                 <IonCol id="imgg" size="6">
                   <IonItem lines="none">
                     <IonLabel className="ion-text-center">
-                      <img src="https://app.mynalu.com/wp-content/uploads/2023/10/sample-journal-icon.svg" />
+                      <img
+                        src={`${BASE_URL}/wp-content/uploads/2023/10/sample-journal-icon.svg`}
+                      />
                     </IonLabel>
                     <IonRadio
-                      value="https://app.mynalu.com/wp-content/uploads/2023/10/sample-journal-icon.svg"
+                      value={`${BASE_URL}/wp-content/uploads/2023/10/sample-journal-icon.svg`}
                       mode="md"
                     ></IonRadio>
                   </IonItem>
@@ -400,10 +404,12 @@ const Addcustomcategory: React.FC = () => {
                 <IonCol id="imgg" size="6">
                   <IonItem lines="none">
                     <IonLabel className="ion-text-center">
-                      <img src="https://app.mynalu.com/wp-content/uploads/2023/10/sad.svg" />
+                      <img
+                        src={`${BASE_URL}/wp-content/uploads/2023/10/sad.svg`}
+                      />
                     </IonLabel>
                     <IonRadio
-                      value="https://app.mynalu.com/wp-content/uploads/2023/10/sad.svg"
+                      value={`${BASE_URL}/wp-content/uploads/2023/10/sad.svg`}
                       mode="md"
                     ></IonRadio>
                   </IonItem>
@@ -412,10 +418,12 @@ const Addcustomcategory: React.FC = () => {
                 <IonCol id="imgg" size="6">
                   <IonItem lines="none">
                     <IonLabel className="ion-text-center">
-                      <img src="https://app.mynalu.com/wp-content/uploads/oral_contraceptives.svg" />
+                      <img
+                        src={`${BASE_URL}/wp-content/uploads/oral_contraceptives.svg`}
+                      />
                     </IonLabel>
                     <IonRadio
-                      value="https://app.mynalu.com/wp-content/uploads/oral_contraceptives.svg"
+                      value={`${BASE_URL}/wp-content/uploads/oral_contraceptives.svg`}
                       mode="md"
                     ></IonRadio>
                   </IonItem>
@@ -424,10 +432,12 @@ const Addcustomcategory: React.FC = () => {
                 <IonCol id="imgg" size="6">
                   <IonItem lines="none">
                     <IonLabel className="ion-text-center">
-                      <img src="https://app.mynalu.com/wp-content/uploads/perdiod_bleeding.svg" />
+                      <img
+                        src={`${BASE_URL}/wp-content/uploads/perdiod_bleeding.svg`}
+                      />
                     </IonLabel>
                     <IonRadio
-                      value="https://app.mynalu.com/wp-content/uploads/perdiod_bleeding.svg"
+                      value={`${BASE_URL}/wp-content/uploads/perdiod_bleeding.svg`}
                       mode="md"
                     ></IonRadio>
                   </IonItem>

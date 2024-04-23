@@ -42,6 +42,7 @@ const Filtermodal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [votes, setVotes] = useState([]);
 
+  const BASE_URL = process.env.BASE_URL;
   const history = useHistory();
 
   const handleRangeChange = (event: CustomEvent) => {
@@ -56,7 +57,7 @@ const Filtermodal: React.FC = () => {
     setIsLoading(true);
 
     apiService
-      .get(`https://app.mynalu.com/wp-json/nalu-app/v1/filter-values?lang=de`)
+      .get(`${BASE_URL}/wp-json/nalu-app/v1/filter-values?lang=de`)
       .then((response) => {
         setFilterValues(response.data);
         type CategoryObject = {
@@ -197,7 +198,7 @@ const Filtermodal: React.FC = () => {
           Authorization: `Bearer ${jwtToken}`,
         };
         HTTP.get(
-          "https://app.mynalu.com/wp-json/nalu-app/v1/ressources",
+          `${BASE_URL}/wp-json/nalu-app/v1/ressources`,
           {
             params: {
               category_name: activeLabelsString,
@@ -229,7 +230,7 @@ const Filtermodal: React.FC = () => {
           });
       } else {
         axios
-          .get("https://app.mynalu.com/wp-json/nalu-app/v1/ressources", {
+          .get(`${BASE_URL}/wp-json/nalu-app/v1/ressources`, {
             params: {
               category_name: activeLabelsString,
               "authority.title": activeRecommendationsString,
