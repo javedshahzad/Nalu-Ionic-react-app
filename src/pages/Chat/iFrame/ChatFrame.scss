@@ -1,0 +1,28 @@
+.ChatFrame {
+  .fullscreen-iframe-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .fullscreen-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    overflow: hidden;
+  }
+
+  .chatLoad {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      border: none;
+      height: 100%;
+  }
+
+  ion-content {
+    --padding-start: 0;
+    --padding-end: 0;
+ }
+}

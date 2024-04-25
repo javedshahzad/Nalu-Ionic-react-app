@@ -35,7 +35,8 @@ import { useHistory, useLocation } from "react-router-dom";
 import axios from "axios";
 import { HTTP } from "@awesome-cordova-plugins/http";
 import authService from "../../authService";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchEventDateData } from "../../actions/eventsAction";
 
 const Eventdetail: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState("");
@@ -44,17 +45,26 @@ const Eventdetail: React.FC = () => {
   const BASE_URL = process.env.BASE_URL;
   const [isLoading, setIsLoading] = useState(false);
   const [isLoaderLoading, setIsLoaderLoading] = useState(false);
-
+  const [flag, setFlag] = useState(true);
   const [isDateSelected, setIsDateSelected] = useState(false);
   const [present] = useIonToast();
   const location = useLocation();
   const history = useHistory();
   const data: any = location?.state;
   const [event_Id, setEventId] = useState(data?.event_id);
+  const dispatch = useDispatch();
 
   const eventsDetailData = useSelector(
     (state: any) => state.eventsReducer.eventDetails
   );
+  const getEventDateDate = useSelector(
+    (state: any) => state.eventsReducer.getEventDateDate
+  );
+
+  useEffect(() => {
+    console.log("getEventDateDate", getEventDateDate);
+  }, [getEventDateDate]);
+
   let axiosCancelToken;
 
   useEffect(() => {
@@ -74,6 +84,14 @@ const Eventdetail: React.FC = () => {
         clickedEvent.then((res) => {
           setEvent(res);
           console.log("clickedEvent", res);
+          const datesDate = res?.dates?.map((date) => {
+            if (flag) {
+              dispatch<any>(fetchEventDateData(date?.event_id));
+            }
+            return date;
+          });
+          setFlag(false);
+          console.log("datesDate", datesDate);
         });
       } catch (error) {
         console.log(error);
@@ -82,6 +100,34 @@ const Eventdetail: React.FC = () => {
 
     fetchData();
   }, [eventsDetailData, event_Id]);
+
+  // useEffect(() => {
+  //   const clickedEventDate = eventsDetailData[event_Id];
+
+  //   return () => {
+  //     second;
+  //   };
+  // }, [third]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       // setIsLoading(true);
+  //       if (getEventDateDate) {
+  //         const result = await getEventDateDate;
+  //         console.log("result", result);
+  //       }
+  //       // setCourseData(result);
+
+  //       // setIsLoading(false);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [getEventDateDate]);
   const getEventByID = (event_id) => {
     setIsLoading(true);
 
@@ -166,6 +212,7 @@ const Eventdetail: React.FC = () => {
   };
 
   const handleDateChange = async (event, date_event, registration_link) => {
+    console.log("date_event", date_event);
     setIsLoaderLoading(true);
     const value = event.target.value;
 

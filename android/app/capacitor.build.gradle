@@ -14,13 +14,10 @@ dependencies {
     implementation project(':capacitor-haptics')
     implementation project(':capacitor-keyboard')
     implementation project(':capacitor-live-updates')
-    implementation project(':capacitor-push-notifications')
     implementation project(':capacitor-status-bar')
-    implementation project(':capacitor-toast')
     implementation "androidx.webkit:webkit:1.4.0"
-    implementation 'com.google.firebase:firebase-messaging:23.4.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.10"
 }
-
 
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()

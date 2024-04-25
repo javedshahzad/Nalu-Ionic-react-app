@@ -231,7 +231,7 @@ const Mygroups: React.FC = () => {
         // eventsDetailData.then(async (res) => {
         // const data = await res;
 
-        console.log("data", eventsDetailData);
+        console.log("dataaa", eventsDetailData);
         // });
       } catch (error) {
         console.log(error);

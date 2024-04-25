@@ -1,14 +1,11 @@
 export const GET_EVENTS = "GET_EVENTS";
 export const GET_EVENT_DETAIL = "GET_EVENT_DETAIL";
-
-const generateUniqueId = () => {
-  // Logic to generate a unique ID, for example:
-  return Math.random().toString(36).substring(2) + Date.now().toString(36);
-};
+export const GET_EVENT_DATE_DATA = "GET_EVENT_DATE_DATA";
 
 const initialState = {
   getEvents: [],
   eventDetails: {},
+  eventDateData: [],
 };
 
 const eventReducer = (state = initialState, action: any) => {
@@ -22,6 +19,15 @@ const eventReducer = (state = initialState, action: any) => {
         eventDetails: {
           ...state.eventDetails,
           [id]: data,
+        },
+      };
+    case GET_EVENT_DATE_DATA:
+      const { idd, dataa } = action.payload;
+      return {
+        ...state,
+        eventDateData: {
+          ...state.eventDateData,
+          [idd]: dataa,
         },
       };
 
