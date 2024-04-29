@@ -57,13 +57,13 @@ const Eventdetail: React.FC = () => {
   const eventsDetailData = useSelector(
     (state: any) => state.eventsReducer.eventDetails
   );
-  const getEventDateDate = useSelector(
-    (state: any) => state.eventsReducer.getEventDateDate
-  );
+  // const getEventDateDate = useSelector(
+  //   (state: any) => state.eventsReducer.getEventDateDate
+  // );
 
-  useEffect(() => {
-    console.log("getEventDateDate", getEventDateDate);
-  }, [getEventDateDate]);
+  // useEffect(() => {
+  //   console.log("getEventDateDate", getEventDateDate);
+  // }, [getEventDateDate]);
 
   let axiosCancelToken;
 
@@ -83,15 +83,15 @@ const Eventdetail: React.FC = () => {
         const clickedEvent = eventsDetailData[event_Id];
         clickedEvent.then((res) => {
           setEvent(res);
-          console.log("clickedEvent", res);
-          const datesDate = res?.dates?.map((date) => {
-            if (flag) {
-              dispatch<any>(fetchEventDateData(date?.event_id));
-            }
-            return date;
-          });
-          setFlag(false);
-          console.log("datesDate", datesDate);
+          // console.log("clickedEvent", res);
+          // const datesDate = res?.dates?.map((date) => {
+          //   if (flag) {
+          //     dispatch<any>(fetchEventDateData(date?.event_id));
+          //   }
+          //   return date;
+          // });
+          // setFlag(false);
+          // console.log("datesDate", datesDate);
         });
       } catch (error) {
         console.log(error);

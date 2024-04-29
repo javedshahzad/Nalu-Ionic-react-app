@@ -225,21 +225,21 @@ const Mygroups: React.FC = () => {
     }
   }, [events]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // eventsDetailData.then(async (res) => {
-        // const data = await res;
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       // eventsDetailData.then(async (res) => {
+  //       // const data = await res;
 
-        console.log("dataaa", eventsDetailData);
-        // });
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  //       console.log("dataaa", eventsDetailData);
+  //       // });
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
-    fetchData();
-  }, [eventsDetailData]);
+  //   fetchData();
+  // }, [eventsDetailData]);
 
   const [users, setUsers] = useState<any[]>([]);
 
