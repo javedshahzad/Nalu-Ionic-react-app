@@ -17,7 +17,7 @@ PODS:
     - Capacitor
   - CordovaPlugins (5.5.1):
     - CapacitorCordova
-  - IonicLiveUpdates (0.5.2)
+  - IonicLiveUpdates (0.5.0)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
@@ -64,8 +64,8 @@ SPEC CHECKSUMS:
   CapacitorLiveUpdates: 1f37f66f44ca50a8b1a975126839ce383aade987
   CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
   CordovaPlugins: e9675db8b5f119c9c02ab3137838b73444cbee5a
-  IonicLiveUpdates: d14e4b0e6a46c492b9e48390ed51a79278059bfd
+  IonicLiveUpdates: 321d34fc5d6ae60d6145451f8f1c7b8971f0401d
 
 PODFILE CHECKSUM: 6f8c0a9347c08caf61a57a2a57d3b2ef3bee0ad2
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.12.1

@@ -61,8 +61,8 @@ const Login: React.FC = () => {
         e.target.focusedValue.trim() === ""
           ? "Bitte gebe deine E-Mail-Adresse ein."
           : !emailRegexx.test(e.target.focusedValue)
-          ? "Bitte gebe eine gültige E-Mail-Adresse ein."
-          : ""
+            ? "Bitte gebe eine gültige E-Mail-Adresse ein."
+            : ""
       );
       setErrorMessage(e.target.focusedValue.trim() === "" ? "" : "");
     }
@@ -74,8 +74,8 @@ const Login: React.FC = () => {
         e.target.focusedValue.trim() === ""
           ? "Bitte gebe dein Passwort ein."
           : e.target.focusedValue.length < 6
-          ? "Das Passwort muss mindestens 6 Zeichen lang sein."
-          : ""
+            ? "Das Passwort muss mindestens 6 Zeichen lang sein."
+            : ""
       );
       setErrorMessage(e.target.focusedValue.trim() === "" ? "" : "");
     }
@@ -148,10 +148,10 @@ const Login: React.FC = () => {
             const chatUserString = JSON.stringify(chatUser);
             localStorage.setItem("chatUser", chatUserString);
 
-            let fcmtoken = localStorage.getItem("fcmtoken");
-            if (naluApiResponseData.data.user._id) {
-              update_fcm_token(naluApiResponseData.data.user._id, fcmtoken);
-            }
+            // let fcmtoken = localStorage.getItem("fcmtoken");
+            // if (naluApiResponseData.data.user._id) {
+            //   update_fcm_token(naluApiResponseData.data.user._id, fcmtoken);
+            // }
           } else {
             // Do not show an error message for Chat API login failure
             console.log("Chat API login failed");
@@ -214,10 +214,10 @@ const Login: React.FC = () => {
             const chatUserString = JSON.stringify(chatUser);
             localStorage.setItem("chatUser", chatUserString);
 
-            let fcmtoken = localStorage.getItem("fcmtoken");
-            if (naluApiResponse.data.data.user._id) {
-              update_fcm_token(naluApiResponse.data.data.user._id, fcmtoken);
-            }
+            // let fcmtoken = localStorage.getItem("fcmtoken");
+            // if (naluApiResponse.data.data.user._id) {
+            //   update_fcm_token(naluApiResponse.data.data.user._id, fcmtoken);
+            // }
           } else {
             // Do not show an error message for Chat API login failure
             console.log("Chat API login failed");
@@ -239,18 +239,18 @@ const Login: React.FC = () => {
     setIsSubmitting(false);
   };
 
-  const update_fcm_token = async (data: any, token) => {
-    let obj = {
-      newToken: token,
-    };
-    let url = "https://apidev.mynalu.com/v1";
-    //let url = 'http://localhost:7001/v1'
-    try {
-      apiService.put2(`${url}/user/update-token/${data}`, obj);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  // const update_fcm_token = async (data: any, token) => {
+  //   let obj = {
+  //     newToken: token,
+  //   };
+  //   let url = "https://apidev.mynalu.com/v1";
+  //   //let url = 'http://localhost:7001/v1'
+  //   try {
+  //     apiService.put2(`${url}/user/update-token/${data}`, obj);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
 
   return (
     <IonPage className="Login">
