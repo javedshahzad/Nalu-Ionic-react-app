@@ -121,24 +121,26 @@ const Login: React.FC = () => {
         let url = "https://apidev.mynalu.com";
         //  let url = 'http://localhost:7001'
         try {
-          const naluApiResponse = await HTTP.post(
-            `${BASE_URL}/v1/user/login`,
+          const naluApiResponse = await apiService.post(
+            `https://apidev.mynalu.com/v1/user/login`,
             {
               email: email,
               password: password,
             },
-            {}
           );
-          const naluApiResponseData = JSON.parse(naluApiResponse.data);
-          if (naluApiResponse.status === 200 && naluApiResponseData.success) {
-            const { access, refresh, user } = naluApiResponseData.data.tokens;
-            const wsToken = naluApiResponseData.data.wsToken;
-            const chatUser = naluApiResponseData.data.user;
+          const naluApiResponseData = naluApiResponse; //JSON.parse(naluApiResponse.data);
+
+          console.log("uper",naluApiResponseData)
+          if (naluApiResponseData.success) {
+            console.log("Hereee",naluApiResponseData)
+            const { access, refresh } = naluApiResponseData.data.tokens;
+            const wsToken = naluApiResponse.data.wsToken;
+            let chatUser = naluApiResponse.data.user;
 
             // Chat Backend Tokens
             localStorage.setItem("accessToken", access.token);
             localStorage.setItem("refreshToken", refresh.token);
-            localStorage.setItem("chatApiUserId", user._id);
+            localStorage.setItem("chatApiUserId", chatUser?._id);
 
             // Chat iFrame Tokens
             localStorage.setItem("chatToken", access.token); // This is the same as accessToken, stored under a new key
@@ -162,7 +164,10 @@ const Login: React.FC = () => {
         }
 
         // Navigation
-        history.push("/tabs/tab1");
+        setTimeout(() => {
+          history.push("/tabs/tab1");
+          window.location.reload();
+         }, 200);
       } else {
         // WordPress API login
         const response = await axios.post(
@@ -228,8 +233,10 @@ const Login: React.FC = () => {
         }
 
         // Navigation
+       setTimeout(() => {
         history.push("/tabs/tab1");
         window.location.reload();
+       }, 200);
       }
     } catch (error) {
       console.log("Error", error.response?.data?.message || error.message);
