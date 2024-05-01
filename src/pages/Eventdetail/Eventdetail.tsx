@@ -52,11 +52,17 @@ const Eventdetail: React.FC = () => {
   const history = useHistory();
   const data: any = location?.state;
   const [event_Id, setEventId] = useState(data?.event_id);
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
+  const controller = new AbortController();
   const eventsDetailData = useSelector(
     (state: any) => state.eventsReducer.eventDetails
   );
+  const eventsDateData = useSelector(
+    (state: any) => state.eventsReducer.eventDateData
+  );
+
+  console.log("eventsDateData", eventsDateData);
   // const getEventDateDate = useSelector(
   //   (state: any) => state.eventsReducer.getEventDateDate
   // );
@@ -81,17 +87,8 @@ const Eventdetail: React.FC = () => {
     const fetchData = async () => {
       try {
         const clickedEvent = eventsDetailData[event_Id];
-        clickedEvent.then((res) => {
+        clickedEvent?.then((res) => {
           setEvent(res);
-          // console.log("clickedEvent", res);
-          // const datesDate = res?.dates?.map((date) => {
-          //   if (flag) {
-          //     dispatch<any>(fetchEventDateData(date?.event_id));
-          //   }
-          //   return date;
-          // });
-          // setFlag(false);
-          // console.log("datesDate", datesDate);
         });
       } catch (error) {
         console.log(error);
@@ -100,6 +97,35 @@ const Eventdetail: React.FC = () => {
 
     fetchData();
   }, [eventsDetailData, event_Id]);
+
+  useEffect(() => {
+    const fetchDateData = async () => {
+      try {
+        const clickedDate = eventsDateData[event_Id];
+        clickedDate?.then((res) => {
+          setEvent(res);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchDateData();
+  }, [eventsDateData, event_Id]);
+
+  useEffect(() => {
+    if (event) {
+      console.log(">>>", event);
+      const datesDate = event?.dates?.map((date) => {
+        dispatch<any>(fetchEventDateData(date?.event_id));
+      });
+    }
+
+    // Cleanup function to cancel requests
+    return () => {
+      controller.abort();
+    };
+  }, [event]);
 
   // useEffect(() => {
   //   const clickedEventDate = eventsDetailData[event_Id];
@@ -138,160 +164,175 @@ const Eventdetail: React.FC = () => {
 
     if (isPlatform("ios")) {
       // Use Cordova HTTP plugin for iOS
-      HTTP.get(
-        `${BASE_URL}/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
-        {},
-        headers
-      )
-        .then((response) => {
-          const data = JSON.parse(response.data);
-
-          setEvent(data);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          if (error) {
-            const status = error.status;
-
-            if (status === 401 || status === 403 || status === 404) {
-              // Unauthorized, Forbidden, or Not Found
-              authService.logout();
-              history.push("/onboarding");
-            }
-          }
-
-          console.error(error);
-          setIsLoading(false);
-        });
+      // HTTP.get(
+      //   `${BASE_URL}/wp-json/nalu-app/v1/event/${event_id}?lang=de`,
+      //   {},
+      //   headers
+      // )
+      //   .then((response) => {
+      //     const data = JSON.parse(response.data);
+      //     setEvent(data);
+      //     setIsLoading(false);
+      //   })
+      // .catch((error) => {
+      //   if (error) {
+      //     const status = error.status;
+      //     if (status === 401 || status === 403 || status === 404) {
+      //       // Unauthorized, Forbidden, or Not Found
+      //       authService.logout();
+      //       history.push("/onboarding");
+      //     }
+      //   }
+      // console.error(error);
+      // setIsLoading(false);
+      // });
     } else {
       // Use Axios for other platforms
-      const source = axios.CancelToken.source();
-      axiosCancelToken = source;
-
-      axios
-        .get(`${BASE_URL}/wp-json/nalu-app/v1/event/${event_id}?lang=de`, {
-          headers: headers,
-          cancelToken: source.token,
-        })
-        .then((response) => {
-          setEvent(response.data);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          setIsLoading(false);
-          if (axios.isCancel(error)) {
-            console.log("Request was canceled:", error.message);
-          } else {
-            console.log(error);
-          }
-          if (isPlatform("ios")) {
-            if (error) {
-              const status = error.status;
-
-              if (status === 401 || status === 403 || status === 404) {
-                // Unauthorized, Forbidden, or Not Found
-                authService.logout();
-                history.push("/onboarding");
-              }
-            }
-          } else {
-            if (error.response) {
-              const status = error.response.status;
-
-              if (status === 401 || status === 403 || status === 404) {
-                // Unauthorized, Forbidden, or Not Found
-                authService.logout();
-                history.push("/onboarding");
-              }
-            }
-          }
-
-          console.error(error);
-        });
+      // const source = axios.CancelToken.source();
+      // axiosCancelToken = source;
+      // axios
+      //   .get(`${BASE_URL}/wp-json/nalu-app/v1/event/${event_id}?lang=de`, {
+      //     headers: headers,
+      //     cancelToken: source.token,
+      //   })
+      //   .then((response) => {
+      //     setEvent(response.data);
+      //     setIsLoading(false);
+      //   })
+      //   .catch((error) => {
+      //     setIsLoading(false);
+      //     if (axios.isCancel(error)) {
+      //       console.log("Request was canceled:", error.message);
+      //     } else {
+      //       console.log(error);
+      //     }
+      //     if (isPlatform("ios")) {
+      //       if (error) {
+      //         const status = error.status;
+      //         if (status === 401 || status === 403 || status === 404) {
+      //           // Unauthorized, Forbidden, or Not Found
+      //           authService.logout();
+      //           history.push("/onboarding");
+      //         }
+      //       }
+      //     } else {
+      //       if (error.response) {
+      //         const status = error.response.status;
+      //         if (status === 401 || status === 403 || status === 404) {
+      //           // Unauthorized, Forbidden, or Not Found
+      //           authService.logout();
+      //           history.push("/onboarding");
+      //         }
+      //       }
+      //     }
+      //     console.error(error);
+      //   });
     }
   };
 
+  useEffect(() => {
+    const fetchDateData = async () => {
+      try {
+        const clickedDate = eventsDateData[event_Id];
+        clickedDate?.then((res) => {
+          setEvent(res);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchDateData();
+  }, [eventsDateData, event_Id]);
+
   const handleDateChange = async (event, date_event, registration_link) => {
     console.log("date_event", date_event);
-    setIsLoaderLoading(true);
-    const value = event.target.value;
 
-    if (isPlatform("ios")) {
-      const jwtToken = localStorage.getItem("jwtToken");
-      const headers = {
-        Authorization: `Bearer ${jwtToken}`,
-      };
-      // Use Cordova HTTP plugin for iOS
-      try {
-        const response = await HTTP.get(
-          `${BASE_URL}/wp-json/nalu-app/v1/event/${date_event.event_id}`,
-          {},
-          headers
-        );
-        const data = JSON.parse(response.data);
+    const clickedDate = await eventsDateData[date_event?.event_id];
+    // await clickedDate?.then((res) => {
+    setEvent(clickedDate);
 
-        setEvent(data);
-        setIsDateSelected(true);
-        setIsLoaderLoading(false);
-      } catch (error) {
-        if (error) {
-          const status = error.status;
+    console.log("setEvent", clickedDate);
+    // });
+    // setIsLoaderLoading(true);
+    // const value = event.target.value;
 
-          if (status === 401 || status === 403 || status === 404) {
-            // Unauthorized, Forbidden, or Not Found
-            authService.logout();
-            history.push("/onboarding");
-          }
-        }
-        console.error(error);
-        setIsLoaderLoading(false);
-      } finally {
-        setIsLoaderLoading(false);
-      }
-    } else {
-      axios
-        .get(`${BASE_URL}/wp-json/nalu-app/v1/event/${date_event.event_id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        })
-        .then((response) => {
-          setEvent(response.data);
-          setIsDateSelected(true);
-          setIsLoaderLoading(false);
-        })
-        .catch((error) => {
-          if (isPlatform("ios")) {
-            if (error) {
-              const status = error.status;
+    // if (isPlatform("ios")) {
+    //   const jwtToken = localStorage.getItem("jwtToken");
+    //   const headers = {
+    //     Authorization: `Bearer ${jwtToken}`,
+    //   };
+    //   // Use Cordova HTTP plugin for iOS
+    //   try {
+    //     const response = await HTTP.get(
+    //       `${BASE_URL}/wp-json/nalu-app/v1/event/${date_event.event_id}`,
+    //       {},
+    //       headers
+    //     );
+    //     const data = JSON.parse(response.data);
 
-              if (status === 401 || status === 403 || status === 404) {
-                // Unauthorized, Forbidden, or Not Found
-                authService.logout();
-                history.push("/onboarding");
-              }
-            }
-          } else {
-            if (error.response) {
-              const status = error.response.status;
+    //     setEvent(data);
+    //     setIsDateSelected(true);
+    //     setIsLoaderLoading(false);
+    //   } catch (error) {
+    //     if (error) {
+    //       const status = error.status;
 
-              if (status === 401 || status === 403 || status === 404) {
-                // Unauthorized, Forbidden, or Not Found
-                authService.logout();
-                history.push("/onboarding");
-              }
-            }
-          }
+    //       if (status === 401 || status === 403 || status === 404) {
+    //         // Unauthorized, Forbidden, or Not Found
+    //         authService.logout();
+    //         history.push("/onboarding");
+    //       }
+    //     }
+    //     console.error(error);
+    //     setIsLoaderLoading(false);
+    //   } finally {
+    //     setIsLoaderLoading(false);
+    //   }
+    // } else {
+    //   axios
+    //     .get(`${BASE_URL}/wp-json/nalu-app/v1/event/${date_event.event_id}`, {
+    //       headers: {
+    //         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    //       },
+    //     })
+    //     .then((response) => {
+    //       setEvent(response.data);
+    //       setIsDateSelected(true);
+    //       setIsLoaderLoading(false);
+    //     })
+    //     .catch((error) => {
+    //       if (isPlatform("ios")) {
+    //         if (error) {
+    //           const status = error.status;
 
-          console.error(error);
-          setIsLoaderLoading(false);
-        });
-    }
+    //           if (status === 401 || status === 403 || status === 404) {
+    //             // Unauthorized, Forbidden, or Not Found
+    //             authService.logout();
+    //             history.push("/onboarding");
+    //           }
+    //         }
+    //       } else {
+    //         if (error.response) {
+    //           const status = error.response.status;
 
-    setSelectedDate(value);
-    setDateError(
-      value.trim() === "" ? "Bitte wähle ein Datum, um fortzufahren." : ""
-    );
+    //           if (status === 401 || status === 403 || status === 404) {
+    //             // Unauthorized, Forbidden, or Not Found
+    //             authService.logout();
+    //             history.push("/onboarding");
+    //           }
+    //         }
+    //       }
+
+    //       console.error(error);
+    //       setIsLoaderLoading(false);
+    //     });
+    // }
+
+    // setSelectedDate(value);
+    // setDateError(
+    //   value.trim() === "" ? "Bitte wähle ein Datum, um fortzufahren." : ""
+    // );
   };
   const handleDateChangeWebinar = async (
     event,
