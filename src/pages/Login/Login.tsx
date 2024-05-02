@@ -132,7 +132,6 @@ const Login: React.FC = () => {
 
           console.log("uper",naluApiResponseData)
           if (naluApiResponseData.success) {
-            console.log("Hereee",naluApiResponseData)
             const { access, refresh } = naluApiResponseData.data.tokens;
             const wsToken = naluApiResponse.data.wsToken;
             let chatUser = naluApiResponse.data.user;
