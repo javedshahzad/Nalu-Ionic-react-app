@@ -79,7 +79,7 @@ const GroupChat: React.FC = () => {
         conversation: groupId,
       });
 
-      socket.on("join", (data) => {});
+      socket.on("join", (data) => { });
 
       socket.emit("message-list", {
         page: 1,
@@ -256,15 +256,15 @@ const GroupChat: React.FC = () => {
     // getAllUsers()
   }, []);
 
-  const sendNotification = (data: any) => {
-    let url = "https://apidev.mynalu.com";
-    // let url = 'http://localhost:7001'
-    try {
-      apiService.post(`${url}/v1/fcm/send-notification`, data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  // const sendNotification = (data: any) => {
+  //   let url = "https://apidev.mynalu.com";
+  //   // let url = 'http://localhost:7001'
+  //   try {
+  //     apiService.post(`${url}/v1/fcm/send-notification`, data);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
 
   const handleSendMessage = () => {
     if (newMessage !== "") {
@@ -288,7 +288,7 @@ const GroupChat: React.FC = () => {
               message: newMessage,
               to: obj?.token,
             };
-            sendNotification(messageData);
+            //   sendNotification(messageData);
           }
         });
       }

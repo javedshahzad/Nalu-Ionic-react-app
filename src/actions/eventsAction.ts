@@ -13,9 +13,9 @@ export const getEventDetail = (id, data: any) => ({
   type: GET_EVENT_DETAIL,
   payload: { id, data },
 });
-export const getEventDateDate = (id, data: any) => ({
+export const getEventDateDate = (idd, dataa: any) => ({
   type: GET_EVENT_DATE_DATA,
-  payload: { id, data },
+  payload: { idd, dataa },
 });
 
 const BASE_URL = process.env.BASE_URL;
@@ -50,7 +50,7 @@ export const fetchEventDateData = (id) => {
       const response = apiService.get(
         `${BASE_URL}/wp-json/nalu-app/v1/event/${id}`
       );
-      dispatch(getEventDetail(id, response));
+      dispatch(getEventDateDate(id, response));
     } catch (error) {
       console.error("Error fetching data:", error);
     }
